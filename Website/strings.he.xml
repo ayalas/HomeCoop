@@ -1,0 +1,1940 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<strings>
+<str>
+    <key>COOPERATIVE_NAME</key>
+    <value>הזינו את שם הקואופרטיב שלכם</value>
+</str>
+<str>
+    <key>COOP_INFO_TITLE</key>
+    <value>על הקואופרטיב שלנו:</value>
+</str>
+<str>
+    <key>COOP_INFO_01</key>
+    <value>100% טבעוני</value>
+</str>
+<str>
+    <key>COOP_INFO_02</key>
+    <value>ללא רווח</value>
+</str>
+<str>
+    <key>COOP_INFO_03</key>
+    <value>מבוסס על התנדבות</value>
+</str>
+<str>
+    <key>COOP_INFO_04</key>
+    <value>להוזלת עלויות המחיה</value>
+</str>
+<str>
+    <key>COOP_INFO_05</key>
+    <value>תוצרת מקומית - ללא הטסה</value>
+</str>
+<str>
+    <key>ALIGN</key>
+    <value>right</value>
+</str>
+<str>
+    <key>ALIGN_OPPOSITE</key>
+    <value>left</value>
+</str>
+<str>
+    <key>GRID_COLUMN_PIXELS_PER_LETTER</key>
+    <value>4</value>
+    <note>configuration in settings.php. allows truncating cell contents when displayed in a grid, and displaying the full text in a tooltip</note>
+</str>
+<str>
+    <key>SHORT_DATE_FORMAT</key>
+    <value>j.n</value>
+    <comment>any PHP date format</comment>
+</str>
+<str>
+    <key>FULL_DATE_FORMAT_CURRENT_YEAR</key>
+    <value>j.n G:i</value>
+    <comment>any PHP date format</comment>
+     <pages>coord/orders</pages>
+</str>
+<str>
+    <key>FULL_DATE_FORMAT_ANY_YEAR</key>
+    <value>j.n.Y G:i</value>
+    <comment>any PHP date format</comment>
+     <pages>coord/orders</pages>
+</str>
+<note>DATE PICKER CLASS</note>
+<str>
+    <key>DATE_PICKER_DATE_FORMAT</key>
+    <value>j.n.Y</value>
+   <comment>any PHP numeric-only date format</comment>
+</str>
+<str>
+    <key>OPEN_OFFICE_DATE_FORMAT</key>
+    <value>DMY</value>
+    <comment>DMY or MDY</comment>
+</str>
+<str>
+    <key>DATE_PICKER_TIME_FORMAT</key>
+    <value>G:i</value>
+    <comment>any PHP numeric-only time format (allowing AM, PM)</comment>
+</str>
+<str>
+    <key>DATE_PICKER_FIRST_DAY_OF_WEEK</key>
+    <value>1</value>
+    <comment>1 - sunday, 2 - monday, etc.</comment>
+</str>
+<str>
+    <key>MAX_LENGTH_DATE_PICKER_DATE_PART</key>
+    <value>15</value>
+</str>
+<str>
+    <key>MAX_LENGTH_DATE_PICKER_TIME_PART</key>
+    <value>8</value>
+</str>
+<str>
+    <key>DATE_PICKER_NEXT</key>
+    <value>&#187;</value>
+</str>
+<str>
+    <key>DATE_PICKER_PREV</key>
+    <value>&#171;</value>
+</str>
+<str>
+    <key>DATE_PICKER_PREV_TITLE</key>
+    <value>החודש הקודם</value>
+</str>
+<str>
+    <key>DATE_PICKER_NEXT_TITLE</key>
+    <value>החודש הבא</value>
+</str>
+<str>
+    <key>DATE_PICKER_DAY1</key>
+    <value>א</value>
+</str>
+<str>
+    <key>DATE_PICKER_DAY2</key>
+    <value>ב</value>
+</str>
+<str>
+    <key>DATE_PICKER_DAY3</key>
+    <value>ג</value>
+</str>
+<str>
+    <key>DATE_PICKER_DAY4</key>
+    <value>ד</value>
+</str>
+<str>
+    <key>DATE_PICKER_DAY5</key>
+    <value>ה</value>
+</str>
+<str>
+    <key>DATE_PICKER_DAY6</key>
+    <value>ו</value>
+</str>
+<str>
+    <key>DATE_PICKER_DAY7</key>
+    <value>ש</value>
+</str>
+<str>
+    <key>DATE_PICKER_JANUARY</key>
+    <value>ינואר</value>
+</str>
+<str>
+    <key>DATE_PICKER_FEBRUARY</key>
+    <value>פברואר</value>
+</str>
+<str>
+    <key>DATE_PICKER_MARCH</key>
+    <value>מרץ</value>
+</str>
+<str>
+    <key>DATE_PICKER_APRIL</key>
+    <value>אפריל</value>
+</str>
+<str>
+    <key>DATE_PICKER_MAY</key>
+    <value>מאי</value>
+</str>
+<str>
+    <key>DATE_PICKER_JUNE</key>
+    <value>יוני</value>
+</str>
+<str>
+    <key>DATE_PICKER_JULY</key>
+    <value>יולי</value>
+</str>
+<str>
+    <key>DATE_PICKER_AUGUST</key>
+    <value>אוגוסט</value>
+</str>
+<str>
+    <key>DATE_PICKER_SEPTEMBER</key>
+    <value>ספטמבר</value>
+</str>
+<str>
+    <key>DATE_PICKER_OCTOBER</key>
+    <value>אוקטובר</value>
+</str>
+<str>
+    <key>DATE_PICKER_NOVEMBER</key>
+    <value>נובמבר</value>
+</str>
+<str>
+    <key>DATE_PICKER_DECEMBER</key>
+    <value>דצמבר</value>
+</str>
+
+<note>end of DATE PICKER CLASS</note>
+
+<str>
+    <key>ERROR_MAX_USER_CONNECTIONS</key>
+    <value>האתר עמוס כרגע. אנא נסו שוב מאוחר יותר</value>
+</str>
+<str>
+    <key>MULTIPLIER_SIGN</key>
+    <value>‏X‏</value>
+</str>
+<str>
+    <key>HELP_SIGN</key>
+    <value>‏?‏</value>
+</str>
+<str>
+    <key>FIELD_DISPLAY_NAME_SUFFIX</key>
+    <value>‏:‏</value>
+</str>
+<str>
+    <key>HEADER_HELLO</key>
+    <value>שלום</value>
+</str>
+<str>
+    <key>HEADER_YOUR_BALNACE</key>
+    <value>היתרה שלך</value>
+</str>
+<str>
+    <key>HEADER_YOUR_MAX_ORDER</key>
+    <value>מקס. הזמנה</value>
+</str>
+<str>
+    <key>ACCESS_DENIED</key>
+    <value>הגישה נחסמה</value>
+</str>
+<str>
+    <key>REMOTE_POST_DENIED</key>
+    <value>הגישה לשליחת טופס מרחוק נחסמה</value>
+</str>
+<str>
+    <key>PUBLIC_INDEX_TITLE</key>
+    <value>כניסה למערכת ההזמנות</value>
+</str>
+<str>
+    <key>LOGIN_INCORRECT</key>
+    <value>שם משתמש/ת או סיסמא לא נכונים.</value>
+</str>
+<str>
+    <key>LOGIN_NAME_REQUIRED</key>
+    <value>יש להזין שם משתמש/ת.</value>
+</str>
+<str>
+    <key>PASSWORD_REQUIRED</key>
+    <value>יש להזין סיסמא.</value>
+</str>
+<str>
+    <key>FIELD_LOGIN_NAME</key>
+    <value>שם כניסה</value>
+</str>
+<str>
+    <key>FIELD_PASSWORD</key>
+    <value>סיסמא:</value>
+</str>
+<str>
+    <key>BTN_LOGIN</key>
+    <value>כניסה</value>
+</str>
+<str>
+    <key>REGISTER_SUGGESTION_PRETEXT</key>
+    <value>להצטרפות לקואופרטיב</value>
+</str>
+<str>
+    <key>REGISTER_LINK</key>
+    <value>צרו שם משתמש/ת</value>
+</str>
+<str>
+    <key>HOME_PAGE_TITLE</key>
+    <value>דף הבית</value>
+</str>
+<str>
+    <key>EMAIL_REQUIRED</key>
+    <value>יש להזין כתובת דוא&quot;ל</value>
+</str>
+<str>
+    <key>FIELD_REQUIRED</key>
+    <value>יש להזין %s</value>
+</str>
+<str>
+    <key>PUBLIC_JOIN_TITLE</key>
+    <value>טופס הצטרפות</value>
+</str>
+<str>
+    <key>INVALID_EMAIL</key>
+    <value>כתובת דוא&quot;ל לא תקינה.</value>
+</str>
+<str>
+    <key>INVALID_LOGIN_NAME_START</key>
+    <value>אין להזין את התו %s בתחילת שם המשתמש/ת.</value>
+</str>
+<str>
+    <key>INVALID_LOGIN_NAME_END</key>
+    <value>אין להזין את התו %s בסוף שם המשתמש/ת.</value>
+</str>
+<str>
+    <key>INVALID_LOGIN_NAME_CHAR</key>
+    <value>אין להזין את התו %s בתוך שם המשתמש/ת.</value>
+</str>
+<str>
+    <key>EMAIL_TAKEN</key>
+    <value>כתובת הדוא&quot;ל שהוזנה כבר רשומה במערכת.</value>
+</str>
+<str>
+    <key>USERNAME_TAKEN</key>
+    <value>שם המשתמש/ת כבר תפוס.</value>
+</str>
+<str>
+    <key>FIELD_EMAIL</key>
+    <value>כתובת דוא&quot;ל</value>
+</str>
+<str>
+    <key>FIELD_EMAIL2</key>
+    <value>כתובת דוא&quot;ל 2</value>
+</str>
+<str>
+    <key>FIELD_EMAIL3</key>
+    <value>כתובת דוא&quot;ל 3</value>
+</str>
+<str>
+    <key>FIELD_EMAIL4</key>
+    <value>כתובת דוא&quot;ל 4</value>
+</str>
+<str>
+    <key>ALREADY_REGISTERED_QUESTION</key>
+    <value>רשומים כבר?</value>
+</str>
+<str>
+    <key>LOGIN_LINK</key>
+    <value>היכנסו למערכת</value>
+</str>
+<str>
+    <key>JOIN_SUCCESS</key>
+    <value>הרישום הצליח!</value>
+</str>
+<str>
+    <key>BTN_JOIN</key>
+    <value>הרשמה</value>
+</str>
+<str>
+    <key>HEADER_LOGOUT</key>
+    <value>יציאה</value>
+</str>
+<str>
+    <key>PAGE_TITLE_PRODUCERS</key>
+    <value>יצרנים</value>
+</str>
+<str>
+    <key>PAGE_TITLE_COORDINATE</key>
+    <value>מתאמים של %s</value>
+</str>
+<str>
+    <key>PAGE_TITLE_PRODUCTS</key>
+    <value>מוצרים</value>
+</str>
+<str>
+    <key>PAGE_TITLE_PICKUP_LOCATIONS</key>
+    <value>מקומות איסוף</value>
+</str>
+<str>
+    <key>PAGE_TITLE_COOP_ORDERS</key>
+    <value>הזמנות קואופרטיב</value>
+</str>
+<str>
+    <key>PAGE_TITLE_DATE_PICKER</key>
+    <value>בחר/י תאריך</value>
+</str>
+<str>
+    <key>MSG_ZERO_BALNACE_LINE1</key>
+    <value>כרגע אין לך יתרה רשומה במערכת.</value>
+</str>
+<str>
+    <key>MSG_ZERO_BALNACE_LINE2</key>
+    <value>ללא יתרה לא ניתן לבצע הזמנות.</value>
+</str>
+<str>
+    <key>MSG_ZERO_BALNACE_LINE3_NEW_MEMBER</key>
+    <value>אם יש לך יתרה ב%s, וודאי נעדכן אותה תוך %d שעות. אם זה לא קורה,</value>
+    <notes>1st param: COOPERATIVE_NAME in this file</notes>
+    <notes>2nd param: HOURS_TO_UPDATE_BALANCE_FOR_NEW_MEMBER in settings.php minus elapsed hours from joining</notes>
+</str>
+<str>
+    <key>MSG_ZERO_BALNACE_LINE4</key>
+    <value>להסדרת היתרה בבקשה פנו אלינו ל %s</value>
+    <notes>param : COOP_ADDRESS_MEMBER_BALANCE in settings.php </notes>
+</str>
+<str>
+    <key>PERMISSIONS_NONE</key>
+    <value>אין לך כלל הרשאות במערכת. אם נעשתה טעות, יש ליצור קשר איתנו ב %s לתיקון הבעיה</value>
+    <notes>param : COOP_ADDRESS_MEMBER_PERMISSIONS in settings.php </notes>
+</str>
+<str>
+    <key>TABLE_ADD</key>
+    <value>הוספה</value>
+</str>
+<str>
+    <key>TABLE_EDIT</key>
+    <value>עריכה</value>
+</str>
+<str>
+    <key>NEW_PRODUCER</key>
+    <value>יצרן חדש</value>
+</str>
+<str>
+    <key>FIELD_PRODUCER_NAME</key>
+    <value>שם יצרן</value>
+</str>
+<str>
+    <key>FIELD_IS_DISABLED</key>
+    <value>מצב</value>
+</str>
+<str>
+    <key>FIELD_VALUE_DISABLED</key>
+    <value>לא פעיל</value>
+</str>
+<str>
+    <key>FIELD_VALUE_ENABLED</key>
+    <value>פעיל</value>
+</str>
+<str>
+    <key>FIELD_COORD</key>
+    <value></value>
+    <note>coordination title. can be empty</note>
+</str>
+<str>
+    <key>FIELD_COPY</key>
+    <value></value>
+    <note>copy coop order column title. can be empty</note>
+</str>
+<str>
+    <key>RECORD_COORD</key>
+    <value>תיאום</value>
+    <note>appears on every row coordination can be set for</note>
+</str>
+<str>
+    <key>BTN_SAVE</key>
+    <value>שמירה</value>
+</str>
+<str>
+    <key>RECORD_SAVED</key>
+    <value>הרשומה נשמרה בהצלחה.</value>
+</str>
+<str>
+    <key>RECORD_NOT_SAVED</key>
+    <value>הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.</value>
+</str>
+<str>
+    <key>COMPLEX_DELETE_SUCESS</key>
+    <value>המחיקה התבצעה בהצלחה.</value>
+</str>
+<str>
+    <key>COMPLEX_DELETE_FAILURE</key>
+    <value>המחיקה נכשלה.</value>
+</str>
+<str>
+    <key>NO_RECORD_FOUND</key>
+    <value>לא נמצאו רשומות.</value>
+</str>
+<str>
+    <key>LOAD_RECORD_FAILED</key>
+    <value>העלאת הרשומה נכשלה.</value>
+</str>
+<str>
+    <key>FIELD_COORDINATOR_NAME</key>
+    <value>מתאמ/ת</value>
+</str>
+<str>
+    <key>FIELD_COORDINATOR_INCLUDED_IN_GROUP</key>
+    <value>כלול בקבוצה?</value>
+</str>
+<str>
+    <key>FIELD_GROUP_NAME</key>
+    <value>שם קבוצה</value>
+</str>
+<str>
+    <key>FIELD_GROUP_NAME_OR_SELECT_FROM_LIST</key>
+    <value>בחר/י מהרשימה</value>
+</str>
+<str>
+    <key>FIELD_COORDINATOR_IS_CONTACT_PERSON</key>
+    <value>האם איש קשר?</value>
+</str>
+<str>
+    <key>MORE_COORDINATORS_INSTRUCTION</key>
+    <value>למתאמים/ות נוספות/ים יש להגדיר תחילה לחברות הרלוונטיים הרשאות תיאום לאיזור ההרשאה</value>
+</str>
+<str>
+    <key>COORDINATE_GROUP_NAME_IS_REQUIRED</key>
+    <value>יש להזין שם קבוצה.</value>
+</str>
+<str>
+    <key>COORDINATE_MEMBERS_IN_GROUP_ARE_REQUIRED</key>
+    <value>לא נבחרו חברים/ות בקבוצה.</value>
+</str>
+<str>
+    <key>COMPLEX_SAVE_SUCESS</key>
+    <value>הנתונים נשמרו בהצלחה.</value>
+</str>
+<str>
+    <key>COMPLEX_SAVE_FAILURE</key>
+    <value>הנתונים לא נשמרו.</value>
+</str>
+<str>
+    <key>GROUP_REMOVE_SUCESS</key>
+    <value>מתאמות/ים הוסרו בהצלחה.</value>
+</str>
+<str>
+    <key>GROUP_REMOVE_FAILURE</key>
+    <value>כישלון בהסרת מתאמות/ים.</value>
+</str>
+<str>
+    <key>BTN_NEW_GROUP</key>
+    <value>קבוצה חדשה</value>
+</str>
+<str>
+    <key>BTN_DELETE_GROUP</key>
+    <value>מחיקת קבוצה</value>
+</str>
+<str>
+    <key>BTN_REMOVE_GROUP</key>
+    <value>הסרת תיאום</value>
+</str>
+<str>
+    <key>BTN_SAVE_NEW_GROUP</key>
+    <value>שמירת קבוצה חדשה</value>
+</str>
+<str>
+    <key>LABEL_CREATE_GROUP</key>
+    <value>קבוצה חדשה:</value>
+</str>
+<str>
+    <key>LABEL_CURRENT_GROUP</key>
+    <value>קבוצה נוכחית:</value>
+</str>
+<str>
+    <key>TOOLTIP_SELECT_ANOTHER_GROUP</key>
+    <value>קבוצה אחרת</value>
+</str>
+<str>
+    <key>BTN_SET_ONLY_THIS_MEMBER_AS_COORDINATOR</key>
+    <value>קביעה כמתאמ/ת בלעדי/ת</value>
+</str>
+<str>
+    <key>CAPTION_COORDINATED_BY_THIS_MEMBER_SOLELY</key>
+    <value>מתאמ/ת בלעדי/ת</value>
+</str>
+<str>
+    <key>SOME_MEMBERS_UNAUTHORIZED_FOR_COORDINATING</key>
+    <value>הקבוצה שנבחרה לא יכולה להיקבע כמתאמת כיוון שלחלק מחבריה אין הרשאת תיאום ל%1$s. החברים ללא הרשאות הן: %2$s</value>
+    <notes>param: record name, such as the producer name</notes>
+    <notes>followed by list of the unauthorized members</notes>
+</str>
+<str>
+    <key>SOME_MEMBERS_UNAUTHORIZED_FOR_COORDINATING_IN_LOADED_RECORD</key>
+    <value>לחלק מחברי הקבוצה כבר אין הרשאת תיאום ל%1$s. החברים ללא הרשאות הן: %2$s</value>
+    <notes>param: record name, such as the producer name</notes>
+    <notes>followed by list of the unauthorized members</notes>
+</str>
+<str>
+    <key>SOME_UNAUTHORIZED_MEMBERS_REMOVED_FROM_COORDINATING</key>
+    <value>לחלק מחברי הקבוצה כבר אין הרשאת תיאום והן הוסרו מהקבוצה. החברים ללא הרשאות הן: %s</value>
+    <notes>param1: list of the unauthorized members</notes>
+</str>
+<str>
+    <key>ALL_MEMBERS_LEFT_ARE_UNAUTHORIZED</key>
+    <value>לכל החברים שנותרו בקבוצה כבר אין הרשאת תיאום: %s</value>
+</str>
+<str>
+    <key>COORDINATE_CANT_REMOVE_OWN_PERMISSION</key>
+    <value>לא ניתן להסיר את הרשאות התיאום של עצמך. רק לשתף עם אחרות/ים.</value>
+</str>
+<str>
+    <key>ERROR_TECHNICAL_INFORMATION</key>
+    <value>מידע טכני:</value>
+</str>
+<str>
+    <key>ERROR_OCCURED</key>
+    <value>אירעה שגיאה במערכת.</value>
+</str>
+<str>
+    <key>BTN_DELETE</key>
+    <value>מחיקה</value>
+</str>
+<str>
+    <key>DELETE_SUCCESS</key>
+    <value>הרשומה נמחקה בהצלחה.</value>
+</str>
+<str>
+    <key>DELETE_FAILURE</key>
+    <value>הרשומה לא נמחקה.</value>
+</str>
+<str>
+    <key>FIELD_PRODUCT</key>
+    <value>מוצר</value>
+</str>
+<str>
+    <key>FIELD_PRODUCER</key>
+    <value>יצרן</value>
+</str>
+<str>
+    <key>FIELD_SORT_ORDER</key>
+    <value>סדר מיון</value>
+</str>
+<str>
+    <key>FIELD_SORT_ORDER_SHORT</key>
+    <value>#</value>
+</str>
+<str>
+    <key>FIELD_BURDEN</key>
+    <value>מעמסה</value>
+</str>
+<str>
+    <key>FIELD_JOIN_TO_PRODUCT</key>
+    <value>צירוף למוצר</value>
+    <pages>coord/product</pages>
+</str>
+<str>
+    <key>TOOLTIP_JOIN_TO_PRODUCT</key>
+    <value>צירוף יחידות למוצר חוסך-עלויות גדול יותר</value>
+    <pages>coord/product</pages>
+</str>
+<str>
+    <key>FIELD_USER_MAX_ORDER</key>
+    <value>מקס. הזמנה</value>
+</str>
+<str>
+    <key>FIELD_UNIT</key>
+    <value>יחידת מדידה</value>
+</str>
+<str>
+    <key>FIELD_PACKAGE_SIZE</key>
+    <value>גודל חבילה</value>
+</str>
+<str>
+    <key>FIELD_UNIT_SHORT</key>
+    <value>מדידה</value>
+</str>
+<str>
+    <key>FIELD_PRODUCER_PRICE</key>
+    <value>מחיר יצרן</value>
+</str>
+<str>
+    <key>FIELD_COOP_PRICE</key>
+    <value>מחיר קואופרטיב</value>
+</str>
+<str>
+    <key>FIELD_PRODUCER_PRICE_SHORT</key>
+    <value>מ. יצרן</value>
+</str>
+<str>
+    <key>FIELD_COOP_PRICE_SHORT</key>
+    <value>מ. קואופ</value>
+</str>
+<str>
+    <key>FIELD_PRODUCT_NAME</key>
+    <value>שם מוצר</value>
+</str>
+<str>
+    <key>FIELD_PRODUCT_SPEC</key>
+    <value>פירוט</value>
+</str>
+<str>
+    <key>FIELD_QUANTITY</key>
+    <value>כמות</value>
+</str>
+<str>
+    <key>FIELD_EXPORT_QUANTITY</key>
+    <value>פריט</value>
+</str>
+<str>
+    <key>FIELD_PRODUCT_ITEMS_IN_PACKAGE</key>
+    <value>פריטים בחבילה</value>
+</str>
+<str>
+    <key>FIELD_PRODUCT_ITEM_QUANTITY</key>
+    <value>כמות לכל פריט</value>
+</str>
+<str>
+    <key>FIELD_ITEM_UNIT</key>
+    <value>פריט נמדד ב</value>
+</str>
+<str>
+    <key>FIELD_UNIT_INTERVAL</key>
+    <value>הזמנה בהפרשים של</value>
+</str>
+<str>
+    <key>TOOLTIP_PACKAGE_SIZE</key>
+    <value>גודל חבילה עבור מוצר שמגיע בחבילה גדולה, והקואפרטיב מאפשר להזמין הזמנות חלקיות ממנו.</value>
+</str>
+<str>
+    <key>TOOLTIP_SORT_ORDER</key>
+    <value>מספר המציין את סדר המיון של המוצר עבור כל מקום שבו מוצגת רשימת מוצרים. מספר נמוך יותר מופיע גבוה יותר ברשימה.</value>
+</str>
+<str>
+    <key>TOOLTIP_BURDEN</key>
+    <value>מדד שמציין כמה מוצר זה "מכביד" על המשלוח. מאפשר לעמוד במכסת גודל משלוח, אותה אפשר להגדיר בהזמנת הקואופרטיב</value>
+</str>
+<str>
+    <key>TOOLTIP_USER_MAX_ORDER</key>
+    <value>מקסימום כמות מהמוצר לכל חבר/ה</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_MAX_PRODUCT_ORDER</key>
+    <value>מקסימום כמות מהמוצר לכל הזמנת הקואופרטיב</value>
+</str>
+<str>
+    <key>TOOLTIP_UNIT_INTERVAL</key>
+    <value>מרווח ביחידות משקל/נפח בין הזמנות אפשריות. למשל, 0.5 כשאפשר להזמין בחצאי ק"ג בלבד. לא רלוונטי עבור מוצרים הנמכרים לפי מספר יחידות</value>
+</str>
+<str>
+    <key>HELP_PRODUCT_PRICE</key>
+    <value>זהו מחיר ברירת המחדל של המוצר. מחיר המוצר בפועל יכול להיקבע לערך אחר בכל הזמנת קואופרטיב</value>
+</str>
+<str>
+    <key>NEW_PRODUCT</key>
+    <value>מוצר חדש</value>
+</str>
+<str>
+    <key>FIELD_SELECT_REQUIRED</key>
+    <value>יש לבחור %s</value>
+</str>
+<str>
+    <key>FIELD_NON_NEGATIVE</key>
+    <value>%s לא יכול להכיל ערך שלילי</value>
+</str>
+<str>
+    <key>FIELD_NON_NEGATIVE_OR_ZERO</key>
+    <value>%s לא יכול להכיל ערך שלילי או אפס</value>
+</str>
+<str>
+    <key>PRODUCT_VALIDATION_UNIT_MUST_BE_IN_ITEMS_WHEN_JOINING_PRODUCTS</key>
+    <value>כאשר מוגדר צירוף למוצר יחידת המדידה של המוצר חייבת להיות ביחידות</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_NAME</key>
+    <value>מקום האיסוף</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_ROTATION_ORDER</key>
+    <value>מיקום בסבב</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_ROTATION_ORDER_SHORT</key>
+    <value>סבב</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_ADDRESS</key>
+    <value>כתובת</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_MAX_BURDEN</key>
+    <value>קיבולת משלוח</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_PUBLISHED_COMMENTS</key>
+    <value>הנחיות איסוף</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_ADMIN_COMMENTS</key>
+    <value>הערות למתאמות/ים</value>
+</str>
+<str>
+    <key>TOOLTIP_PICKUP_LOCATION_MAX_BURDEN</key>
+    <value>הקיבולת המקסימאלית של מקום האיסוף במונחים של שדה המוצר "מעמסה". הסכום של המעמסות של כל המוצרים כפול הכמות שהוזמנה מכל מוצר יושווה לערך זה עבור כל הזמנות החברות/ים שמקום איסוף זה נבחר בהם. זהו רק ערך ברירת מחדל, וניתן להחליפו בהגדרות מקום האיסוף של הזמנת הקואופרטיב. אם לא הוחלף הערך בהגדרות מקום האיסוף של הזמנת הקואופרטיב,  חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</value>
+</str>
+<str>
+    <key>NEW_PICKUP_LOCATION</key>
+    <value>מקוף איסוף חדש</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_NAME</key>
+    <value>כותרת הזמנה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_NAME_SHORT</key>
+    <value>הזמנה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_START</key>
+    <value>פתיחה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_END</key>
+    <value>סגירה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_DELIVERY</key>
+    <value>משלוח</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_MODIFIER</key>
+    <value>עודכן לאחרונה ע"י</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_MAX_BURDEN</key>
+    <value>קיבולת משלוח</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_MAX_COOP_TOTAL</key>
+    <value>מכסת סכום לקואופ</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_COOP_TOTAL</key>
+    <value>סכום לקואופ</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCER_TOTAL</key>
+    <value>סכום ליצרנים</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_COOP_TOTAL_SHORT</key>
+    <value>קואופ</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCER_TOTAL_SHORT</key>
+    <value>יצרנים</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_TOTAL_BURDEN</key>
+    <value>סה"כ מעמסה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_STATUS</key>
+    <value>מצב</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_COOP_FEE</key>
+    <value>עמלת קואופרטיב</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_SMALL_ORDER</key>
+    <value>מכסת הזמנה קטנה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_SMALL_ORDER_COOP_FEE</key>
+    <value>עמלה להזמנה קטנה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_COOP_FEE_PERCENT</key>
+    <value>עמלה %</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PAYMENT_METHOD_ID</key>
+    <value>שיטת תשלום אחידה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_TOTAL_DELIVERY</key>
+    <value>סה"כ משלוח</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_TOTAL_BURDEN</key>
+    <value>הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב כפול מספר הפעמים שהוזמן</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_BURDEN</key>
+    <value>הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור מקום האיסוף כפול מספר הפעמים שהוזמן</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_PICKUP_LOCATION_MAX_BURDEN</key>
+ <value>הגבלת גודל המשלוח למקום איסוף זה לפי הקיבולת הכוללת של המוצרים שיגיעו אליו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_PRODUCER_MAX_BURDEN</key>
+ <value>הגבלת גודל המשלוח ליצרן זה לפי הקיבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_PRODUCER_TOTAL_BURDEN</key>
+    <value>הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור היצרן כפול מספר הפעמים שהוזמן</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_PAYMENT_METHOD</key>
+    <value>קביעת שיטת תשלום אחידה תדרוס את הגדרות שיטת תשלום שהוגדרו פר חבר/ה עבור ההזמנה הנוכחית</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_MAX_BURDEN</key>
+    <value>הגבלת גודל ההזמנה לפי הקיבולת הכוללת שלה, ע"י השוואת סיכום של המעמסות של כל מוצר כפול כמות ההזמנה ממנו. ניתן לקבוע הגבלה כזו גם פר מקום איסוף. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_MAX_COOP_TOTAL</key>
+    <value>מגבילה את הסכום הכולל של הזמנת הקואופרטיב. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_COOP_FEE</key>
+    <value>סכום קבוע שמשולם ע"י כל חבר/ה פר הזמנה בנוסף לסכום המוצרים, לכיסוי הוצאות הרכישה המרוכזת</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_SMALL_ORDER</key>
+    <value>ערך המגדיר רף הזמנה קטנה, עבורה עמלת הקואופרטיב מופחתת</value>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_SMALL_ORDER_COOP_FEE</key>
+    <value>עמלת קואופרטיב מופחתת עבור הזמנה קטנה</value>
+</str>
+<str>
+    <key>COOP_ORDER_STATUS_DRAFT</key>
+    <value>טיוטה</value>
+</str>
+<str>
+    <key>COOP_ORDER_STATUS_ACTIVE</key>
+    <value>פעילה</value>
+</str>
+<str>
+    <key>COOP_ORDER_STATUS_CLOSED</key>
+    <value>סגורה</value>
+</str>
+<str>
+    <key>COOP_ORDER_STATUS_CANCELLED</key>
+    <value>מבוטלת</value>
+</str>
+<str>
+    <key>CANNOT_DELETE_ACTIVE_ORDER</key>
+    <value>לא ניתן למחוק הזמנה פעילה.</value>
+</str>
+<str>
+    <key>FIELD_MUST_BE_SET_TO_VALID_DATE</key>
+    <value>%s חייב להכיל תאריך תקין</value>
+</str>
+<str>
+    <key>FIELD_MUST_BE_NUMERIC</key>
+    <value>%s חייב להכיל ערך מספרי</value>
+</str>
+<str>
+    <key>INVALID_SELECT_CHANGE</key>
+    <value>לא ניתן לשנות את %s לערך שנבחר</value>
+</str>
+<str>
+    <key>FIELD1_MUST_BE_SET_WHEN_FIELD2_IS_SET</key>
+    <value>יש להזין ערך עבור %1$s כאשר מוזן ערך עבור %2$s.</value>
+</str>
+<str>
+    <key>NEW_COOP_ORDER</key>
+    <value>הזמנת קואופרטיב חדשה</value>
+</str>
+<str>
+    <key>FIELD1_MUST_BE_LATER_OR_EQUAL_TO_FIELD2</key>
+    <value>%1$s צריך להיות מאוחר יותר או זהה ל-%2$s</value>
+</str>
+<str>
+    <key>TAB_SEPARATOR</key>
+    <value>&gt;&gt;</value>
+</str>
+<str>
+    <key>TAB_ORDER_ITEMS</key>
+    <value>פריטים מוזמנים</value>
+</str>
+<str>
+    <key>TAB_ORDER_PICKUP_LOCATIONS</key>
+    <value>מקומות איסוף</value>
+</str>
+<str>
+    <key>TAB_ORDER_PRODUCERS</key>
+    <value>יצרנים</value>
+</str>
+<str>
+    <key>TAB_ORDER_PRODUCTS</key>
+    <value>מוצרים</value>
+</str>
+<str>
+    <key>TAB_ORDER_ORDERS</key>
+    <value>הזמנות חברות/ים</value>
+</str>
+<str>
+    <key>TAB_ORDER_EXPORT_DATA</key>
+    <value>יצוא נתונים</value>
+    <pages>coop order tab</pages>
+</str>
+<str>
+    <key>ARE_YOU_SURE_DELETE_MSG</key>
+    <value>נא אשר/י או בטל/י את פעולת המחיקה</value>
+</str>
+<str>
+    <key>ARE_YOU_SURE_DELETE_COOP_ORDER_PRODUCT_MSG</key>
+    <value>פעולה זו תמחק גם את כל ההזמנות על סך %s שנעשו עבור מוצר זה. נא אשר/י</value>
+</str>
+<str>
+    <key>COOP_ORDER_CANNOT_BE_UPDATED_AT_THIS_STATUS</key>
+    <value>לא ניתן לעדכן את הזמנת הקואופרטיב במצב הנוכחי שלה</value>
+</str>
+<str>
+    <key>COOP_ORDER_PICKUP_LOCATION_LIST_IS_EMPTY</key>
+    <value>אין מקומות איסוף לבחירה. ייתכן שלא מוגדרים במערכת מקומות איסוף פעילים שלא נבחרו כבר בהזמנה הנוכחית או שאין לך הרשאות מספיקות</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCER_DELIVERY_PERCENT</key>
+    <value>% תוספת משלוח</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCER_FIXED_DELIVERY</key>
+    <value>תוספת משלוח קבועה</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCER_DELIVERY_PERCENT_MAX</key>
+    <value>מקס. תוספת משלוח</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCER_DELIVERY_PERCENT_MIN</key>
+    <value>מינ. תוספת משלוח</value>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCER_TOTAL_DELIVERY</key>
+    <value>סה"כ משלוח</value>
+</str>
+<str>
+    <key>FIELD_MAX_PRODUCER_ORDER</key>
+    <value>מכסת הזמנה ליצרן</value>
+</str>
+<str>
+    <key>FIELD_PRODUCER_TOTAL</key>
+    <value>סכום ליצרן</value>
+</str>
+<str>
+    <key>COOP_ORDER_PRODUCER_LIST_IS_EMPTY</key>
+    <value>אין יצרנים פעילים להוספה</value>
+</str>
+<str>
+    <key>FIELD_MAX_ORDER_PER_MEMBER</key>
+    <value>מכסת הזמנה לחבר/ה</value>
+</str>
+<str>
+    <key>FIELD_MAX_ORDER_PER_COOP</key>
+    <value>מכסת הזמנה לקואופ</value>
+</str>
+<str>
+    <key>COOP_ORDER_PRODUCT_LIST_IS_EMPTY</key>
+    <value>לא מוגדרים במערכת מוצרים פעילים, שלא נבחרו כבר בהזמנה הנוכחית</value>
+</str>
+<str>
+    <key>COOP_ORDER_PRODUCT_PRODUCER_LIST_IS_EMPTY</key>
+    <value>אין יצרנים בהזמנה הנוכחית. יש להוסיף תחילה יצרנים</value>
+</str>
+<str>
+    <key>PAGE_TITLE_COOP_ORDERS_FOR_COPY</key>
+    <value>העתקת הזמנת קואופרטיב</value>
+</str>
+<str>
+    <key>PAGE_TITLE_COOP_ORDERS_FOR_COPY_SHORT</key>
+    <value>העתקת הזמנה</value>
+</str>
+<str>
+    <key>LINK_COPY_COOP_ORDER</key>
+    <value>העתקה</value>
+</str>
+<str>
+    <key>PAGE_TITLE_COOP_ORDER_COPY</key>
+    <value>העתקת הזמנת קואופרטיב חדשה</value>
+</str>
+<str>
+    <key>HOME_LABEL_PICKUP_LOCATIONS</key>
+    <value>איסוף</value>
+</str>
+<str>
+    <key>HOME_LABEL_PRODUCERS</key>
+    <value>יצרנים</value>
+</str>
+<str>
+    <key>HOME_LINK_COOP_ORDER_PRODUCTS</key>
+    <value>מוצרים</value>
+</str>
+<str>
+    <key>HOME_LINK_COOP_ORDER_EXPORT</key>
+    <value>יצוא</value>
+</str>
+<str>
+    <key>ORDER_CAPACITY_PERCENT_FULL</key>
+    <value>תפוסה</value>
+</str>
+<str>
+    <key>HOME_ORDER_OPEN</key>
+    <value>ניתן להזמין</value>
+</str>
+<str>
+    <key>HOME_ORDER_CLOSED</key>
+    <value>הזמנה סגורה</value>
+</str>
+<str>
+    <key>HOME_ORDER_ARRIVED</key>
+    <value>המשלוח הגיע</value>
+</str>
+<str>
+    <key>HOME_ORDER_ARRIVING_TODAY</key>
+    <value>המשלוח מגיע היום</value>
+</str>
+<str>
+    <key>BTN_HOME_NEW_ORDER</key>
+    <value>הזמינו עכשיו</value>
+</str>
+<str>
+    <key>BTN_HOME_MY_ORDER</key>
+    <value>ההזמנה שלי</value>
+</str>
+<str>
+    <key>HOME_ORDER_AT_HOUR</key>
+    <value>בשעה</value>
+</str>
+<str>
+    <key>ORDER_READONLY_REASON_COOPORDER_IS_NOT_ACTIVE</key>
+    <value>לא ניתן לעדכן את הזמנה זו כיוון שהזמנת הקואופרטיב אינה פעילה.</value>
+</str>
+<str>
+    <key>ORDER_READONLY_REASON_ACTIVE_COOPORDER_NOT_OPEN_FOR_MEMBER</key>
+    <value>לא ניתן לעדכן את הזמנה זו כיוון שהזמנת הקואופרטיב נסגרה.</value>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_WHEN_CAPACITY_IS_FULL</key>
+    <value>לא ניתן להגדיל את ההזמנה הזו מעבר לתפוסה המלאה של הזמנת הקואופרטיב</value>
+    <explanation>this message appears both when opening an order that cannot be enlarged and when trying to enlarge an order that can be enlarged to some extent - but beyond that extent</explanation>
+</str>
+<str>
+    <key>ORDER_READONLY_REASON_CANNOT_CREATE_NEW_WHEN_CAPACITY_IS_FULL</key>
+    <value>לא ניתן ליצור הזמנה חדשה כיוון שהזמנת הקואופרטיב בתפוסה מלאה</value>
+</str>
+<str>
+    <key>ORDER_READONLY_REASON_CANNOT_CREATE_NEW_DUE_TO_BURDER</key>
+    <value>הסיבה לתפוסה המלאה היא ששדה סה"כ מעמסה בהזמנת הקואופרטיב הגיע לערך של שדה קיבולת משלוח של הזמנת הקואופרטיב. להגדלת התפוסה יש להגדיל את הערך בשדה קיבולת המשלוח</value>
+</str>
+<str>
+    <key>ORDER_READONLY_REASON_CANNOT_CREATE_NEW_DUE_TO_MAX_COOP_ORDER</key>
+    <value>הסיבה לתפוסה המלאה היא ששדה סה"כ לקואופ בהזמנת הקואופרטיב הגיע לערך של שדה מכסת סכום לקואופ של הזמנת הקואופרטיב. להגדלת התפוסה יש להגדיל את הערך בשדה מכסת סכום לקואופ</value>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_WHEN_PICKUP_LOCATION_CAPACITY_IS_FULL</key>
+    <value>לא ניתן להגדיל את ההזמנה הזו מעבר לתפוסה המלאה של מקום האיסוף של הזמנת הקואופרטיב</value>
+    <explanation>this message can appear both when changing a pickup location and when updating order items</explanation>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_WHEN_PICKUP_LOCATION_CAPACITY_IS_FULL_BURDEN_REASON</key>
+    <value>שדה סה"כ מעמסה במקום האיסוף של הזמנת הקואופרטיב חרג מהמגבלה שהוגדרה בשדה קיבולת משלוח של מקום האיסוף.</value>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_WHEN_PICKUP_LOCATION_CAPACITY_IS_FULL_COOP_TOTAL_REASON</key>
+    <value>שדה סה"כ לקואופ במקום האיסוף של הזמנת הקואופרטיב חרג מהמגבלה שהוגדרה בשדה מכסת סכום לקואופ של מקום האיסוף.</value>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_WHEN_PRODUCER_CAPACITY_IS_FULL</key>
+    <value>לא ניתן להגדיל את ההזמנה הזו מעבר לתפוסה המלאה של היצרן %s של הזמנת הקואופרטיב</value>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_WHEN_PRODUCER_CAPACITY_IS_FULL_BURDEN_REASON</key>
+     <value>שדה סה"כ מעמסה עבור היצרן %s של הזמנת הקואופרטיב חרג מהמגבלה שהוגדרה בשדה קיבולת משלוח של היצרן.</value>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_WHEN_PRODUCER_CAPACITY_IS_FULL_TOTAL_REASON</key>
+    <value>שדה סכום ליצרן עבור היצרן %s של הזמנת הקואופרטיב חרג מהמגבלה שהוגדרה בשדה מכסת הזמנה ליצרן.</value>
+</str>
+<str>
+    <key>ORDER_CANNOT_BE_ENLARGED_BEYOND_BALANCE</key>
+    <value> לא ניתן להגדיל את ההזמנה מעבר לסכום מוצרים כולל של %s</value>
+</str>
+<str>
+    <key>PAGE_TITLE_SEPARATOR</key>
+    <value> - </value>
+</str>
+<str>
+    <key>MY_ORDER_NAME_SUFFIX</key>
+    <value>ההזמנה שלי</value>
+</str>
+<str>
+    <key>USER_ORDER_NAME_SUFFIX</key>
+    <value>ההזמנה של %s</value>
+</str>
+<str>
+    <key>NEW_ORDER_SUFFIX</key>
+    <value>הזמנה חדשה</value>
+</str>
+<str>
+    <key>FIELD_MEMBER</key>
+    <value>חבר/ה</value>
+</str>
+<str>
+    <key>FIELD_ORDER_COOP_TOTAL_SHORT</key>
+    <value>סכום</value>
+</str>
+<str>
+    <key>FIELD_MEMBER_COMMENTS</key>
+    <value>הערות</value>
+</str>
+<str>
+    <key>ERR_ORDER_NO_LEFT_MEMBERS</key>
+    <value>לא נותרו חברות/ים להוספה להזמנה הנוכחית. יש כבר הזמנה לכל חברי הקואופרטיב</value>
+</str>
+<str>
+    <key>FIELD_ORDER_CREATED</key>
+    <value>ת. הזמנה</value>
+</str>
+<str>
+    <key>FIELD_MEMBER_ORDER_ITEM_QUANTITY</key>
+    <value>הזמנה</value>
+</str>
+<str>
+    <key>FIELD_MEMBER_ORDER_ITEM_TOTAL</key>
+    <value>סה"כ</value>
+</str>
+<str>
+    <key>FIELD_MEMBER_ORDER_ITEM_COMMENTS</key>
+    <value>הערות</value>
+</str>
+<str>
+    <key>FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION</key>
+    <value>הוספה</value>
+</str>
+<str>
+    <key>TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION</key>
+    <value>הכמות המקסימלית שמתאמי הזמנת הקואופרטיב יורשו *להוסיף* להזמנה שלך כדי להשלים הזמנות חלקיות לגודל החבילה. למשל, אם גודל החבילה הוא 2ק"ג, והכמות שהזמנת היא 0.5ק"ג, ע"י השמת הערך 0.5ק"ג בשדה זה, תוכל/י להגדיר שאפשר לעלות עד ל- 1ק"ג כדי להשלים הזמנה חלקית</value>
+</str>
+<str>
+    <key>BTN_SAVE_ORDER_ITEMS</key>
+    <value>שמירת מוצרי ההזמנה</value>
+</str>
+<str>
+    <key>BTN_SAVE_ORDER</key>
+    <value>שמירת כותר ההזמנה</value>
+</str>
+<str>
+    <key>BTN_SAVE_NEW_ORDER</key>
+    <value>יצירת הזמנה</value>
+</str>
+<str>
+    <key>BTN_DELETE_THE_ENTIRE_ORDER</key>
+    <value>מחיקת %s</value>
+</str>
+<str>
+    <key>ORDER_ITEMS_SAVE_SUCESS</key>
+    <value>המוצרים המוזמנים נשמרו בהצלחה.</value>
+</str>
+<str>
+    <key>ORDER_ITEMS_PRICE</key>
+    <value>מחיר</value>
+</str>
+<str>
+    <key>ORDER_ITEM_VALIDATION_ADDITION_ENTERED_WITHOUT_QUANTITY</key>
+    <value>לא ניתן להזין ערך לעמודה הוספה ללא הזמנה</value>
+</str>
+<str>
+    <key>ORDER_ITEM_VALIDATION_COMMENT_ENTERED_WITHOUT_QUANTITY</key>
+    <value>לא ניתן להזין הערה ללא הזמנה. הערות כאלה יש להזין בכותר ההזמנה</value>
+</str>
+<str>
+    <key>ORDER_ITEMS_VALIDATION_GENERAL_MESSAGE</key>
+    <value>הזמנת המוצרים שהוזנה אינה תקינה. הודעה מפורטת מופיעה מעל כל שורה הצבועה באדום</value>
+</str>
+<str>
+    <key>ORDER_ITEM_VALIDATION_QUANTITY_EXCEEDS_MAX_USER_ORDER</key>
+    <value>הכמות שהוזנה חורגת ממכסת ההזמנה פר חבר/ה עבור המוצר</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>ORDER_ITEM_VALIDATION_QUANTITY_EXCEEDS_MAX_COOP_ORDER</key>
+    <value>הכמות שהוזנה גורמת לקואופרטיב לחרוג ממכסת ההזמנה הכוללת עבור המוצר</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>ORDER_ITEM_VALIDATION_FOR_UNIT_INTERVAL</key>
+    <value>לא ניתן להזמין את הכמות שהוזנה. יש להזין כמות בכפולות של  %s</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>ORDER_ITEM_VALIDATION_CANNOT_DELETE_JOINED</key>
+    <value>לא ניתן להסיר כרגע הזמנה ממוצר זה, כיוון שנעשה עבורו איחוד פריטים לחבילה גדולה יותר. אנא פנו למתאמי ההזמנה/קואופרטיב</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>ORDER_ITEM_VALIDATION_CANNOT_REDUCE_JOINED</key>
+    <value>לא ניתן להפחית כמות כרגע ממוצר זה, כיוון שנעשה עבורו איחוד פריטים לחבילה גדולה יותר לצרכי חסכון עלויות. אנא פנו למתאמי ההזמנה/קואופרטיב</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_COOP_TOTAL_INCLUDE_FEE</key>
+    <value>סה"כ ההזמנה</value>
+    <pages>order tab (orderitems,order)</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_COOP_TOTAL</key>
+    <value>סה"כ מוצרים</value>
+    <pages>order tab (orderitems,order)</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_COOP_FEE</key>
+    <value>תוספת לקואופ</value>
+    <pages>order tab (orderitems,order)</pages>
+</str>
+<str>
+    <key>ORDER_ITEMS_VIEW_MODE_ALL_PRODUCTS</key>
+    <value>כל המוצרים</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>ORDER_ITEMS_VIEW_MODE_ORDERED_PRODUCTS</key>
+    <value>מוצרים מוזמנים</value>
+    <pages>order tab (orderitems,order)</pages>
+</str>
+<str>
+    <key>ORDER_ITEMS_NOT_SAVED_BEFORE_VIEW_CHANGE</key>
+    <value>נראה שערכת את מוצרי ההזמנה אך לא ביצעת שמירה. לאחר שינוי התצוגה השינויים האלה יאבדו. האם להמשיך?</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>FIELD_LAST_UPDATE_FULL</key>
+    <value>עדכון אחרון ע"י %1$s בתאריך %2$s בשעה %3$s</value>
+    <pages>order</pages>
+</str>
+<str>
+    <key>FIELD_CREATED_FULL</key>
+    <value>נוצרה ע"י %1$s בתאריך %2$s בשעה %3$s</value>
+    <pages>order</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_PICKUP_LOCATION_COMMENTS</key>
+    <value>הנחיות איסוף</value>
+    <pages>order</pages>
+</str>
+<str>
+    <key>ORDER_ITEMS_CHANGED_BY_COORDINATOR</key>
+    <value>הכמות המוזמנת של חלק מהפריטים שונתה ע"י מתאמ/ת קואופרטיב. השורות ששונו צבועות בצבע שונה והכמויות המקוריות מוצגות בסוגריים</value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>ORDERS_ITEM_COMMENTS_LINK_TEXT</key>
+    <value>עוד...</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCT_TOTAL_QUANTITY</key>
+    <value>כמות</value>
+    <pages>coop order product</pages>
+</str>
+<str>
+    <key>FIELD_COOP_ORDER_PRODUCT_PRODUCER_TOTAL</key>
+    <value>סה"כ ליצרן</value>
+    <pages>coop order product</pages>
+</str>
+<str>
+    <key>FIELD_BALANCE</key>
+    <value>יתרה</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_SUFFIX_PARTIAL_ORDERS</key>
+    <value>הזמנות חלקיות</value>
+    <pages>coord/partialorders</pages>
+</str>
+<str>
+    <key>NO_PARTIAL_ORDERS</key>
+    <value>לא נמצאו הזמנות חלקיות.</value>
+    <pages>coord/partialorders</pages>
+</str>
+<str>
+    <key>FIELD_ORIGINAL_QUANTITY</key>
+    <value>כמות מקורית</value>
+    <pages>coord/partialorders</pages>
+</str>
+<str>
+    <key>FIELD_SUGGESTED_QUANTITY</key>
+    <value>כמות מוצעת</value>
+    <pages>coord/partialorders</pages>
+</str>
+<str>
+    <key>ALL_PARTIAL_ORDERS_ADD_UP_TO_COMPLETE_COOP_ORDER</key>
+    <value>ההזמנות החלקיות מצטברות לכדי הזמנת קואופרטיב שלמה</value>
+    <pages>coord/partialorders</pages>
+</str>
+<str>
+    <key>ORDER_COORDINATOR_BYPASS_MEMBER_PERMISSIONS_WARNING</key>
+    <value>הרשאת חבר/ת קואופרטיב נעקפה: </value>
+    <pages>orderitems</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_MEMBER_ORDERS</key>
+    <value>ההזמנות של %s</value>
+    <pages>orders</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_MY_ORDERS</key>
+    <value>ההזמנות שלי</value>
+    <pages>orders</pages>
+</str>
+<str>
+    <key>LINK_MEMBER_ORDERS</key>
+    <value>הזמנות חבר/ה</value>
+    <pages>coord panel</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_PRODUCER_ORDERS_MAIL_LIST</key>
+    <value>מיילים של מזמינים מ%s</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_PICKUP_LOCATION_ORDERS_MAIL_LIST</key>
+    <value>מיילים של מזמינים ל%s</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_PRODUCER_ORDERS</key>
+    <value>הזמנה מ%s</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_PICKUP_LOCATION_ORDERS</key>
+    <value>משלוח ל%s</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_ENTIRE_COOP_ORDER</key>
+    <value>כל הנתונים</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_COOP_ORDER_SUMMARY</key>
+    <value>סיכום הזמנת הקואופרטיב</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_ENTIRE_COOP_ORDER_MAIL_LIST</key>
+    <value>מיילים של כל המזמינים</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_ENTIRE_COOP_ORDER_PRODUCTS_MAIL_LIST</key>
+    <value>מיילים של מזמיני מוצרים</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_DATA_MAIL_LIST_IS_EMPTY</key>
+    <value>אין כתובות מייל.</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_EXPORT_DATASET</key>
+    <value>נתונים ליצוא</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>BTN_ORDER_EXPORT_DISPLAY_PRODUCTS_MAIL_LIST</key>
+    <value>הצגת הרשימה</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>ORDER_EXPORT_NO_PRODUCTS_SELECTED</key>
+    <value>לא נבחרו מוצרים.</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_EXPORT_TOTAL_PRODUCT_QUANTITY</key>
+    <value>סה”כ כמות</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_EXPORT_TOTAL_PRODUCT_PRODUCER_SUM</key>
+    <value>סה”כ מחיר</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_EXPORT_TOTAL_ROW_LABEL</key>
+    <value>סכום כולל</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_EXPORT_TOTAL_PRODUCTS_ROW_LABEL</key>
+    <value>סכום למוצרים</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>FIELD_ORDER_EXPORT_TOTAL_DELIVERY_ROW_LABEL</key>
+    <value>משלוח</value>
+    <pages>coord/cooporderexport</pages>
+</str>
+<str>
+    <key>BTN_JOIN_COOP_ORDER_PRODUCTS</key>
+    <value>צירוף מוצרים</value>
+    <pages>coord/cooporder</pages>
+</str>
+<str>
+    <key>BTN_UNJOIN_COOP_ORDER_PRODUCTS</key>
+    <value>הפרדת מוצרים</value>
+    <pages>coord/cooporder</pages>
+</str>
+<str>
+    <key>TOOLTIP_JOIN_COOP_ORDER_PRODUCTS</key>
+    <value>צירוף מוצרים ששדה צירוף למוצר מוגדר עבורם, כדי לחסוך עלויות ע"י הזמנת חבילה גדולה יותר</value>
+    <pages>coord/cooporder</pages>
+</str>
+<str>
+    <key>TOOLTIP_UNJOIN_COOP_ORDER_PRODUCTS</key>
+    <value>ביטול פעולת צירוף מוצרים, כדי לאפשר הפחתת כמויות עבורם</value>
+    <pages>coord/cooporder</pages>
+</str>
+<str>
+    <key>DEFICIT_IS_NOT_FIXED</key>
+    <value>שימו לב: גם אחרי קביעת הכמות המוצעת כאן, הכמויות של המוצר לא ישלימו לכפולות הנדרשות ע"י היצרן</value>
+    <pages>coord/partialorders</pages>
+</str>
+<str>
+    <key>COOP_ORDER_STILL_OPEN_ARE_YOU_SURE_JOIN_PRODUCTS</key>
+    <value>הזמנת הקואופרטיב עדיין פתוחה מבחינת התאריכים שלה. בשלב זה לא מומלץ לצרף מוצרים, כיוון שהפעולה תנעל את המוצרים שצורפו מפני הפחתת כמויות, ועשוי להיות צורך להריצה שוב, במקרה של הוספת כמויות. האם להמשיך?</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>JOIN_PRODUCTS_SUCCESS</key>
+    <value>פריטי מוצרים צורפו בהצלחה לחבילות גדולות יותר לצורך חסכון בעלויות. ההזמנות הבאות, המסומנות בצבע, עודכנו.</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>JOIN_PRODUCTS_NO_UPDATE</key>
+    <value>לא נמצאו מוצרים לצירוף.</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>UNJOIN_PRODUCTS_SUCCESS</key>
+    <value>פריטי מוצרים הופרדו בהצלחה לחבילות קטנות ויקרות יותר. ההזמנות הבאות, המסומנות בצבע, עודכנו.</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>UNJOIN_PRODUCTS_NO_UPDATE</key>
+    <value>לא נמצאו מוצרים להפרדה.</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>TOOLTIP_ORDER_ITEM_WAS_JOINED</key>
+    <value>%1$d מפריטי המוצר צורפו למוצר %2$s. כתוצאה מכך נחסך סכום של %3$s</value>
+    <pages>coord/orders</pages>
+</str>
+<str>
+    <key>COOP_ORDER_PRODUCT_VALIDATION_CANNOT_CHANGE_COOP_PRICE_WHEN_ALREADY_ORDERED</key>
+    <value>כבר יש הזמנות עבור המוצר הזה בהזמנת הקואופרטיב הנוכחית. לא ניתן לשנות מחירים במצב כזה. יש להסיר תחילה את ההזמנות מהמוצר.</value>
+    <pages>coord/coproduct</pages>
+</str>
+<str>
+    <key>COOP_ORDER_PRODUCT_VALIDATION_CANNOT_DELETE_WHEN_ALREADY_ORDERED</key>
+    <value>כבר יש הזמנות עבור המוצר הזה בהזמנת הקואופרטיב הנוכחית. לא ניתן למחוק את המוצר במצב כזה. יש להסיר תחילה את ההזמנות מהמוצר.</value>
+    <pages>coord/coproduct</pages>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_PRODUCT_QUANTITY_JOINED_BY</key>
+    <value>לכמות של המוצר הזה צורפה כמות ממוצר מקושר</value>
+    <pages>coord/coproduct(s)</pages>
+</str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_PRODUCT_QUANTITY_JOINED_TO</key>
+    <value>לפחות חלק מהכמות של מוצר זה צורפה למוצר מקושר</value>
+    <pages>coord/coproduct(s)</pages>
+</str>
+<str>
+    <key>FIELD_EXPORT_FILE_NAME</key>
+    <value>שם קובץ ליצוא</value>
+    <pages>coord/pickuploc, coord/producer</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_COOP_ORDER_PICKUP_LOCATION_PRODUCERS</key>
+    <value>יצרנים לפי מקום האיסוף %s</value>
+    <pages>coord/copickuplocproducers</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_COOP_ORDER_PICKUP_LOCATION_PRODUCTS</key>
+    <value>מוצרים לפי מקום האיסוף %s</value>
+    <pages>coord/copickuplocproducts</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_COOP_ORDER_PICKUP_LOCATION_ORDERS</key>
+    <value>הזמנות חברות לפי מקום האיסוף %s</value>
+    <pages>coord/copickuplocorders</pages>
+</str>
+<str>
+    <key>TAB_COOP_ORDER_PICKUP_LOCATION_PRODUCERS</key>
+    <value>יצרנים</value>
+    <pages>coord/copickuploctab</pages>
+</str>
+<str>
+    <key>TAB_COOP_ORDER_PICKUP_LOCATION_PRODUCTS</key>
+    <value>מוצרים</value>
+    <pages>coord/copickuploctab</pages>
+</str>
+<str>
+    <key>TAB_COOP_ORDER_PICKUP_LOCATION_ORDERS</key>
+    <value>הזמנות חברות/ים</value>
+    <pages>coord/copickuploctab</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_MEMBERS</key>
+    <value>חברות/ים</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>FIELD_PERCENT_OVER_BALANCE</key>
+    <value>אחוז חריגה</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>FIELD_JOINED_ON</key>
+    <value>הצטרפות</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>FIELD_PAYMENT_METHOD</key>
+    <value>שיטת תשלום</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>BTN_SEARCH</key>
+    <value>חיפוש</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>FIELD_MEMBER_NAME</key>
+    <value>שם</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>PAYMENT_METHOD_WITH_PERCENT_OVER_BALANCE</key>
+    <value>עד ליתרה + %%%s חריגה</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>FIELD_INVALID</key>
+    <value>ערך לא תקין עבור %s</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>NEW_MEMBER</key>
+    <value>חבר/ה חדש/ה</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>FIELD_NEW_PASSWORD</key>
+    <value>סיסמא חדשה</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>HELP_PERCENT_OVER_BALANCE</key>
+    <value>בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>FIELD_VERIFY_PASSWORD</key>
+    <value>אימות סיסמא</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>VALIDATE_FIELD_MIN_LENGTH</key>
+    <value>יש להזין לפחות %2$d תווים עבור %1$s</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>VALIDATE_NEW_PASSWORD_VERIFY</key>
+    <value>אימות סיסמא אינו מכיל את אותו ערך שהוזן עבור סיסמא חדשה</value>
+    <pages>coord/members</pages>
+</str>
+<str>
+    <key>ARE_YOU_SURE_DELETE_USER_MSG</key>
+    <value>נא אשרו את פעולת המחיקה. שימו לב: פעולה זו תצליח רק כאשר אין הזמנות המקושרות לחבר/ה. ניתן לחסום חבר/ה מלהיכנס למערכת ע"י הסרת ההרשאות שלה/ו</value>
+</str>
+<str>
+    <key>VALIDATE_CANNOT_DELETE_OWN_USER</key>
+    <value>לא ניתן למחוק את רשומת החבר/ה שלך עצמך.</value>
+</str>
+<str>
+    <key>VALIDATE_CANNOT_REMOVE_OWN_SYSTEM_ADMIN_PERMISSIONS</key>
+    <value>לא ניתן למחוק את הרשאת ניהול המערכת של עצמך.</value>
+</str>
+<str>
+    <key>VALIDATE_CANNOT_MODIFY_SYSTEM_ADMIN_WITH_LESS_PERMISSIONS</key>
+    <value>לא ניתן לערוך רשומה של מנהל/ת מערכת ללא הרשאת ניהול מערכת</value>
+</str>
+<str>
+    <key>EXPORT_LIST_ITEM_ALL_MEMBERS_DATA</key>
+    <value>כל נתוני החברות/ים</value>
+</str>
+<str>
+    <key>EXPORT_LIST_ITEM_SELECTED_MEMBERS_EMAILS</key>
+    <value>מיילים של חברות/ים שנבחרו</value>
+</str>
+<str>
+    <key>SELECT_ALL</key>
+    <value>כולם</value>
+</str>
+<str>
+    <key>DESELECT_ALL</key>
+    <value>הסרת בחירה</value>
+</str>
+<str>
+    <key>MEMBERS_MAIL_LIST_NO_MEMBER_CHECKED</key>
+    <value>לא נבחרו חברות/ים.</value>
+</str>
+<str>
+    <key>LINK_MEMBER_ROLES</key>
+    <value>תפקידים</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_MEMBER_ROLES</key>
+    <value>תפקידים של %s</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>FIELD_ROLE_NAME</key>
+    <value>תפקיד</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>NO_EXISTING_ROLES</key>
+    <value>לחברה זה אין תפקידים קיימים</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>NO_ROLES_TO_ADD</key>
+    <value>לחברה זה יש את כל התפקידים הקיימים. אין תפקידים להוספה</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_MY_PROFILE</key>
+    <value>הפרופיל שלי</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>PASSWORDS_DO_NOT_MATCH</key>
+    <value>אימות הסיסמא נכשל</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>PASSWORDS_MATCH</key>
+    <value>אימות הסיסמא הצליח</value>
+    <pages>coord/member roles</pages>
+</str>
+<str>
+    <key>LINK_BACK_TO</key>
+    <value>חזרה ל-%s</value>
+</str>
+<str>
+    <key>LINK_BACK</key>
+    <value>חזרה</value>
+</str>
+<str>
+    <key>COOP_ORDER_CONTACTS</key>
+    <value>מתאמ/י הזמנה</value>
+</str>
+<str>
+    <key>PICKUP_LOCATION_CONTACTS</key>
+    <value>מתאמ/י מקום איסוף</value>
+</str>
+<str>
+    <key>CONTACT_NAME_EMAIL_FORMAT</key>
+    <value>%1$s, %2$s </value>
+    <pages>order</pages>
+</str>
+<str>
+    <key>FIELD_PICTURE1</key>
+    <value>תמונה 1</value>
+</str>
+<str>
+    <key>FIELD_PICTURE1_FILE_NAME</key>
+    <value>שם קובץ</value>
+    <pages>coord/product</pages>
+</str>
+<str>
+    <key>FIELD_PICTURE2</key>
+    <value>תמונה 2</value>
+</str>
+<str>
+    <key>FIELD_PICTURE2_FILE_NAME</key>
+    <value>שם קובץ</value>
+    <pages>coord/product</pages>
+</str>
+<str>
+    <key>TOOLTIP_PICTURE_HELP</key>
+    <value>קבצים נתמכים: jpg, gif, png. גודל מקסימלי: %sKB</value>
+</str>
+<str>
+    <key>TOOLTIP_PICTURE_FILE_NAME_HELP</key>
+    <value>בהעלאת קבצים שדה זה אינו חובה והמערכת יכולה לקבוע אותו באופן אוטומטי. השדה נכלל עבור מקרים שבהם אין לך הרשאה להעלות קבצים, וברצונך לקשר בין מוצרים לקבצי תמונות שכבר הועלו. קבצי תמונות חייבים להיות מועלים לתיקיית ההעלאה: %s</value>
+    <pages>coord/product</pages>
+</str>
+<str>
+    <key>ERR_COULD_NOT_UPLOAD_FILE</key>
+    <value>העלאת הקובץ %s נכשלה.</value>
+</str>
+<str>
+    <key>ERR_UPLOAD_REASON_POSSIBLE_BUG</key>
+    <value>נראה שהסיבה לכך היא באג בתוכנה.</value>
+</str>
+<str>
+    <key>ERR_UPLOAD_REASON_MAX_SIZE_EXCEEDED</key>
+    <value>גודל הקובץ חורג מהמכסה המקסימלית של %dKb</value>
+</str>
+<str>
+    <key>ERR_UPLOAD_REASON_FILE_TYPE_UNSUPPORTED</key>
+    <value>סוג או גודל הקובץ לא נתמך.</value>
+</str>
+<str>
+    <key>ERR_UPLOAD_REASON_PERMISSION</key>
+    <value>נראה שיש בעיית הרשאה באתר בעת ההעלאה אליו</value>
+</str>
+<str>
+    <key>ERR_UPLOAD_REASON_NO_TMP_DIR</key>
+    <value>נראה שיש בעיית הרשאה או הגדרות באתר בעת ההעלאה אליו - המערכת לא מוצאת תיקייה זמנית לביצוע ההעלאה אליה</value>
+</str>
+<str>
+    <key>ERR_UPLOAD_REASON_UPLOADS_DIR_WRITE_FAILED</key>
+    <value>הקובץ הועלה, אך העברתו מהתיקיה הזמנית לתיקיית ההעלאות נכשלה - כנראה בשל בעיית הרשאות</value>
+</str>
+<str>
+    <key>ERR_UPLOAD_REASON_OTHER_CODES</key>
+    <value>קוד/י שגיאה: %s</value>
+</str>
+<str>
+    <key>LBL_REMOVE_IMAGE</key>
+    <value>הסרת התמונה</value>
+</str>
+<str>
+    <key>PRODUCER_PRICE_MEMBER_FORMAT</key>
+    <value>[ מחיר היצרן: %1$s. עלויות הקואופ: %2$s ]</value>
+    <pages>product</pages>
+</str>
+<str>
+    <key>COMES_IN_PACKAGES_OF</key>
+    <value>מגיע בגודל חבילה מינימלי של </value>
+    <pages>product</pages>
+</str>
+<str>
+    <key>TOOLTIP_PRODUCER_DELIVERY_IN_PICKUP_LOCATION</key>
+    <value>סכום זה מתייחס לסך עלויות המשלוח לכל מקומות האיסוף בהזמנת הקואופרטיב עבור היצרן</value>
+</str>
+<str>
+    <key>PAGE_TITLE_PRODUCT_CATALOG</key>
+    <value>קטלוג המוצרים</value>
+    <pages>catalog</pages>
+</str>
+<str>
+    <key>CATALOG_PRICES_COMMENT</key>
+    <value>הערה: המחירים בקטלוג עשויים להיות שונים מאלו שבהזמנה ספציפית</value>
+    <pages>catalog</pages>
+</str>
+<str>
+    <key>ABOUT_SOFTWARE</key>
+    <value>אודות התוכנה</value>
+</str>
+<str>
+    <key>ABOUT_SOFTWARE_LINE1</key>
+    <value>HomeCoop היא מערכת הזמנות אינטרנטית לקואופרטיבים צרכניים זעירים.</value>
+</str>
+<str>
+    <key>ABOUT_SOFTWARE_LINE2</key>
+    <value>זוהי תוכנה חופשית: ניתן להפיץ ו\או לעדכן אותה תחת התנאים של רישיון ציבורי כללי של GNU המובא להלן, כפי שפורסם ע"י קרן התוכנה החופשית, גרסה 3 של הרישיון, או, לבחירתך, כל גרסה מאוחרת יותר.</value>
+</str>
+<str>
+    <key>ABOUT_SOFTWARE_LINKS</key>
+    <value>אתר התוכנה, כולל קישורים להורדה ומדריך התקנה: %1$s. קוד התוכנה: %2$s</value>
+</str>
+<str>
+    <key>ABOUT_SOFTWARE_LINE3</key>
+    <value>תוכנה זו מופצת בתקווה שהיא תהיה שימושית, אבל ללא כל אחריות; ללא אפילו אחריות משתמעת של תאימות למסחר או למטרה ספציפית. ראו הרישיון להלן לפרטים נוספים:</value>
+</str>
+<str>
+    <key>ERROR_PAGE_TITLE</key>
+    <value>שגיאה במערכת</value>
+</str>
+<str>
+    <key>TOOLTIP_MAX_ORDER</key>
+    <value>מקס. הזמנה: %s</value>
+</str>
+<str>
+    <key>TOOLTIP_LOGIN_NAME</key>
+    <value>שם כניסה: %s</value>
+</str>
+<str>
+    <key>HELP_TIME_FORMAT</key>
+    <value>הזמן צריך להיות בתבנית: %s</value>
+</str>
+<str>
+    <key>ORDER_CONFIRM_MEMBER_SWITCH</key>
+    <value>שימו לב: בחרתם להעביר את ההזמנה מחבר/ה אחת לאחרת! כדי להשלים את השינוי אשרו תיבת הודעה זו ובצעו שמירה</value>
+</str>
+<str>
+    <key>MOVE_ORDER_TO</key>
+    <value>העברת הזמנה ל</value>
+</str>
+<str>
+    <key>LOGIN_NAME_ADDED_IS_NOT_UNIQUE</key>
+    <value>שם הכניסה שהוזן כבר נמצא בשימוש במערכת</value>
+</str>
+<str>
+    <key>MEMBER_NAME_IS_NOT_UNIQUE</key>
+    <value>שם החבר/ה שהוזן כבר נמצא בשימוש במערכת</value>
+</str>
+<str>
+    <key>MEMBER_MAIN_EMAIL_IS_NOT_UNIQUE</key>
+    <value>כתובת הדוא"ל הראשונה שהוזנה כבר נמצאת בשימוש במערכת</value>
+</str>
+<str>
+    <key>FIELD_CACHIER</key>
+    <value>קופה</value>
+    <pages>pickuploc</pages>
+</str>
+<str>
+    <key>FIELD_PREV_CACHIER</key>
+    <value>קופה קודמת</value>
+    <pages>pickuploc</pages>
+</str>
+<str>
+    <key>FIELD_CACHIER_DATE</key>
+    <value>עדכון קופה</value>
+    <pages>pickuploc</pages>
+</str>
+<str>
+    <key>PAGE_TITLE_CACHIER</key>
+    <value>מצב הקופה</value>
+    <pages>coord/cachier</pages>
+</str>
+<str>
+    <key>FIELD_TOTAL_MEMBER_BALANCES</key>
+    <value>סה"כ יתרות חברות/ים</value>
+    <pages>coord/cachier</pages>
+</str>
+<str>
+    <key>FIELD_TOTAL_CACHIERS</key>
+    <value>סה"כ קופות</value>
+    <pages>coord/cachier</pages>
+</str>
+<str>
+    <key>FIELD_TOTAL_BALANCE</key>
+    <value>סה"כ מאזן</value>
+    <pages>coord/cachier</pages>
+</str>
+<str>
+    <key>BTN_REMOVE_PERMISSIONS</key>
+    <value>הסרת הרשאות</value>
+    <pages>coord/member</pages>
+</str>
+<str>
+    <key>BTN_RESTORE_PERMISSIONS</key>
+    <value>החזרת הרשאות</value>
+    <pages>coord/member</pages>
+</str>
+<str>
+    <key>MEMBER_DEACTIVATE_SUCCESS</key>
+    <value>ההרשאות הוסרו בהצלחה</value>
+    <pages>coord/member</pages>
+</str>
+<str>
+    <key>MEMBER_DEACTIVATE_FAILURE</key>
+    <value>הסרת ההרשאות נכשלה</value>
+    <pages>coord/member</pages>
+</str>
+<str>
+    <key>MEMBER_ACTIVATE_SUCCESS</key>
+    <value>ההרשאות הוחזרו בהצלחה</value>
+    <pages>coord/member</pages>
+</str>
+<str>
+    <key>MEMBER_ACTIVATE_FAILURE</key>
+    <value>החזרת ההרשאות נכשלה</value>
+    <pages>coord/member</pages>
+</str>
+</strings>

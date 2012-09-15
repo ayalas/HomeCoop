@@ -1,0 +1,1 @@
+python3.2 [ENTER PATH OF THE PYTHON SCRIPT HERE]\create-language-folders.py "[ENTER PATH OF THE ROOT FOLDER HERE]"

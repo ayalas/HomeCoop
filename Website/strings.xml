@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<strings>
+<str>
+    <key>DATE_PICKER_X_POSITION</key>
+    <value>600</value>
+</str>
+<str>
+    <key>DATE_PICKER_Y_POSITION</key>
+    <value>300</value>
+</str>
+<str>
+    <key>SHORT_COLUMN_WIDTH</key>
+    <value>75</value>
+</str>
+<str>
+    <key>TINY_COLUMN_WIDTH</key>
+    <value>55</value>
+</str> 
+<str>
+    <key>NORMAL_COLUMN_WIDTH</key>
+    <value>120</value>
+</str>
+<str>
+    <key>NORMAL_COLUMN_WIDTH_WSCROLL</key>
+    <value>136</value>
+    <notes>Add 16px to last TH for scrollbar padding</notes>
+</str>
+<str>
+    <key>LONG_COLUMN_WIDTH</key>
+    <value>180</value>
+</str>
+<str>
+    <key>EXTRA_LONG_COLUMN_WIDTH</key>
+    <value>250</value>
+</str> 
+<str>
+    <key>MAX_LENGTH_NAME</key>
+    <value>100</value>
+</str>
+<str>
+    <key>MAX_LENGTH_LONGTEXT</key>
+    <value>3000</value>
+</str>
+<str>
+    <key>MAX_LENGTH_LOGIN_NAME</key>
+    <value>128</value>
+</str>
+<str>
+    <key>MAX_LENGTH_PASSWORD</key>
+    <value>30</value>
+</str>
+<str>
+    <key>SELECT_LANGUAGE</key>
+    <value>Language</value>
+</str>
+<str>
+    <key>TOTAL_PAGE_WIDTH</key>
+    <value>908</value>
+</str>
+<str>
+    <key>COORD_PAGE_WIDTH</key>
+    <value>780</value>
+</str>
+<str>
+    <key>USER_PAGE_WIDTH</key>
+    <value>692</value>
+</str>
+<str>
+    <key>USER_PANEL_WIDTH</key>
+    <value>108</value>
+</str>
+<str>
+    <key>HOME_CONTENT_WIDTH</key>
+    <value>672</value>
+</str>
+<str>
+    <key>COORD_PANEL_WIDTH</key>
+    <value>128</value>
+</str>
+<str>
+    <key>PRODUCT_PIC_VIEWER_WIDTH</key>
+    <value>800</value>
+</str>
+<str>
+    <key>PRODUCT_PAGE_WIDTH</key>
+    <value>800</value>
+</str>
+<str>
+    <key>HOME_ORDER_CAPACITY_PERCENT_WIDTH</key>
+    <value>80px</value>
+     <comment>Width of the X% full section in each order box in the home screen</comment>
+</str>
+<str>
+    <key>HOME_ORDER_STATUS_WIDTH</key>
+    <value>120px</value>
+     <comment>Width of the status field area in each order box in the home screen</comment>
+</str>
+<str>
+    <key>HOME_ORDER_PICKUP_WIDTH</key>
+    <value>180px</value>
+     <comment>Width of the Pickup Locations area in each order box in the home screen</comment>
+</str>
+<str>
+    <key>ORDER_ITEMS_SCROLL_HEIGHT</key>
+    <value>550px</value>
+     <comment>Height of the order items screen's scorllable area</comment>
+</str>
+<str>
+    <key>TAB_SEPARATOR_NO_PROGRESS</key>
+    <value>||</value>
+</str>
+<str>
+    <key>ORDER_EXPORT_FILE_EXTENTION</key>
+    <value>ods</value>
+</str>
+<str>
+    <key>ORDER_EXPORT_COOP_ORDER_SUMMARY_FILE_NAME_SUFFIX</key>
+    <value>Coop</value>
+</str>
+<str>
+    <key>ORDER_EXPORT_COOP_ORDER_ALL_FILE_NAME_SUFFIX</key>
+    <value>All</value>
+</str>
+<str>
+    <key>MEMBERS_EXPORT_FILE_NAME_SUFFIX</key>
+    <value>Members</value>
+</str>
+<str>
+     <key>COOP_ORDER_EXPORT_ROW_ALTERNATE_BG_COLOR</key>
+    <value>#e0e0e0</value>
+</str>
+<str>
+     <key>FILE_UPLOADER_SIZE</key>
+    <value>12</value>
+</str>
+</strings>
