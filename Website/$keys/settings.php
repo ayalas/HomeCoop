@@ -31,8 +31,8 @@ define('SITE_ROOT', $_SERVER['DOCUMENT_ROOT'] );
 define('DB_HOST',  '127.0.01');
 define('DB_NAME',  'HomeCoop');
 define('DB_CONNECTION_STRING',  'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME);
-define('DB_USERNAME',  'dbuser');
-define('DB_PASSWORD',  'dbuserpassword');
+define('DB_USERNAME',  'coopwebuser');
+define('DB_PASSWORD',  'rubby');
 
 //timezones. for other timezones see http://php.net/manual/en/timezones.php
 define('COOP_TIMEZONE',  'America/New_York');
