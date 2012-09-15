@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<document>
+<orientation>ltr</orientation>
+<sheet>
+    <name>sample xml</name>
+    <comment>This is a sample xml of the produced xml document that is transformed by cooporder.xsl</comment>
+    <colh>
+        <prdh>Product</prdh>
+        <quantityh>Quantity</quantityh>
+        <priceh>Price</priceh>
+        <packageh>Package Size</packageh>
+        <memh>Member1</memh>
+        <memh>Member2</memh>
+        <totalh>Total Quantity</totalh>
+    </colh>
+    <row>
+      <prd>Hard Tofu</prd>
+      <quantity>1 Kg</quantity>
+      <price>13.5</price>
+      <quantity>1 Kg</quantity>
+      <mem>1</mem>
+      <mem>6</mem>
+      <total>1</total>
+    </row>
+    <row>
+      <prd>Tempeh</prd>
+      <quantity>1 Kg</quantity>
+      <price>13.5</price>
+      <quantity>1 Kg</quantity>
+      <mem>2.5</mem>
+      <mem/>
+      <total>7.5</total>
+    </row>
+    <sum>
+      <sumlabel>Total Sum</sumlabel>
+      <sumtotal>1200</sumtotal>
+      <summem>13.5</summem>
+      <summem>165</summem>
+    </sum>
+</sheet>
+</document>

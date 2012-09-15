@@ -1,0 +1,383 @@
+a:hover {background:#ffffff; text-decoration:none;} /*BG color is a must for IE6*/
+a.tooltip span {display:none; padding:2px 3px; margin-left:8px; width:150px;}
+a.tooltip:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
+a.tooltip:link    { color:#000000; text-decoration:none; }
+a.tooltip:visited { color:#000000; text-decoration:none; }
+a.tooltip:hover   { color:#000000; text-decoration:none; }
+a.tooltip:active  { color:#000000; text-decoration:none; }
+a.tooltiphelp:link    { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelp:visited { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelp:hover   { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelp:active  { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelp span {display:none; padding:2px 3px; margin-left:8px; width:150px;}
+a.tooltiphelp:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
+a.tooltiplink span {display:none; padding:2px 3px; margin-left:8px; width:150px;}
+a.tooltiplink:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
+body
+{
+  font-family: Loma, Arial, Serif;
+  font-size: 12px;
+}
+body.centered
+{
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 908px;
+  margin: auto;
+}
+body.product
+{
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 800px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+button{
+    font-size: 12px;
+    background-color:#FFCC99;
+    border:1px solid #990000;
+    color:#000000;
+}
+button:disabled
+{
+  font-size: 12px;
+  background-color:#FFFFFF;
+  border:1px solid #A8A8A8;
+  color:#A8A8A8;
+}
+button:hover
+{
+  background-color:#FF9966;
+}
+button:disabled:hover
+{
+  background-color:#FFFFFF;
+}
+input
+{
+  font-size: 12px;
+}
+label
+{
+  font-size: 12px;
+}
+select
+{
+  font-size: 12px;
+  background-color:#FFFFFF;
+  border:1px solid #A8A8A8;
+  color:#000000;
+}
+span
+{
+  font-size: 12px;
+}
+span.btnrange
+{
+  font-size: 1px;
+}
+span.bulletintitle
+{
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+span.coopname
+{
+    color: #FF3300;
+    font-size: 18px;
+    font-weight: bold;
+}
+span.cooptitle
+{
+    color: #FF3300;
+    font-size: 24px;
+    font-weight: bold;
+}
+span.pagename
+{
+    font-size: 16px;
+    font-weight: bold;
+}
+td
+{
+  vertical-align: top;
+}
+th
+{
+  vertical-align: top;
+  text-align: left;
+}
+ul
+{
+list-style-type: none;
+}
+.alarmingdata
+{
+  color: red;
+}
+.arrivedorder
+{
+   color: #996666;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+   font-size: 14px;
+   border-color: #996666;
+}
+.bolddata
+{
+  font-size: 14px;
+  font-weight: bold;
+}
+.bltpoint
+{
+    font-size: 1px;
+    vertical-align: middle;
+}
+.blttext
+{
+    font-size: 16px;
+    font-weight: bold;
+}
+.capacitypercent
+{
+   color: #999999;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+   font-size: 30px;
+   font-family: Ubuntu Condensed, Liberation Serif,  Serif;
+}
+.changedrow
+{
+  background-color:#9999FF;
+}
+.columntitle
+{
+  font-weight: bold;
+  width: 120px;
+}
+.columntitleextralong
+{
+  font-weight: bold;
+  width: 250px;
+}
+.columntitlelong
+{
+  font-weight: bold;
+  width: 180px;
+}
+.columntitlenowidth
+{
+  font-weight: bold;
+}
+.columntitleshort
+{
+  font-weight: bold;
+  width: 75px;
+}
+.columntitletiny
+{
+  font-weight: bold;
+  width: 55px;
+}
+
+.columndata
+{
+  width: 120px;
+}
+.columndataextralong
+{
+  width: 250px;
+}
+.columndatalong
+{
+  width: 180px;
+}
+.columndatashort
+{
+  width: 75px;
+}
+.columndatatiny
+{
+  width: 55px;
+}
+
+.closedorder
+{
+   color: #999999;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: normal;
+   font-size: 14px;
+   border-color: #999999;
+}
+.coordlangtitle
+{
+    text-align: center;
+}
+.dataentry
+{
+  font-size: 12px;
+  width: 200px;
+  background-color:#FFFFFF;
+}
+.dateentry
+{
+  font-size: 12px;
+  width: 110px;
+  background-color:#FFFFFF;
+}
+
+.headdata
+{
+  font-size: 14px;
+  font-weight: normal;  
+  white-space: nowrap;
+}
+.headlabel
+{
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.headmaindata
+{
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.headmainlabel
+{
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.link
+{
+  text-decoration: underline;
+  font-weight: bold;
+  cursor:pointer;
+}
+.listareatitle
+{
+   color: #999999;
+   text-align: center;
+   font-weight: normal;
+   vertical-align: middle;
+}
+.mailinglist
+{
+  font-size: 12px;
+  width: 100%;
+  height:300px;
+  background-color:#FFFFFF;
+}
+.message
+{
+   color: #600000;
+   font-weight: bold;
+}
+.normalcolor
+{
+  color: #000000;
+  font-weight: normal;
+}
+.nowrapping
+{
+  white-space: nowrap;
+}
+.openorder
+{
+   color: #336633;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+   font-size: 14px;
+   border-color: #336633;
+}
+.oppositealign
+{
+  text-align: right;
+}
+.orderitemcentry
+{
+  font-size: 12px;
+  width: 130px;
+  background-color:#FFFFFF;
+}
+.orderiteminvalidrow
+{
+  background-color:#FF6666;
+}
+.orderitemqentry
+{
+  font-size: 12px;
+  width: 30px;
+  background-color:#FFFFFF;
+}
+.popularlink
+{
+  font-weight: bold;
+}
+.regularalign
+{
+  text-align: left;
+}
+.required
+{
+  font-weight: bold;
+}
+.requireddata
+{
+  font-size: 12px;
+  width: 200px;
+  border:1px solid #990033;
+  background-color:#FFFFFF;
+}
+.requireddate
+{
+  font-size: 12px;
+  width: 110px;
+  border:1px solid #990033;
+  background-color:#FFFFFF;
+}
+.requiredselect
+{
+  font-size: 12px;
+  width: 206px;
+  background-color:#FFFFFF;
+  border:1px solid #990033;
+  color:#000000;
+}
+.requiredtime
+{
+  font-size: 12px;
+  width: 65px;
+  border:1px solid #990033;
+  background-color:#FFFFFF;
+}
+.selectentry
+{
+  font-size: 12px;
+  width: 206px;
+  background-color:#FFFFFF;
+  border:1px solid #A8A8A8;
+  color:#000000;
+}
+.tabtitleroot
+{
+  font-weight: bold;
+}
+.timeentry
+{
+  font-size: 12px;
+  width: 65px;
+  background-color:#FFFFFF;
+}
