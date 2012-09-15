@@ -55,12 +55,6 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
   public function __get( $name ) {
     switch ($name)
     {
-      case self::PROPERTY_TOTAL_DELIVERY:
-        return self::GetDeliveryTotal($this->m_aData[self::PROPERTY_DELIVERY_PERCENT], 
-                $this->m_aData[self::PROPERTY_FIXED_DELIVERY], 
-                $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MIN], 
-                $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MAX], 
-                $this->m_aData[self::PROPERTY_PRODUCER_TOTAL]);
        case self::PROPERTY_ORIGINAL_PRODUCER_ID:
         return $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID];
       default:
@@ -170,12 +164,18 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
       return FALSE;
     }
-
+    
     if (!$this->Validate())
     {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
       return FALSE;
     }
+    
+    $this->m_aData[self::PROPERTY_TOTAL_DELIVERY] = self::GetDeliveryTotal($this->m_aData[self::PROPERTY_DELIVERY_PERCENT], 
+                $this->m_aData[self::PROPERTY_FIXED_DELIVERY], 
+                $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MIN], 
+                $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MAX], 
+                $this->m_aData[self::PROPERTY_PRODUCER_TOTAL]);
     
     try
     {
@@ -237,12 +237,18 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_SUFFICIENT_DATA_PROVIDED;
       return FALSE;
     }
-        
+    
     if (!$this->Validate())
     {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
       return FALSE;
     }
+    
+    $this->m_aData[self::PROPERTY_TOTAL_DELIVERY] = self::GetDeliveryTotal($this->m_aData[self::PROPERTY_DELIVERY_PERCENT], 
+                $this->m_aData[self::PROPERTY_FIXED_DELIVERY], 
+                $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MIN], 
+                $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MAX], 
+                $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL]);
     
     try
     {
