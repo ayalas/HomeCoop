@@ -39,7 +39,7 @@ include_once 'settings.php';
         <td><div dir="ltr" align="center">Copyright © 2012 Ayala Shani - ayalashah (at) joindiaspora [dot] com</div></td>
       </tr>
       <tr>
-        <td><span><?php echo sprintf('The software website, including download and installation guide links: %1$s. Source code: %2$s', 
+        <td><span><?php echo sprintf('The software website, including a download installation package link: %1$s. Source code: %2$s', 
            '<a href="http://sourceforge.net/projects/homecoop/" target="_blank">sourceforge</a>',
            '<a href="https://github.com/ayalas/HomeCoop" target="_blank">github</a>'); ?></span></td>
       </tr>

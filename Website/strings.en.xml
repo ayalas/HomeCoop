@@ -1930,7 +1930,7 @@
 </str>
 <str>
     <key>ABOUT_SOFTWARE_LINKS</key>
-    <value>The software website, including download and installation guide links: %1$s. Source code: %2$s</value>
+    <value>The software website, including a download installation package link: %1$s. Source code: %2$s</value>
 </str>
 <str>
     <key>ABOUT_SOFTWARE_LINE3</key>
