@@ -187,14 +187,24 @@ def LoadLanguages( ):
         docLang.unlink()
     docLangs.unlink()
 
-gsScriptRootDir = os.path.split( sys.argv[0] )[0]
+gsScriptRootDir = '.'
+if len(sys.argv) >= 1:
+    gsScriptRootDir = os.path.split( sys.argv[0] )[0]
+    if gsScriptRootDir == '':
+        gsScriptRootDir = '.'
+    elif gsScriptRootDir != '.':
+        os.chdir( gsScriptRootDir )
 
-os.chdir( gsScriptRootDir )
-if len(sys.argv) < 2 or not os.path.isdir(sys.argv[1]) or not os.path.isdir( sys.argv[1] + '/$keys')or not os.path.isfile(  'supported-languages.xml' ):
+gsTargetRootDir = '.'
+if len(sys.argv) >= 2:
+    gsTargetRootDir = sys.argv[1]
+    if gsTargetRootDir == '':
+        gsTargetRootDir = '.'
+
+if not os.path.isdir(gsTargetRootDir) or not os.path.isdir( gsTargetRootDir + '/$keys')or not os.path.isfile(  'supported-languages.xml' ):
     print ('\nusage:\n\n    python[3.2+] [create-languages-folders.py path] [target path with a $keys sub-folder]\n\nnote: supported-languages.xml and strings file[s] in the name format strings.[language folder].xml must be in the same path as create-languages-folders.py' )
     exit()
 
-gsTargetRootDir = sys.argv[1]
 gdctLangs = dict()
 gdctDefaults = dict()
 gsFoldersMsg = ''
@@ -203,7 +213,7 @@ gnEndPHLen = len( gsPHEnd )
 
 LoadLanguages( )
 
-ProcessDir( sys.argv[1] + '/$keys')
+ProcessDir( gsTargetRootDir + '/$keys')
 
 del gdctLangs
 
