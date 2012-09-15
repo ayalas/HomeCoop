@@ -40,8 +40,8 @@ include_once 'settings.php';
       </tr>
       <tr>
         <td><span><?php echo sprintf('The software website, including download and installation guide links: %1$s. Source code: %2$s', 
-           '<a href="http://homecoop.info" target="_blank">homecoop.info</a>',
-           '<a href="http://github.com/homecoop" target="_blank">github.com/homecoop</a>'); ?></span></td>
+           '<a href="http://sourceforge.net/projects/homecoop/" target="_blank">sourceforge</a>',
+           '<a href="https://github.com/ayalas/HomeCoop" target="_blank">github</a>'); ?></span></td>
       </tr>
       <tr>
         <td><span>This is a free software: you can redistribute it and/or modify it under the terms of the GNU General Public License included below, as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</span></td>

@@ -40,8 +40,8 @@ include_once 'settings.php';
       </tr>
       <tr>
         <td><span><?php echo sprintf('<!$ABOUT_SOFTWARE_LINKS$!>', 
-           '<a href="http://homecoop.info" target="_blank">homecoop.info</a>',
-           '<a href="http://github.com/homecoop" target="_blank">github.com/homecoop</a>'); ?></span></td>
+           '<a href="http://sourceforge.net/projects/homecoop/" target="_blank">sourceforge</a>',
+           '<a href="https://github.com/ayalas/HomeCoop" target="_blank">github</a>'); ?></span></td>
       </tr>
       <tr>
         <td><span><!$ABOUT_SOFTWARE_LINE2$!></span></td>
