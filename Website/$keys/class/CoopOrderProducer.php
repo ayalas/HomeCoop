@@ -200,7 +200,7 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
               $this->ConcatValIfNotNull(self::PROPERTY_DELIVERY_PERCENT_MAX) .
               " )";
 
-      $this->RunSQLWithParams($sSQL, array( $this->TotalDelivery ));
+      $this->RunSQLWithParams($sSQL, array( $this->m_aData[self::PROPERTY_TOTAL_DELIVERY] ));
 
       $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
       $this->m_aOriginalData = $this->m_aData;
@@ -243,26 +243,47 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
       return FALSE;
     }
+    
+    try
+    {
 
-    $sSQL =   " UPDATE T_CoopOrderProducer " .
-              " SET mTotalDelivery =  ?, " . 
-              " mMaxProducerOrder = ? ," .
-              " fMaxBurden = ? ," .
-              " fDelivery = ? ," .
-              " mDelivery = ? ," .
-              " mMinDelivery = ? ," .
-              " mMaxDelivery = ? " .
-              " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
-              " AND ProducerKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID] . ";";
+      $this->BeginTransaction();
 
-    $this->RunSQLWithParams( $sSQL, array(  $this->TotalDelivery,
-                                            $this->m_aData[self::PROPERTY_MAX_PRODUCER_ORDER],
-                                            $this->m_aData[self::PROPERTY_MAX_BURDEN] ,
-                                            $this->m_aData[self::PROPERTY_DELIVERY_PERCENT],
-                                            $this->m_aData[self::PROPERTY_FIXED_DELIVERY],
-                                            $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MIN],
-                                            $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MAX]
-        ) );
+      $sSQL =   " UPDATE T_CoopOrderProducer " .
+                " SET mTotalDelivery =  ?, " . 
+                " mMaxProducerOrder = ? ," .
+                " fMaxBurden = ? ," .
+                " fDelivery = ? ," .
+                " mDelivery = ? ," .
+                " mMinDelivery = ? ," .
+                " mMaxDelivery = ? " .
+                " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+                " AND ProducerKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID] . ";";
+
+      $this->RunSQLWithParams( $sSQL, array(  $this->m_aData[self::PROPERTY_TOTAL_DELIVERY],
+                                              $this->m_aData[self::PROPERTY_MAX_PRODUCER_ORDER],
+                                              $this->m_aData[self::PROPERTY_MAX_BURDEN] ,
+                                              $this->m_aData[self::PROPERTY_DELIVERY_PERCENT],
+                                              $this->m_aData[self::PROPERTY_FIXED_DELIVERY],
+                                              $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MIN],
+                                              $this->m_aData[self::PROPERTY_DELIVERY_PERCENT_MAX]
+          ) );
+      
+      //if delivery was changed, recalculate totals for coop order
+      if ($this->m_aData[self::PROPERTY_TOTAL_DELIVERY] != $this->m_aOriginalData[self::PROPERTY_TOTAL_DELIVERY])
+      {
+        $oCalc = new CoopOrderCalculate($this->m_aData[self::PROPERTY_COOP_ORDER_ID]);
+
+        $oCalc->CalculateCoopOrder();
+      }
+
+      $this->CommitTransaction();
+    }
+    catch(Exception $e)
+    {
+      $this->RollbackTransaction();
+      throw $e;
+    }
     
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
     $this->m_aData[self::PROPERTY_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL];
