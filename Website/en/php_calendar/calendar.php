@@ -159,3 +159,15 @@ for ($d=$nFirstDayOfCal;$d<=$nLastDayOfMonth;$d++)
 ?>
 </body>
 </html>
+<?php
+
+//close DB connection and release memory
+if ($g_oDBAccess != NULL)
+  $g_oDBAccess->Close();
+unset($g_oDBAccess);
+unset($g_oTimeZone);
+unset($g_dNow);
+unset($g_aSupportedLanguages);
+unset($g_oError);
+
+?>

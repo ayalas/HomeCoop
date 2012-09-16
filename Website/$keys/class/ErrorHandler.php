@@ -34,16 +34,25 @@ class ErrorHandler {
     
     $sErrorMessage = '';
     
+    $bTransformed = FALSE;
+    
     //handle known errors
     if (stripos($sException,"SQLSTATE[42000]") > 0 &&
             stripos($sException,"more than 'max_user_connections' active connections"))
     {
       $sErrorMessage = '<!$ERROR_MAX_USER_CONNECTIONS$!>';
+      $bTransformed = TRUE;
     }
     else
     {
       $sErrorMessage = sprintf('<!$ERROR_TECHNICAL_INFORMATION$!><br/><div dir="ltr">Message: %s<br/>Trace: %s</div>', 
             $sException, nl2br($e->getTraceAsString () ) );
+    }
+    
+    //remove db user name from messages
+    if (!$bTransformed && stripos($sErrorMessage,DB_USERNAME) > 0 )
+    {
+      $sErrorMessage = str_replace(DB_USERNAME, '[USER NAME]', $sErrorMessage);
     }
   
     if (USE_ERROR_PAGE && isset($g_oMemberSession) && $g_oMemberSession->IsLoggedIn)

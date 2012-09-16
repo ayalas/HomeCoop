@@ -13,6 +13,7 @@ unset($g_oTimeZone);
 unset($g_dNow);
 unset($g_aSupportedLanguages);
 unset($g_oError);
-unset($g_oMemberSession);
+if (isset($g_oMemberSession))
+  unset($g_oMemberSession);
 
 ?>
