@@ -25,7 +25,7 @@ $g_aSupportedLanguages = array(
 //SITE_ROOT
 //the path where the site resides (default is website's root dir). If there are more than on supported languages - do not include_once here any specific language dir
 //default language is set in the root index.php
-define('SITE_ROOT', $_SERVER['DOCUMENT_ROOT'] );
+define('SITE_ROOT', $_SERVER['DOCUMENT_ROOT'] ); //server path, i.e '/home/vhosts/webroot'
 
 //db access
 define('DB_HOST',  '127.0.01');

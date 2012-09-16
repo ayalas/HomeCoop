@@ -1,5 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `HomeCoop` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `HomeCoop`;
+
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (i686)
 --
 -- Host: localhost    Database: HomeCoop
