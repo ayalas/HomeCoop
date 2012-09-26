@@ -192,6 +192,11 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_CACHI
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'Cachier Totals' );
 
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_ORDER_SET_MAX');
+
+INSERT INTO Tlng_String (KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'Order - Set Max. Order' );
+
 /* Permission Scopes - strings NOT IN USE (no translation required) */
 SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_SCOPE_COOP');
 

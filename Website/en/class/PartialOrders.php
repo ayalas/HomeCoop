@@ -77,7 +77,8 @@ class PartialOrders extends SQLBase {
             $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCERS) .
             " WHERE COPRD.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
             " AND COPRD.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] .
-            " AND PRD.fPackageSize IS NOT NULL AND PRD.fPackageSize != PRD.fQuantity; ";
+            " AND PRD.UnitKeyID != " . Consts::UNIT_ITEMS .
+            " AND (PRD.fUnitInterval IS NULL OR PRD.fUnitInterval != PRD.fQuantity); ";
     
     $this->RunSQL($sSQL);
         
@@ -92,7 +93,10 @@ class PartialOrders extends SQLBase {
     $this->m_aData[self::PROPERTY_PRODUCT_NAME] = $recProduct["sProduct"];
     $this->m_aData[self::PROPERTY_PRODUER_NAME] = $recProduct["sProducer"];
     $this->m_aData[self::PROPERTY_TOTAL_ORDER] = $recProduct["fTotalCoopOrder"];
-    $this->m_aData[self::PROPERTY_PACKAGE_SIZE] = $recProduct["fPackageSize"];
+    if ($recProduct["fPackageSize"] == NULL)
+      $this->m_aData[self::PROPERTY_PACKAGE_SIZE] = $recProduct["fQuantity"];
+    else
+      $this->m_aData[self::PROPERTY_PACKAGE_SIZE] = $recProduct["fPackageSize"];
     $this->m_aData[self::PROPERTY_QUANTITY] = $recProduct["fQuantity"];
     
     return TRUE;

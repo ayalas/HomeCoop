@@ -196,6 +196,11 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_CACHI
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'מצב הקופה');
 
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_ORDER_SET_MAX');
+
+INSERT INTO Tlng_String (KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'הזמנה - קביעת מכסה' );
+
 /* Permission Scopes */
 SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_SCOPE_COOP');
 

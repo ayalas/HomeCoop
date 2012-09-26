@@ -168,83 +168,86 @@ class Coordinate extends SQLBase {
 
   public function Save()
   {
-      global $g_oMemberSession;
-      global $g_oError;
-      $bLoadOwnCoordinatingGroups = FALSE;
-      
-      $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
-          
-      //check sufficient data
-      if (  $this->m_aData[self::PROPERTY_PERMISSION_AREA] == 0 ||
-            $this->m_aData[self::PROPERTY_RECORD_ID] == 0 )
-      {
-          $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_SUFFICIENT_DATA_PROVIDED;
-          return FALSE;
-      }
-      
-      //check basic permissions
-      //check permissions
-      
-      $bCoord = $this->AddPermissionBridge(self::PERMISSION_COORD, $this->m_aData[self::PROPERTY_PERMISSION_AREA], Consts::PERMISSION_TYPE_COORD, 
-         Consts::PERMISSION_SCOPE_BOTH, $this->m_aData[self::PROPERTY_GROUP_ID], TRUE);
-      
-      $bCoordSet = $this->AddPermissionBridge(self::PERMISSION_COORD_SET, $this->m_aData[self::PROPERTY_PERMISSION_AREA], 
-              Consts::PERMISSION_TYPE_COORD_SET, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
-      
-      if (!$bCoord || !$bCoordSet)
-      {
-          $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
-          return FALSE;
-      }
+    global $g_oMemberSession;
+    global $g_oError;
+    $bLoadOwnCoordinatingGroups = FALSE;
 
-      //validate membership, name, if can change it
-      if ($this->CheckGroupsExtendedPermission())
+    $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
+
+    //check sufficient data
+    if (  $this->m_aData[self::PROPERTY_PERMISSION_AREA] == 0 ||
+          $this->m_aData[self::PROPERTY_RECORD_ID] == 0 )
+    {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_SUFFICIENT_DATA_PROVIDED;
+        return FALSE;
+    }
+
+    //check basic permissions
+    //check permissions
+
+    $bCoord = $this->AddPermissionBridge(self::PERMISSION_COORD, $this->m_aData[self::PROPERTY_PERMISSION_AREA], Consts::PERMISSION_TYPE_COORD, 
+       Consts::PERMISSION_SCOPE_BOTH, $this->m_aData[self::PROPERTY_GROUP_ID], TRUE);
+
+    $bCoordSet = $this->AddPermissionBridge(self::PERMISSION_COORD_SET, $this->m_aData[self::PROPERTY_PERMISSION_AREA], 
+            Consts::PERMISSION_TYPE_COORD_SET, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
+
+    if (!$bCoord || !$bCoordSet)
+    {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
+        return FALSE;
+    }
+
+    //validate membership, name, if can change it
+    if ($this->CheckGroupsExtendedPermission())
+    {
+      if (!is_array($this->m_aData[self::PROPERTY_MEMBERS]) || count($this->m_aData[self::PROPERTY_MEMBERS]) == 0)
       {
-        if (!is_array($this->m_aData[self::PROPERTY_MEMBERS]) || count($this->m_aData[self::PROPERTY_MEMBERS]) == 0)
-        {
-           $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_LIST_ITEM_SELECTED;
-           return FALSE;
-        }
-        
-        //data validations for creating new group: has name, and has members
-        if ($this->m_aData[self::PROPERTY_GROUP_NAME] == NULL)
-        {
-          $this->m_nLastOperationStatus = parent::OPERATION_STATUS_REQUIRED_FIELD_MISSING;
-          return FALSE;
-        }
-        $this->m_aData[self::PROPERTY_GROUP_NAME] = trim($this->m_aData[self::PROPERTY_GROUP_NAME]);
-        if ($this->m_aData[self::PROPERTY_GROUP_NAME] == "")        
-        {
-          $this->m_nLastOperationStatus = parent::OPERATION_STATUS_REQUIRED_FIELD_MISSING;
-          return FALSE;
-        }
-
-        foreach($this->m_aData[self::PROPERTY_MEMBERS] as $aMember)
-        {
-           if ($aMember["MemberID"] == $g_oMemberSession->MemberID)
-           {
-             $bLoadOwnCoordinatingGroups = TRUE;
-             break;
-           }
-        }
-
-        //if only has group permissions, check that the curreent user did not remove hirself
-        if ($this->GetPermissionScope(self::PERMISSION_COORD) == Consts::PERMISSION_SCOPE_GROUP_CODE && !$bLoadOwnCoordinatingGroups)
-        {
-          $this->m_nLastOperationStatus = parent::OPERATION_STATUS_CANT_REMOVE_OWN_PERMISSION;
-          return FALSE;
-        }
+         $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_LIST_ITEM_SELECTED;
+         return FALSE;
       }
 
-      $sSQL = NULL;   
-      
-      $bUpdateRecordGroup = FALSE;
-      
-      //if original is a personal group
-      if ( $this->m_aOriginalData[self::PROPERTY_IS_PRIVATE_GROUP] 
-           &&    $this->m_aOriginalData[self::PROPERTY_GROUP_ID] == $this->m_aData[self::PROPERTY_GROUP_ID] )
-        $this->m_aData[self::PROPERTY_GROUP_ID] = 0; //don't update it, but rather create a new group
-      
+      //data validations for creating new group: has name, and has members
+      if ($this->m_aData[self::PROPERTY_GROUP_NAME] == NULL)
+      {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_REQUIRED_FIELD_MISSING;
+        return FALSE;
+      }
+      $this->m_aData[self::PROPERTY_GROUP_NAME] = trim($this->m_aData[self::PROPERTY_GROUP_NAME]);
+      if ($this->m_aData[self::PROPERTY_GROUP_NAME] == "")        
+      {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_REQUIRED_FIELD_MISSING;
+        return FALSE;
+      }
+
+      foreach($this->m_aData[self::PROPERTY_MEMBERS] as $aMember)
+      {
+         if ($aMember["MemberID"] == $g_oMemberSession->MemberID)
+         {
+           $bLoadOwnCoordinatingGroups = TRUE;
+           break;
+         }
+      }
+
+      //if only has group permissions, check that the curreent user did not remove hirself
+      if ($this->GetPermissionScope(self::PERMISSION_COORD) == Consts::PERMISSION_SCOPE_GROUP_CODE && !$bLoadOwnCoordinatingGroups)
+      {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_CANT_REMOVE_OWN_PERMISSION;
+        return FALSE;
+      }
+    }
+
+    $sSQL = NULL;   
+
+    $bUpdateRecordGroup = FALSE;
+
+    //if original is a personal group
+    if ( $this->m_aOriginalData[self::PROPERTY_IS_PRIVATE_GROUP] 
+         &&    $this->m_aOriginalData[self::PROPERTY_GROUP_ID] == $this->m_aData[self::PROPERTY_GROUP_ID] )
+      $this->m_aData[self::PROPERTY_GROUP_ID] = 0; //don't update it, but rather create a new group
+
+    try
+    {
+
       if ($this->m_aData[self::PROPERTY_GROUP_ID] == 0) //new group
       {
         //if new group, must have extended permissions
@@ -253,8 +256,7 @@ class Coordinate extends SQLBase {
           $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
           return FALSE;
         }
-        try
-        {
+
           $this->m_bUseClassConnection = TRUE;
           $this->BeginTransaction();
 
@@ -273,28 +275,14 @@ class Coordinate extends SQLBase {
                       $aMember["bContactPerson"]
                     )
                   );
-           }
-           
-           $this->CommitTransaction();
+            }
         }
-        catch(Exception $e)
+        else //update existing group
         {
-          $this->RollbackTransaction();
-          $this->CloseConnection();
-          $this->m_bUseClassConnection = FALSE;
-          throw $e;
-        }
-        $this->CloseConnection();
-        $this->m_bUseClassConnection = FALSE;
-      }
-      else //update existing group
-      {
-        $this->ValidateGroupMembersForArea();
-        
-        try
-        {
+          $this->ValidateGroupMembersForArea();
+
           $this->BeginTransaction();
-          
+
           if (is_array($this->m_aUnauthorizedMembers) && count($this->m_aUnauthorizedMembers) > 0)
           {
             //remove unauthorized members and notify on the removal
@@ -363,36 +351,45 @@ class Coordinate extends SQLBase {
               }
             }
           }
-          //update record group
-          $sTable = NULL;
-          $sRecordIdentifier = NULL;
-
-          $oArea = new PermissionArea($this->m_aData[self::PROPERTY_PERMISSION_AREA]);
-
-          if ($oArea->TableName != NULL)
-          { 
-            $sSQL = "UPDATE " . $oArea->TableName . " SET CoordinatingGroupID = " . $this->m_aData[self::PROPERTY_GROUP_ID] . " WHERE " . 
-                    $oArea->TablePrimaryKey . " = " . $this->m_aData[self::PROPERTY_RECORD_ID];
-
-            $this->RunSQL($sSQL);
-          }
-          
-          $this->CommitTransaction();
-        
         }
-        catch(Exception $e)
+        //update record group
+        $sTable = NULL;
+        $sRecordIdentifier = NULL;
+
+        $oArea = new PermissionArea($this->m_aData[self::PROPERTY_PERMISSION_AREA]);
+
+        if ($oArea->TableName != NULL)
+        { 
+          $sSQL = "UPDATE " . $oArea->TableName . " SET CoordinatingGroupID = " . $this->m_aData[self::PROPERTY_GROUP_ID] . " WHERE " . 
+                  $oArea->TablePrimaryKey . " = " . $this->m_aData[self::PROPERTY_RECORD_ID];
+
+          $this->RunSQL($sSQL);
+        }
+
+        $this->CommitTransaction();
+        if ($this->m_bUseClassConnection)
         {
-          $this->RollbackTransaction();
-          throw $e;
+          $this->CloseConnection();
+          $this->m_bUseClassConnection = FALSE;
         }
       }
-      
+      catch(Exception $e)
+      {
+        $this->RollbackTransaction();
+        if ($this->m_bUseClassConnection)
+        {
+          $this->CloseConnection();
+          $this->m_bUseClassConnection = FALSE;
+        }
+        throw $e;
+      }
+
       //reload Own Coordinating Groups
       if ($bLoadOwnCoordinatingGroups)
         $g_oMemberSession->LoadCoordinatingGroups();
-      
+
       $this->m_aOriginalData = $this->m_aData;
-      
+
       return TRUE;
   }
   
@@ -603,10 +600,11 @@ class Coordinate extends SQLBase {
               " INNER JOIN T_RolePermission RP " .
               " ON RP.RoleKeyID = MR.RoleKeyID " .
               " AND RP.PermissionAreaKeyID = " . $this->m_aData[self::PROPERTY_PERMISSION_AREA] .
-              " AND RP.PermissionTypeKeyID =  " . Consts::PERMISSION_TYPE_COORD;
+              " AND RP.PermissionTypeKeyID =  " . Consts::PERMISSION_TYPE_COORD . 
+              " WHERE M.bDisabled = 0 ";
     if ($this->m_aData[self::PROPERTY_GROUP_ID] > 0)
     {
-      $sSQL .=  " Where 0 = (SELECT Count(CGM.MemberID) FROM T_CoordinatingGroupMember CGM WHERE CGM.MemberID = M.MemberID AND CoordinatingGroupID = " 
+      $sSQL .=  " AND 0 = (SELECT Count(CGM.MemberID) FROM T_CoordinatingGroupMember CGM WHERE CGM.MemberID = M.MemberID AND CoordinatingGroupID = " 
                 . $this->m_aData[self::PROPERTY_GROUP_ID] . " ) ";
     }
     
@@ -646,7 +644,7 @@ class Coordinate extends SQLBase {
             " INNER JOIN T_Member M " .
             " ON CGM.CoordinatingGroupID = " . $this->m_aData[self::PROPERTY_GROUP_ID] .
             " AND CGM.MemberID = M.MemberID " .
-            " WHERE 0 = (SELECT Count(*)  FROM T_MemberRole MR " .
+            " WHERE M.bDisabled = 1 OR 0 = (SELECT Count(*)  FROM T_MemberRole MR " .
                         " INNER JOIN T_RolePermission RP " .
                         " ON RP.RoleKeyID = MR.RoleKeyID AND RP.PermissionAreaKeyID = " . $this->m_aData[self::PROPERTY_PERMISSION_AREA] .
                         " AND RP.PermissionTypeKeyID = " . Consts::PERMISSION_TYPE_COORD .

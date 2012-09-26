@@ -232,8 +232,8 @@ function Save()
                 
                 <tr>
                   <?php
-                    $oIsDisabled = new HtmlSelectBoolean('ctlIsDisabled', 'Status', $oRecord->IsDisabled, 'Disabled', 
-                            'Enabled');
+                    $oIsDisabled = new HtmlSelectBoolean('ctlIsDisabled', 'Status', $oRecord->IsDisabled, 'Inactive', 
+                            'Active');
                     $oIsDisabled->EchoHtml();
                     unset($oIsDisabled);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 

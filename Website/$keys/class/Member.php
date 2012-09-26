@@ -28,6 +28,8 @@ class Member extends SQLBase  {
   const PROPERTY_IS_SYS_ADMIN = "IsSysAdmin";
   const PROPERTY_HAS_NO_PERMISSIONS = "HasNoPermissions";
   const PROPERTY_IS_REGULAR_MEMBER = "IsRegularMember";
+  const PROPERTY_IS_DISABLED = "IsDisabled";
+  const PROPERTY_MAX_ORDER = "MaxOrder";
   
   public function __construct()
   {
@@ -50,7 +52,9 @@ class Member extends SQLBase  {
                             self::PROPERTY_CAN_MODIFY => TRUE,
                             self::PROPERTY_IS_SYS_ADMIN => FALSE,
                             self::PROPERTY_HAS_NO_PERMISSIONS => FALSE,
-                            self::PROPERTY_IS_REGULAR_MEMBER => FALSE
+                            self::PROPERTY_IS_REGULAR_MEMBER => FALSE,
+                            self::PROPERTY_IS_DISABLED => FALSE,
+                            self::PROPERTY_MAX_ORDER => FALSE
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData; 
@@ -63,6 +67,7 @@ class Member extends SQLBase  {
       case self::PROPERTY_JOINED_ON:
       case self::PROPERTY_IS_COORDINATOR:
       case self::PROPERTY_CAN_MODIFY:
+      case self::PROPERTY_MAX_ORDER:
         $trace = debug_backtrace();
         trigger_error(
           'Undefined property via __set(): ' . $name .
@@ -127,7 +132,7 @@ class Member extends SQLBase  {
     }
     
     $sSQL =   " SELECT M.MemberID, M.sName, M.sLoginName, M.sEMail, M.PaymentMethodKeyID, M.dJoined, M.mBalance, M.fPercentOverBalance, M.sEMail2, " . 
-             " M.sEMail3, M.sEMail4, (SELECT CG.CoordinatingGroupID FROM T_CoordinatingGroupMember CGM INNER JOIN " .
+             " M.bDisabled, M.sEMail3, M.sEMail4, (SELECT CG.CoordinatingGroupID FROM T_CoordinatingGroupMember CGM INNER JOIN " .
               " T_CoordinatingGroup CG ON CGM.CoordinatingGroupID = CG.CoordinatingGroupID " . 
             " WHERE CGM.MemberID = M.MemberID AND CG.sCoordinatingGroup IS NULL LIMIT 1) as CoordinatingGroupID, " .
             $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PAYMENT_METHODS, 'sPaymentMethod') .
@@ -159,11 +164,17 @@ class Member extends SQLBase  {
     $this->m_aData[self::PROPERTY_EMAIL2] = $rec["sEMail2"];
     $this->m_aData[self::PROPERTY_EMAIL3] = $rec["sEMail3"];
     $this->m_aData[self::PROPERTY_EMAIL4] = $rec["sEMail4"];
+    $this->m_aData[self::PROPERTY_IS_DISABLED] = $rec["bDisabled"];
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] = $rec["PaymentMethodKeyID"];
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_NAME] = $rec["sPaymentMethod"];
     $this->m_aData[self::PROPERTY_JOINED_ON] = new DateTime($rec["dJoined"]);
     $this->m_aData[self::PROPERTY_BALANCE] = $rec["mBalance"];
     $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $rec["fPercentOverBalance"];
+    
+    $this->m_aData[self::PROPERTY_MAX_ORDER] = self::CalculateMaxOrder(
+            $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID],
+            $this->m_aData[self::PROPERTY_BALANCE],
+            $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE]);
     
     $this->m_aOriginalData = $this->m_aData;
         
@@ -246,7 +257,14 @@ class Member extends SQLBase  {
     $this->CloseConnection();
     $this->m_bUseClassConnection = FALSE;
     
-    $this->m_aData[self::PROPERTY_CAN_MODIFY] = TRUE; 
+    $this->m_aData[self::PROPERTY_MAX_ORDER] = self::CalculateMaxOrder(
+            $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID],
+            $this->m_aData[self::PROPERTY_BALANCE],
+            $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE]);
+    
+    $this->m_aData[self::PROPERTY_CAN_MODIFY] = TRUE;
+    $this->m_aData[self::PROPERTY_IS_REGULAR_MEMBER] = TRUE;
+    $this->m_aData[self::PROPERTY_HAS_NO_PERMISSIONS] = FALSE;
 
     $this->m_aOriginalData = $this->m_aData;
 
@@ -305,10 +323,11 @@ class Member extends SQLBase  {
       if ($this->m_aData[self::PROPERTY_IS_COORDINATOR])
       {
          $sSQL .= " , PaymentMethodKeyID = " . $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . 
-                  ", mBalance = ?, fPercentOverBalance = ? ";
+                  ", mBalance = ?, fPercentOverBalance = ?, bDisabled = ? ";
 
          $arrParams[] = $this->m_aData[self::PROPERTY_BALANCE];
          $arrParams[] = $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];
+         $arrParams[] = $this->m_aData[self::PROPERTY_IS_DISABLED];
       }
 
       if ($this->m_aData[self::PROPERTY_NEW_PASSWORD] != NULL)
@@ -328,6 +347,11 @@ class Member extends SQLBase  {
       $this->RollbackTransaction();
       throw $e;
     }
+    
+    $this->m_aData[self::PROPERTY_MAX_ORDER] = self::CalculateMaxOrder(
+            $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID],
+            $this->m_aData[self::PROPERTY_BALANCE],
+            $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE]);
     
     $this->m_aData[self::PROPERTY_NEW_PASSWORD] = NULL; //don't send passwords back to client
     $this->m_aData[self::PROPERTY_VERIFY_PASSWORD] = NULL;
@@ -504,6 +528,7 @@ class Member extends SQLBase  {
     $this->m_aData[self::PROPERTY_JOINED_ON] = $this->m_aOriginalData[self::PROPERTY_JOINED_ON];
     $this->m_aData[self::PROPERTY_COORDINATING_GROUP_ID] = $this->m_aOriginalData[self::PROPERTY_COORDINATING_GROUP_ID];
     $this->m_aData[self::PROPERTY_CAN_MODIFY] =  $this->m_aOriginalData[self::PROPERTY_CAN_MODIFY];
+    $this->m_aData[self::PROPERTY_MAX_ORDER] =  $this->m_aOriginalData[self::PROPERTY_MAX_ORDER];
   }
   
   public function PreserveFieldsForProfileScreen()
@@ -675,36 +700,6 @@ class Member extends SQLBase  {
     if ($this->fetch())
       return FALSE;
     return TRUE;
-  }
-
-  //get max order for a member that is not necessarily the current one 
-  //(for the current one, use UserSession::GetMaxOrder to save access to db)
-  //used in the order screen to validate the order against the max order for the user (through the CanEnlarge property)
-  public function GetMaxOrder($MemberID)
-  {
-    global $g_oMemberSession;
-    
-    //save access to db, if current user
-    if ($MemberID == $g_oMemberSession->MemberID)
-    {
-      if ($this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
-         Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
-         return $g_oMemberSession->GetMaxOrder();
-    }
-    else
-    {
-      if ($this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_COOP_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
-         Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
-      {
-        $sSQL = "SELECT mBalance, PaymentMethodKeyID, fPercentOverBalance FROM T_Member WHERE MemberID = " . $MemberID . ";";
-        $this->RunSQL($sSQL);
-        $rec = $this->fetch();
-        return self::CalculateMaxOrder($rec["PaymentMethodKeyID"],$rec["mBalance"],$rec["fPercentOverBalance"]);
-      }
-    }
-    
-    return NULL;
-    
   }
   
   //helps get max order for a member that may be the current one (in UserSession:GetMaxOrder) or not (in this class' GetMaxOrder)

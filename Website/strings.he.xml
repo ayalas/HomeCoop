@@ -379,6 +379,11 @@
     <notes>param : COOP_ADDRESS_MEMBER_PERMISSIONS in settings.php </notes>
 </str>
 <str>
+    <key>ERR_MEMBER_DISABLED</key>
+    <value>החשבון שלך לא פעיל. אם נעשתה טעות, יש ליצור קשר איתנו ב %s לתיקון הבעיה</value>
+    <notes>param : COOP_ADDRESS_MEMBER_PERMISSIONS in settings.php </notes>
+</str>
+<str>
     <key>TABLE_ADD</key>
     <value>הוספה</value>
 </str>
@@ -885,6 +890,10 @@
     <value>טיוטה</value>
 </str>
 <str>
+    <key>COOP_ORDER_STATUS_DRAFT_PUBLIC</key>
+    <value>לא פעילה</value>
+</str>
+<str>
     <key>COOP_ORDER_STATUS_ACTIVE</key>
     <value>פעילה</value>
 </str>
@@ -895,6 +904,10 @@
 <str>
     <key>COOP_ORDER_STATUS_CANCELLED</key>
     <value>מבוטלת</value>
+</str>
+<str>
+    <key>COOP_ORDER_STATUS_LOCKED</key>
+    <value>נעולה</value>
 </str>
 <str>
     <key>CANNOT_DELETE_ACTIVE_ORDER</key>
@@ -1006,6 +1019,10 @@
     <value>מכסת הזמנה לחבר/ה</value>
 </str>
 <str>
+    <key>FIELD_MAX_ORDER</key>
+    <value>מכסת הזמנה</value>
+</str>
+<str>
     <key>FIELD_MAX_ORDER_PER_COOP</key>
     <value>מכסת הזמנה לקואופ</value>
 </str>
@@ -1087,7 +1104,7 @@
 </str>
 <str>
     <key>ORDER_READONLY_REASON_ACTIVE_COOPORDER_NOT_OPEN_FOR_MEMBER</key>
-    <value>לא ניתן לעדכן את הזמנה זו כיוון שהזמנת הקואופרטיב נסגרה.</value>
+    <value>לא ניתן לעדכן את הזמנה זו בשל מגבלת טווח התאריכים של הזמנת הקואופרטיב.</value>
 </str>
 <str>
     <key>ORDER_CANNOT_BE_ENLARGED_WHEN_CAPACITY_IS_FULL</key>
@@ -1936,5 +1953,25 @@
     <key>MEMBER_ACTIVATE_FAILURE</key>
     <value>החזרת ההרשאות נכשלה</value>
     <pages>coord/member</pages>
+</str>
+<str>
+<key>LOGIN_EXCEPTION</key>
+<value>אירעה שגיאה באימות פרטי הכניסה מול בסיס הנתונים, כנראה בשל עומס יתר</value>
+<pages>login</pages>
+</str>
+<str>
+    <key>LBL_PRICES_SOURCE</key>
+    <value>מקור המחירים</value>
+    <pages>coord/coopordercopy</pages>
+</str>
+<str>
+    <key>PRICES_SOURCE_ORDER</key>
+    <value>הזמנת הקואופרטיב</value>
+    <pages>coord/coopordercopy</pages>
+</str>
+<str>
+    <key>PRICES_SOURCE_PRODUCTS</key>
+    <value>טבלת מוצרים</value>
+    <pages>coord/coopordercopy</pages>
 </str>
 </strings>

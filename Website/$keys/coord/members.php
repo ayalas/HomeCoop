@@ -124,6 +124,7 @@ function SelectAll(bCheck)
       </td>
       <?php
           $selList = new HtmlSelectArray('DataSet', '<!$FIELD_ORDER_EXPORT_DATASET$!>', $arrList, 0);
+          $selList->EncodeHtml = FALSE; //already encoded
           $selList->OnChange = "JavaScript:ListSelect();";
           $selList->EchoHtml();
        ?>
@@ -178,16 +179,24 @@ function SelectAll(bCheck)
                   {
                       echo "<tr>";
                       
-                      echo '<td><input type="checkbox" name="chkMember[]" value="',$recTable["MemberID"], '"';
+                      echo '<td>';
                       
-                      //restore is checked
-                      if (isset($_POST["chkMember"]))
+                      //do not allow selecting disabled members
+                      if (!$recTable["bDisabled"])
                       {
-                        if (in_array($recTable["MemberID"], $_POST["chkMember"]))
-                          echo ' checked ';
+                        echo '<input type="checkbox" name="chkMember[]" value="',$recTable["MemberID"], '"';
+
+                        //restore is checked
+                        if (isset($_POST["chkMember"]))
+                        {
+                          if (in_array($recTable["MemberID"], $_POST["chkMember"]))
+                            echo ' checked ';
+                        }
+
+                        echo ' />';
                       }
                       
-                      echo ' /></td>';
+                      echo '</td>';
                       
                       //name
                       echo "<td><a href='member.php?id=",$recTable["MemberID"],"' >"  , htmlspecialchars( $recTable["sName"] ) ,  "</a></td>";

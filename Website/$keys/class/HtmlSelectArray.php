@@ -16,6 +16,8 @@ class HtmlSelectArray {
   const PROPERTY_REQUIRED = "Required";
   const PROPERTY_READ_ONLY = "ReadOnly";
   const PROPERTY_ON_CHANGE = "OnChange";
+  const PROPERTY_VALUE_FOUND = "ValueFound";
+  const PROPERTY_ENCODE_HTML = "EncodeHtml";
   
   protected $m_aData = array( self::PROPERTY_LABEL => NULL,
                               self::PROPERTY_ARRAY => NULL,
@@ -24,7 +26,9 @@ class HtmlSelectArray {
                               self::PROPERTY_REQUIRED => FALSE,
                               self::PROPERTY_READ_ONLY => FALSE,
                               self::PROPERTY_ID => NULL,
-                              self::PROPERTY_ON_CHANGE => NULL
+                              self::PROPERTY_ON_CHANGE => NULL,
+                              self::PROPERTY_VALUE_FOUND => FALSE,
+                              self::PROPERTY_ENCODE_HTML => TRUE
                       );
   
   public function __construct($sIDSufix, $sLabel, &$arr, $nValue) {
@@ -117,9 +121,17 @@ class HtmlSelectArray {
         echo '<option value="' , $key , '" ';
 
         if ($this->m_aData[self::PROPERTY_VALUE] == $key)
+        {
           echo ' selected="1" ';
+          $this->m_aData[self::PROPERTY_VALUE_FOUND] = TRUE;
+        }
 
-        echo  ' >' , htmlspecialchars($str) , '</option>';
+        echo  ' >';
+        if ($this->m_aData[self::PROPERTY_ENCODE_HTML])
+          echo htmlspecialchars($str);
+        else
+          echo $str;
+        echo '</option>';
       }
     }
     

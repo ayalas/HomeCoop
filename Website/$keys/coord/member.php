@@ -58,6 +58,9 @@ try
     if ( isset( $_POST['txtEMail4'] ) && !empty($_POST['txtEMail4']))
       $oRecord->EMail4 = trim($_POST['txtEMail4']);
     
+    if ( isset( $_POST['ctlIsDisabled'] ))
+      $oRecord->IsDisabled = (intval($_POST['ctlIsDisabled']) == 1);
+    
     if (!empty( $_POST['hidPostAction'] ))
     {
       switch($_POST['hidPostAction'])
@@ -131,7 +134,7 @@ try
   if ($oRecord->Name != NULL)
     $sPageTitle = $oRecord->Name;
   
-  $arrPaymentMethods = $oRecord->GetPaymentMethods(); //fetches first row
+  $arrPaymentMethods = $oRecord->GetPaymentMethods();
 }
 catch(Exception $e)
 {
@@ -339,6 +342,14 @@ function VerifyPassword()
                   <td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>
                 </tr>
 
+                <tr>
+                  <?php
+                    $lblMaxOrder = new HtmlTextLabel('<!$FIELD_MAX_ORDER$!>', 'lblMaxOrder',$oRecord->MaxOrder);
+                    $lblMaxOrder->EchoHtml();
+                    unset($lblMaxOrder);
+                  ?>
+                  <td>&nbsp;</td>
+                </tr>
                 
                 <tr>
                 <?php
@@ -388,6 +399,18 @@ function VerifyPassword()
                 
                 ?>
                 <td>&nbsp;</td>
+                </tr>
+                
+                <tr>
+                  <?php
+                   $oIsDisabled = new HtmlSelectBoolean('ctlIsDisabled', '<!$FIELD_IS_DISABLED$!>', $oRecord->IsDisabled, '<!$FIELD_VALUE_DISABLED$!>', 
+                          '<!$FIELD_VALUE_ENABLED$!>');
+                    $oIsDisabled->ReadOnly =  (!$oRecord->CanModify || ($oRecord->ID == 0));
+                    $oIsDisabled->EchoHtml();
+                   unset($oIsDisabled);
+                  
+                  ?>
+                  <td>&nbsp;</td>
                 </tr>
                 
                 

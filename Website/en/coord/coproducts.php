@@ -49,7 +49,9 @@ try
 
   if (!$oData->HasPermission(CoopOrderProducts::PERMISSION_COOP_ORDER_PRODUCT_EDIT))
     $bReadOnly = TRUE;
-  else if ($oData->Status != CoopOrder::STATUS_ACTIVE && $oData->Status != CoopOrder::STATUS_DRAFT)
+  else if ($oData->Status != CoopOrder::STATUS_ACTIVE 
+          && $oData->Status != CoopOrder::STATUS_DRAFT
+          && $oData->Status != CoopOrder::STATUS_LOCKED )
   {
     $bReadOnly = TRUE;
     $g_oError->AddError('Cooperative order cannot be updated at its current status');
@@ -164,13 +166,20 @@ function OpenPartialOrders(nProductID)
                       echo "</a></td>";
                       
                       //quantity
+                      $fPackageSize = $recTable["fPackageSize"];
+                      if ($fPackageSize == NULL)
+                        $fPackageSize = $recTable["ProductQuantity"];
+
                       echo '<td'; 
-                      if ( $recTable["fPackageSize"] != NULL &&  fmod($recTable["fTotalCoopOrder"], $recTable["fPackageSize"]) != 0 )
+                      if ( fmod($recTable["fTotalCoopOrder"], $fPackageSize) != 0 )
                         echo ' class="alarmingdata" ';
                       
                       echo '>'; 
                       
-                      if ($recTable["fPackageSize"] != NULL && $recTable["fPackageSize"] != $recTable["ProductQuantity"])
+                      if (Product::AllowsPartialOrders(
+                              $recTable["UnitKeyID"], 
+                              $recTable["ProductQuantity"], 
+                              $recTable["fUnitInterval"]))
                         echo '<span class="link" onclick="JavaScript:OpenPartialOrders(' , $recTable["ProductKeyID"]  ,
                               ');" >' , $recTable["fTotalCoopOrder"] , '</span>';
                       else

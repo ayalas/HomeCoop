@@ -11,7 +11,8 @@ class CoopOrder extends SQLBase {
   const STATUS_ACTIVE = 1;
   const STATUS_CLOSED = 2;
   const STATUS_CANCELLED = 3;
-  const MAX_STATUS = 3;
+  const STATUS_LOCKED = 4;
+  const MAX_STATUS = 4;
   
   //id of permission bridge to view/edit summary fields
   const PERMISSION_SUMS = 11;
@@ -20,6 +21,7 @@ class CoopOrder extends SQLBase {
   protected static $m_aStatusNames = array(
         self::STATUS_DRAFT => 'Draft',
         self::STATUS_ACTIVE => 'Active',
+        self::STATUS_LOCKED => 'Locked',
         self::STATUS_CLOSED => 'Closed',
         self::STATUS_CANCELLED => 'Cancelled'
       );
@@ -46,6 +48,7 @@ class CoopOrder extends SQLBase {
   const PROPERTY_MODIFIER_NAME = "ModifiedByMemberName";
   const PROPERTY_ORIGINAL_STATUS = "OriginalStatus";
   const PROPERTY_HAS_JOINED_PRODUCTS = "HasJoinedProducts";
+  const PROPERTY_PRICES_FROM_PRODUCTS = "PricesFromProducts";
   
   protected $m_bCopyMode = FALSE;
 
@@ -71,7 +74,8 @@ class CoopOrder extends SQLBase {
                             self::PROPERTY_STATUS => self::STATUS_DRAFT,
                             self::PROPERTY_COORDINATING_GROUP_ID => 0,
                             self::PROPERTY_SOURCE_COOP_ORDER_ID => 0,
-                            self::PROPERTY_HAS_JOINED_PRODUCTS => FALSE
+                            self::PROPERTY_HAS_JOINED_PRODUCTS => FALSE,
+                            self::PROPERTY_PRICES_FROM_PRODUCTS => FALSE
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;
@@ -362,8 +366,10 @@ class CoopOrder extends SQLBase {
     try
     {
         
-      //allow updating only active and draft orders
-      if ($this->m_aOriginalData[self::PROPERTY_STATUS] == self::STATUS_ACTIVE ||  $this->m_aOriginalData[self::PROPERTY_STATUS] == self::STATUS_DRAFT )
+      //allow updating only active, locked and draft orders
+      if ($this->m_aOriginalData[self::PROPERTY_STATUS] == self::STATUS_ACTIVE 
+         ||  $this->m_aOriginalData[self::PROPERTY_STATUS] == self::STATUS_DRAFT 
+         ||  $this->m_aOriginalData[self::PROPERTY_STATUS] == self::STATUS_LOCKED )
       {
         if (!$this->Validate())
         {
@@ -745,6 +751,8 @@ class CoopOrder extends SQLBase {
     $this->m_aData[self::PROPERTY_DELIVERY] = $aNewData[self::PROPERTY_DELIVERY];
     $this->m_aData[self::PROPERTY_NAMES] = $aNewData[self::PROPERTY_NAMES];
     
+    
+    
     //now $this->m_aData[self::PROPERTY_ID] contains the new order id
     
     try
@@ -780,9 +788,19 @@ class CoopOrder extends SQLBase {
 
       //copy order products
       $sSQL =  " INSERT INTO T_CoopOrderProduct( CoopOrderKeyID, ProductKeyID, mProducerPrice, mCoopPrice, fMaxUserOrder, fBurden) " .
-               " SELECT " .  $this->m_aData[self::PROPERTY_ID] . 
-               " , SRC.ProductKeyID, SRC.mProducerPrice, SRC.mCoopPrice, SRC.fMaxUserOrder, SRC.fBurden " .
-               " FROM T_CoopOrderProduct SRC WHERE SRC.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID];
+               " SELECT " .  $this->m_aData[self::PROPERTY_ID] . " , SRC.ProductKeyID, ";
+      
+      if ($aNewData[self::PROPERTY_PRICES_FROM_PRODUCTS])
+        $sSQL .= " PRD.mProducerPrice, PRD.mCoopPrice, ";
+      else
+        $sSQL .= " SRC.mProducerPrice, SRC.mCoopPrice, "; 
+      
+      $sSQL .= " SRC.fMaxUserOrder, SRC.fBurden FROM T_CoopOrderProduct SRC ";
+      
+      if ($aNewData[self::PROPERTY_PRICES_FROM_PRODUCTS])
+        $sSQL .= " INNER JOIN T_Product PRD ON PRD.ProductKeyID = SRC.ProductKeyID ";
+      
+      $sSQL .= " WHERE SRC.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID];
 
       $this->RunSQL($sSQL);
     
@@ -857,6 +875,7 @@ class CoopOrder extends SQLBase {
         break;
       case self::STATUS_ACTIVE:
       case self::STATUS_CLOSED:
+      case self::STATUS_LOCKED;
         break;
       default:
         return NULL;
@@ -869,6 +888,9 @@ class CoopOrder extends SQLBase {
   {
     if ($nStatus < 0 || $nStatus > self::MAX_STATUS)
       return $nStatus;
+    
+    if ($nStatus == self::STATUS_DRAFT)
+      return 'Inactive';
     
     return self::$m_aStatusNames[$nStatus];
   }

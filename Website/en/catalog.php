@@ -123,34 +123,38 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
                         //info
                         echo '<td>',
                           '<table cellspacing="0" cellpadding="0">',
-                          '<tr><td><span class="pagename">', $recProduct["sProduct"], '</span></td></tr>';
+                          '<tr><td colspan="2"><span class="pagename">', $recProduct["sProduct"], '</span></td></tr>';
 
                           if ( $sQuantity != NULL )
                           {
-                            echo '<tr><td><span>', $sQuantity,'</span></td></tr>';
+                            echo '<tr><td colspan="2"><span>', $sQuantity,'</span></td></tr>';
                           }
                           
                           if ($recProduct["sSpec"] != NULL)
-                            echo '<tr><td><span>', $recProduct["sSpec"], '</span></td></tr><tr><td>&nbsp;</td></tr>';
+                            echo '<tr><td colspan="2"><span>', nl2br(htmlspecialchars ($recProduct["sSpec"])), '</span></td></tr>',
+                                 '<tr><td colspan="2">&nbsp;</td></tr>';
 
                           if ( $sPackageSize != NULL )
                           {
-                            echo '<tr><td><span>', $sPackageSize,'</span></td></tr>';
+                            echo '<tr><td colspan="2"><span>', $sPackageSize,'</span></td></tr>';
                           }
                           if ($sUnitInterval != NULL)
                           {
-                            echo '<tr><td><span>Unit Interval‏:‏&nbsp;', $sUnitInterval,'</span></td></tr>';
+                            echo '<tr><td><span>Unit Interval‏:‏&nbsp;</span></td>',
+                                    '<td><span>', $sUnitInterval,'</span></td></tr>';
                           }
 
-                          echo '<tr><td><span>Producer:&nbsp;', $recProduct["sProducer"],'</span></td></tr>';
+                          echo '<tr><td><span>Producer‏:‏&nbsp;</span></td>',
+                                  '<td><span>', htmlspecialchars($recProduct["sProducer"]),'</span></td></tr>';
 
                           
 
-                          echo '<tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;', $recProduct["mCoopPrice"], '</span></td></tr>';
+                          echo '<tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td>',
+                                  '<td><span>', $recProduct["mCoopPrice"], '</span></td></tr>';
 
                           if (SHOW_PRODUCER_PRICES_IN_PRODUCT_CATALOG)
                           { 
-                            echo '<tr><td><span>', sprintf('[ Producer Price: %1$s. Coop Costs: %2$s ]', $recProduct["mProducerPrice"], $fCoopCosts),
+                            echo '<tr><td colspan="2"><span>', sprintf('[ Producer Price: %1$s. Coop Costs: %2$s ]', $recProduct["mProducerPrice"], $fCoopCosts),
                                  '</span></td></tr>';   
                           }
 

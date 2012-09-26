@@ -48,7 +48,9 @@ try
 
   if (!$oData->HasPermission(CoopOrderProducers::PERMISSION_COOP_ORDER_PRODUCER_EDIT))
       $bReadOnly = TRUE;
-  else if ($oData->Status != CoopOrder::STATUS_ACTIVE && $oData->Status != CoopOrder::STATUS_DRAFT)
+  else if ($oData->Status != CoopOrder::STATUS_ACTIVE 
+          && $oData->Status != CoopOrder::STATUS_DRAFT
+          && $oData->Status != CoopOrder::STATUS_LOCKED )
   {
     $bReadOnly = TRUE;
     $g_oError->AddError('Cooperative order cannot be updated at its current status');

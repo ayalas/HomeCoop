@@ -39,12 +39,12 @@ class ActiveOrders extends SQLBase {
       //show active orders (not draft, closed or cancelled) that can the current user can participate in, or already has participated in.
       
       $sSQL =   " SELECT O.OrderID, CO.CoopOrderKeyID, CO.dStart, CO.dEnd, CO.dDelivery, CO.mMaxCoopTotal, CO.fMaxBurden, CO.mCoopTotal, CO.mProducerTotal, " .  
-        " CO.fBurden, CO.mTotalDelivery, CO.CoordinatingGroupID, " . 
+        " CO.fBurden, CO.mTotalDelivery, CO.CoordinatingGroupID, CO.nStatus, " . 
         $this->ConcatStringsSelect(Consts::PERMISSION_AREA_COOP_ORDERS, 'sCoopOrder') .
         " FROM T_CoopOrder CO LEFT JOIN T_Order O ON O.CoopOrderKeyID = CO.CoopOrderKeyID AND O.MemberID = " . $g_oMemberSession->MemberID .  
         $this->ConcatStringsJoin(Consts::PERMISSION_AREA_COOP_ORDERS) .
-        " WHERE CO.nStatus = " . CoopOrder::STATUS_ACTIVE . 
-        " AND CO.dStart <= ? " .
+        " WHERE CO.nStatus IN (" . CoopOrder::STATUS_ACTIVE . "," . CoopOrder::STATUS_LOCKED .
+        " ) AND CO.dStart <= ? " .
         " AND (CO.dEnd >= ? OR O.CoopOrderKeyID IS NOT NULL) " .
         " ORDER BY CO.dDelivery desc; ";
 

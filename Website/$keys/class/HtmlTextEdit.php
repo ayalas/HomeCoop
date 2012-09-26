@@ -89,6 +89,7 @@ class HtmlTextEdit {
     $sValueSuffix = '';
     $sMaxLength = '';
     $sCssClass = '';
+    $nEncodingFlag = ENT_COMPAT;
     //requireddata
     switch($this->m_aData[self::PROPERTY_TYPE])
     {
@@ -110,6 +111,7 @@ class HtmlTextEdit {
         if ($this->m_aData[self::PROPERTY_TEXTAREA_ROWS] != NULL)
           $sControl .= ' rows="' . $this->m_aData[self::PROPERTY_TEXTAREA_ROWS] . '" ';
         $sValuePrefix = '>';
+        $nEncodingFlag = ENT_NOQUOTES;
         $sValueSuffix = '</textarea>';
         break;
     }
@@ -155,7 +157,7 @@ class HtmlTextEdit {
       
     echo $sValuePrefix;
     if ($this->m_aData[self::PROPERTY_VALUE] !== NULL)
-      echo htmlspecialchars( $this->m_aData[self::PROPERTY_VALUE] );
+      echo htmlspecialchars( $this->m_aData[self::PROPERTY_VALUE] , $nEncodingFlag);
     
     echo $sValueSuffix;
     

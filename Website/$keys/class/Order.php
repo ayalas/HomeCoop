@@ -5,9 +5,12 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 //faciliate member order and order items pages (order.php and orderitems.php)
 class Order extends SQLBase {
-  
+
   const MAX_LENGTH_MEMBER_COMMENTS = 250;
-    
+  const PERMISSION_SET_MAX_ORDER = 11;
+  
+  const POST_ACTION_MEMBER_CHANGE = 11;
+
   const PROPERTY_COOP_ORDER_ID = "CoopOrderID";
   const PROPERTY_COOP_ORDER_NAME = "CoopOrderName";
   const PROPERTY_COOP_ORDER_CONTACTS = "CoopOrderContacts";
@@ -22,7 +25,7 @@ class Order extends SQLBase {
   const PROPERTY_PICKUP_LOCATION_MAX_BURDEN = "PickupLocationMaxBurden";
   const PROPERTY_PICKUP_LOCATION_GROUP_ID = "PickupLocationGroupID";
   const PROPERTY_PICKUP_LOCATION_CONTACTS = "PickupLocationContacts";
-  
+
   const PROPERTY_COOP_TOTAL = "CoopTotal";
   const PROPERTY_COOP_TOTAL_INC_FEE = "CoopTotalIncludingFee";
   const PROPERTY_PRODUCER_TOTAL = "ProducerTotal";
@@ -44,11 +47,15 @@ class Order extends SQLBase {
   const PROPERTY_PAGE_TITLE_ADDITION = "PageTitleSuffix";
   const PROPERTY_COOP_ORDER_COOP_TOTAL = "CoopOrderCoopTotal";
   const PROPERTY_SUPRESS_MESSAGES = "SuppressMessages";
+
+  const PROPERTY_PERCENT_OVER_BALANCE ="PercentOverBalance";
+  const PROPERTY_PAYMENT_METHOD_ID = "PaymentMethodID";
+  const PROPERTY_MAX_ORDER = "MaxOrder";
   
   const PROPERTY_COOP_ORDER_STATUS_OBJECT = "StatusObj";
-  
+
   protected $m_bCanModify = FALSE;
-  
+    
   protected $m_bRunningTotalsValidation = FALSE;
   
   public function __construct()
@@ -106,6 +113,10 @@ class Order extends SQLBase {
                             Member::PROPERTY_EMAIL2 => NULL,
                             Member::PROPERTY_EMAIL3 => NULL,
                             Member::PROPERTY_EMAIL4 => NULL,
+                            Member::PROPERTY_BALANCE => NULL,
+                            self::PROPERTY_PERCENT_OVER_BALANCE => NULL,
+                            self::PROPERTY_PAYMENT_METHOD_ID => NULL,
+                            self::PROPERTY_MAX_ORDER => NULL
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;
@@ -179,6 +190,8 @@ class Order extends SQLBase {
       case CoopOrder::PROPERTY_DELIVERY:
       case CoopOrder::PROPERTY_MAX_COOP_TOTAL:
       case CoopOrder::PROPERTY_MAX_BURDEN:
+      case Member::PROPERTY_BALANCE:
+      case self::PROPERTY_MAX_ORDER:
         $trace = debug_backtrace();
         throw new Exception(
           'Forbidden set operation for ' . $name .
@@ -209,6 +222,10 @@ class Order extends SQLBase {
       $bMyOrderEdit = $this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
          Consts::PERMISSION_SCOPE_BOTH, 0, TRUE);
     }
+    
+    //add check for setting max order
+    $this->AddPermissionBridge(self::PERMISSION_SET_MAX_ORDER, Consts::PERMISSION_AREA_ORDER_SET_MAX, 
+            Consts::PERMISSION_TYPE_MODIFY, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
     
     return ($bCoord || $bView || $bMyOrderEdit);
   }
@@ -253,7 +270,8 @@ class Order extends SQLBase {
     " O.mProducerTotal as OrderProducerTotal, O.mCoopTotalIncFee, O.sMemberComments, O.mCoopFee, " . 
     " O.bHasItemComments, IfNull(O.fBurden,0) as OrderBurden, PL.CoordinatingGroupID PickupLocationGroupID, "  .
     " O.CreatedByMemberID, O.ModifiedByMemberID, M.sName as MemberName, MC.sName as CreateMemberName, MM.sName as ModifyMemberName, " .
-    " M.sLoginName, M.sEMail, M.sEMail2, M.sEMail3, M.sEMail4, " .
+    " M.sLoginName, M.sEMail, M.sEMail2, M.sEMail3, M.sEMail4, IfNull(O.PaymentMethodKeyID, M.PaymentMethodKeyID) as PaymentMethodKeyID, " .
+    " IfNull(O.fPercentOverBalance,M.fPercentOverBalance) as fPercentOverBalance, M.mBalance, " .
            $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATIONS, 'sPickupLocation') .
     ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATION_ADDRESS, 'sPickupLocationAddress') .
     ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATION_PUBLISHED_COMMENTS, 'sPickupLocationComments') .
@@ -297,6 +315,14 @@ class Order extends SQLBase {
     $this->m_aData[self::PROPERTY_MODIFY_MEMBER_ID] = $rec["ModifiedByMemberID"];
     $this->m_aData[self::PROPERTY_MODIFY_MEMBER_NAME] = $rec["ModifyMemberName"];
     $this->m_aData[self::PROPERTY_HAS_ITEMS_COMMENTS] = $rec["bHasItemComments"];
+    $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $rec["fPercentOverBalance"];
+    $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] = $rec["PaymentMethodKeyID"];
+    $this->m_aData[Member::PROPERTY_BALANCE] = $rec["mBalance"];
+    
+    $this->m_aData[self::PROPERTY_MAX_ORDER] = Member::CalculateMaxOrder(
+            $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID],
+            $this->m_aData[Member::PROPERTY_BALANCE],
+            $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE]);
     
     $this->m_aData[Member::PROPERTY_LOGIN_NAME] = $rec["sLoginName"];
     $this->m_aData[Member::PROPERTY_EMAIL] = $rec["sEMail"];
@@ -362,17 +388,36 @@ class Order extends SQLBase {
         $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
         return FALSE;
       }
+      
+      $arrParams = array( $sNow, $sNow, $this->m_aData[self::PROPERTY_MEMBER_COMMENTS] );
 
       //insert the record
       $sSQL =  " INSERT INTO T_Order( CoopOrderKeyID, MemberID, dCreated, dModified, CreatedByMemberID, ModifiedByMemberID " .
                 $this->ConcatColIfNotValue(self::PROPERTY_PICKUP_LOCATION_ID, "PickupLocationKeyID", 0)  . 
-                " ,sMemberComments ) " .
+                " ,sMemberComments "; 
+      
+      if ($this->HasPermission(self::PERMISSION_COORD) && $this->HasPermission(self::PERMISSION_SET_MAX_ORDER))
+      {
+        if ($this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] != $this->m_aOriginalData[self::PROPERTY_PAYMENT_METHOD_ID])
+        {
+          $sSQL .= ", PaymentMethodKeyID";
+          $arrParams[] = $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID];
+        }
+
+        if ($this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] != $this->m_aOriginalData[self::PROPERTY_PERCENT_OVER_BALANCE])
+        {
+          $sSQL .= ", fPercentOverBalance";
+          $arrParams[] = $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];
+        }
+      }
+      
+      $sSQL .=  ") " .
                " VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   ", " . 
               $this->m_aData[self::PROPERTY_MEMBER_ID] .    
               ", ? , ?, " . $g_oMemberSession->MemberID .   ", " .  $g_oMemberSession->MemberID .   
               $this->ConcatValIfNotValue(self::PROPERTY_PICKUP_LOCATION_ID, 0) . ", ? );";
 
-      $this->RunSQLWithParams($sSQL, array( $sNow, $sNow, $this->m_aData[self::PROPERTY_MEMBER_COMMENTS] ));
+      $this->RunSQLWithParams($sSQL, $arrParams);
 
       $this->m_aData[self::PROPERTY_ID] = $this->GetLastInsertedID();
 
@@ -401,18 +446,14 @@ class Order extends SQLBase {
     }
     
     if (!$this->CanModify())
-    {
-      $this->CopyOriginalDataWhenUnsaved();
       return FALSE;
-    }
     
     if (!$this->Validate())
     {
-      $this->CopyOriginalDataWhenUnsaved();
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
       return FALSE;
     }
-    
+
     try
     {
       $this->BeginTransaction();
@@ -420,7 +461,19 @@ class Order extends SQLBase {
       $sSQL =   " UPDATE T_Order " .
                 " SET PickupLocationKeyID =  ? , dModified = ?, ModifiedByMemberID = ?, sMemberComments = ? ";
       if ($this->HasPermission(self::PERMISSION_COORD)) //allow changing a user for coordinators
+      {
         $sSQL .= ", MemberID = " . $this->m_aData[self::PROPERTY_MEMBER_ID];
+      
+        if ($this->HasPermission(self::PERMISSION_SET_MAX_ORDER))
+        {
+          if ($this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] != $this->m_aOriginalData[self::PROPERTY_PAYMENT_METHOD_ID])
+            $sSQL .= ", PaymentMethodKeyID = " . $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID];
+
+          if ($this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] != $this->m_aOriginalData[self::PROPERTY_PERCENT_OVER_BALANCE])
+            $sSQL .= ", fPercentOverBalance = " . $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];      
+        }
+      }
+      
       $sSQL .=  " WHERE OrderID = " . $this->m_aData[self::PROPERTY_ID] . ';';
 
       $nPickupLocationID = NULL;
@@ -434,8 +487,6 @@ class Order extends SQLBase {
                 $g_oMemberSession->MemberID,
                 $this->m_aData[self::PROPERTY_MEMBER_COMMENTS]
           ));
-
-      $this->m_aData[self::PROPERTY_COOP_ORDER_ID] =  $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_ID];
 
       //Recalculate totals for coop order pickup locations    
       if ($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_ID] > 0 ||
@@ -516,18 +567,20 @@ class Order extends SQLBase {
     $this->m_aData[self::PROPERTY_COOP_ORDER_ID] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_ID];
     $this->m_aData[self::PROPERTY_MEMBER_ID] = $this->m_aOriginalData[self::PROPERTY_MEMBER_ID];
     $this->m_aOriginalData = $this->m_aData; //erase old original data
-    $bSuccess = $this->CanModify();
+    $bSuccess = $this->LoadCoopOrder($this->m_aData[self::PROPERTY_COOP_ORDER_ID], $this->m_aData[self::PROPERTY_MEMBER_ID]);
     $this->m_aOriginalData = $this->m_aData; //save data for serialization
     return $bSuccess;
   }
   
   //load data and validation for the coop order
-  public function LoadCoopOrder($nCoopOrderID)
+  //called when loading a new order record form
+  public function LoadCoopOrder($nCoopOrderID, $MemberID)
   {
     global $g_oMemberSession;
     
     $this->m_aData[self::PROPERTY_COOP_ORDER_ID] =  $nCoopOrderID;
-    $this->m_aData[self::PROPERTY_MEMBER_ID] = $g_oMemberSession->MemberID;
+    $this->m_aData[self::PROPERTY_MEMBER_ID] = $MemberID;
+    $this->LoadMemberFields();
     $bSuccess = $this->CanModify();
     $this->m_aOriginalData = $this->m_aData; //save data for serialization
     return $bSuccess;
@@ -630,9 +683,26 @@ class Order extends SQLBase {
     unset($oCOPL);
   }
   
-  //preserve data after post back
-  protected function CopyOriginalDataWhenUnsaved()
+  public function GetPaymentMethods()
   {
+    global $g_oMemberSession;
+    
+    if ( !$this->HasPermission(self::PERMISSION_SET_MAX_ORDER) )
+      return NULL;
+
+    $sSQL =  " SELECT PM.PaymentMethodKeyID, " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PAYMENT_METHODS, 'sPaymentMethod');
+    $sSQL .= " FROM T_PaymentMethod PM " . $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PAYMENT_METHODS);
+    $sSQL .= " ORDER BY PM_S.sString; ";
+
+    $this->RunSQL( $sSQL );
+
+    return $this->fetchAllKeyPair(); 
+  }
+  
+  //preserve data after post back
+  public function CopyOriginalDataWhenUnsaved()
+  {
+    $this->m_aData[self::PROPERTY_COOP_ORDER_ID] =  $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_ID];
     $this->m_aData[self::PROPERTY_PICKUP_LOCATION_NAME] = $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_NAME];
     $this->m_aData[self::PROPERTY_MEMBER_NAME] = $this->m_aOriginalData[self::PROPERTY_MEMBER_NAME];
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
@@ -650,7 +720,43 @@ class Order extends SQLBase {
     $this->m_aData[Member::PROPERTY_EMAIL2] = $this->m_aOriginalData[Member::PROPERTY_EMAIL2];
     $this->m_aData[Member::PROPERTY_EMAIL3] = $this->m_aOriginalData[Member::PROPERTY_EMAIL3];
     $this->m_aData[Member::PROPERTY_EMAIL4] = $this->m_aOriginalData[Member::PROPERTY_EMAIL4];
+    $this->PreserveMemberFields();
 
+  }
+  
+  //get member fields for starting a new order
+  protected function LoadMemberFields()
+  {
+    $sSQL = " SELECT mBalance, PaymentMethodKeyID, fPercentOverBalance, sName as MemberName, " . 
+            " sLoginName, sEMail, sEMail2, sEMail3, sEMail4 FROM T_Member WHERE MemberID = " . 
+            $this->m_aData[self::PROPERTY_MEMBER_ID] . ";";
+    $this->RunSQL($sSQL);
+    $rec = $this->fetch();
+    
+    $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $rec["fPercentOverBalance"];
+    $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] = $rec["PaymentMethodKeyID"];
+    $this->m_aData[Member::PROPERTY_BALANCE] = $rec["mBalance"];
+    $this->m_aData[self::PROPERTY_MEMBER_NAME] = $rec["MemberName"];
+    
+    $this->m_aData[Member::PROPERTY_LOGIN_NAME] = $rec["sLoginName"];
+    $this->m_aData[Member::PROPERTY_EMAIL] = $rec["sEMail"];
+    $this->m_aData[Member::PROPERTY_EMAIL2] = $rec["sEMail2"];
+    $this->m_aData[Member::PROPERTY_EMAIL3] = $rec["sEMail3"];
+    $this->m_aData[Member::PROPERTY_EMAIL4] = $rec["sEMail4"];
+    
+    $this->m_aData[self::PROPERTY_MAX_ORDER] = Member::CalculateMaxOrder(
+            $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID],
+            $this->m_aData[Member::PROPERTY_BALANCE],
+            $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE]);
+    
+  }
+  
+  protected function PreserveMemberFields()
+  {
+    $this->m_aData[Member::PROPERTY_BALANCE] = $this->m_aOriginalData[Member::PROPERTY_BALANCE];
+    $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] = $this->m_aOriginalData[self::PROPERTY_PAYMENT_METHOD_ID];
+    $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $this->m_aOriginalData[self::PROPERTY_PERCENT_OVER_BALANCE];
+    $this->m_aData[self::PROPERTY_MAX_ORDER] = $this->m_aOriginalData[self::PROPERTY_MAX_ORDER];
   }
   
   //get coop order data for validations and calculations
@@ -736,19 +842,23 @@ class Order extends SQLBase {
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     $this->m_bCanModify = FALSE;
     $this->m_aData[self::PROPERTY_CAN_ENLARGE] = FALSE;
-    
+
+    $bHasCoordPermission = FALSE;
+
     if (!$this->m_bRunningTotalsValidation)
     {
       //load coop order data on every postback, to make validations against up-to-date data
       if (!$this->LoadCoopOrderData())
         return FALSE;
    
+      $bHasCoordPermission = $this->HasPermission(self::PERMISSION_COORD);
       //has coordinating permissions?
-      if ($this->HasPermission(self::PERMISSION_COORD))
+      if ($bHasCoordPermission)
       {
-        //now let's check them: coordinating group permission check for updating any order in the current coop order
+        //now let's check those permissions: can update any member order in the current coop order?
         if ( !$this->CheckCoordinator() )
         {
+          $bHasCoordPermission = FALSE;
           //user has no coordination permissions for the current coop order
           //if does not have regular permissions, block hir
           if (!$this->HasPermission(self::PERMISSION_PAGE_ACCESS))
@@ -760,7 +870,7 @@ class Order extends SQLBase {
       }
 
       //member can order (has balance/pays at pickup) or coordinator
-      if (!$g_oMemberSession->CanOrder && !$this->HasPermission(self::PERMISSION_COORD))
+      if (!$g_oMemberSession->CanOrder && !$bHasCoordPermission)
       {
         if (!$this->HasPermission(self::PERMISSION_VIEW))
           $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
@@ -771,11 +881,18 @@ class Order extends SQLBase {
       if ($this->m_aData[CoopOrder::PROPERTY_STATUS] == 0)
         $this->m_aData[CoopOrder::PROPERTY_STATUS] = $this->m_aOriginalData[CoopOrder::PROPERTY_STATUS];
 
-      //coop order status is active
+      //check coop order status : members can update only when active. coordinators - also when in draft/locked mode
       if ($this->m_aData[CoopOrder::PROPERTY_STATUS] != CoopOrder::STATUS_ACTIVE)
       {
-        $this->AddError('<!$ORDER_READONLY_REASON_COOPORDER_IS_NOT_ACTIVE$!>');
-        return FALSE;
+        if ($bHasCoordPermission && 
+             ($this->m_aData[CoopOrder::PROPERTY_STATUS] == CoopOrder::STATUS_DRAFT 
+              || $this->m_aData[CoopOrder::PROPERTY_STATUS] == CoopOrder::STATUS_LOCKED ))
+          $this->AddError('<!$ORDER_COORDINATOR_BYPASS_MEMBER_PERMISSIONS_WARNING$!><!$ORDER_READONLY_REASON_COOPORDER_IS_NOT_ACTIVE$!>'); 
+        else
+        {
+          $this->AddError('<!$ORDER_READONLY_REASON_COOPORDER_IS_NOT_ACTIVE$!>');
+          return FALSE;
+        }
       }
 
       if ($this->m_aData[CoopOrder::PROPERTY_END] == NULL)
@@ -786,7 +903,7 @@ class Order extends SQLBase {
 
       if ($this->m_aData[self::PROPERTY_COOP_ORDER_STATUS_OBJECT]->Status != ActiveCoopOrderStatus::Open)
       {
-        if (!$this->HasPermission(self::PERMISSION_COORD))
+        if (!$bHasCoordPermission)
         {
           $this->AddError('<!$ORDER_READONLY_REASON_ACTIVE_COOPORDER_NOT_OPEN_FOR_MEMBER$!>');
           return FALSE;
@@ -807,6 +924,8 @@ class Order extends SQLBase {
      if ($this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL] == NULL)
         $this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_COOP_TOTAL];
     } //end of !m_bRunningTotalsValidation
+    else
+      $bHasCoordPermission = $this->HasPermission(self::PERMISSION_COORD);
 
     $oCoopOrderCapacity = new CoopOrderCapacity($this->m_aData[CoopOrder::PROPERTY_MAX_BURDEN], 
           $this->m_aData[CoopOrder::PROPERTY_TOTAL_BURDEN], 
@@ -822,7 +941,7 @@ class Order extends SQLBase {
           $this->AddError('<!$ORDER_CANNOT_BE_ENLARGED_WHEN_CAPACITY_IS_FULL$!>');
 
         //more detailed message for coordinators
-        if ($this->HasPermission(self::PERMISSION_COORD))
+        if ($bHasCoordPermission)
         {
           if ($oCoopOrderCapacity->SelectedType == CoopOrderCapacity::TypeBurden)
             $this->AddError('<!$ORDER_READONLY_REASON_CANNOT_CREATE_NEW_DUE_TO_BURDER$!>');
@@ -842,22 +961,19 @@ class Order extends SQLBase {
       return TRUE;
     }
 
-    $oMember = new Member;
-    $mMaxOrder = $oMember->GetMaxOrder($this->m_aData[self::PROPERTY_MEMBER_ID]);
-    unset($oMember);
-
-    if ($mMaxOrder != NULL) //if not payment at pickup
+    if ($this->m_aData[self::PROPERTY_MAX_ORDER] != NULL) //if not payment at pickup
     {
-      if ($mMaxOrder < $this->m_aData[self::PROPERTY_COOP_TOTAL])
+      if ($this->m_aData[self::PROPERTY_MAX_ORDER] < $this->m_aData[self::PROPERTY_COOP_TOTAL])
       {
         $this->m_bCanModify = TRUE;
-        if (!$this->HasPermission(self::PERMISSION_COORD))
+        if (!$bHasCoordPermission)
         {
-          $this->AddError(sprintf('<!$ORDER_CANNOT_BE_ENLARGED_BEYOND_BALANCE$!>',$mMaxOrder));
+          $this->AddError(sprintf('<!$ORDER_CANNOT_BE_ENLARGED_BEYOND_BALANCE$!>',$this->m_aData[self::PROPERTY_MAX_ORDER]));
           return TRUE; //CanEnlarge remains FALSE
         }
         else
-          $this->AddError(sprintf('<!$ORDER_COORDINATOR_BYPASS_MEMBER_PERMISSIONS_WARNING$!><!$ORDER_CANNOT_BE_ENLARGED_BEYOND_BALANCE$!>',$mMaxOrder)); 
+          $this->AddError(sprintf('<!$ORDER_COORDINATOR_BYPASS_MEMBER_PERMISSIONS_WARNING$!><!$ORDER_CANNOT_BE_ENLARGED_BEYOND_BALANCE$!>',
+                  $this->m_aData[self::PROPERTY_MAX_ORDER])); 
       }
     }
 

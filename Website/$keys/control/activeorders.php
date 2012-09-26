@@ -57,34 +57,36 @@ try
       $dDelivery = new DateTime($recTable["dDelivery"]);
       $dStart = new DateTime($recTable["dStart"]);
       $dEnd = new DateTime($recTable["dEnd"]);
-      $oActiveOrderStatus = new ActiveCoopOrderStatus($dEnd, $dDelivery, CoopOrder::STATUS_ACTIVE);
-      $sActiveOrderStatus = '';
+      $oActiveOrderStatus = new ActiveCoopOrderStatus($dEnd, $dDelivery, $recTable["nStatus"] );
+      $sActiveOrderStatus = $oActiveOrderStatus->StatusName;
       
       $oCoopOrderCapacity = new CoopOrderCapacity($recTable["fMaxBurden"], $recTable["fBurden"], 
               $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"]);
       
-      switch($oActiveOrderStatus->Status)
+      if ($recTable["nStatus"] == CoopOrder::STATUS_LOCKED)
+        $sOrderCssClass = ' class="closedorder" ';
+      else
       {
-        case ActiveCoopOrderStatus::Open:
-          $sOrderCssClass = ' class="openorder" ';
-          if ($oCoopOrderCapacity->Percent < 100) //show order as open only if capacity is less then 100%
-            $sActiveOrderStatus = '<!$HOME_ORDER_OPEN$!>';
-          break;
-        case ActiveCoopOrderStatus::Closed:
-          $sOrderCssClass = ' class="closedorder" ';
-          $sActiveOrderStatus = '<!$HOME_ORDER_CLOSED$!>';
-          break;
-        case ActiveCoopOrderStatus::Arrived:
-          $sOrderCssClass = ' class="arrivedorder" ';
-          $sActiveOrderStatus = '<!$HOME_ORDER_ARRIVED$!>';
-         break;
-        case ActiveCoopOrderStatus::ArrivingToday:
-          $sOrderCssClass = ' class="arrivedorder" ';
-          $sActiveOrderStatus = '<!$HOME_ORDER_ARRIVING_TODAY$!>';
-          break;
-        default:
-          $sOrderCssClass = '';
-          break;
+        switch($oActiveOrderStatus->Status)
+        {
+          case ActiveCoopOrderStatus::Open:
+            $sOrderCssClass = ' class="openorder" ';
+            if ($oCoopOrderCapacity->Percent >= 100) //show order as open only if capacity is less then 100%
+              $sActiveOrderStatus = '';
+            break;
+          case ActiveCoopOrderStatus::Closed:
+            $sOrderCssClass = ' class="closedorder" ';
+            break;
+          case ActiveCoopOrderStatus::Arrived:
+            $sOrderCssClass = ' class="arrivedorder" ';
+           break;
+          case ActiveCoopOrderStatus::ArrivingToday:
+            $sOrderCssClass = ' class="arrivedorder" ';
+            break;
+          default:
+            $sOrderCssClass = '';
+            break;
+        }
       }
       
       echo '<tr><td><table cellpadding="4" border="3" ', $sOrderCssClass,

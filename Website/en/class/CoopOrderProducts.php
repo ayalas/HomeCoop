@@ -27,7 +27,7 @@ class CoopOrderProducts  extends CoopOrderSubBase {
     }
     
     $sSQL =   " SELECT COPRD.ProductKeyID, P.ProducerKeyID, COPRD.nJoinedStatus, COPRD.mProducerPrice, COPRD.mCoopPrice, ". 
-            " IfNUll(COPRD.mProducerTotal,0) mProducerTotal," . 
+            " IfNUll(COPRD.mProducerTotal,0) mProducerTotal, PRD.UnitKeyID," . 
             " NUllIf(PRD.fQuantity,0) ProductQuantity, PRD.nItems ProductItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
             " IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder, COPRD.fMaxUserOrder, COPRD.fMaxCoopOrder, IfNull(COPRD.fBurden,0) fBurden, " . 
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .

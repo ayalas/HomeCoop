@@ -304,7 +304,7 @@ function OnChangeUnit()
                 <tr>
                 <?php
                                 
-                $txtSpec = new HtmlTextEditMultiLang('Details', 'txtSpec', HtmlTextEdit::TEXTBOX, 
+                $txtSpec = new HtmlTextEditMultiLang('Details', 'txtSpec', HtmlTextEdit::TEXTAREA, 
                         $oRecord->SpecStrings);
                 $txtSpec->ReadOnly =  $bReadOnly;
                 $txtSpec->EchoHtml();
@@ -452,8 +452,8 @@ function OnChangeUnit()
                 </tr>
                 <tr>
                   <?php                    
-                    $oIsDisabled = new HtmlSelectBoolean('ctlIsDisabled', 'Status', $oRecord->IsDisabled, 'Disabled', 
-                            'Enabled');
+                    $oIsDisabled = new HtmlSelectBoolean('ctlIsDisabled', 'Status', $oRecord->IsDisabled, 'Inactive', 
+                            'Active');
                     $oIsDisabled->ReadOnly =  $bReadOnly;
                     $oIsDisabled->EchoHtml();
                     unset($oIsDisabled);

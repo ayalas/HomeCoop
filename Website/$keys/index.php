@@ -16,14 +16,18 @@ try
          exit();
       }
 
-      $sLoginName = trim($_POST['txt_login']);
-      $nLoginFlags = $oLogin->DoLogin ( $sLoginName, trim($_POST['txt_pwd']) );
+      $oLogin->LoginName = trim($_POST['txt_login']);
+      $oLogin->Password = trim($_POST['txt_pwd']);
+      $nLoginFlags = $oLogin->DoLogin ();
       $oLogin->UnsetAll();
       unset($oLogin);
 
       if ( $nLoginFlags == 0 )
       {
-          header('Location: ' . Consts::URL_HOME );
+          if (isset($_GET["redr"]))
+            header('Location: ' . $_GET["redr"]) ;
+          else
+            header('Location: ' . Consts::URL_HOME );
           exit();
       }
       else
@@ -41,6 +45,9 @@ try
                   break;
               case Login::ERR_NO_PERMISSIONS:
                   $g_oError->AddError(sprintf('<!$PERMISSIONS_NONE$!>', COOP_ADDRESS_MEMBER_PERMISSIONS));
+                  break;
+              case Login::ERR_MEMBER_DISABLED:
+                  $g_oError->AddError(sprintf('<!$ERR_MEMBER_DISABLED$!>', COOP_ADDRESS_MEMBER_PERMISSIONS));
                   break;
               default:
                   break;

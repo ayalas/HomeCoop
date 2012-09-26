@@ -35,8 +35,9 @@ if ($_SERVER[ 'REQUEST_METHOD'] == 'POST')
 //authenticate user by checking session data
 if (! $g_oMemberSession->Authenticate( ) )
 {
-        RedirectPage::To( $g_sRootRelativePath . Consts::URL_LOGIN );
-        exit;
+    //not authenticated yet: add to login url a redirect instruction to desired page after login
+    RedirectPage::To( $g_sRootRelativePath . Consts::URL_LOGIN . "?redr=" .  urlencode($_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] ) );
+    exit;
 }
 
 ?>

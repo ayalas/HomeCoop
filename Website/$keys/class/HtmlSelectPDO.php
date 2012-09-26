@@ -121,7 +121,7 @@ class HtmlSelectPDO {
         $bReplacePlaceholder = TRUE;
       }
       
-      $sOptions .=  ' >' . htmlspecialchars($this->m_aData[self::PROPERTY_DATA_ROW][$this->m_aData[self::PROPERTY_TEXT_FIELD]]) . '</option>';
+      $sOptions .=  ' >' . htmlspecialchars($this->m_aData[self::PROPERTY_DATA_ROW][$this->m_aData[self::PROPERTY_TEXT_FIELD]], ENT_NOQUOTES) . '</option>';
       $this->m_aData[self::PROPERTY_DATA_ROW] = $this->m_aData[self::PROPERTY_SQL_BASE_OBJECT]->fetch();
     }
     

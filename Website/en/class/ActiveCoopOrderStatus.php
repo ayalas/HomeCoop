@@ -15,12 +15,14 @@ class ActiveCoopOrderStatus {
  const ArrivingToday = 4;
  
  protected $m_nStatus = self::None;
+ protected $m_nCoopOrderStatus = 0;
  protected $m_sStatusName = NULL;
-   
+
  public function __construct($dEnd, $dDelivery, $nCoopOrderStatus)
  {
    global $g_dNow; //now in the coop time zone
    $dNow = $g_dNow;
+   $this->m_nCoopOrderStatus = $nCoopOrderStatus;
    
    //if close date is not now yet, coop order is open
    $diInterval = $dNow->diff($dEnd);
@@ -68,6 +70,9 @@ class ActiveCoopOrderStatus {
       case self::PROPERTY_STATUS:
         return $this->m_nStatus;
       case self::PROPERTY_STATUS_NAME:
+        //if open, check coop order status as well, so won't mislead people to think it's really open
+        if ($this->m_nStatus == self::Open && $this->m_nCoopOrderStatus != CoopOrder::STATUS_ACTIVE)
+          return CoopOrder::StatusName($this->m_nCoopOrderStatus);
         return $this->m_sStatusName;
       default:
         $trace = debug_backtrace();

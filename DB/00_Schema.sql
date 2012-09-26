@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `Tlng_String`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Tlng_String` (
   `KeyID` bigint(20) unsigned NOT NULL,
-  `LangID` tinyint(3) unsigned NOT NULL,
+  `LangID` tinyint(1) unsigned NOT NULL,
   `sString` varchar(3000) NOT NULL,
   PRIMARY KEY (`KeyID`,`LangID`),
   KEY `indLangID` (`LangID`) USING BTREE,
@@ -80,7 +80,7 @@ CREATE TABLE `T_CoopOrderProduct` (
   `fMaxCoopOrder` float unsigned DEFAULT NULL,
   `fBurden` float unsigned DEFAULT NULL,
   `fTotalCoopOrder` float unsigned DEFAULT NULL,
-  `nJoinedStatus` tinyint(4) NOT NULL,
+  `nJoinedStatus` tinyint(1) NOT NULL,
   `mProducerTotal` decimal(10,2) unsigned DEFAULT NULL,
   `mCoopTotal` decimal(10,2) unsigned DEFAULT NULL,
   PRIMARY KEY (`CoopOrderKeyID`,`ProductKeyID`),
@@ -218,9 +218,11 @@ CREATE TABLE `T_Order` (
   `mProducerTotal` decimal(10,2) NOT NULL DEFAULT '0.00',
   `sMemberComments` varchar(250) DEFAULT NULL,
   `mCoopFee` decimal(10,2) DEFAULT NULL,
-  `bHasItemComments` tinyint(4) NOT NULL DEFAULT '0',
+  `bHasItemComments` tinyint(1) NOT NULL DEFAULT '0',
   `fBurden` float unsigned DEFAULT NULL,
   `mCoopTotalIncFee` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `PaymentMethodKeyID` BIGINT UNSIGNED NULL,
+  `fPercentOverBalance` FLOAT UNSIGNED NULL,
   PRIMARY KEY (`OrderID`),
   UNIQUE KEY `indCoopOrderMember` (`CoopOrderKeyID`,`MemberID`),
   KEY `indMemberID` (`MemberID`),
@@ -230,11 +232,13 @@ CREATE TABLE `T_Order` (
   KEY `indPickupLocationKeyID` (`PickupLocationKeyID`,`CoopOrderKeyID`),
   KEY `indCOPL` (`CoopOrderKeyID`,`PickupLocationKeyID`),
   KEY `fkOrderPL` (`PickupLocationKeyID`),
+  KEY `fkOrderPayMethod` (`PaymentMethodKeyID`),
   CONSTRAINT `fkCreatedByOrder` FOREIGN KEY (`CreatedByMemberID`) REFERENCES `T_Member` (`MemberID`),
   CONSTRAINT `fkMemberOrder` FOREIGN KEY (`MemberID`) REFERENCES `T_Member` (`MemberID`),
   CONSTRAINT `fkModifiedByOrder` FOREIGN KEY (`ModifiedByMemberID`) REFERENCES `T_Member` (`MemberID`),
   CONSTRAINT `fkOrderCoopOrder` FOREIGN KEY (`CoopOrderKeyID`) REFERENCES `T_CoopOrder` (`CoopOrderKeyID`) ON DELETE CASCADE,
-  CONSTRAINT `fkOrderPL` FOREIGN KEY (`PickupLocationKeyID`) REFERENCES `T_PickupLocation` (`PickupLocationKeyID`)
+  CONSTRAINT `fkOrderPL` FOREIGN KEY (`PickupLocationKeyID`) REFERENCES `T_PickupLocation` (`PickupLocationKeyID`),
+  CONSTRAINT `fkOrderPayMethod` FOREIGN KEY (`PaymentMethodKeyID` ) REFERENCES `T_PaymentMethod` (`PaymentMethodKeyID` )
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -263,7 +267,7 @@ CREATE TABLE `T_CoopOrder` (
   `mCoopTotal` decimal(10,2) DEFAULT '0.00',
   `mProducerTotal` decimal(10,2) DEFAULT '0.00',
   `mTotalDelivery` decimal(10,2) DEFAULT '0.00',
-  `bHasJoinedProducts` tinyint(4) NOT NULL,
+  `bHasJoinedProducts` tinyint(1) NOT NULL,
   PRIMARY KEY (`CoopOrderKeyID`),
   KEY `indModifiedByMemberID` (`ModifiedByMemberID`),
   KEY `indCoordinatingGroupID` (`CoordinatingGroupID`) USING BTREE,
@@ -356,7 +360,7 @@ DROP TABLE IF EXISTS `T_Unit`;
 CREATE TABLE `T_Unit` (
   `UnitKeyID` bigint(20) unsigned NOT NULL,
   `MeasureKeyID` bigint(20) unsigned NOT NULL,
-  `nFloatingPoint` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `nFloatingPoint` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `UnitAbbreviationStringKeyID` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`UnitKeyID`),
   KEY `indMeasure` (`MeasureKeyID`) USING BTREE,
@@ -374,7 +378,7 @@ DROP TABLE IF EXISTS `T_Permission`;
 CREATE TABLE `T_Permission` (
   `PermissionAreaKeyID` bigint(20) unsigned NOT NULL,
   `PermissionTypeKeyID` bigint(20) unsigned NOT NULL,
-  `nAllowedScopeCodes` tinyint(3) unsigned NOT NULL,
+  `nAllowedScopeCodes` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`PermissionAreaKeyID`,`PermissionTypeKeyID`) USING BTREE,
   KEY `indPermissionTypeKeyID` (`PermissionTypeKeyID`) USING BTREE,
   CONSTRAINT `fkPPermissionAreaKeyID` FOREIGN KEY (`PermissionAreaKeyID`) REFERENCES `T_PermissionArea` (`PermissionAreaKeyID`),
@@ -488,7 +492,7 @@ DROP TABLE IF EXISTS `T_PermissionScope`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `T_PermissionScope` (
   `PermissionScopeKeyID` bigint(20) unsigned NOT NULL,
-  `nScopeCode` tinyint(3) unsigned NOT NULL,
+  `nScopeCode` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`PermissionScopeKeyID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -543,11 +547,11 @@ DROP TABLE IF EXISTS `Tlng_Language`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Tlng_Language` (
-  `LangID` tinyint(3) unsigned NOT NULL,
+  `LangID` tinyint(1) unsigned NOT NULL,
   `sLanguage` varchar(100) NOT NULL,
   `bActive` tinyint(1) NOT NULL DEFAULT '1',
   `bRequired` tinyint(1) NOT NULL DEFAULT '1',
-  `FallingLangID` tinyint(3) unsigned DEFAULT NULL,
+  `FallingLangID` tinyint(1) unsigned DEFAULT NULL,
   `sPhpFolder` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`LangID`),
   UNIQUE KEY `ind_sLanguage` (`sLanguage`),
@@ -598,6 +602,7 @@ CREATE TABLE `T_Member` (
   `sEMail2` varchar(100) DEFAULT NULL,
   `sEMail3` varchar(100) DEFAULT NULL,
   `sEMail4` varchar(100) DEFAULT NULL,
+  `bDisabled` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`MemberID`),
   UNIQUE KEY `ind_sLoginName` (`sLoginName`),
   UNIQUE KEY `indName` (`sName`),
@@ -606,6 +611,7 @@ CREATE TABLE `T_Member` (
   KEY `indEMail2` (`sEMail2`),
   KEY `indEMail3` (`sEMail3`),
   KEY `indEMail4` (`sEMail4`),
+  KEY `indDisabled` (`bDisabled`, `sName`),
   CONSTRAINT `fkPaymentMethodKeyID` FOREIGN KEY (`PaymentMethodKeyID`) REFERENCES `T_PaymentMethod` (`PaymentMethodKeyID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

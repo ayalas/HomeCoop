@@ -54,6 +54,12 @@ class ErrorHandler {
     {
       $sErrorMessage = str_replace(DB_USERNAME, '[USER NAME]', $sErrorMessage);
     }
+    
+    //remove db password
+    if (!$bTransformed && stripos($sErrorMessage,DB_PASSWORD) > 0 )
+    {
+      $sErrorMessage = str_replace(DB_PASSWORD, '[pwd]', $sErrorMessage);
+    }
   
     if (USE_ERROR_PAGE && isset($g_oMemberSession) && $g_oMemberSession->IsLoggedIn)
     {

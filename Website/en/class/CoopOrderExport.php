@@ -125,14 +125,14 @@ class CoopOrderExport extends CoopOrderSubBase {
                  );
 
 
-         $aReturn[$fIndex ] = sprintf('Delivery to %s',$recPickupLoc["sPickupLocation"]);
+         $aReturn[$fIndex ] = sprintf('Delivery to %s',htmlspecialchars($recPickupLoc["sPickupLocation"]));
          
          $fIndex = self::LIST_ITEM_PICKUP_LOCATION + self::LIST_ITEM_TYPE_MAILS + $nID;
          //must have permission to member orders to view member emails
          if ($this->AddPermissionBridge($fIndex, Consts::PERMISSION_AREA_COOP_ORDER_PICKUP_LOCATION_ORDERS, 
              Consts::PERMISSION_TYPE_VIEW, Consts::PERMISSION_SCOPE_BOTH, $recPickupLoc["CoordinatingGroupID"], 
              FALSE))
-          $aReturn[$fIndex ] = sprintf('E-mails of Ordering Members to %s',$recPickupLoc["sPickupLocation"]);
+          $aReturn[$fIndex ] = sprintf('E-mails of Ordering Members to %s',htmlspecialchars($recPickupLoc["sPickupLocation"]));
        }
        $recPickupLoc = $oPickupLocations->fetch();
      }
@@ -159,11 +159,11 @@ class CoopOrderExport extends CoopOrderSubBase {
                   );
 
 
-         $aReturn[$fIndex ] = sprintf('Order from %s',  $recProducer["sProducer"]);
+         $aReturn[$fIndex ] = sprintf('Order from %s',  htmlspecialchars($recProducer["sProducer"]));
          $fIndex = self::LIST_ITEM_PRODUCER + self::LIST_ITEM_TYPE_MAILS + $nID;
          //must have permission to member orders to view member emails
          if ($bHasOrdersPermission)
-          $aReturn[$fIndex ] = sprintf('E-mails of Ordering Members from %s',$recProducer["sProducer"]);
+          $aReturn[$fIndex ] = sprintf('E-mails of Ordering Members from %s',  htmlspecialchars ($recProducer["sProducer"]));
 
          $recProducer = $this->fetch();
        }

@@ -779,6 +779,15 @@ class Product extends SQLBase {
     return TRUE;
   }
   
+  public static function AllowsPartialOrders($Unit, $Quantity, $UnitInterval)
+  {
+    //partial orders are allowed when the quantity (weight or volume) is different than the unit interval
+    if ($Unit == Consts::UNIT_ITEMS)
+      return FALSE;
+    
+    return ($UnitInterval == NULL || $Quantity != $UnitInterval);
+  }
+  
 }
 
 ?>

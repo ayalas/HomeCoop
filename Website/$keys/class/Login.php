@@ -7,14 +7,26 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 class Login extends SQLBase
 {
     const PROPERTY_USER_SESSION = "SessionManager";
+    const PROPERTY_LOGIN_NAME = "LoginName";
+    const PROPERTY_PASSWORD = "Password";
+    
     //login error codes
     const SUCCESS = 0;
     const ERR_LOGIN_NAME_EMPTY = 1;
     const ERR_LOGIN_PASSWORD_EMPTY = 2;
     const ERR_LOGIN_INCORRECT_NAME_PASSWORD = 3;
     const ERR_NO_PERMISSIONS = 4;
+    const ERR_MEMBER_DISABLED = 5;
 
     protected $m_oSessionManager = null;
+    
+    public function __construct()
+    {
+      $this->m_aData = array( 
+                              self::PROPERTY_LOGIN_NAME => NULL,
+                              self::PROPERTY_PASSWORD => NULL
+                              );
+    }
 
     public function __get( $name ) {
         switch ( $name ) 
@@ -31,26 +43,36 @@ class Login extends SQLBase
         }
     }
 
-    public function DoLogin ($sLoginName, $sPassword)
+    public function DoLogin ()
     {
         //first check for must fields
-        if ( !isset($sLoginName) || $sLoginName == "")
+        if ( !isset($this->m_aData[self::PROPERTY_LOGIN_NAME]) || $this->m_aData[self::PROPERTY_LOGIN_NAME] == "")
             return self::ERR_LOGIN_NAME_EMPTY;
 
-        if ( !isset($sPassword) || $sPassword == "")
+        if ( !isset($this->m_aData[self::PROPERTY_PASSWORD]) || $this->m_aData[self::PROPERTY_PASSWORD] == "")
             return self::ERR_LOGIN_PASSWORD_EMPTY;
+        
+        try
+        {
+          $sSQL = "SELECT M.sName, M.MemberID, M.PaymentMethodKeyID, M.bDisabled, M.fPercentOverBalance, M.dJoined, M.mBalance, CG.CoordinatingGroupID " . 
+                  " FROM T_Member M INNER JOIN T_CoordinatingGroupMember CGM ON CGM.MemberID = M.MemberID " . 
+                  " INNER JOIN T_CoordinatingGroup CG ON CG.CoordinatingGroupID = CGM.CoordinatingGroupID AND CG.sCoordinatingGroup IS NULL " .
+                  " WHERE M.sLoginName = ? and M.sPassword = md5( ? ) ;";
 
-        $sSQL = "SELECT M.sName, M.MemberID, M.PaymentMethodKeyID, M.fPercentOverBalance, M.dJoined, M.mBalance, CG.CoordinatingGroupID " . 
-                " FROM T_Member M INNER JOIN T_CoordinatingGroupMember CGM ON CGM.MemberID = M.MemberID " . 
-                " INNER JOIN T_CoordinatingGroup CG ON CG.CoordinatingGroupID = CGM.CoordinatingGroupID AND CG.sCoordinatingGroup IS NULL " .
-                " WHERE M.sLoginName = ? and M.sPassword = md5( ? ) ;";
-
-        $this->RunSQLWithParams($sSQL, array($sLoginName, $sPassword));
+          $this->RunSQLWithParams($sSQL, array($this->m_aData[self::PROPERTY_LOGIN_NAME], $this->m_aData[self::PROPERTY_PASSWORD]));
+        }
+        catch(Exception $e)
+        {
+          //do not throw original exception here, so user name and password won't be sent back to screen
+          throw new Exception('<!$LOGIN_EXCEPTION$!>');
+        }
 
         $result = $this->fetch();
 
         if (!$result)
             return self::ERR_LOGIN_INCORRECT_NAME_PASSWORD;
+        else if ($result["bDisabled"])
+            return self::ERR_MEMBER_DISABLED;
 
         $m_oSessionManager= new SessionManager;
     

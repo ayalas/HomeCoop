@@ -85,33 +85,36 @@ function OpenPicViewer(sPicName)
     <tr>
       <td>
         <table cellspacing="0" cellpadding="0">
-        <tr><td><span class="pagename"><?php echo $sPageTitle; ?></span></td></tr>
+        <tr><td colspan="2"><span class="pagename"><?php echo $sPageTitle; ?></span></td></tr>
         <?php 
         
           if ( $sQuantity != NULL )
           {
-            echo '<tr><td><span>', $sQuantity,'</span></td></tr>';
+            echo '<tr><td colspan="2"><span>', $sQuantity,'</span></td></tr>';
           }
           
           if ($recProduct["sSpec"] != NULL)
-            echo '<tr><td><span>', $recProduct["sSpec"], '</span></td></tr><tr><td>&nbsp;</td></tr>';
+            echo '<tr><td colspan="2"><span>', nl2br(htmlspecialchars ($recProduct["sSpec"])), '</span></td></tr><tr><td colspan="2">&nbsp;</td></tr>';
        
           if ( $sPackageSize != NULL )
           {
-            echo '<tr><td><span>', $sPackageSize,'</span></td></tr>';
+            echo '<tr><td colspan="2"><span>', $sPackageSize,'</span></td></tr>';
           }
           if ($sUnitInterval != NULL)
           {
-            echo '<tr><td><span><!$FIELD_UNIT_INTERVAL$!><!$FIELD_DISPLAY_NAME_SUFFIX$!>&nbsp;', $sUnitInterval,'</span></td></tr>';
+            echo '<tr><td><span><!$FIELD_UNIT_INTERVAL$!><!$FIELD_DISPLAY_NAME_SUFFIX$!>&nbsp;</span></td>',
+                    '<td><span>', $sUnitInterval,'</span></td></tr>';
           }
           
-          echo '<tr><td><span><!$FIELD_PRODUCER$!>:&nbsp;', $recProduct["sProducer"],'</span></td></tr>';
+          echo '<tr><td><span><!$FIELD_PRODUCER$!><!$FIELD_DISPLAY_NAME_SUFFIX$!>&nbsp;</span></td>',
+              '<td><span>', htmlspecialchars($recProduct["sProducer"]),'</span></td></tr>';
           
-          echo '<tr><td>&nbsp;</td></tr><tr><td><span><!$FIELD_COOP_PRICE$!><!$FIELD_DISPLAY_NAME_SUFFIX$!>&nbsp;', $recProduct["mCoopPrice"], '</span></td></tr>';
+          echo '<tr><td>&nbsp;</td></tr><tr><td><span><!$FIELD_COOP_PRICE$!><!$FIELD_DISPLAY_NAME_SUFFIX$!>&nbsp;</span></td>',
+                  '<td><span>', $recProduct["mCoopPrice"], '</span></td></tr>';
           
           if (SHOW_PRODUCER_PRICES_IN_PRODUCT_OVERVIEW)
           { 
-            echo '<tr><td><span>', sprintf('<!$PRODUCER_PRICE_MEMBER_FORMAT$!>', $recProduct["mProducerPrice"], $fCoopCosts),
+            echo '<tr><td colspan="2"><span>', sprintf('<!$PRODUCER_PRICE_MEMBER_FORMAT$!>', $recProduct["mProducerPrice"], $fCoopCosts),
                  '</span></td></tr>';   
           }
         

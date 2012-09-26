@@ -132,9 +132,9 @@ UserSessionBase::Close();
                       echo "<td>";
                       $sDisabled = NULL;
                       if ($recProducts["bDisabled"])
-                          $sDisabled = "Disabled";
+                          $sDisabled = "Inactive";
                       else
-                          $sDisabled = "Enabled";
+                          $sDisabled = "Active";
                       
                       $cellDisabled = new HtmlGridCellText($sDisabled, HtmlGridCellText::CELL_TYPE_TINY);
                       $cellDisabled->EchoHtml();

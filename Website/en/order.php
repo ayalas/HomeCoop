@@ -13,6 +13,8 @@ $oOrderTabInfo = NULL;
 $oPLTabInfo = NULL;
 $arrCOContacts = NULL;
 $arrPLContacts = NULL;
+$arrPaymentMethods = NULL;
+$bHasCoordPermission = FALSE;
 
 try
 {  
@@ -24,31 +26,40 @@ try
     if ( isset( $_POST['hidOriginalData'] ) )
       $oRecord->SetSerializedOriginalData( $_POST["hidOriginalData"] );
     
+    $oRecord->CopyOriginalDataWhenUnsaved();
+    
     if (!empty( $_POST['hidPostAction'] ))
     {
+      //collect data
+      $sCtl = HtmlSelectPDO::PREFIX . 'PickupLocationKeyID';
+      if ( isset( $_POST[$sCtl] ))
+        $oRecord->PickupLocationID = intval($_POST[$sCtl]);
+
+      $sCtl = HtmlSelectArray::PREFIX . 'MemberID';
+      if ( isset( $_POST[$sCtl] ))
+        $oRecord->MemberID = intval($_POST[$sCtl]);
+      else if ($oRecord->ID == 0)
+        $oRecord->MemberID = $g_oMemberSession->MemberID;
+
+      if ( isset( $_POST['txtPercentOverBalance'] ) && !empty($_POST['txtPercentOverBalance']))
+        $oRecord->PercentOverBalance = 0 + trim($_POST['txtPercentOverBalance']);
+
+      $sCtl = HtmlSelectPDO::PREFIX . 'PaymentMethodKeyID';
+      if ( isset( $_POST[$sCtl] ))
+        $oRecord->PaymentMethodID = intval($_POST[$sCtl]);
+
+      $oRecord->MemberComments = NULL;
+      if ( isset( $_POST['txtMemberComments'] ))
+      {
+        $sMemberComments = trim($_POST['txtMemberComments']);
+        if (!empty($sMemberComments))
+          $oRecord->MemberComments = $sMemberComments;
+      }
+
       switch($_POST['hidPostAction'])
       {
         case SQLBase::POST_ACTION_SAVE:
-          //collect data
-          $sCtl = HtmlSelectPDO::PREFIX . 'PickupLocationKeyID';
-          if ( isset( $_POST[$sCtl] ))
-            $oRecord->PickupLocationID = intval($_POST[$sCtl]);
-          
-          $sCtl = HtmlSelectArray::PREFIX . 'MemberID';
-          if ( isset( $_POST[$sCtl] ))
-            $oRecord->MemberID = intval($_POST[$sCtl]);
-          else if ($oRecord->ID == 0)
-            $oRecord->MemberID = $g_oMemberSession->MemberID;
-          
-          $oRecord->MemberComments = NULL;
-          if ( isset( $_POST['txtMemberComments'] ))
-          {
-            $sMemberComments = trim($_POST['txtMemberComments']);
-            if (!empty($sMemberComments))
-              $oRecord->MemberComments = $sMemberComments;
-          }
-          
-          $bSuccess = false;
+          $bSuccess = FALSE; //trigger var declare
           if ($oRecord->ID > 0)
             $bSuccess = $oRecord->Edit();
           else
@@ -68,6 +79,10 @@ try
               $g_oError->PushError('Record was not saved. You may not have sufficent permissions or an error has occured.');
           else
             $g_oError->PushError('Data was not saved.');
+          break;
+        case Order::POST_ACTION_MEMBER_CHANGE:
+          //load new member and coop order data
+          $oRecord->LoadCoopOrder($oRecord->CoopOrderID, $oRecord->MemberID);
           break;
         case SQLBase::POST_ACTION_DELETE:
           $bSuccess = $oRecord->Delete();
@@ -92,7 +107,7 @@ try
     }
     else if (isset($_GET['coid']))
     {
-      $oRecord->LoadCoopOrder(intval($_GET['coid']));
+      $oRecord->LoadCoopOrder(intval($_GET['coid']), $g_oMemberSession->MemberID);
     }
   }
   
@@ -106,31 +121,25 @@ try
       exit;
   }
   
+  $bHasCoordPermission = $oRecord->HasPermission(SQLBase::PERMISSION_COORD);
+    
   if ( $oRecord->CanModify )
   {
     $oPickupLocs = new CoopOrderPickupLocations;
     $recPickupLocs = $oPickupLocs->LoadList($oRecord->CoopOrderID, $oRecord->MemberID);
     
-    if ( $oRecord->HasPermission(SQLBase::PERMISSION_COORD) )
-    {  
+    if ( $bHasCoordPermission )
+    {
+      $arrPaymentMethods = $oRecord->GetPaymentMethods();
       $oMembers = new Members;
       $arrMembers = $oMembers->GetMembersListForOrder($oRecord->CoopOrderID, $oRecord->ID);
+      //if there are no members, can't modify
       if (!is_array($arrMembers) || count($arrMembers) == 0)
       {
         $oRecord->CanModify = FALSE;
         $g_oError->AddError('There are no members left to add to this cooperative order. All members are already ordering.');
       }
     }
-  }
-
-  switch($oRecord->LastOperationStatus)
-  {
-    case SQLBase::OPERATION_STATUS_NO_SUFFICIENT_DATA_PROVIDED:
-    case SQLBase::OPERATION_STATUS_NO_PERMISSION:
-    case SQLBase::OPERATION_STATUS_LOAD_RECORD_FAILED:
-    case SQLBase::OPERATION_STATUS_COORDINATION_GROUP_VERIFY_FAILED:
-      RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
-      exit;
   }
 
   $oTabInfo = new CoopOrderTabInfo;
@@ -191,12 +200,19 @@ function Delete()
     document.frmMain.submit();
   }
 }
-function ConfirmMemberChange()
+function MemberChange()
 {
-  if (!confirm(decodeXml('Attention: you have chosen to move this order from one member to another. To complete the operation confirm this message box and save the order')))
-  {
-    document.getElementById("selMemberID").value = <?php echo $oRecord->MemberID; ?>;
-  }
+  <?php
+  if ($oRecord->ID > 0) { ?>
+    if (!confirm(decodeXml('Attention: you have chosen to move this order from one member to another. To complete the operation confirm this message box and save the order')))
+    {
+      document.getElementById("selMemberID").value = <?php echo $oRecord->MemberID; ?>;
+      return;
+    }
+  <?php } ?>
+  
+  document.getElementById("hidPostAction").value = <?php echo Order::POST_ACTION_MEMBER_CHANGE; ?>;
+  document.frmMain.submit();
 }
 function Save()
 {
@@ -219,7 +235,7 @@ function Save()
             <table cellspacing="0" cellpadding="0" width="100%">
             <tr>
               <?php 
-              if ($oRecord->HasPermission(SQLBase::PERMISSION_COORD) || $oTabInfo->CheckAccess())
+              if ($bHasCoordPermission || $oTabInfo->CheckAccess())
                 echo '<td width="780" >';
               else
               {
@@ -252,12 +268,12 @@ function Save()
                   echo 'Create Order';  
                 ?></button>&nbsp;<?php 
                   if ($oRecord->CanModify && $oRecord->ID > 0 && $oRecord->HasPermission(SQLBase::PERMISSION_DELETE)) 
-                    {
+                  {
                         echo '<button type="button" onclick="JavaScript:Delete();" id="btnDelete" name="btnDelete" ';
                         if ($g_oError->HadError) 
                           echo ' disabled="disabled" '; 
                         echo '>' , sprintf('Delete %s', $oRecord->PageTitleSuffix ) , '</button>';
-                    } 
+                  } 
                 ?></td>
               </tr>
               <tr><td>
@@ -303,8 +319,53 @@ function Save()
                   ?>
                   <td></td>
                 </tr>
-                <?php } ?>
+                <?php } 
                 
+                  if ($oRecord->CanModify && $bHasCoordPermission && 
+                      $oRecord->HasPermission(Order::PERMISSION_SET_MAX_ORDER) )
+                  {
+                    echo '<tr>';
+                   
+                    $txtBalance = new HtmlTextLabel('Balance', 'txtBalance', $oRecord->Balance);
+                    $txtBalance->EchoHtml();
+                    unset($txtBalance);
+                 
+                    echo '<td></td>';
+                    echo '</tr>';
+                
+                    echo '<tr>';
+                
+                    $selPaymentMethod = new HtmlSelectArray('PaymentMethodKeyID', 'Payment Method', $arrPaymentMethods,
+                          $oRecord->PaymentMethodID);
+                    $selPaymentMethod->Required = TRUE;
+                    $selPaymentMethod->ReadOnly = !$oRecord->CanModify;
+                    $selPaymentMethod->EchoHtml();
+                    unset($selPaymentMethod);
+
+                    echo '<td></td>';
+                    echo '</tr>';
+
+                    echo '<tr>';
+                    $txtPOBalance = new HtmlTextEditNumeric('% Over Balance', 'txtPercentOverBalance', 
+                            $oRecord->PercentOverBalance);
+                    $txtPOBalance->ReadOnly = !$oRecord->CanModify;
+                    $txtPOBalance->EchoHtml();
+                    unset($txtPOBalance);
+                  
+                    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>';
+                    echo '</tr>';
+
+                  }
+                ?>
+                <tr>
+                  <?php
+                    $lblMaxOrder = new HtmlTextLabel('Max. Order', 'lblMaxOrder',$oRecord->MaxOrder);
+                    $lblMaxOrder->EchoHtml();
+                    unset($lblMaxOrder);
+                  ?>
+                  <td></td>
+                </tr>
+
                 <tr>
                   <td><label for="txtMemberComments">Comments‏:‏</label></td>
                   <?php 
@@ -314,9 +375,10 @@ function Save()
                     $txtMemberComments->MaxLength = Order::MAX_LENGTH_MEMBER_COMMENTS;
                     $txtMemberComments->EchoEditPartHtml();
                   ?>
+                  <td></td>
                 </tr>
                 <?php 
-                  if ($oRecord->HasPermission(SQLBase::PERMISSION_COORD) && $oRecord->CanModify)
+                  if ($bHasCoordPermission && $oRecord->CanModify)
                   {
                     echo '<tr>';
                     
@@ -330,30 +392,37 @@ function Save()
                     
                     //select member
                     $selMember = new HtmlSelectArray('MemberID', $sMemberFieldLabel, $arrMembers, $oRecord->MemberID);
-                    if ($oRecord->ID > 0)
-                      $selMember->OnChange = "JavaScript:ConfirmMemberChange();";
+                    $selMember->OnChange = "JavaScript:MemberChange();";
                     $selMember->Required = TRUE;
                     $selMember->EmptyText = NULL; //remove empty row
                     $selMember->EchoHtml();
                     
-                    echo '<td><span id="spLoginName" name="spLoginName">',
-                          sprintf('Login name: %s', htmlspecialchars( $oRecord->LoginName )),
-                          '</span></td>';
+                    echo '<td><span id="spLoginName" name="spLoginName">';
+                    if ($selMember->ValueFound) //if member not found, don't show incorrect data
+                        echo sprintf('Login name: %s', htmlspecialchars( $oRecord->LoginName ));
+                    echo '</span></td>';
                     
                     echo '</tr>';
                     
                     echo '<tr>',
                           '<td><label>Email address‏:‏</label></td>';
                     
-                    echo '<td>' , htmlspecialchars($oRecord->EMail);
+                    echo '<td>';
+                    
+                    if ($selMember->ValueFound) //if member not found, don't show incorrect data
+                    {
+                      echo htmlspecialchars($oRecord->EMail);
                       if ( $oRecord->EMail2 != NULL )
                         echo ', ', htmlspecialchars($oRecord->EMail2);
                       if ( $oRecord->EMail3 != NULL )
                         echo ', ', htmlspecialchars($oRecord->EMail3);
                       if ( $oRecord->EMail4 != NULL )
                         echo ', ', htmlspecialchars($oRecord->EMail4);
-                      
-                   echo '</td>';
+                    }
+                     
+                    echo '</td>';
+                   
+                    echo '<td></td>';
                     
                     echo '</tr>';
                   }

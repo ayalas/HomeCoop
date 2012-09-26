@@ -29,6 +29,9 @@ try
     $oRecord->End = ComplexPostData::GetDate('End');
     $oRecord->Delivery = ComplexPostData::GetDate('Delivery');
     
+    if (isset($_POST['selPricesSource']))
+      $oRecord->PricesFromProducts = (intval($_POST['selPricesSource']) == 1);
+    
     if (!empty( $_POST['hidPostAction'] ))
     {
       switch($_POST['hidPostAction'])
@@ -175,6 +178,18 @@ function Save()
                 ?>
                 <td></td>
                 </tr>
+                
+                <tr>
+                  <?php 
+                    $selPricesSource = new HtmlSelectBoolean('selPricesSource', 'Prices Source', FALSE, 'Products table', 
+                            'Cooperative order');
+                    $selPricesSource->EchoHtml();
+                  
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                  ?>
+                </tr>
+                
+                
                 </table>
                 </td></tr></table>
                 </td>

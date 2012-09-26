@@ -127,7 +127,9 @@ try
 
   $arrPickupLocs = $oPickupLocs->GetListForCoopOrder($oRecord->PickupLocationID, $oRecord->CoopOrderID   );
   
-  $bReadOnly = ($oRecord->Status != CoopOrder::STATUS_ACTIVE && $oRecord->Status != CoopOrder::STATUS_DRAFT);
+  $bReadOnly = ($oRecord->Status != CoopOrder::STATUS_ACTIVE 
+          && $oRecord->Status != CoopOrder::STATUS_DRAFT
+          && $oRecord->Status != CoopOrder::STATUS_LOCKED );
   
   //check if empty list
   if (!is_array($arrPickupLocs) || count($arrPickupLocs) == 0)

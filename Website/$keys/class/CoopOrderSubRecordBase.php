@@ -44,9 +44,10 @@ class CoopOrderSubRecordBase extends CoopOrderSubBase {
       return FALSE;
     }  
     
-    //allow updating only active and draft orders
+    //allow updating only active, locked and draft orders
     if (    $this->m_aData[self::PROPERTY_STATUS] != CoopOrder::STATUS_ACTIVE 
-        &&  $this->m_aData[self::PROPERTY_STATUS] != CoopOrder::STATUS_DRAFT )
+        &&  $this->m_aData[self::PROPERTY_STATUS] != CoopOrder::STATUS_DRAFT
+        &&  $this->m_aData[self::PROPERTY_STATUS] != CoopOrder::STATUS_LOCKED )
     {
       $g_oError->AddError('<!$COOP_ORDER_CANNOT_BE_UPDATED_AT_THIS_STATUS$!>');
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;

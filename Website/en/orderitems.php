@@ -90,6 +90,16 @@ try
     $oTable->LoadTable();
   }
   
+  switch($oTable->LastOperationStatus)
+  {
+    case SQLBase::OPERATION_STATUS_NO_SUFFICIENT_DATA_PROVIDED:
+    case SQLBase::OPERATION_STATUS_NO_PERMISSION:
+    case SQLBase::OPERATION_STATUS_LOAD_RECORD_FAILED:
+    case SQLBase::OPERATION_STATUS_COORDINATION_GROUP_VERIFY_FAILED:
+      RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
+      exit;
+  }
+  
   $arrItems = $oTable->OrderItems;
   
   $oPLTabInfo = new CoopOrderPickupLocationTabInfo( $oRecord->CoopOrderID, $oRecord->PickupLocationID, $oRecord->PickupLocationName, 
@@ -254,7 +264,7 @@ function SetDirty()
                   <th class="columntitletiny">Quantity</th>
                   <th class="columntitletiny">Price</th>
                   <th class="columntitletiny">Order</th>
-                  <th class="columntitletiny"><a class="tooltiphelp" href="#" >Add<span>The maximum quantity the cooperative order coordinator will be allowed to *add* to your order for completing partial orders to the package size. For instance, if a package size is 2kg, and you wish to order only 0.5kg, by entering 0.5Kg in this field you may specify that you are ready to go up to 1Kg.</span></a></th>
+                  <th class="columntitletiny"><a class="tooltiphelp" href="#" >Add<span>The maximum quantity the cooperative order coordinator will be allowed to *add* to your order for completing partial orders to the package size. For instance, if a package size is 2lb, and you wish to order only 0.5lb, by entering 0.5lb in this field you may specify that you are ready to go up to 1lb.</span></a></th>
                   <th class="columntitletiny">Total</th>
                   <th class="columntitlescroll">Comments</th>
                 </tr>
@@ -346,13 +356,16 @@ function SetDirty()
                       
                       //6. Max Fix Addition
                       if (  ($oItem->MemberMaxFixQuantityAddition != NULL && $oItem->MemberMaxFixQuantityAddition != 0)
-                        || ($oItem->PackageSize != NULL && $oItem->PackageSize != $oItem->ProductQuantity) )
+                        || Product::AllowsPartialOrders($oItem->ProductUnitID, $oItem->ProductQuantity, $oItem->UnitInterval))
                       {
                         $txtMemberMaxFixQuantityAddition = new HtmlTextEditNumericRange(OrderItems::CTL_PREFIX_MAX_FIX_QUANTITY_ADDITION . $oItem->ProductID,
                             'ltr', HtmlTextEdit::TEXTBOX, $oItem->MemberMaxFixQuantityAddition, $oItem->GetAllowedInterval() );
                         $txtMemberMaxFixQuantityAddition->ReadOnly = !$oRecord->CanModify;
                         $txtMemberMaxFixQuantityAddition->MaxLength = HtmlTextEditNumeric::NUMBER_DEFAULT_MAX_LENGTH;
-                        $txtMemberMaxFixQuantityAddition->MaxValue = $oItem->PackageSize;
+                        if ($oItem->PackageSize != NULL)
+                          $txtMemberMaxFixQuantityAddition->MaxValue = $oItem->PackageSize;
+                        else
+                          $txtMemberMaxFixQuantityAddition->MaxValue = $oItem->ProductQuantity;
                         $txtMemberMaxFixQuantityAddition->CssClass = "orderitemqentry";
                         $txtMemberMaxFixQuantityAddition->OnChange = "JavaScript:SetDirty();";
                         echo '<td class="columndatatiny">';

@@ -38,7 +38,7 @@ class Members extends SQLBase {
       $sSearchPhrase = $this->m_aData[self::PROPERTY_SEARCH_PHRASE];
 
       $sSQL =   " SELECT M.MemberID, M.sName, M.sLoginName, M.sEMail, M.PaymentMethodKeyID, M.dJoined, M.mBalance, M.fPercentOverBalance, M.sEMail2, " . 
-                       " M.sEMail3, M.sEMail4, " .
+                       " M.sEMail3, M.sEMail4, M.bDisabled, " .
                        $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PAYMENT_METHODS, 'sPaymentMethod') .
                 " FROM T_Member M INNER JOIN T_PaymentMethod PM ON M.PaymentMethodKeyID = PM.PaymentMethodKeyID " . 
                 $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PAYMENT_METHODS);
@@ -62,7 +62,7 @@ class Members extends SQLBase {
                   . " ) ";
       }
       
-      $sSQL .= " ORDER BY M.sName; ";
+      $sSQL .= " ORDER BY bDisabled, M.sName; ";
 
       $this->RunSQL( $sSQL );
 
@@ -93,7 +93,7 @@ class Members extends SQLBase {
     if ($OrderID > 0)
       $sSQL .= " WHERE (O.OrderID = " . $OrderID . " OR O.OrderID IS NULL) ";
     else
-      $sSQL .= " WHERE O.OrderID IS NULL ";
+      $sSQL .= " WHERE O.OrderID IS NULL AND M.bDisabled = 0 "; //don't allow order creation for disabled members
     $sSQL .= " ORDER BY M.sName asc;";
 
     $this->RunSQL( $sSQL );
@@ -101,6 +101,7 @@ class Members extends SQLBase {
     return $this->fetchAllKeyPair();
   }
   
+ //used in orders screen, to display past orders of a selected member (so should include also disabled ones)
  public function GetMembersListForOrders()
  {    
     if (!$this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_COOP_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
@@ -259,7 +260,7 @@ class Members extends SQLBase {
       return NULL;
 
     $sSQL = "SELECT M.sEMail, M.sEmail2, M.sEmail3, M.sEmail4 FROM T_Member M WHERE M.MemberID IN (" . 
-            $this->m_aData[self::PROPERTY_MEMBER_IDS_FOR_MAIL_EXPORT] . ");";              
+            $this->m_aData[self::PROPERTY_MEMBER_IDS_FOR_MAIL_EXPORT] . ") AND M.bDisabled = 0;";  //ensure mail-export is disabled for disabled members
 
     $this->RunSQL($sSQL);
     $recMail = $this->fetch();

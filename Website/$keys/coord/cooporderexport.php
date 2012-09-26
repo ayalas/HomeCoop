@@ -190,6 +190,7 @@ function SelectAll(bCheck)
               <tr>
                   <?php
                   $selList = new HtmlSelectArray('DataSet', '<!$FIELD_ORDER_EXPORT_DATASET$!>', $arrList, $oData->ID);
+                  $selList->EncodeHtml = FALSE; //already encoded
                   $selList->Required = TRUE;
                   $selList->OnChange = "JavaScript:ListSelect();";
                   $selList->EchoHtml();

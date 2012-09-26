@@ -46,6 +46,7 @@ try
           {
             case CoopOrder::STATUS_ACTIVE:
             case CoopOrder::STATUS_DRAFT:
+            case CoopOrder::STATUS_LOCKED:
               //collect data if status is active or draft
               $oRecord->Names = ComplexPostData::GetNames('txtName');
               $oRecord->Start = ComplexPostData::GetDateTime('Start',array(0,0,0));
@@ -145,6 +146,7 @@ try
   {
     case CoopOrder::STATUS_ACTIVE:
     case CoopOrder::STATUS_DRAFT:
+    case CoopOrder::STATUS_LOCKED:
       $bStatusOnly = FALSE; //allow update of other fields when order is active or draft
       break;
    }
@@ -252,6 +254,7 @@ function Save()
                   <?php 
                     $aArr = CoopOrder::GetStatusesToChangeTo($oRecord->Status);
                     $selStatus = new HtmlSelectArray('Status', 'Status', $aArr, $oRecord->Status);
+                    $selStatus->EncodeHtml = FALSE; //already encoded in python script
                     $selStatus->EmptyText = NULL; //means no empty entry
                     $selStatus->Required = TRUE;
                     $selStatus->ReadOnly = ($oRecord->ID == 0) || $bReadOnly;

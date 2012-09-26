@@ -90,7 +90,9 @@ try
   if ($oPercent->SelectedType != CoopOrderCapacity::TypeNone)
     $oTabInfo->Capacity = $oPercent->PercentRounded . '%';
   unset($oPercent);
-  $bReadOnly = ($oData->Status != CoopOrder::STATUS_ACTIVE && $oData->Status != CoopOrder::STATUS_DRAFT);
+  $bReadOnly = ($oData->Status != CoopOrder::STATUS_ACTIVE 
+          && $oData->Status != CoopOrder::STATUS_DRAFT
+          && $oData->Status != CoopOrder::STATUS_LOCKED );
 
 }
 catch(Exception $e)

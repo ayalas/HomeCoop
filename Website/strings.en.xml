@@ -22,7 +22,7 @@
 </str>
 <str>
     <key>COOP_INFO_03</key>
-    <value>Based on Volunteering</value>
+    <value>Volunteer Based</value>
     <pages>coopbrief</pages>
 </str>
 <str>
@@ -421,7 +421,12 @@
 </str>
 <str>
     <key>PERMISSIONS_NONE</key>
-    <value>Your user has no permissions at all. If this is a mistake, please contact us at %s to correct the problem</value>
+    <value>Your account has no permissions at all. If this is a mistake, please contact us at %s to correct the problem</value>
+    <notes>param : COOP_ADDRESS_MEMBER_PERMISSIONS in settings.php </notes>
+</str>
+<str>
+    <key>ERR_MEMBER_DISABLED</key>
+    <value>Your account is inactive. If this is a mistake, please contact us at %s to correct the problem</value>
     <notes>param : COOP_ADDRESS_MEMBER_PERMISSIONS in settings.php </notes>
 </str>
 <str>
@@ -446,11 +451,11 @@
 </str>
 <str>
     <key>FIELD_VALUE_DISABLED</key>
-    <value>Disabled</value>
+    <value>Inactive</value>
 </str>
 <str>
     <key>FIELD_VALUE_ENABLED</key>
-    <value>Enabled</value>
+    <value>Active</value>
 </str>
 <str>
     <key>FIELD_COORD</key>
@@ -958,6 +963,10 @@
     <value>Draft</value>
 </str>
 <str>
+    <key>COOP_ORDER_STATUS_DRAFT_PUBLIC</key>
+    <value>Inactive</value>
+</str>
+<str>
     <key>COOP_ORDER_STATUS_ACTIVE</key>
     <value>Active</value>
 </str>
@@ -968,6 +977,10 @@
 <str>
     <key>COOP_ORDER_STATUS_CANCELLED</key>
     <value>Cancelled</value>
+</str>
+<str>
+    <key>COOP_ORDER_STATUS_LOCKED</key>
+    <value>Locked</value>
 </str>
 <str>
     <key>CANNOT_DELETE_ACTIVE_ORDER</key>
@@ -1080,6 +1093,10 @@
     <value>Max. Member Order</value>
 </str>
 <str>
+    <key>FIELD_MAX_ORDER</key>
+    <value>Max. Order</value>
+</str>
+<str>
     <key>FIELD_MAX_ORDER_PER_COOP</key>
     <value>Max. Coop Order</value>
 </str>
@@ -1161,7 +1178,7 @@
 </str>
 <str>
     <key>ORDER_READONLY_REASON_ACTIVE_COOPORDER_NOT_OPEN_FOR_MEMBER</key>
-    <value>This order cannot be modified because its cooperative order is in full capacity.</value>
+    <value>This order cannot be modified due to its date range limitations.</value>
 </str>
 <str>
     <key>ORDER_READONLY_REASON_CANNOT_CREATE_NEW_WHEN_CAPACITY_IS_FULL</key>
@@ -1267,7 +1284,7 @@
 </str>
 <str>
     <key>TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION</key>
-    <value>The maximum quantity the cooperative order coordinator will be allowed to *add* to your order for completing partial orders to the package size. For instance, if a package size is 2kg, and you wish to order only 0.5kg, by entering 0.5Kg in this field you may specify that you are ready to go up to 1Kg.</value>
+    <value>The maximum quantity the cooperative order coordinator will be allowed to *add* to your order for completing partial orders to the package size. For instance, if a package size is 2lb, and you wish to order only 0.5lb, by entering 0.5lb in this field you may specify that you are ready to go up to 1lb.</value>
 </str>
 <str>
     <key>BTN_SAVE_ORDER_ITEMS</key>
@@ -2041,5 +2058,25 @@
     <key>MEMBER_ACTIVATE_FAILURE</key>
     <value>Permissions restore failed</value>
     <pages>coord/member</pages>
+</str>
+<str>
+<key>LOGIN_EXCEPTION</key>
+<value>There was an error in verifying the login details against the database, possibly due to overload</value>
+<pages>login</pages>
+</str>
+<str>
+    <key>LBL_PRICES_SOURCE</key>
+    <value>Prices Source</value>
+    <pages>coord/coopordercopy</pages>
+</str>
+<str>
+    <key>PRICES_SOURCE_ORDER</key>
+    <value>Cooperative order</value>
+    <pages>coord/coopordercopy</pages>
+</str>
+<str>
+    <key>PRICES_SOURCE_PRODUCTS</key>
+    <value>Products table</value>
+    <pages>coord/coopordercopy</pages>
 </str>
 </strings>

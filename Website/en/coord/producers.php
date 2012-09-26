@@ -77,9 +77,9 @@ UserSessionBase::Close();
                       echo "<tr><td><a href='producer.php?id=" ,  $recProducers["ProducerKeyID"] , "' >" ,  
                               htmlspecialchars($recProducers["sProducer"]) , "</a></td><td>";
                       if ($recProducers["bDisabled"])
-                          echo "Disabled";
+                          echo "Inactive";
                       else
-                          echo "Enabled";
+                          echo "Active";
                       echo  "</td>";
                       
                       echo "<td>";

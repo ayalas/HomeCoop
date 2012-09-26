@@ -159,7 +159,9 @@ try
       exit;
   }
 
-  $bReadOnly = ($oRecord->Status != CoopOrder::STATUS_ACTIVE && $oRecord->Status != CoopOrder::STATUS_DRAFT);
+  $bReadOnly = ($oRecord->Status != CoopOrder::STATUS_ACTIVE 
+          && $oRecord->Status != CoopOrder::STATUS_DRAFT
+          && $oRecord->Status != CoopOrder::STATUS_LOCKED );
   
   if ( !$bReadOnly && !$oRecord->IsExistingRecord )
   {

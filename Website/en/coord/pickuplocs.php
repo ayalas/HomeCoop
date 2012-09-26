@@ -118,9 +118,9 @@ UserSessionBase::Close();
                       
                       echo "<td>";
                       if ($recTable["bDisabled"])
-                          echo "Disabled";
+                          echo "Inactive";
                       else
-                          echo "Enabled";
+                          echo "Active";
                       echo  "</td>";
                       
                       echo "<td>";

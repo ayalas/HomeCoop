@@ -50,7 +50,9 @@ try
 
   if (!$oData->HasPermission(CoopOrderPickupLocations::PERMISSION_COOP_ORDER_PICKUP_LOCATION_EDIT))
       $bReadOnly = TRUE;
-  else if ($oData->Status != CoopOrder::STATUS_ACTIVE && $oData->Status != CoopOrder::STATUS_DRAFT)
+  else if ($oData->Status != CoopOrder::STATUS_ACTIVE 
+          && $oData->Status != CoopOrder::STATUS_DRAFT
+          && $oData->Status != CoopOrder::STATUS_LOCKED )
   {
     $bReadOnly = TRUE;
     $g_oError->AddError('<!$COOP_ORDER_CANNOT_BE_UPDATED_AT_THIS_STATUS$!>');

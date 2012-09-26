@@ -304,7 +304,7 @@ function OnChangeUnit()
                 <tr>
                 <?php
                                 
-                $txtSpec = new HtmlTextEditMultiLang('<!$FIELD_PRODUCT_SPEC$!>', 'txtSpec', HtmlTextEdit::TEXTBOX, 
+                $txtSpec = new HtmlTextEditMultiLang('<!$FIELD_PRODUCT_SPEC$!>', 'txtSpec', HtmlTextEdit::TEXTAREA, 
                         $oRecord->SpecStrings);
                 $txtSpec->ReadOnly =  $bReadOnly;
                 $txtSpec->EchoHtml();
