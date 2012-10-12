@@ -784,11 +784,13 @@ class CoopOrderExport extends CoopOrderSubBase {
   }
   
   protected function QueryOrders()
-  {    
-    $sSQL =     " SELECT O.OrderID, O.MemberID, M.sName, O.PickupLocationKeyID, O.mCoopFee, O.mCoopTotal, (IfNull(O.mCoopFee,0) + O.mCoopTotal) as OrderCoopTotal " .
+  {
+    $sSQL =     " SELECT O.OrderID, O.MemberID, M.sName, O.PickupLocationKeyID, O.mCoopFee, " . 
+                " O.mCoopTotal, (IfNull(O.mCoopFee,0) + O.mCoopTotal) as OrderCoopTotal " .
                 " FROM T_Order O " .
                 " INNER JOIN T_Member M ON O.MemberID = M.MemberID " .
-                " WHERE O.CoopOrderKeyID = " . $this->m_aData[parent::PROPERTY_COOP_ORDER_ID];
+                " WHERE O.CoopOrderKeyID = " . $this->m_aData[parent::PROPERTY_COOP_ORDER_ID] . 
+                " AND O.mCoopTotal > 0 ";
     if ($this->m_nPickupLocationID > 0)
       $sSQL .=  " AND O.PickupLocationKeyID = " . $this->m_nPickupLocationID;     
     $sSQL .=    " ORDER BY O.dCreated, O.OrderID; "; //must have unequivocal order to match orders with items (hence the use of ids)

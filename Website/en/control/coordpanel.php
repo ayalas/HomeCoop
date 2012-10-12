@@ -80,7 +80,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidCachierTotals, Consts::PE
            Consts::PERMISSION_TYPE_VIEW, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
 {
 ?>
-<span><a href="<?php echo $g_sRootRelativePath; ?>coord/cachier.php">Cachier Totals</a></span><br/>
+<span><a href="<?php echo $g_sRootRelativePath; ?>coord/cachier.php">Cashier Totals</a></span><br/>
 <?php
 }
 

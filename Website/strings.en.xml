@@ -1991,27 +1991,27 @@
 </str>
 <str>
     <key>FIELD_CACHIER</key>
-    <value>Cachier</value>
+    <value>Cashier</value>
     <pages>coord/pickuploc</pages>
 </str>
 <str>
     <key>FIELD_PREV_CACHIER</key>
-    <value>Prev. Cachier</value>
+    <value>Prev. Cashier</value>
     <pages>coord/pickuploc</pages>
 </str>
 <str>
     <key>FIELD_CACHIER_DATE</key>
-    <value>Cachier Update</value>
+    <value>Cashier Update</value>
     <pages>coord/pickuploc</pages>
 </str>
 <str>
     <key>PAGE_TITLE_CACHIER</key>
-    <value>Cachier Totals</value>
+    <value>Cashier Totals</value>
     <pages>coord/cachier</pages>
 </str>
 <str>
     <key>FIELD_TOTAL_CACHIERS</key>
-    <value>Total Cachiers</value>
+    <value>Total Cashiers</value>
     <pages>coord/cachier</pages>
 </str>
 <str>
@@ -2021,7 +2021,7 @@
 </str>
 <str>
     <key>FIELD_TOTAL_CACHIERS</key>
-    <value>Total Cachiers</value>
+    <value>Total Cashiers</value>
     <pages>coord/cachier</pages>
 </str>
 <str>
@@ -2078,5 +2078,10 @@
     <key>PRICES_SOURCE_PRODUCTS</key>
     <value>Products table</value>
     <pages>coord/coopordercopy</pages>
+</str>
+<str>
+    <key>HELP_MEMBER_BALANCE_UPDATES_CASHIER</key>
+    <value>Cashier of balance change</value>
+    <pages>coord/member</pages>
 </str>
 </strings>

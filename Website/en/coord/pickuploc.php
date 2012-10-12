@@ -262,7 +262,7 @@ function Save()
                 
                 <tr>
                   <?php                     
-                    $txtCachier = new HtmlTextEditNumeric('Cachier', 'txtCachier', $oRecord->Cachier);
+                    $txtCachier = new HtmlTextEditNumeric('Cashier', 'txtCachier', $oRecord->Cachier);
                     $txtCachier->EchoHtml();
                     unset($txtCachier);
                     
@@ -277,7 +277,7 @@ function Save()
                     if ($oRecord->CachierDate != NULL)
                       $sDate = $oRecord->CachierDate->format('n.j.Y g:i A');
                   
-                    $lblCachierDate = new HtmlTextLabel('Cachier Update', 'lblCachierDate', $sDate);
+                    $lblCachierDate = new HtmlTextLabel('Cashier Update', 'lblCachierDate', $sDate);
                     $lblCachierDate->SetAttribute('dir','ltr');
                     $lblCachierDate->EchoHtml();
                     unset($lblCachierDate);
@@ -289,7 +289,7 @@ function Save()
                 <tr>
                   <?php
                   
-                    $lblPrevCachier = new HtmlTextLabel('Prev. Cachier', 'lblPrevCachier', $oRecord->PrevCachier);
+                    $lblPrevCachier = new HtmlTextLabel('Prev. Cashier', 'lblPrevCachier', $oRecord->PrevCachier);
                     $lblPrevCachier->EchoHtml();
                     unset($lblPrevCachier);
                     

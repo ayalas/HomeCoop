@@ -104,7 +104,7 @@ UserSessionBase::Close();
             </tr>
             <tr>
               <td class="columntitlelong"><!$FIELD_PRODUCER$!></td>
-              <td class="columntitle"><a class="tooltip" href="#" ><!$FIELD_COOP_ORDER_TOTAL_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PRODUCER_TOTAL_BURDEN$!></span></a></td>              
+              <td class="columntitle"><a class="tooltip" href="#" ><!$FIELD_COOP_ORDER_MAX_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PRODUCER_MAX_BURDEN$!></span></a></td>              
               <td class="columntitle"><!$FIELD_PRODUCER_TOTAL$!></td>
               <td class="columntitle"><!$FIELD_COOP_ORDER_COOP_TOTAL$!></td>
               <td class="columntitlenowidth"><!$FIELD_COOP_ORDER_PRODUCER_TOTAL_DELIVERY$!></td>
@@ -127,7 +127,7 @@ UserSessionBase::Close();
                               $recTable["mMaxProducerOrder"], $recTable["mProducerTotal"] );
                      
                       //burden
-                      echo '<td>' , Rounding::Round($recTable["fBurden"], ROUND_SETTING_BURDEN);
+                      echo '<td>' , $recTable["fMaxBurden"];
                       if ($oCoopOrderCapacity->Burden->CanCompute)
                         echo ' (' , $oCoopOrderCapacity->Burden->PercentRounded , '%)';
                       echo '</td>';                  

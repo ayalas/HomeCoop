@@ -1974,4 +1974,9 @@
     <value>טבלת מוצרים</value>
     <pages>coord/coopordercopy</pages>
 </str>
+<str>
+    <key>HELP_MEMBER_BALANCE_UPDATES_CASHIER</key>
+    <value>הקופה שבה נעשה שינוי היתרה</value>
+    <pages>coord/member</pages>
+</str>
 </strings>

@@ -104,7 +104,7 @@ UserSessionBase::Close();
             </tr>
             <tr>
               <td class="columntitlelong">Producer</td>
-              <td class="columntitle"><a class="tooltip" href="#" >Total Burden<span>The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered, per producer</span></a></td>              
+              <td class="columntitle"><a class="tooltip" href="#" >Delivery Capacity<span>Limits the size of this cooperative order&#x27;s producer to the overall capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. Members will not be able to place an order that exceeds the limitation set here.</span></a></td>              
               <td class="columntitle">Producer Total</td>
               <td class="columntitle">Total Coop</td>
               <td class="columntitlenowidth">Total Delivery</td>
@@ -127,7 +127,7 @@ UserSessionBase::Close();
                               $recTable["mMaxProducerOrder"], $recTable["mProducerTotal"] );
                      
                       //burden
-                      echo '<td>' , Rounding::Round($recTable["fBurden"], ROUND_SETTING_BURDEN);
+                      echo '<td>' , $recTable["fMaxBurden"];
                       if ($oCoopOrderCapacity->Burden->CanCompute)
                         echo ' (' , $oCoopOrderCapacity->Burden->PercentRounded , '%)';
                       echo '</td>';                  

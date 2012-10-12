@@ -238,6 +238,16 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
+    //save original values
+    $this->m_aData[self::PROPERTY_TOTAL_BURDEN] = $this->m_aOriginalData[self::PROPERTY_TOTAL_BURDEN];
+    $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
+    $this->m_aData[self::PROPERTY_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL];
+    
+    $this->m_aData[self::PROPERTY_PRODUCER_ID] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID];
+    $this->m_aData[Producer::PROPERTY_PRODUCER_NAME] = $this->m_aOriginalData[Producer::PROPERTY_PRODUCER_NAME];
+ 
+    $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
+    
     if (!$this->Validate())
     {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
@@ -291,13 +301,7 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
       throw $e;
     }
     
-    $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
-    $this->m_aData[self::PROPERTY_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL];
     
-    $this->m_aData[self::PROPERTY_PRODUCER_ID] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID];
-    $this->m_aData[Producer::PROPERTY_PRODUCER_NAME] = $this->m_aOriginalData[Producer::PROPERTY_PRODUCER_NAME];
- 
-    $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
     $this->m_aOriginalData = $this->m_aData;
 
     return TRUE;

@@ -6,6 +6,7 @@ include_once '../authenticate.php';
 $sPageTitle = 'New Member';
 $oRecord = new Member;
 $arrPaymentMethods = NULL;
+$arrPickupLocations = NULL;
 $bHasAccessToRoles = $oRecord->HasAccessToRoles();
 try
 {
@@ -37,6 +38,10 @@ try
     $sCtl = HtmlSelectPDO::PREFIX . 'PaymentMethodKeyID';
     if ( isset( $_POST[$sCtl] ))
       $oRecord->PaymentMethodID = intval($_POST[$sCtl]);
+    
+    $sCtl = HtmlSelectPDO::PREFIX . 'PickupLocationKeyID';
+    if ( isset( $_POST[$sCtl] ))
+      $oRecord->PickupLocationID = intval($_POST[$sCtl]);
 
     $oRecord->Balance = NULL;
     if ( isset( $_POST['txtBalance'] ) && !empty($_POST['txtBalance']))
@@ -135,6 +140,8 @@ try
     $sPageTitle = $oRecord->Name;
   
   $arrPaymentMethods = $oRecord->GetPaymentMethods();
+  
+  $arrPickupLocations = $oRecord->GetCachiers();
 }
 catch(Exception $e)
 {
@@ -318,6 +325,23 @@ function VerifyPassword()
                   ?>
                   <td>&nbsp;</td>
                 </tr>
+                
+                
+                
+                  <?php          
+                  if ($oRecord->CanModify)
+                    {
+                      echo '<tr>';
+                      $selPickupLoc = new HtmlSelectArray('PickupLocationKeyID', 'Cashier', $arrPickupLocations,
+                            0);
+                      $selPickupLoc->ReadOnly = !$oRecord->CanModify;
+                      $selPickupLoc->EchoHtml();
+                      unset($selPickupLoc);
+                    
+                      echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>Cashier of balance change</span></a></td>';
+                      echo '</tr>';
+                    }
+                  ?>                
                 
                 <tr>
                   <?php                    

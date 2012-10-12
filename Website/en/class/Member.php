@@ -30,6 +30,7 @@ class Member extends SQLBase  {
   const PROPERTY_IS_REGULAR_MEMBER = "IsRegularMember";
   const PROPERTY_IS_DISABLED = "IsDisabled";
   const PROPERTY_MAX_ORDER = "MaxOrder";
+  const PROPERTY_CACHIER_PICKUP_LOCATION_ID = "PickupLocationID";
   
   public function __construct()
   {
@@ -54,7 +55,8 @@ class Member extends SQLBase  {
                             self::PROPERTY_HAS_NO_PERMISSIONS => FALSE,
                             self::PROPERTY_IS_REGULAR_MEMBER => FALSE,
                             self::PROPERTY_IS_DISABLED => FALSE,
-                            self::PROPERTY_MAX_ORDER => FALSE
+                            self::PROPERTY_MAX_ORDER => FALSE,
+                            self::PROPERTY_CACHIER_PICKUP_LOCATION_ID => 0
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData; 
@@ -245,6 +247,15 @@ class Member extends SQLBase  {
               $this->m_aData[self::PROPERTY_ID] . "," . Consts::ROLE_MEMBER . ");";
       $this->RunSQL($sSQL); 
       
+      //check if need to update cachier
+      if ($this->m_aData[self::PROPERTY_BALANCE] != 0 &&
+          $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
+      {
+        $sSQL = " UPDATE T_PickupLocation SET mCachier = mCachier + " . $this->m_aData[self::PROPERTY_BALANCE] .
+                " WHERE PickupLocationKeyID = ". $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
+        $this->RunSQL($sSQL); 
+      }
+      
       $this->CommitTransaction();
     }
     catch(Exception $e)
@@ -339,6 +350,16 @@ class Member extends SQLBase  {
       $sSQL .=  " WHERE MemberID = " . $this->m_aData[self::PROPERTY_ID];
 
       $this->RunSQLWithParams( $sSQL, $arrParams );
+      
+      //check if need to update cachier
+      if ($this->m_aData[self::PROPERTY_BALANCE] != $this->m_aOriginalData[self::PROPERTY_BALANCE] &&
+          $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
+      {
+        $sSQL = " UPDATE T_PickupLocation SET mCachier = mCachier + (" . 
+                ($this->m_aData[self::PROPERTY_BALANCE] - $this->m_aOriginalData[self::PROPERTY_BALANCE]) .
+                ") WHERE PickupLocationKeyID = ". $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
+        $this->RunSQL($sSQL); 
+      }
     
       $this->CommitTransaction();
     }
@@ -520,6 +541,29 @@ class Member extends SQLBase  {
     $this->RunSQL( $sSQL );
 
     return $this->fetchAllKeyPair(); 
+  }
+  
+  public function GetCachiers()
+  {
+    global $g_oMemberSession;
+
+    if ( !$this->CheckAccess() )
+    {
+      $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
+      return NULL;
+    }
+
+    $sSQL =   " SELECT PL.PickupLocationKeyID, " . 
+                 $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATIONS, 'sPickupLocation') .
+                " FROM T_PickupLocation PL " . 
+                $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PICKUP_LOCATIONS) .
+               " WHERE (PL.bDisabled = 0 OR IfNull(PL.mCachier,0) <> 0) " .
+     " ORDER BY PL.bDisabled, PL.nRotationOrder, PL_S.sString; ";
+
+    $this->RunSQL( $sSQL );
+
+    return $this->fetchAllKeyPair(); 
+    
   }
   
   protected function PreserveFormData()

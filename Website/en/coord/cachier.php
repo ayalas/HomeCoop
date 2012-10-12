@@ -28,7 +28,7 @@ UserSessionBase::Close();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="../style/main.css" />
-<title>Enter Your Cooperative Name: Cachier Totals</title>
+<title>Enter Your Cooperative Name: Cashier Totals</title>
 <script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 </head>
@@ -37,7 +37,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="908"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Cachier Totals</span></td>
+        <td width="908"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Cashier Totals</span></td>
     </tr>
     <tr>
         <td >
@@ -67,7 +67,7 @@ UserSessionBase::Close();
                 
                 <tr>
                 <?php                
-                $lblTotalPickupLocationCachiers = new HtmlTextLabel('Total Cachiers', 'lblTotalPickupLocationCachiers', 
+                $lblTotalPickupLocationCachiers = new HtmlTextLabel('Total Cashiers', 'lblTotalPickupLocationCachiers', 
                         $oData->TotalPickupLocationCachiers);
                 $lblTotalPickupLocationCachiers->SetAttribute('dir', 'ltr');
                 $lblTotalPickupLocationCachiers->SetAttribute('class', 'headlabel');

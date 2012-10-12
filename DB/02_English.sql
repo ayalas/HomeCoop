@@ -290,6 +290,11 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'ROLE_PRODUCER');
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'Producer' );
 
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'ROLE_MEMBERSHIP_COORDINATOR');
+
+INSERT INTO Tlng_String (KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'Membership Coordinator' );
+
 /* Units */
 SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'UNIT_ITEMS');
 
