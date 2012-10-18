@@ -662,23 +662,40 @@ class CoopOrderExport extends CoopOrderSubBase {
   protected function BuildSheetSummaryRowXML($bIncludeOrders, $sLabel, $mSummary, &$sheet)
   {
     $mTotal = 0;
-    //summary rows
-    $sum = $this->m_oXmlDoc->createElement('sum');
+    $mTotalFee = 0;
     
+    //summary row
+    $sum = $this->m_oXmlDoc->createElement('sum');
     $sumlabel = $this->m_oXmlDoc->createElement('sumlabel', $sLabel);
     $sum->appendChild($sumlabel);
+    
+    //fee row
+    $fee = $this->m_oXmlDoc->createElement('sum');
     
     if ($bIncludeOrders)
     {
       foreach($this->m_aOrders as $order)
       {
-        $mTotal += $order["mCoopTotal"];
-        $summem = $this->m_oXmlDoc->createElement('summem', $order["mCoopTotal"]);
+        if ($order["mCoopFee"] != NULL)
+        {
+          $mTotalFee += $order["mCoopFee"];
+          $feemem = $this->m_oXmlDoc->createElement('summem', $order["mCoopFee"]);
+          $fee->appendChild($feemem);
+        }
+        $mTotal += $order["OrderCoopTotal"];
+        $summem = $this->m_oXmlDoc->createElement('summem', $order["OrderCoopTotal"]);
         $sum->appendChild($summem);
       }
       
       if ($mSummary == NULL)
         $mSummary = $mTotal;
+      
+      //has fee?
+      if ($fee->hasChildNodes())
+      {
+        $feetotal = $this->m_oXmlDoc->createElement('sumtotal', $mTotalFee);
+        $fee->appendChild($feetotal);
+      }
     }
     
     if ($mSummary != NULL)
@@ -687,7 +704,15 @@ class CoopOrderExport extends CoopOrderSubBase {
       $sum->appendChild($sumtotal);
     }
     
-    $sheet->appendChild($sum);
+    if ($fee->hasChildNodes())
+    {
+      //add fee row
+      $feelabel = $this->m_oXmlDoc->createElement('sumlabel', 'Coop Fee');
+      $fee->appendChild($feelabel);
+      $sheet->appendChild($fee);
+    }
+    
+    $sheet->appendChild($sum);    
   }
   
   protected function QueryCoopOrderProducts()
