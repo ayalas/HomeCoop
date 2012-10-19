@@ -114,24 +114,24 @@ class Consts
     const ROLE_COOP_CHIEF_COORDINATOR = 50;
     const ROLE_COOP_ORDER_COORDINATOR = 52;
     const ROLE_MEMBER = 54;
+    const ROLE_MEMBERSHIP_COORDINATOR = 56;
     const ROLE_PICKUP_LOCATION_COORDINATOR = 53;
     const ROLE_PRODUCER = 55;
     const ROLE_PRODUCER_COORDINATOR = 51;
     const ROLE_SYSTEM_ADMIN = 49;
-    const UNIT_GALLON = 68;
-    const UNIT_GALLON_ABBRV = 69;
-    const UNIT_GRAM = 62;
-    const UNIT_GRAM_ABBRV = 63;
-    const UNIT_ITEMS = 56;
-    const UNIT_ITEMS_ABBRV = 57;
-    const UNIT_KG = 58;
-    const UNIT_KG_ABBRV = 59;
-    const UNIT_LITER = 60;
-    const UNIT_LITER_ABBRV = 61;
-    const UNIT_OUNCE = 66;
-    const UNIT_OUNCE_ABBRV = 67;
-    const UNIT_POUND = 64;
-    const UNIT_POUND_ABBRV = 65;
-
+    const UNIT_GALLON = 69;
+    const UNIT_GALLON_ABBRV = 70;
+    const UNIT_GRAM = 63;
+    const UNIT_GRAM_ABBRV = 64;
+    const UNIT_ITEMS = 57;
+    const UNIT_ITEMS_ABBRV = 58;
+    const UNIT_KG = 59;
+    const UNIT_KG_ABBRV = 60;
+    const UNIT_LITER = 61;
+    const UNIT_LITER_ABBRV = 62;
+    const UNIT_OUNCE = 67;
+    const UNIT_OUNCE_ABBRV = 68;
+    const UNIT_POUND = 65;
+    const UNIT_POUND_ABBRV = 66;
     //end of DATABASE-MATCHING CONSTANTS
 }
