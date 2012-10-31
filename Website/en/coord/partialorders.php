@@ -138,7 +138,7 @@ UserSessionBase::Close();
                       
                       echo '>' , ($recTable["fQuantity"] + $fItemQuantityToCompleteDeficit) , '</td>';
                       
-                      $dDate = new DateTime($recTable["dCreated"]);
+                      $dDate = new DateTime($recTable["dCreated"], $g_oTimeZone);
                       
                       echo "<td>" , $dDate->format('n.j.Y') , "</td>";
 

@@ -13,13 +13,13 @@ class DateTimeValidate {
   
   protected function SetDateObjects($sDatePhpFormat)
   {
-    global $g_dNow;
+    global $g_dNow, $g_oTimeZone;
     $dThisYear = $g_dNow;
     
     $sYear = $dThisYear->format("Y");
         
-    $dShort = DateTime::createFromFormat("Y/n/j", $sYear . "/1/1");
-    $dLong = DateTime::createFromFormat("Y/n/j", $sYear . "/12/31");
+    $dShort = DateTime::createFromFormat("Y/n/j", $sYear . "/1/1", $g_oTimeZone);
+    $dLong = DateTime::createFromFormat("Y/n/j", $sYear . "/12/31", $g_oTimeZone);
     
     $sShortFormated = $dShort->format($sDatePhpFormat);
     $sLongFormated = $dLong->format($sDatePhpFormat);
@@ -30,8 +30,9 @@ class DateTimeValidate {
   
   protected function SetTimeObjects($sDatePhpFormat)
   {        
-    $dShort = DateTime::createFromFormat("G:i", "1:00");
-    $dLong = DateTime::createFromFormat("G:i", "23:59");
+    global $g_oTimeZone;
+    $dShort = DateTime::createFromFormat("G:i", "1:00", $g_oTimeZone);
+    $dLong = DateTime::createFromFormat("G:i", "23:59", $g_oTimeZone);
     
     $sShortFormated = $dShort->format($sDatePhpFormat);
     $sLongFormated = $dLong->format($sDatePhpFormat);

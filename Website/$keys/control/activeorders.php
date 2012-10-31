@@ -54,9 +54,9 @@ try
         $bHasExportPermission = $oPermissions->HasPermission(ActiveOrders::PERMISSION_EXPORT);
       }
       
-      $dDelivery = new DateTime($recTable["dDelivery"]);
-      $dStart = new DateTime($recTable["dStart"]);
-      $dEnd = new DateTime($recTable["dEnd"]);
+      $dDelivery = new DateTime($recTable["dDelivery"], $g_oTimeZone);
+      $dStart = new DateTime($recTable["dStart"], $g_oTimeZone);
+      $dEnd = new DateTime($recTable["dEnd"], $g_oTimeZone);
       $oActiveOrderStatus = new ActiveCoopOrderStatus($dEnd, $dDelivery, $recTable["nStatus"] );
       $sActiveOrderStatus = $oActiveOrderStatus->StatusName;
       

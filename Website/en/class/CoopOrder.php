@@ -156,6 +156,7 @@ class CoopOrder extends SQLBase {
   public function LoadRecord($nID)
   {
     global $g_oMemberSession;
+    global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
@@ -207,9 +208,9 @@ class CoopOrder extends SQLBase {
     $this->AddPermissionBridge(self::PERMISSION_SUMS, Consts::PERMISSION_AREA_COOP_ORDER_SUMS, Consts::PERMISSION_TYPE_VIEW, 
          Consts::PERMISSION_SCOPE_BOTH, $this->m_aData[self::PROPERTY_COORDINATING_GROUP_ID], FALSE);
     
-    $this->m_aData[self::PROPERTY_START] = new DateTime($rec["dStart"]);
-    $this->m_aData[self::PROPERTY_END] = new DateTime($rec["dEnd"]);
-    $this->m_aData[self::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"]);
+    $this->m_aData[self::PROPERTY_START] = new DateTime($rec["dStart"], $g_oTimeZone);
+    $this->m_aData[self::PROPERTY_END] = new DateTime($rec["dEnd"], $g_oTimeZone);
+    $this->m_aData[self::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"], $g_oTimeZone);
     $this->m_aData[self::PROPERTY_COOP_FEE] = $rec["mCoopFee"];
     $this->m_aData[self::PROPERTY_SMALL_ORDER] = $rec["mSmallOrder"];
     $this->m_aData[self::PROPERTY_SMALL_ORDER_COOP_FEE] = $rec["mSmallOrderCoopFee"];
@@ -674,6 +675,7 @@ class CoopOrder extends SQLBase {
   public function LoadSourceOrderInitalData()
   {
     global $g_oMemberSession;
+    global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
@@ -712,9 +714,9 @@ class CoopOrder extends SQLBase {
     if ( !$this->AddPermissionBridgeGroupID(self::PERMISSION_EDIT, FALSE) )
       return FALSE;
     
-    $this->m_aData[self::PROPERTY_START] = new DateTime($rec["dStart"]);
-    $this->m_aData[self::PROPERTY_END] = new DateTime($rec["dEnd"]);
-    $this->m_aData[self::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"]);
+    $this->m_aData[self::PROPERTY_START] = new DateTime($rec["dStart"], $g_oTimeZone);
+    $this->m_aData[self::PROPERTY_END] = new DateTime($rec["dEnd"], $g_oTimeZone);
+    $this->m_aData[self::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"], $g_oTimeZone);
     $this->m_aData[self::PROPERTY_NAMES] = $this->GetKeyStrings($this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID]);
 
     return TRUE;

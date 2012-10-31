@@ -95,6 +95,7 @@ class PickupLocation extends SQLBase {
   public function LoadRecord($nID)
   {
     global $g_oMemberSession;
+    global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
@@ -149,7 +150,7 @@ class PickupLocation extends SQLBase {
     $this->m_aData[self::PROPERTY_CACHIER] = $rec["mCachier"];
     $this->m_aData[self::PROPERTY_PREV_CACHIER] = $rec["mPrevCachier"];
     if ($rec["dCachierUpdate"] != NULL)
-      $this->m_aData[self::PROPERTY_CACHIER_DATE] = new DateTime($rec["dCachierUpdate"]);
+      $this->m_aData[self::PROPERTY_CACHIER_DATE] = new DateTime($rec["dCachierUpdate"], $g_oTimeZone);
         
     $this->m_aData[self::PROPERTY_EXPORT_FILE_NAME] = $rec["sExportFileName"];
 
@@ -208,7 +209,7 @@ class PickupLocation extends SQLBase {
           $this->m_aData[self::PROPERTY_ADMIN_STR_ID] = $this->NewKey();
           $this->InsertStrings($this->m_aData[self::PROPERTY_ADMIN_STRINGS], $this->m_aData[self::PROPERTY_ADMIN_STR_ID]);
           
-          $arrParams = array($this->m_aData[self::PROPERTY_MAX_BURDEN]);
+          $arrParams = array("MaxBurden" => $this->m_aData[self::PROPERTY_MAX_BURDEN]);
 
           //insert the record
           $sSQL =  " INSERT INTO T_PickupLocation( PickupLocationKeyID, AddressStringKeyID, PublishedCommentsStringKeyID, AdminCommentsStringKeyID, bDisabled" .
@@ -221,30 +222,31 @@ class PickupLocation extends SQLBase {
           $sSQL .= ", fMaxBurden "; 
           
           if ( $this->m_aData[self::PROPERTY_CACHIER] != NULL)
-          {
             $sSQL .= ", mCachier, dCachierUpdate " ;
-            
-            $arrParams[] = $this->m_aData[self::PROPERTY_CACHIER];
-            
-            $this->m_aData[self::PROPERTY_CACHIER_DATE] = $g_dNow;
-            $arrParams[] = $this->m_aData[self::PROPERTY_CACHIER_DATE]->format(DATABASE_DATE_FORMAT);
-          }
           
           $sSQL .= "  ) VALUES (" . $nKeyID . "," . $this->m_aData[self::PROPERTY_ADDRESS_STR_ID] . "," . $this->m_aData[self::PROPERTY_PUBLISHED_STR_ID] . 
                   "," . $this->m_aData[self::PROPERTY_ADMIN_STR_ID] . "," . intval($this->m_aData[self::PROPERTY_IS_DISABLED]) .
                   $this->ConcatValIfNotNull(self::PROPERTY_ROTATION_ORDER);
 
           if ( $this->m_aData[self::PROPERTY_EXPORT_FILE_NAME] != NULL)
-             $sSQL .= ", '" . $this->m_aData[self::PROPERTY_EXPORT_FILE_NAME] . "' ";
+          {
+             $sSQL .= ", :ExportFileName ";
+             $arrParams["ExportFileName"] = CoopOrderExport::remove_filename_special_char($this->m_aData[self::PROPERTY_EXPORT_FILE_NAME]);
+          }
            
           //group
           if ( $this->GetPermissionScope(self::PERMISSION_PAGE_ACCESS) == Consts::PERMISSION_SCOPE_GROUP_CODE ) 
             $sSQL .= ", " . $g_oMemberSession->CoordinatingGroupID;
 
-          $sSQL .= ", ? "; 
+          $sSQL .= ", :MaxBurden "; 
           
           if ( $this->m_aData[self::PROPERTY_CACHIER] != NULL)
-            $sSQL .= ", ?, ? "; 
+          {
+            $sSQL .= ", :Cachier, :CachierUpdate "; 
+            $arrParams["Cachier"] = $this->m_aData[self::PROPERTY_CACHIER];
+            $this->m_aData[self::PROPERTY_CACHIER_DATE] = $g_dNow;
+            $arrParams["CachierUpdate"] = $this->m_aData[self::PROPERTY_CACHIER_DATE]->format(DATABASE_DATE_FORMAT);
+          }
           
           $sSQL .= " );";
 
@@ -302,9 +304,9 @@ class PickupLocation extends SQLBase {
     }
     
     $arrParams = array(
-            $this->m_aData[self::PROPERTY_EXPORT_FILE_NAME],
-            $this->m_aData[self::PROPERTY_ROTATION_ORDER], 
-            $this->m_aData[self::PROPERTY_MAX_BURDEN]
+            "ExportFileName" => CoopOrderExport::remove_filename_special_char($this->m_aData[self::PROPERTY_EXPORT_FILE_NAME]),
+            "RotationOrder" => $this->m_aData[self::PROPERTY_ROTATION_ORDER], 
+            "MaxBurden" => $this->m_aData[self::PROPERTY_MAX_BURDEN]
           );
     
     try
@@ -312,18 +314,18 @@ class PickupLocation extends SQLBase {
       $this->BeginTransaction();
     
       $sSQL =   " UPDATE T_PickupLocation " .
-                " SET sExportFileName = ?, nRotationOrder = ?, fMaxBurden = ?, bDisabled = " . intval($this->m_aData[self::PROPERTY_IS_DISABLED]);
+                " SET sExportFileName = :ExportFileName, nRotationOrder = :RotationOrder, fMaxBurden = :MaxBurden, bDisabled = " . intval($this->m_aData[self::PROPERTY_IS_DISABLED]);
       
       if ($this->m_aData[self::PROPERTY_CACHIER] != $this->m_aOriginalData[self::PROPERTY_CACHIER])
       {
-        $sSQL .=  ", mCachier = ?, dCachierUpdate = ?, mPrevCachier = ? ";
+        $sSQL .=  ", mCachier = :Cachier, dCachierUpdate = :CachierUpdate, mPrevCachier = :PrevCachier ";
         
         $this->m_aData[self::PROPERTY_PREV_CACHIER] = $this->m_aOriginalData[self::PROPERTY_CACHIER];
         $this->m_aData[self::PROPERTY_CACHIER_DATE] = $g_dNow;
         
-        $arrParams[] = $this->m_aData[self::PROPERTY_CACHIER];
-        $arrParams[] = $this->m_aData[self::PROPERTY_CACHIER_DATE]->format(DATABASE_DATE_FORMAT);
-        $arrParams[] = $this->m_aData[self::PROPERTY_PREV_CACHIER];
+        $arrParams["Cachier"] = $this->m_aData[self::PROPERTY_CACHIER];
+        $arrParams["CachierUpdate"] = $this->m_aData[self::PROPERTY_CACHIER_DATE]->format(DATABASE_DATE_FORMAT);
+        $arrParams["PrevCachier"] = $this->m_aData[self::PROPERTY_PREV_CACHIER];
       }
 
       $sSQL .=  " WHERE PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_ID] . ';';

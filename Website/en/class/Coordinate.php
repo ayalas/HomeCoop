@@ -261,8 +261,8 @@ class Coordinate extends SQLBase {
           $this->BeginTransaction();
 
            //creating the group
-           $sSQL = "INSERT INTO T_CoordinatingGroup (sCoordinatingGroup) VALUES (?);";
-           $this->RunSQLWithParams($sSQL, array($this->m_aData[self::PROPERTY_GROUP_NAME]));
+           $sSQL = "INSERT INTO T_CoordinatingGroup (sCoordinatingGroup) VALUES (:grpname);";
+           $this->RunSQLWithParams($sSQL, array("grpname" => $this->m_aData[self::PROPERTY_GROUP_NAME]));
            $this->m_aData[self::PROPERTY_GROUP_ID] = $this->GetLastInsertedID();
 
            //adding the members
@@ -300,9 +300,9 @@ class Coordinate extends SQLBase {
             //see if updating group name
             if ($this->m_aData[self::PROPERTY_GROUP_NAME] != $this->m_aOriginalData[self::PROPERTY_GROUP_NAME])
             {
-              $sSQL = "UPDATE T_CoordinatingGroup SET sCoordinatingGroup = ? WHERE CoordinatingGroupID = ?;";
-              $this->RunSQLWithParams($sSQL, array( $this->m_aData[self::PROPERTY_GROUP_NAME],
-                                                    $this->m_aData[self::PROPERTY_GROUP_ID] ));
+              $sSQL = "UPDATE T_CoordinatingGroup SET sCoordinatingGroup = :CoordinatingGroup WHERE CoordinatingGroupID = :CoordinatingGroupID;";
+              $this->RunSQLWithParams($sSQL, array( "CoordinatingGroup" => $this->m_aData[self::PROPERTY_GROUP_NAME],
+                                                    "CoordinatingGroupID" => $this->m_aData[self::PROPERTY_GROUP_ID] ));
             }
             //check changes in members
             $oTableDiff = new TableDiff;

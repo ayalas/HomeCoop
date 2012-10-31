@@ -822,6 +822,13 @@ class CoopOrderExport extends CoopOrderSubBase {
     $this->RunSQL( $sSQL );
     $this->m_aOrders = $this->fetchAll();
   }
+  
+  //source: http://snipplr.com/view/52144/
+  public static function remove_filename_special_char($string) {
+    $ts = array("/\~/", "/\`/", "/\@/", "/\#/", "/\\$/", "/\%/", "/\^/", "/\&/", "/\*/", "/\(/", "/\)/", "/\:/", "/\:/", "/\;/", "/\</", "/\>/", "/\?/", "/\//", "/\,/", "/\{/", "/\}/", "/\[/", "/\]/", "/\|/", "/\+/", "/\=/", "/\!/", "/\'/" );
+    $string = preg_replace($ts,'', $string);
+    return $string;
+  }
 
 }
 

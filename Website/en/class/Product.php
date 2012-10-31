@@ -264,15 +264,15 @@ class Product extends SQLBase {
           if ($this->UploadImage($this->m_aData[self::PROPERTY_IMAGE1_FILE], 1, self::PROPERTY_IMAGE1_FILE_NAME))
           {
 
-            $sSQL .= " sImage1FileName = ? ";
-            $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
+            $sSQL .= " sImage1FileName = :Image1FileName ";
+            $arrArgs["Image1FileName"] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
           }
         }
         //perhaps setting file name only?
         else if ($this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME] != NULL)
         {
-          $sSQL .= " sImage1FileName = ? ";
-          $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
+          $sSQL .= " sImage1FileName = :Image1FileName ";
+          $arrArgs["Image1FileName"] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
         }
 
         if ($this->m_aData[self::PROPERTY_IMAGE2_FILE] != NULL)
@@ -281,8 +281,8 @@ class Product extends SQLBase {
           {
             if ($sSQL != '')
               $sSQL .= ", ";
-            $sSQL .= " sImage2FileName = ? ";
-            $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
+            $sSQL .= " sImage2FileName = :Image2FileName ";
+            $arrArgs["Image2FileName"] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
           }
         }
         //perhaps setting file name only?
@@ -290,8 +290,8 @@ class Product extends SQLBase {
         {
           if ($sSQL != '')
             $sSQL .= ", ";
-          $sSQL .= " sImage2FileName = ? ";
-          $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
+          $sSQL .= " sImage2FileName = :Image2FileName ";
+          $arrArgs["Image2FileName"] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
         }
         
         if ($sSQL != '')
@@ -353,12 +353,12 @@ class Product extends SQLBase {
     }
     
     $arrArgs = array(
-        $this->m_aData[self::PROPERTY_UNIT_INTERVAL],
-        $this->m_aData[self::PROPERTY_MAX_USER_ORDER],
-        $this->m_aData[self::PROPERTY_ITEM_QUANTITY],
-        $this->m_aData[self::PROPERTY_ITEM_UNIT_ID],
-        $this->m_aData[self::PROPERTY_SORT_ORDER],
-        $this->m_aData[self::PROPERTY_PACKAGE_SIZE]
+        "UnitInterval" => $this->m_aData[self::PROPERTY_UNIT_INTERVAL],
+        "MaxUserOrder" => $this->m_aData[self::PROPERTY_MAX_USER_ORDER],
+        "ItemQuantity" => $this->m_aData[self::PROPERTY_ITEM_QUANTITY],
+        "ItemUnitKeyID" => $this->m_aData[self::PROPERTY_ITEM_UNIT_ID],
+        "SortOrder" => $this->m_aData[self::PROPERTY_SORT_ORDER],
+        "PackageSize" => $this->m_aData[self::PROPERTY_PACKAGE_SIZE]
             );
     
      try
@@ -376,16 +376,16 @@ class Product extends SQLBase {
         {
           if ($this->UploadImage($this->m_aData[self::PROPERTY_IMAGE1_FILE], 1, self::PROPERTY_IMAGE1_FILE_NAME))
           {
-            $sSetImagesSQL .= " ,sImage1FileName = ? ";
-            $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
+            $sSetImagesSQL .= " ,sImage1FileName = :Image1FileName ";
+            $arrArgs["Image1FileName"] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
           }
         }
         //perhaps setting file name only?
         else if ($this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME] != NULL && 
                 $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME] != $this->m_aOriginalData[self::PROPERTY_IMAGE1_FILE_NAME])
         {
-          $sSetImagesSQL .= " ,sImage1FileName = ? ";
-            $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
+          $sSetImagesSQL .= " ,sImage1FileName = :Image1FileName ";
+            $arrArgs["Image1FileName"] = $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME];
         }
 
         if ($this->m_aData[self::PROPERTY_IMAGE2_REMOVE])
@@ -397,8 +397,8 @@ class Product extends SQLBase {
         {
           if ($this->UploadImage($this->m_aData[self::PROPERTY_IMAGE2_FILE], 2, self::PROPERTY_IMAGE2_FILE_NAME))
           {
-            $sSetImagesSQL .= " ,sImage2FileName = ? ";
-            $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
+            $sSetImagesSQL .= " ,sImage2FileName = :Image2FileName ";
+            $arrArgs["Image2FileName"] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
           }
         }
         //perhaps setting file name only?
@@ -406,14 +406,15 @@ class Product extends SQLBase {
                 $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME] != $this->m_aOriginalData[self::PROPERTY_IMAGE2_FILE_NAME]
                 )
         {
-          $sSetImagesSQL .= " ,sImage2FileName = ? ";
-          $arrArgs[] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
+          $sSetImagesSQL .= " ,sImage2FileName = :Image2FileName ";
+          $arrArgs["Image2FileName"] = $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME];
         }
 
         $sSQL =   " UPDATE T_Product " .
                   " SET ProducerKeyID = " . $this->m_aData[self::PROPERTY_PRODUCER_ID] .
                   " , UnitKeyID = " . $this->m_aData[self::PROPERTY_UNIT_ID] .
-                  " , fUnitInterval = ? , fMaxUserOrder = ?, fItemQuantity = ?, ItemUnitKeyID = ?, nSortOrder = ?, fPackageSize = ? " .
+                  " , fUnitInterval = :UnitInterval , fMaxUserOrder = :MaxUserOrder, fItemQuantity = :ItemQuantity " .
+                  " , ItemUnitKeyID = :ItemUnitKeyID, nSortOrder = :SortOrder, fPackageSize = :PackageSize " .
                   " , mProducerPrice = " . $this->m_aData[self::PROPERTY_PRODUCER_PRICE] .
                   " , mCoopPrice = " . $this->m_aData[self::PROPERTY_COOP_PRICE] .
                   " , fBurden = " . $this->m_aData[self::PROPERTY_BURDEN] .

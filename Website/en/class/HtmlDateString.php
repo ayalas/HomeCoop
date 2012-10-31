@@ -17,8 +17,9 @@ class HtmlDateString {
   
   
   public function __construct($dtValue, $nType) {
+    global $g_oTimeZone;
     $this->m_aData = array(
-         self::PROPERTY_DATE => new DateTime($dtValue),
+         self::PROPERTY_DATE => new DateTime($dtValue, $g_oTimeZone),
          self::PROPERTY_TYPE => $nType
         );
   }

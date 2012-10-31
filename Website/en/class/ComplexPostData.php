@@ -54,6 +54,7 @@ class ComplexPostData {
   public static function GetDate($sIDSuffix)
   {
     global $_POST;
+    global $g_oTimeZone;
     
     $sID = HtmlDatePicker::PREFIX . $sIDSuffix;
         
@@ -72,7 +73,7 @@ class ComplexPostData {
     if (!$oValidate->ValidateDateString('n.j.Y', $sString))
       return NULL;
     
-    return DateTime::createFromFormat('n.j.Y', $sString);
+    return DateTime::createFromFormat('n.j.Y', $sString, $g_oTimeZone);
   }
   
   //get and validate date + time entry from the date picker (HtmlDatePicker)
@@ -81,6 +82,7 @@ class ComplexPostData {
   public static function GetDateTime($sIDSuffix, $aDefaultTime)
   {
     global $_POST;
+    global $g_oTimeZone;
     
     $dDate = self::GetDate($sIDSuffix);
     if ($dDate == NULL)
@@ -96,7 +98,7 @@ class ComplexPostData {
      if (!$oValidate->ValidateTimeString('g:i A', $sString))
        return NULL;
 
-     $dTime = DateTime::createFromFormat('g:i A', $sString);
+     $dTime = DateTime::createFromFormat('g:i A', $sString, $g_oTimeZone);
      $dDate->setTime($dTime->format('G')+0, $dTime->format('i')+0, $dTime->format('s')+0);
     }
     else if ($aDefaultTime != NULL)

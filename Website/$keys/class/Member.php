@@ -116,6 +116,7 @@ class Member extends SQLBase  {
   {   
     global $g_oMemberSession;
     global $g_oError;
+    global $g_oTimeZone;
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
     $this->m_aData[self::PROPERTY_ID] = $nID;
@@ -169,7 +170,7 @@ class Member extends SQLBase  {
     $this->m_aData[self::PROPERTY_IS_DISABLED] = $rec["bDisabled"];
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] = $rec["PaymentMethodKeyID"];
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_NAME] = $rec["sPaymentMethod"];
-    $this->m_aData[self::PROPERTY_JOINED_ON] = new DateTime($rec["dJoined"]);
+    $this->m_aData[self::PROPERTY_JOINED_ON] = new DateTime($rec["dJoined"], $g_oTimeZone);
     $this->m_aData[self::PROPERTY_BALANCE] = $rec["mBalance"];
     $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $rec["fPercentOverBalance"];
     
@@ -213,19 +214,19 @@ class Member extends SQLBase  {
       //insert the record
       $sSQL =  " INSERT INTO T_Member( sName, sLoginName, sPassword, PaymentMethodKeyID, dJoined, sEMail, sEMail2, sEMail3, sEMail4 " .
               $this->ConcatColIfNotNull(self::PROPERTY_BALANCE, "mBalance") .
-              $this->ConcatColIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE, "fPercentOverBalance").  " ) VALUES( ?, ? , md5(?) ," .
-          $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . ", ?, ?, ?, ?, ? " .
+              $this->ConcatColIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE, "fPercentOverBalance").  " ) VALUES( :mname, :lname , md5(:pwd) ," .
+          $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . ", :joined, :email1, :email2, :email3, :email4 " .
              $this->ConcatValIfNotNull(self::PROPERTY_BALANCE) .
              $this->ConcatValIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE) . " ); " ;
 
-      $this->RunSQLWithParams($sSQL, array( $this->m_aData[self::PROPERTY_MEMBER_NAME],
-                                            $this->m_aData[self::PROPERTY_LOGIN_NAME],
-                                            $this->m_aData[self::PROPERTY_NEW_PASSWORD],
-                                            $this->m_aData[self::PROPERTY_JOINED_ON]->format(DATABASE_DATE_FORMAT),
-                                            $this->m_aData[self::PROPERTY_EMAIL],
-                                            $this->m_aData[self::PROPERTY_EMAIL2],
-                                            $this->m_aData[self::PROPERTY_EMAIL3],
-                                            $this->m_aData[self::PROPERTY_EMAIL4]
+      $this->RunSQLWithParams($sSQL, array( "mname" => $this->m_aData[self::PROPERTY_MEMBER_NAME],
+                                            "lname" => $this->m_aData[self::PROPERTY_LOGIN_NAME],
+                                            "pwd" => $this->m_aData[self::PROPERTY_NEW_PASSWORD],
+                                            "joined" => $this->m_aData[self::PROPERTY_JOINED_ON]->format(DATABASE_DATE_FORMAT),
+                                            "email1" => $this->m_aData[self::PROPERTY_EMAIL],
+                                            "email2" => $this->m_aData[self::PROPERTY_EMAIL2],
+                                            "email3" => $this->m_aData[self::PROPERTY_EMAIL3],
+                                            "email4" => $this->m_aData[self::PROPERTY_EMAIL4]
           ));
 
       $this->m_aData[self::PROPERTY_NEW_PASSWORD] = NULL; //don't send passwords back to client
@@ -323,28 +324,28 @@ class Member extends SQLBase  {
       $this->BeginTransaction();
     
       $sSQL =  " UPDATE T_Member " .
-               " SET sName = ?, sEMail = ?, sEMail2 = ?, sEMail3 = ?, sEMail4 = ? ";
-      $arrParams = array( $this->m_aData[self::PROPERTY_MEMBER_NAME],
-                                            $this->m_aData[self::PROPERTY_EMAIL],
-                                            $this->m_aData[self::PROPERTY_EMAIL2],
-                                            $this->m_aData[self::PROPERTY_EMAIL3],
-                                            $this->m_aData[self::PROPERTY_EMAIL4]
+               " SET sName = :Name, sEMail = :EMail1, sEMail2 = :EMail2, sEMail3 = :EMail3, sEMail4 = :EMail4 ";
+      $arrParams = array( "Name" => $this->m_aData[self::PROPERTY_MEMBER_NAME],
+                                            "EMail1" => $this->m_aData[self::PROPERTY_EMAIL],
+                                            "EMail2" => $this->m_aData[self::PROPERTY_EMAIL2],
+                                            "EMail3" => $this->m_aData[self::PROPERTY_EMAIL3],
+                                            "EMail4" => $this->m_aData[self::PROPERTY_EMAIL4]
           );
 
       if ($this->m_aData[self::PROPERTY_IS_COORDINATOR])
       {
          $sSQL .= " , PaymentMethodKeyID = " . $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . 
-                  ", mBalance = ?, fPercentOverBalance = ?, bDisabled = ? ";
+                  ", mBalance = :Balance, fPercentOverBalance = :PercentOverBalance, bDisabled = :Disabled ";
 
-         $arrParams[] = $this->m_aData[self::PROPERTY_BALANCE];
-         $arrParams[] = $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];
-         $arrParams[] = $this->m_aData[self::PROPERTY_IS_DISABLED];
+         $arrParams["Balance"] = $this->m_aData[self::PROPERTY_BALANCE];
+         $arrParams["PercentOverBalance"] = $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];
+         $arrParams["Disabled"] = $this->m_aData[self::PROPERTY_IS_DISABLED];
       }
 
       if ($this->m_aData[self::PROPERTY_NEW_PASSWORD] != NULL)
       {
-        $sSQL .= ", sPassword = md5(?) ";
-        $arrParams[] = $this->m_aData[self::PROPERTY_NEW_PASSWORD];
+        $sSQL .= ", sPassword = md5(:Password) ";
+        $arrParams["Password"] = $this->m_aData[self::PROPERTY_NEW_PASSWORD];
       }
 
       $sSQL .=  " WHERE MemberID = " . $this->m_aData[self::PROPERTY_ID];
@@ -715,8 +716,8 @@ class Member extends SQLBase  {
   
   protected function IsUniqueLoginName()
   {
-    $sSQL = "SELECT MemberID FROM T_Member WHERE sLoginName = ?;";
-    $this->RunSQLWithParams($sSQL, array($this->m_aData[self::PROPERTY_LOGIN_NAME]));
+    $sSQL = "SELECT MemberID FROM T_Member WHERE sLoginName = :LoginName;";
+    $this->RunSQLWithParams($sSQL,  array("LoginName" => $this->m_aData[self::PROPERTY_LOGIN_NAME]));
     if ($this->fetch())
       return FALSE;
     return TRUE;
@@ -724,11 +725,11 @@ class Member extends SQLBase  {
   
   protected function IsUniqueName()
   {
-    $sSQL = "SELECT MemberID FROM T_Member WHERE sName = ? ";
+    $sSQL = "SELECT MemberID FROM T_Member WHERE sName = :Name ";
     if ($this->m_aData[self::PROPERTY_ID] > 0)
       $sSQL .= " AND MemberID <> " . $this->m_aData[self::PROPERTY_ID];
     $sSQL .= ";";
-    $this->RunSQLWithParams($sSQL, array($this->m_aData[self::PROPERTY_MEMBER_NAME]));
+    $this->RunSQLWithParams($sSQL, array("Name" => $this->m_aData[self::PROPERTY_MEMBER_NAME]));
     if ($this->fetch())
       return FALSE;
     return TRUE;
@@ -736,11 +737,11 @@ class Member extends SQLBase  {
   
   protected function IsUniqueEMail()
   {
-    $sSQL = "SELECT MemberID FROM T_Member WHERE sEMail = ? ";
+    $sSQL = "SELECT MemberID FROM T_Member WHERE sEMail = :EMail ";
     if ($this->m_aData[self::PROPERTY_ID] > 0)
       $sSQL .= " AND MemberID <> " . $this->m_aData[self::PROPERTY_ID];
     $sSQL .= ";";
-    $this->RunSQLWithParams($sSQL, array($this->m_aData[self::PROPERTY_EMAIL]));
+    $this->RunSQLWithParams($sSQL, array("EMail" => $this->m_aData[self::PROPERTY_EMAIL]));
     if ($this->fetch())
       return FALSE;
     return TRUE;

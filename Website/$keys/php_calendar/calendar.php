@@ -32,7 +32,7 @@ else
 <html dir="ltr">
 <head>
 <title><!$PAGE_TITLE_DATE_PICKER$!></title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="copyright" content="(c) 2005 separd" />
 <link href="style.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript">
@@ -47,7 +47,7 @@ function insertdate(d) {
 <?php
 
 
-$dFirstDayOfMonth = new DateTime;
+$dFirstDayOfMonth = new DateTime("now",$g_oTimeZone );
 $dFirstDayOfMonth->setDate($year, $month, 1); // get the first day of the month
 
 //translate first day of the week to a (zero based) value correlating to php date(w', [date]) returned value

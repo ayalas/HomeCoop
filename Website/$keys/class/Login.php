@@ -57,9 +57,10 @@ class Login extends SQLBase
           $sSQL = "SELECT M.sName, M.MemberID, M.PaymentMethodKeyID, M.bDisabled, M.fPercentOverBalance, M.dJoined, M.mBalance, CG.CoordinatingGroupID " . 
                   " FROM T_Member M INNER JOIN T_CoordinatingGroupMember CGM ON CGM.MemberID = M.MemberID " . 
                   " INNER JOIN T_CoordinatingGroup CG ON CG.CoordinatingGroupID = CGM.CoordinatingGroupID AND CG.sCoordinatingGroup IS NULL " .
-                  " WHERE M.sLoginName = ? and M.sPassword = md5( ? ) ;";
+                  " WHERE M.sLoginName = :lname and M.sPassword = md5( :pwd ) ;";
 
-          $this->RunSQLWithParams($sSQL, array($this->m_aData[self::PROPERTY_LOGIN_NAME], $this->m_aData[self::PROPERTY_PASSWORD]));
+          $this->RunSQLWithParams($sSQL, array("lname" => $this->m_aData[self::PROPERTY_LOGIN_NAME], 
+              "pwd" => $this->m_aData[self::PROPERTY_PASSWORD]));
         }
         catch(Exception $e)
         {

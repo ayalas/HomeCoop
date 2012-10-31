@@ -137,7 +137,7 @@ function SwitchMember()
                       echo "</td>";
                       
                       //status
-                      $oStatus = new ActiveCoopOrderStatus(new DateTime($recTable["dEnd"]),  new DateTime($recTable["dDelivery"]), 
+                      $oStatus = new ActiveCoopOrderStatus(new DateTime($recTable["dEnd"], $g_oTimeZone),  new DateTime($recTable["dDelivery"], $g_oTimeZone), 
                               $recTable["nStatus"]);
                       echo "<td>" , $oStatus->StatusName , "</td>";
                       unset($oStatus);

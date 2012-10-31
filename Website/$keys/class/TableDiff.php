@@ -181,10 +181,9 @@ class TableDiff {
     } while($nOrigPos < $nTotalOrig || $nDataPos < $nTotalData);
   }
     
-  //returns -1 if Data's key is larger than Orig's
-  //0 if matching
-  //1 if Orig's key is larger than Data's
-  //2 if both one key is larger and the other key also has to be removed/added
+  //returns self::REMOVED_RECORD if Data's key is larger than Orig's
+  //self::MATCHED_RECORD if matching
+  //self::ADDED_RECORD if Orig's key is larger than Data's
   protected function CompareRecordKeys(&$aOriginalData ,&$aData)
   {
     foreach($this->m_aNumericKeys as $key)

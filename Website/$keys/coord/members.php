@@ -228,7 +228,7 @@ function SelectAll(bCheck)
                       echo '</td>';
 
                       //joined on
-                      $oDate = new DateTime($recTable["dJoined"]);
+                      $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
                       echo "<td>" , $oDate->format('<!$DATE_PICKER_DATE_FORMAT$!>') ,  "</td>";
                       
                       echo '</tr>';

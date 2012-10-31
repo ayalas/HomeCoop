@@ -249,6 +249,7 @@ class Order extends SQLBase {
   public function LoadRecord($nID)
   {
     global $g_oMemberSession;
+    global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
@@ -308,10 +309,10 @@ class Order extends SQLBase {
     $this->m_aData[self::PROPERTY_TOTAL_BURDEN] = $rec["OrderBurden"];
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $rec["OrderProducerTotal"];
     $this->m_aData[self::PROPERTY_COOP_FEE] = $rec["mCoopFee"];
-    $this->m_aData[self::PROPERTY_CREATE_DATE] =  new DateTime($rec["dCreated"]);
+    $this->m_aData[self::PROPERTY_CREATE_DATE] =  new DateTime($rec["dCreated"], $g_oTimeZone);
     $this->m_aData[self::PROPERTY_CREATE_MEMBER_ID] = $rec["CreatedByMemberID"];
     $this->m_aData[self::PROPERTY_CREATE_MEMBER_NAME] = $rec["CreateMemberName"];
-    $this->m_aData[self::PROPERTY_MODIFY_DATE] = new DateTime($rec["dModified"]);
+    $this->m_aData[self::PROPERTY_MODIFY_DATE] = new DateTime($rec["dModified"], $g_oTimeZone);
     $this->m_aData[self::PROPERTY_MODIFY_MEMBER_ID] = $rec["ModifiedByMemberID"];
     $this->m_aData[self::PROPERTY_MODIFY_MEMBER_NAME] = $rec["ModifyMemberName"];
     $this->m_aData[self::PROPERTY_HAS_ITEMS_COMMENTS] = $rec["bHasItemComments"];
@@ -389,33 +390,38 @@ class Order extends SQLBase {
         return FALSE;
       }
       
-      $arrParams = array( $sNow, $sNow, $this->m_aData[self::PROPERTY_MEMBER_COMMENTS] );
+      $arrParams = array( "created" => $sNow, "modified" => $sNow, "comments" => $this->m_aData[self::PROPERTY_MEMBER_COMMENTS] );
 
       //insert the record
       $sSQL =  " INSERT INTO T_Order( CoopOrderKeyID, MemberID, dCreated, dModified, CreatedByMemberID, ModifiedByMemberID " .
                 $this->ConcatColIfNotValue(self::PROPERTY_PICKUP_LOCATION_ID, "PickupLocationKeyID", 0)  . 
-                " ,sMemberComments "; 
+                " ,sMemberComments ";
+      
+      $sSQLSuffix = "";
       
       if ($this->HasPermission(self::PERMISSION_COORD) && $this->HasPermission(self::PERMISSION_SET_MAX_ORDER))
       {
         if ($this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] != $this->m_aOriginalData[self::PROPERTY_PAYMENT_METHOD_ID])
         {
           $sSQL .= ", PaymentMethodKeyID";
-          $arrParams[] = $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID];
+          $arrParams["paymid"] = $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID];
+          $sSQLSuffix .= ", :paymid ";
         }
 
         if ($this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] != $this->m_aOriginalData[self::PROPERTY_PERCENT_OVER_BALANCE])
         {
           $sSQL .= ", fPercentOverBalance";
-          $arrParams[] = $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];
+          $arrParams["poverb"] = $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];
+          $sSQLSuffix .= ", :poverb ";
         }
       }
       
       $sSQL .=  ") " .
                " VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   ", " . 
               $this->m_aData[self::PROPERTY_MEMBER_ID] .    
-              ", ? , ?, " . $g_oMemberSession->MemberID .   ", " .  $g_oMemberSession->MemberID .   
-              $this->ConcatValIfNotValue(self::PROPERTY_PICKUP_LOCATION_ID, 0) . ", ? );";
+              ", :created , :modified, " . $g_oMemberSession->MemberID .   ", " .  $g_oMemberSession->MemberID .   
+              $this->ConcatValIfNotValue(self::PROPERTY_PICKUP_LOCATION_ID, 0) . ", :comments " .
+         $sSQLSuffix . ");";
 
       $this->RunSQLWithParams($sSQL, $arrParams);
 
@@ -459,7 +465,8 @@ class Order extends SQLBase {
       $this->BeginTransaction();
 
       $sSQL =   " UPDATE T_Order " .
-                " SET PickupLocationKeyID =  ? , dModified = ?, ModifiedByMemberID = ?, sMemberComments = ? ";
+                " SET PickupLocationKeyID =  :PickupLocationKeyID , dModified = :Modified, " . 
+                " ModifiedByMemberID = :ModifiedByMemberID, sMemberComments = :MemberComments ";
       if ($this->HasPermission(self::PERMISSION_COORD)) //allow changing a user for coordinators
       {
         $sSQL .= ", MemberID = " . $this->m_aData[self::PROPERTY_MEMBER_ID];
@@ -482,10 +489,10 @@ class Order extends SQLBase {
         $nPickupLocationID = $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID];
 
       $this->RunSQLWithParams( $sSQL, array(
-                $nPickupLocationID,
-                $sNow,
-                $g_oMemberSession->MemberID,
-                $this->m_aData[self::PROPERTY_MEMBER_COMMENTS]
+                "PickupLocationKeyID" => $nPickupLocationID,
+                "Modified" => $sNow,
+                "ModifiedByMemberID" => $g_oMemberSession->MemberID,
+                "MemberComments" => $this->m_aData[self::PROPERTY_MEMBER_COMMENTS]
           ));
 
       //Recalculate totals for coop order pickup locations    
@@ -763,6 +770,7 @@ class Order extends SQLBase {
   protected function LoadCoopOrderData()
   {
     global $g_oMemberSession;
+    global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
@@ -807,9 +815,9 @@ class Order extends SQLBase {
 
     $this->m_aData[self::PROPERTY_COOP_ORDER_NAME] = $rec["sCoopOrder"];
     $this->m_aData[CoopOrder::PROPERTY_STATUS] = $rec["nStatus"];
-    $this->m_aData[CoopOrder::PROPERTY_START] = new DateTime($rec["dStart"]);
-    $this->m_aData[CoopOrder::PROPERTY_END] = new DateTime($rec["dEnd"]);
-    $this->m_aData[CoopOrder::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"]);
+    $this->m_aData[CoopOrder::PROPERTY_START] = new DateTime($rec["dStart"], $g_oTimeZone);
+    $this->m_aData[CoopOrder::PROPERTY_END] = new DateTime($rec["dEnd"], $g_oTimeZone);
+    $this->m_aData[CoopOrder::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"], $g_oTimeZone);
     $this->m_aData[CoopOrder::PROPERTY_COOP_FEE] = $rec["mCoopFee"];
     $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER] = $rec["mSmallOrder"];
     $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE] = $rec["mSmallOrderCoopFee"];

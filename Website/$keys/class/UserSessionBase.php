@@ -110,8 +110,8 @@ abstract class UserSessionBase extends SQLBase
         else
         {
             //load the language id
-            $sSQL = "SELECT LangID, FallingLangID FROM Tlng_Language WHERE sPhpFolder = ? ;";
-            $this->RunSQLWithParams($sSQL, array($g_sLangDir) );
+            $sSQL = "SELECT LangID, FallingLangID FROM Tlng_Language WHERE sPhpFolder = :folder ;";
+            $this->RunSQLWithParams($sSQL, array("folder" => $g_sLangDir) );
 
             $result = $this->fetch();
 

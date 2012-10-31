@@ -171,12 +171,20 @@ class Producer extends SQLBase
           if ( $this->GetPermissionScope(self::PERMISSION_PAGE_ACCESS) == Consts::PERMISSION_SCOPE_GROUP_CODE ) 
              $sSQL .= ", " . $g_oMemberSession->CoordinatingGroupID;
 
+          
           if ( $this->m_aData[self::PROPERTY_EXPORT_FILE_NAME] != NULL)
-             $sSQL .= ", '" . $this->m_aData[self::PROPERTY_EXPORT_FILE_NAME] . "' ";
+          {
+             $sSQL .= ", :ExportFileName );"; 
 
-          $sSQL .= " ); ";
+             $this->RunSQLWithParams($sSQL, array("ExportFileName" => 
+                 CoopOrderExport::remove_filename_special_char($this->m_aData[self::PROPERTY_EXPORT_FILE_NAME])));
+          }
+          else
+          {
+             $sSQL .= " ); ";
 
-          $this->RunSQL( $sSQL );
+             $this->RunSQL($sSQL);
+          }
 
           $this->CommitTransaction();
         }
@@ -223,11 +231,10 @@ class Producer extends SQLBase
           $this->UpdateStrings(self::PROPERTY_PRODUCER_NAMES, $this->m_aData[self::PROPERTY_PRODUCER_ID]);
 
           //update record
-          $sSQL = " UPDATE T_Producer SET sExportFileName = ?, bDisabled = " . intval($this->m_aData[self::PROPERTY_IS_DISABLED]) .
-                " WHERE ProducerKeyID = ? ;";
+          $sSQL = " UPDATE T_Producer SET sExportFileName = :ExportFileName, bDisabled = " . intval($this->m_aData[self::PROPERTY_IS_DISABLED]) .
+                " WHERE ProducerKeyID = " . $this->m_aData[self::PROPERTY_PRODUCER_ID ] . " ;";
           $this->RunSQLWithParams( $sSQL, 
-              array(  $this->m_aData[self::PROPERTY_EXPORT_FILE_NAME],
-                      $this->m_aData[self::PROPERTY_PRODUCER_ID ] ) 
+              array(  "ExportFileName" => CoopOrderExport::remove_filename_special_char($this->m_aData[self::PROPERTY_EXPORT_FILE_NAME]) ) 
            );
           $this->CommitTransaction();
         }

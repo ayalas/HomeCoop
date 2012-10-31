@@ -497,9 +497,9 @@ abstract class SQLBase
       if ($nKeyID == 0)
         throw new Exception("UpdateString failed. String key was not set for update operation of: " . $sString);
       
-      $sSQL = " UPDATE Tlng_String SET sString = ? " .
-                  " WHERE KeyID = ? AND LangID = ? ;";
-      $this->RunSQLWithParams( $sSQL, array($sString, $nKeyID, $nLangID) );
+      $sSQL = " UPDATE Tlng_String SET sString = :String " .
+                  " WHERE KeyID = :Key AND LangID = :Lang ;";
+      $this->RunSQLWithParams( $sSQL, array("String" => $sString, "Key" => $nKeyID, "Lang" => $nLangID) );
     }
     
     protected function UpdateStrings($nDataIndex, $nKeyID)
@@ -523,8 +523,8 @@ abstract class SQLBase
         throw new Exception("InsertString failed. String key was not set for insert operation of: " . $sString);
       
       $sSQL =  " INSERT INTO Tlng_String( KeyID, LangID, sString ) ";
-      $sSQL .= " VALUES (? , ? , ? ); ";
-      $this->RunSQLWithParams( $sSQL, array($nKeyID, $nLangID, $sString ) );
+      $sSQL .= " VALUES (:key , :lang , :str ); ";
+      $this->RunSQLWithParams( $sSQL, array("key" => $nKeyID, "lang" => $nLangID, "str" => $sString ) );
     }
     
     protected function InsertStrings($aArrStrings, $nKeyID)

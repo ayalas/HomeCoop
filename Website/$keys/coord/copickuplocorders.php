@@ -187,7 +187,7 @@ function Sort(nField)
                       //place date    
                       echo "<td><span dir='ltr'>";
                       
-                      $dDate = new DateTime($recTable["dCreated"]);
+                      $dDate = new DateTime($recTable["dCreated"], $g_oTimeZone);
                       //if current year, take current year format
                       if (($dDate->format('Y')+0) == HtmlDateString::GetThisYear())
                         echo $dDate->format('<!$FULL_DATE_FORMAT_CURRENT_YEAR$!>');

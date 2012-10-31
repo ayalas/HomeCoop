@@ -583,11 +583,13 @@ class OrderItems extends SQLBase {
  {
    $sSQL = " INSERT T_OrderItem (OrderID, ProductKeyID, fQuantity, fUnjoinedQuantity, fMaxFixQuantityAddition, sMemberComments, mCoopPrice, " . 
           " mProducerPrice, fOriginalQuantity) VALUES ( " . 
-          $this->m_aData[Order::PROPERTY_ID] . "," .  $oOrderItem->ProductID . "," . $oOrderItem->Quantity . "," . $oOrderItem->UnjoinedQuantity .
-           " , ? ,  ?, ?, ?, ?  );";
+          $this->m_aData[Order::PROPERTY_ID] . "," .  $oOrderItem->ProductID . "," . $oOrderItem->Quantity . "," . 
+           $oOrderItem->UnjoinedQuantity .
+           " , :MaxFixQuantityAddition ,  :MemberComments, :CoopPrice, :ProducerPrice, :OriginalQuantity  );";
    
-   $this->RunSQLWithParams($sSQL, array( $oOrderItem->MemberMaxFixQuantityAddition, $oOrderItem->MemberComments,
-       $oOrderItem->CoopTotal,$oOrderItem->ProducerTotal,$oOrderItem->MemberLastQuantity
+   $this->RunSQLWithParams($sSQL, array( "MaxFixQuantityAddition" => $oOrderItem->MemberMaxFixQuantityAddition, 
+       "MemberComments" => $oOrderItem->MemberComments,
+       "CoopPrice" => $oOrderItem->CoopTotal,"ProducerPrice" => $oOrderItem->ProducerTotal, "OriginalQuantity" => $oOrderItem->MemberLastQuantity
        ) );
    
    $oOrderItem->OrderItemID = $this->GetLastInsertedID();
@@ -608,11 +610,12 @@ class OrderItems extends SQLBase {
      return;
    
    $sSQL = " UPDATE T_OrderItem SET fQuantity = " . $oOrderItem->Quantity .
-           " ,fMaxFixQuantityAddition = ? , sMemberComments = ?, mCoopPrice = ?, mProducerPrice = ?, fOriginalQuantity = ?, fUnjoinedQuantity = ? " .
+           " ,fMaxFixQuantityAddition = :MaxFixQuantityAddition , sMemberComments = :MemberComments, mCoopPrice = :CoopPrice, " . 
+           " mProducerPrice = :ProducerPrice, fOriginalQuantity = :OriginalQuantity, fUnjoinedQuantity = :UnjoinedQuantity " .
            " WHERE OrderItemID = " . $oOrderItem->OrderItemID . ';';
 
-   $this->RunSQLWithParams($sSQL, array( $oOrderItem->MemberMaxFixQuantityAddition, $oOrderItem->MemberComments,
-       $oOrderItem->CoopTotal,$oOrderItem->ProducerTotal,$oOrderItem->MemberLastQuantity, $oOrderItem->UnjoinedQuantity
+   $this->RunSQLWithParams($sSQL, array( "MaxFixQuantityAddition" => $oOrderItem->MemberMaxFixQuantityAddition, "MemberComments" => $oOrderItem->MemberComments,
+       "CoopPrice" => $oOrderItem->CoopTotal,"ProducerPrice" => $oOrderItem->ProducerTotal,"OriginalQuantity" => $oOrderItem->MemberLastQuantity, "UnjoinedQuantity" => $oOrderItem->UnjoinedQuantity
        ) );
    
    //check if calculation is required for this product (only quantities matters)

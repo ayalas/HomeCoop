@@ -103,6 +103,7 @@ class CoopOrderSubBase extends SQLBase {
   protected function LoadCoopOrderData()
   {
     global $g_oMemberSession;
+    global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
@@ -147,8 +148,8 @@ class CoopOrderSubBase extends SQLBase {
       
       $this->m_aData[self::PROPERTY_STATUS] = $rec["nStatus"];
       $this->m_aData[self::PROPERTY_NAME] = $rec["sCoopOrder"];
-      $this->m_aData[CoopOrder::PROPERTY_END] = new DateTime($rec["dEnd"]);
-      $this->m_aData[CoopOrder::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"]);
+      $this->m_aData[CoopOrder::PROPERTY_END] = new DateTime($rec["dEnd"], $g_oTimeZone);
+      $this->m_aData[CoopOrder::PROPERTY_DELIVERY] = new DateTime($rec["dDelivery"], $g_oTimeZone);
       $this->m_aData[CoopOrder::PROPERTY_HAS_JOINED_PRODUCTS] = $rec["bHasJoinedProducts"];
       $this->m_aData[self::PROPERTY_COOP_ORDER_BURDEN] = $rec["fBurden"];
       $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_BURDEN] = $rec["fMaxBurden"];

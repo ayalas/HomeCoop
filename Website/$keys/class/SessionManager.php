@@ -15,10 +15,11 @@ class SessionManager extends UserSessionBase
     }
 
     public function __set( $name, $value ) {
+      global $g_oTimeZone;
         switch( $name )
         {
              case parent::KEY_JOINED_DATE;
-                 $this->m_aData[$name] = new DateTime($value);
+                 $this->m_aData[$name] = new DateTime($value, $g_oTimeZone);
                  $_SESSION[ $name ] = $this->m_aData[$name];     
                 break;
              case parent::KEY_MEMBERID;

@@ -142,6 +142,8 @@ class Members extends SQLBase {
   
   protected function BuildXmlDoc()
   {
+    global $g_oTimeZone;
+    
     $this->m_oXmlDoc = new DOMDocument('1.0', 'utf-8');
     
     $document = $this->m_oXmlDoc->createElement('document');
@@ -220,7 +222,7 @@ class Members extends SQLBase {
       $rd = $this->m_oXmlDoc->createElement('email', $sEMails);
       $row->appendChild($rd);
       
-      $dJoined = new DateTime($recMember["dJoined"]);
+      $dJoined = new DateTime($recMember["dJoined"], $g_oTimeZone);
       
       $rd = $this->m_oXmlDoc->createElement('djoin_v', $dJoined->format(Consts::OPEN_OFFICE_DATE_VALUE_FORMAT) );
       $row->appendChild($rd);
