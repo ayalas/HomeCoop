@@ -330,6 +330,13 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
+    if ( $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL] > 0 )
+    {
+      $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
+      $g_oError->AddError('There are already orders against this producer in this cooperative orders. Producer cannot be deleted in such a case. Specific products can be deleted though.');
+      return FALSE;
+    }
+    
     try
     {
       $this->BeginTransaction();
@@ -415,7 +422,7 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
   {
     //add producer products
     $sSQL =  " DELETE COPRD FROM T_CoopOrderProduct COPRD INNER JOIN T_Product PRD ON COPRD.ProductKeyID = PRD.ProductKeyID " .
-             " WHERE PRD.ProducerKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID]  . ";";
+             " WHERE COPRD.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] . " AND PRD.ProducerKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID]  . ";";
     
     $this->RunSQL($sSQL);
   }

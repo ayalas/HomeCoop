@@ -1613,6 +1613,11 @@
     <pages>coord/orders</pages>
 </str>
 <str>
+    <key>COOP_ORDER_PRODUCER_VALIDATION_CANNOT_DELETE_WHEN_HAS_ORDERS</key>
+    <value>There are already orders against this producer in this cooperative orders. Producer cannot be deleted in such a case. Specific products can be deleted though.</value>
+    <pages>coord/coproducer</pages>
+</str>
+<str>
     <key>COOP_ORDER_PRODUCT_VALIDATION_CANNOT_CHANGE_COOP_PRICE_WHEN_ALREADY_ORDERED</key>
     <value>There are already orders against this product in this cooperative orders. Prices cannot be changed in such a case. All orders must be removed from the product first.</value>
     <pages>coord/coproduct</pages>

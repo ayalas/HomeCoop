@@ -1525,6 +1525,11 @@
     <pages>coord/orders</pages>
 </str>
 <str>
+    <key>COOP_ORDER_PRODUCER_VALIDATION_CANNOT_DELETE_WHEN_HAS_ORDERS</key>
+    <value>כבר יש הזמנות עבור היצרן הזה בהזמנת הקואופרטיב הנוכחית. לא ניתן למחוק את היצרן במצב כזה. ניתן למחוק מוצרים ספציפיים והזמנותיהם ימחקו גם כן.</value>
+    <pages>coord/coproducer</pages>
+</str>
+<str>
     <key>COOP_ORDER_PRODUCT_VALIDATION_CANNOT_CHANGE_COOP_PRICE_WHEN_ALREADY_ORDERED</key>
     <value>כבר יש הזמנות עבור המוצר הזה בהזמנת הקואופרטיב הנוכחית. לא ניתן לשנות מחירים במצב כזה. יש להסיר תחילה את ההזמנות מהמוצר.</value>
     <pages>coord/coproduct</pages>
