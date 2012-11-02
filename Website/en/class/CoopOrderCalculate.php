@@ -305,7 +305,7 @@ class CoopOrderCalculate extends SQLBase {
     $this->m_bUseSecondSqlPreparedStmt = TRUE; //to allow fetch operations to continue on original one
     
     $mCoopTotal = $this->m_recPickupLocations["TotalCoopPrice"] + 
-            $this->m_aPickupLocationsFees[$this->m_recPickupLocations["PickupLocationKeyID"]]["TotalFee"];
+            $this->m_aPickupLocationsFees[$this->m_recPickupLocations["PickupLocationKeyID"]];
     
     $sSQL = " UPDATE T_CoopOrderPickupLocation SET fBurden = ?, mCoopTotal = ? WHERE CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
           " AND PickupLocationKeyID = " . $this->m_recPickupLocations["PickupLocationKeyID"] . ";";
