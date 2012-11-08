@@ -795,7 +795,8 @@ class CoopOrderExport extends CoopOrderSubBase {
              " AND O.PickupLocationKeyID = " . $this->m_nPickupLocationID;
     }
     $sSQL .=  " LEFT JOIN T_OrderItem OI ON OI.OrderID = O.OrderID AND OI.ProductKeyID = COPRD.ProductKeyID " . 
-              " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID];
+              " WHERE O.CoopOrderKeyID = " . $this->m_aData[parent::PROPERTY_COOP_ORDER_ID] . 
+                " AND O.mCoopTotal > 0 ";
    if ($this->m_nProducerID > 0)
       $sSQL .= " AND PRD.ProducerKeyID = " . $this->m_nProducerID; 
    $sSQL .=  " AND (COPRD.nJoinedStatus > 0 OR ";

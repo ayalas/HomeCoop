@@ -647,7 +647,7 @@ class OrderItems extends SQLBase {
     
     $oItem = new OrderItem;
     $oItem->ProductID = $nProductID;
-    $oOrderItem->OrderItemID = $oOriginalItem->OrderItemID;
+    $oItem->OrderItemID = $oOriginalItem->OrderItemID;
     //copy constant data from original item
     $oItem->ProducerID = $oOriginalItem->ProducerID;
     $oItem->CoordinatingGroupID = $oOriginalItem->CoordinatingGroupID;

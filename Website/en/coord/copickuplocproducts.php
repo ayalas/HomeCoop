@@ -103,7 +103,7 @@ UserSessionBase::Close();
               <td class="columntitlelong">Producer</td>
               <td class="columntitlelong">Product</td>
               <td class="columntitleshort">Package Size</td>
-              <td class="columntitletiny">Quantity</td>
+              <td class="columntitletiny">Total</td>
               <td class="columntitle">Producer Total</td>
               <td class="columntitlenowidth">Total Coop</td>
             </tr>

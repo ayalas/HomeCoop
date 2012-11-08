@@ -51,7 +51,7 @@ class CoopOrders extends SQLBase {
            && $this->GetPermissionScope(self::PERMISSION_COORD) != Consts::PERMISSION_SCOPE_COOP_CODE )
           $sSQL .=  " WHERE CO.CoordinatingGroupID IN ( 0, " . implode(",", $g_oMemberSession->Groups) . ") ";
 
-      $sSQL .= " ORDER BY CO.nStatus, CO.dDelivery desc; ";
+      $sSQL .= " ORDER BY CO.dDelivery desc; ";
 
       $this->RunSQL( $sSQL );
 

@@ -416,7 +416,7 @@ function Save()
                 </tr>
                 <tr>
                   <?php
-                      $lblTotalCoopOrder = new HtmlTextLabel('Quantity', 'lblTotalCoopOrder', 
+                      $lblTotalCoopOrder = new HtmlTextLabel('Total', 'lblTotalCoopOrder', 
                               $oRecord->TotalCoopOrder );
                       $lblTotalCoopOrder->EchoHtml();
                       unset($lblTotalCoopOrder);

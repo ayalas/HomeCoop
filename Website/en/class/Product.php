@@ -343,8 +343,10 @@ class Product extends SQLBase {
     }
     
     //copy values lost after postback
-    $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME] = $this->m_aOriginalData[self::PROPERTY_IMAGE1_FILE_NAME];
-    $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME] = $this->m_aOriginalData[self::PROPERTY_IMAGE2_FILE_NAME];
+    if ($this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME] == NULL)
+      $this->m_aData[self::PROPERTY_IMAGE1_FILE_NAME] = $this->m_aOriginalData[self::PROPERTY_IMAGE1_FILE_NAME];
+    if ($this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME] == NULL)
+      $this->m_aData[self::PROPERTY_IMAGE2_FILE_NAME] = $this->m_aOriginalData[self::PROPERTY_IMAGE2_FILE_NAME];
 
     if (!$this->Validate())
     {

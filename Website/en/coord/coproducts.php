@@ -115,11 +115,11 @@ function OpenPartialOrders(nProductID)
             <tr>
               <td class="columntitlelong">Producer</td>
               <td class="columntitlelong">Product</td>
-              <td class="columntitletiny">Quantity</td>
+              <td class="columntitletiny">Total</td>
               <td class="columntitleshort">Producer Total</td>
               <td class="columntitleshort">Prod. P.</td>
               <td class="columntitleshort">Coop P.</td>
-              <td class="columntitleshort">Package Size</td>
+              <td class="columntitleshort">Quantity</td>
               <td class="columntitlenowidth" ><a class="tooltip" href="#" >Burden<span>An index that indicates how much this product &quot;burdens&quot; a delivery. Helps to uphold a cooperative order&#x27;s Delivery Capacity, if set</span></a></td>
             </tr>
             <?php

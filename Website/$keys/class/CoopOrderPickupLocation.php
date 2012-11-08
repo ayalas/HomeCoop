@@ -220,13 +220,36 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
-    $sSQL =   " UPDATE T_CoopOrderPickupLocation " .
-              " SET fMaxBurden =  ?, mMaxCoopTotal = ?, " . 
-              " PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
-              " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
-              " AND PickupLocationKeyID = " . $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_ID] . ";";
+    try
+    {
+    
+      $this->BeginTransaction();
 
-    $this->RunSQLWithParams( $sSQL, array( $this->m_aData[self::PROPERTY_MAX_BURDEN], $this->m_aData[self::PROPERTY_MAX_COOP_TOTAL] ) );
+      $sSQL =   " UPDATE T_CoopOrderPickupLocation " .
+                " SET fMaxBurden =  ?, mMaxCoopTotal = ?, " . 
+                " PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
+                " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+                " AND PickupLocationKeyID = " . $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_ID] . ";";
+
+      $this->RunSQLWithParams( $sSQL, array( $this->m_aData[self::PROPERTY_MAX_BURDEN], $this->m_aData[self::PROPERTY_MAX_COOP_TOTAL] ) );
+      
+      //update orders pickup location, if changed
+      if ($this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] != $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_ID])
+      {
+        $sSQL = " UPDATE T_Order " . 
+                " SET PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
+                " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+                " AND PickupLocationKeyID = " . $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_ID] . ";";
+        $this->RunSQL($sSQL);
+      }
+      
+      $this->CommitTransaction();
+    }
+    catch(Exception $e)
+    {
+      $this->RollbackTransaction();
+      throw $e;
+    }
     
     $this->m_aData[self::PROPERTY_TOTAL_BURDEN] = $this->m_aOriginalData[self::PROPERTY_TOTAL_BURDEN];
  

@@ -1404,7 +1404,7 @@
 </str>
 <str>
     <key>FIELD_COOP_ORDER_PRODUCT_TOTAL_QUANTITY</key>
-    <value>Quantity</value>
+    <value>Total</value>
     <pages>coop order product</pages>
 </str>
 <str>

@@ -119,7 +119,7 @@ function OpenPartialOrders(nProductID)
               <td class="columntitleshort"><!$FIELD_COOP_ORDER_PRODUCT_PRODUCER_TOTAL$!></td>
               <td class="columntitleshort"><!$FIELD_PRODUCER_PRICE_SHORT$!></td>
               <td class="columntitleshort"><!$FIELD_COOP_PRICE_SHORT$!></td>
-              <td class="columntitleshort"><!$FIELD_PACKAGE_SIZE$!></td>
+              <td class="columntitleshort"><!$FIELD_QUANTITY$!></td>
               <td class="columntitlenowidth" ><a class="tooltip" href="#" ><!$FIELD_BURDEN$!><span><!$TOOLTIP_BURDEN$!></span></a></td>
             </tr>
             <?php
