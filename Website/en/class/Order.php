@@ -1031,6 +1031,7 @@ class Order extends SQLBase {
     if ($this->m_aData[self::PROPERTY_COOP_TOTAL] == NULL || $this->m_aData[self::PROPERTY_COOP_TOTAL] <= 0)
     {
       $this->m_aData[self::PROPERTY_COOP_FEE] = NULL;
+      $this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE] = NULL;
       return;
     }
 

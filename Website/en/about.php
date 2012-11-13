@@ -36,7 +36,7 @@ include_once 'settings.php';
         <td><span>HomeCoop is a tiny local consumer cooperatives web ordering system.</span></td>
       </tr>
       <tr>
-        <td><div dir="ltr" align="center">Copyright © 2012 Ayala Shani - ayalashah (at) joindiaspora [dot] com</div></td>
+        <td><div dir="ltr" align="center">Copyright © 2012 Ayala Shani - ayala (at) code-op [dot] org, or ayalashah (at) joindiaspora [dot] com</div></td>
       </tr>
       <tr>
         <td><span><?php echo sprintf('The software website, including a download installation package link: %1$s. Source code: %2$s', 

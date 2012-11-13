@@ -509,10 +509,10 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
     }
     
     //block editing prices after orders were filled- not supported for now (requires calculations of entire order, including items)
-    if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0 )
+    if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0 && 
+            ($this->m_aData[self::PROPERTY_COOP_PRICE] != $this->m_aOriginalData[self::PROPERTY_COOP_PRICE] 
+        || $this->m_aData[self::PROPERTY_PRODUCER_PRICE] != $this->m_aOriginalData[self::PROPERTY_PRODUCER_PRICE]) ) 
     {
-      if ($this->m_aData[self::PROPERTY_COOP_PRICE] != $this->m_aOriginalData[self::PROPERTY_COOP_PRICE] 
-        || $this->m_aData[self::PROPERTY_PRODUCER_PRICE] != $this->m_aOriginalData[self::PROPERTY_PRODUCER_PRICE])
         $g_oError->AddError( '<!$COOP_ORDER_PRODUCT_VALIDATION_CANNOT_CHANGE_COOP_PRICE_WHEN_ALREADY_ORDERED$!>');
         $bValid = FALSE;
     }
