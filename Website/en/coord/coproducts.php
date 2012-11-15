@@ -136,12 +136,12 @@ function OpenPartialOrders(nProductID)
                       $bTooltip = FALSE;
                       if ($recTable["fMaxUserOrder"] != NULL)
                       {
-                        $sTooltipLines .= "Max. Member Order‏:‏ " . $recTable["fMaxUserOrder"] . "<br/>";
+                        $sTooltipLines .= sprintf("%s: %s items<br/>", "Max. Member Order", $recTable["fMaxUserOrder"]);
                         $bTooltip = TRUE;
                       }
                       if ($recTable["fMaxCoopOrder"] != NULL)
                       {
-                        $sTooltipLines .= "Max. Coop Order‏:‏ " . $recTable["fMaxCoopOrder"] . "<br/>";
+                        $sTooltipLines .= sprintf("%s: %s items<br/>", "Max. Coop Order", $recTable["fMaxCoopOrder"]);
                         $bTooltip = TRUE;
                       }
                       
@@ -215,7 +215,8 @@ function OpenPartialOrders(nProductID)
                       //PackageSize
                       $oProductPackage = new ProductPackage(
                               $recTable["ProductItems"], $recTable["fItemQuantity"], $recTable["sItemUnitAbbrev"], 
-                              $recTable["fUnitInterval"], $recTable["sUnitAbbrev"], $recTable["fPackageSize"], $recTable["ProductQuantity"]
+                              $recTable["fUnitInterval"], $recTable["sUnitAbbrev"], $recTable["fPackageSize"], $recTable["ProductQuantity"],
+                              $recTable["fMaxCoopOrder"], $recTable["fTotalCoopOrder"]
                               );
                       
                       echo '<td>'; 

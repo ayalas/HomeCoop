@@ -742,6 +742,21 @@
     <pages>coord/product</pages>
 </str>
 <str>
+    <key>TOOLTIP_ITEMS</key>
+    <value>%s: %s items</value>
+    <pages>product tooltip</pages>
+</str>
+<str>
+    <key>ITEMS_LEFT</key>
+    <value>Left</value>
+    <pages>product tooltip</pages>
+</str>
+<str>
+    <key>TOOLTIP_SOLD_OUT</key>
+    <value>SOLD OUT</value>
+    <pages>product tooltip</pages>
+</str>
+<str>
     <key>TOOLTIP_PACKAGE_SIZE</key>
     <value>Package size for a large package that the cooperative allows ordering portions/slices of.</value>
     <pages>coord/product</pages>

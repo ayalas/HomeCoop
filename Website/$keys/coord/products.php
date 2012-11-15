@@ -113,7 +113,7 @@ UserSessionBase::Close();
                       
                       $oProductPackage = new ProductPackage($recProducts["nItems"], $recProducts["fItemQuantity"], 
                                 $recProducts["sItemUnitAbbrev"], $recProducts["fUnitInterval"], $recProducts["sUnitAbbrev"], $recProducts["fPackageSize"], 
-                                $recProducts["fQuantity"]);
+                                $recProducts["fQuantity"],0, 0);
                       
                       //package size and unit quantity 
                       echo '<td>';

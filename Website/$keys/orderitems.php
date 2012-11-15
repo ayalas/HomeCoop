@@ -298,12 +298,12 @@ function SetDirty()
                       
                       $oProductPackage = new ProductPackage($oItem->ProductItems, $oItem->ProductItemQuantity, 
                                 $oItem->ItemUnitAbbrev, $oItem->UnitInterval, $oItem->UnitAbbrev, $oItem->PackageSize, 
-                                $oItem->ProductQuantity);
+                                $oItem->ProductQuantity, $oItem->ProductMaxCoopOrder, $oItem->ProductTotalCoopOrderQuantity);
                       
                       //1. ProductName + link to product screen + hidden order item id to identify existing records
                       echo '<td class="columndatalong">';
                       
-                      if ($oProductPackage->Mode == ProductPackage::MODE_PACKAGE_SIZE)
+                      if ($oProductPackage->HasTooltip)
                       {
                         echo '<a class="tooltiphelp" href="#" onclick="JavaScript:OpenProductOverview(\'' , $g_sRootRelativePath, '\', ',
                               $oRecord->CoopOrderID, ',', $oItem->ProductID, ');" >', htmlspecialchars($oItem->ProductName), 

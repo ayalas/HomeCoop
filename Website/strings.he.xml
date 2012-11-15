@@ -678,6 +678,21 @@
     <value>הזמנה בהפרשים של</value>
 </str>
 <str>
+    <key>TOOLTIP_ITEMS</key>
+    <value>%s: %s פריטים</value>
+    <pages>product tooltip</pages>
+</str>
+<str>
+    <key>TOOLTIP_SOLD_OUT</key>
+    <value>המוצר אזל</value>
+    <pages>product tooltip</pages>
+</str>
+<str>
+    <key>ITEMS_LEFT</key>
+    <value>נותרו</value>
+    <pages>product tooltip</pages>
+</str>
+<str>
     <key>TOOLTIP_PACKAGE_SIZE</key>
     <value>גודל חבילה עבור מוצר שמגיע בחבילה גדולה, והקואפרטיב מאפשר להזמין הזמנות חלקיות ממנו.</value>
 </str>

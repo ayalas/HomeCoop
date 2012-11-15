@@ -355,7 +355,7 @@ function Save()
                   <?php
                       $oProductPackage = new ProductPackage($oRecord->Items, $oRecord->ItemQuantity, 
                                 $oRecord->ItemUnitAbbrev, $oRecord->UnitInterval, $oRecord->UnitAbbrev, $oRecord->PackageSize, 
-                                $oRecord->Quantity);
+                                $oRecord->Quantity, $oRecord->MaxCoopOrder, $oRecord->TotalCoopOrder);
                       
                       $lblQuantity = new HtmlTextLabel('Quantity', 'lblQuantity', $oProductPackage->Html);
                       $lblQuantity->UseHtmlEscape = FALSE; //already escaped in ProductPackage
