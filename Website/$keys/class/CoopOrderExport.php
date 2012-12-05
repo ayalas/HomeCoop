@@ -186,7 +186,7 @@ class CoopOrderExport extends CoopOrderSubBase {
      return NULL;
 
     $sSQL = "SELECT M.sEMail, M.sEmail2, M.sEmail3, M.sEmail4 FROM T_Order O INNER JOIN T_Member M ON O.MemberID = M.MemberID " .               
-             " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID];
+             " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] . " AND O.mCoopTotal > 0 ";
     if ( ($this->m_aData[self::PROPERTY_ID] & CoopOrderExport::LIST_ITEM_PRODUCER) === CoopOrderExport::LIST_ITEM_PRODUCER )
     {
      $nProducerID = $this->m_aData[self::PROPERTY_ID] - CoopOrderExport::LIST_ITEM_TYPE_MAILS - CoopOrderExport::LIST_ITEM_PRODUCER;

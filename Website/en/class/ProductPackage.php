@@ -101,14 +101,14 @@ class ProductPackage {
   public function __get( $name ) {
     if ($name == self::PROPERTY_HTML)
     {
-      if ($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP] || !$this->m_aData[self::PROPERTY_HAS_TOOLTIP])
+      if (($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP]) || !($this->m_aData[self::PROPERTY_HAS_TOOLTIP]))
         return $this->m_sResult;
       return '<a class="tooltiphelp" href="#" >' . htmlspecialchars($this->m_sResult) . '<span>' .
             $this->m_sToolTipPackageSizeLine . $this->m_sToolTipQuantityIntervalLine . $this->m_sToolTipAvailableItems  . '</span></a>';
     }
     else if ($name == self::PROPERTY_TOOLTIP)
       return $this->m_sToolTipPackageSizeLine . $this->m_sToolTipQuantityIntervalLine . $this->m_sToolTipAvailableItems;
-    else if ($name = self::PROPERTY_MODE)
+    else if ($name == self::PROPERTY_MODE)
       return $this->m_nMode;
     else if ( array_key_exists( $name, $this->m_aData) )
         return $this->m_aData[$name];
@@ -136,7 +136,7 @@ class ProductPackage {
   //echo directly to html document to save some string concats/retrieval
   public function EchoHtml()
   {
-    if ($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP] || !$this->m_aData[self::PROPERTY_HAS_TOOLTIP])
+    if (($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP]) || !($this->m_aData[self::PROPERTY_HAS_TOOLTIP]))
       echo htmlspecialchars( $this->m_sResult );
     else
       echo '<a class="tooltiphelp" href="#" >' , htmlspecialchars( $this->m_sResult ) , '<span>' ,

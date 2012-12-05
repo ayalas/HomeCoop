@@ -20,10 +20,7 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
 
   $oData = new ProductCatalog;
   $recProduct = NULL;
-  $sPackageSize = NULL;
-  $sUnitInterval = NULL;
-  $fCoopCosts = NULL;
-  $sQuantity = NULL;
+  
 
   try
   {
@@ -102,6 +99,11 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
                   {
                     while ( $recProduct )
                     {
+                        $sPackageSize = NULL;
+                        $sUnitInterval = NULL;
+                        $fCoopCosts = NULL;
+                        $sQuantity = NULL;
+                        
                         if ( $recProduct["nItems"] > 1 && $recProduct["fItemQuantity"] != NULL && $recProduct["sItemUnitAbbrev"] != NULL )
                           $sPackageSize = $recProduct["nItems"] . '<!$MULTIPLIER_SIGN$!>' . $recProduct["fItemQuantity"] . $recProduct["sItemUnitAbbrev"];
                         else
