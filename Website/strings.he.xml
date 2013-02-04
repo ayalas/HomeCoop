@@ -29,6 +29,11 @@
     <value>תוצרת מקומית - ללא הטסה</value>
 </str>
 <str>
+    <key>PAGE_LINK_JOIN</key>
+    <value>הצטרפות</value>
+    <pages>index</pages>
+</str>
+<str>
     <key>ALIGN</key>
     <value>right</value>
 </str>

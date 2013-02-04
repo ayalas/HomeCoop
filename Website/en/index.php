@@ -97,12 +97,20 @@ catch(Exception $e)
                   include_once 'control/error/ctlError.php';
                 ?></td>
     </tr>
+    <tr>
+      <td colspan="2">
     <?php
      if (PRODUCT_CATALOG_IS_PUBLIC)
      {
-        echo '<tr><td colspan="2"><span><a href="catalog.php">Products Catalog</a></span></td></tr>';
+        echo '<span><a href="catalog.php">Products Catalog</a>&nbsp;</span>';
+     }
+     if (JOIN_PAGE != '')
+     {
+       echo '<span><a href="',JOIN_PAGE,'">Join</a>&nbsp;</span>';
      }
     ?>
+      </td>
+    </tr>
     <tr>
         <td colspan="2"><span class="pagename">Login</span></td>
     </tr>

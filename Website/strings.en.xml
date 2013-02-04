@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <strings>
+  
+  
 <str>
     <key>COOPERATIVE_NAME</key>
     <value>Enter Your Cooperative Name</value>
@@ -34,6 +36,11 @@
     <key>COOP_INFO_05</key>
     <value>Local produce</value>
     <pages>coopbrief</pages>
+</str>
+<str>
+    <key>PAGE_LINK_JOIN</key>
+    <value>Join</value>
+    <pages>index</pages>
 </str>
 <str>
     <key>ALIGN</key>
