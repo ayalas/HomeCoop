@@ -138,10 +138,7 @@ while ($nPos === FALSE)
 
 define('SITE_ROOT', substr($_SERVER["SCRIPT_FILENAME"], 0, $nPos) );
 
-$lenRoot = strlen( SITE_ROOT . '/' ); //this is the string until the language folder in SCRIPT_FILENAME
-
-
-$g_sFilePathFromRoot = substr( $_SERVER["SCRIPT_FILENAME"], $lenRoot );
+$g_sFilePathFromRoot = substr( $_SERVER["SCRIPT_FILENAME"], $nPos+1 );
 
 $nRootPos = 0;
 $nPos = 0;
