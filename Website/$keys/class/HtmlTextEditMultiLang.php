@@ -79,7 +79,7 @@ class HtmlTextEditMultiLang {
       echo 'for="' , $sID , '">' , $this->m_aData[self::PROPERTY_LABEL] , '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label></td>';
       //first get current language
       $oTextEdit = new HtmlTextEdit( $sID, $g_aSupportedLanguages[$g_sLangDir][Consts::IND_LANGUAGE_DIRECTION], 
-              $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $this->m_aData[self::PROPERTY_VALUES][$g_sLangDir] );
+              $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $this->GetLangPropertyVal(self::PROPERTY_VALUES,$g_sLangDir) );
       $oTextEdit->MaxLength = $this->m_aData[self::PROPERTY_MAX_LENGTH];
       $oTextEdit->ReadOnly = $this->m_aData[self::PROPERTY_READ_ONLY];
       $oTextEdit->Required = $this->m_aData[self::PROPERTY_REQUIRED];    
@@ -170,6 +170,14 @@ class HtmlTextEditMultiLang {
       '</span></a></td>';
    
   }
+  
+  protected function GetLangPropertyVal($PropertyID, $sLang)
+    {
+      if ( isset( $this->m_aData[$PropertyID][$sLang] ))
+        return $this->m_aData[$PropertyID][$sLang];
+      
+      return '';
+    }
 }
 
 ?>

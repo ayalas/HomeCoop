@@ -19,13 +19,9 @@ ini_set('display_errors', '1');
 //language id (from db)
 //falling language id (from db. language to look in when a string is not found in the current langauge)
 $g_aSupportedLanguages = array( 
+                    'he' => array('עברית', true, 'rtl',2, 1), 
                     'en' => array('English', true, 'ltr', 1, 0) 
  );
-
-//SITE_ROOT
-//the path where the site resides (default is website's root dir). If there are more than on supported languages - do not include_once here any specific language dir
-//default language is set in the root index.php
-define('SITE_ROOT', getcwd() ); //server path, i.e '/home/vhosts/webroot'
 
 //db access
 define('DB_HOST',  '127.0.01');
@@ -122,12 +118,36 @@ $g_sFilePathFromRoot = '';
 $g_nCurrentLanguageID = 0;
 $g_nFallingLanguageID = 0;
 
+$sNeedle = $_SERVER["PHP_SELF"];
+//look for php self in the script file name
+$nPos = strpos($_SERVER["SCRIPT_FILENAME"], $sNeedle);
+
+$nNext = 0;
+
+while ($nPos === FALSE)
+{
+  $nNext = stripos( $sNeedle, '/', $nNext );
+  if ($nNext !== FALSE)
+    $sNeedle = substr( $sNeedle, $nNext );
+  else
+    break;
+  $nNext++;
+  
+  $nPos = strpos($_SERVER["SCRIPT_FILENAME"], $sNeedle);
+}
+
+define('SITE_ROOT', substr($_SERVER["SCRIPT_FILENAME"], 0, $nPos) );
+
 $lenRoot = strlen( SITE_ROOT . '/' ); //this is the string until the language folder in SCRIPT_FILENAME
-$g_sFilePathFromRoot = substr( $_SERVER['SCRIPT_FILENAME'], $lenRoot );
+
+
+$g_sFilePathFromRoot = substr( $_SERVER["SCRIPT_FILENAME"], $lenRoot );
 
 $nRootPos = 0;
 $nPos = 0;
+
 $endLang = stripos( $g_sFilePathFromRoot, '/'); //go to next '/' (possibly after the language folder)
+
 if ($g_aSupportedLanguages !== NULL)
 {
   $g_sLangDir = substr ($g_sFilePathFromRoot, 0, $endLang); //extract language folder
@@ -170,6 +190,7 @@ if ($g_sLangDir != '')
   $g_nCurrentLanguageID = $g_aSupportedLanguages[$g_sLangDir][Consts::IND_LANGUAGE_ID];
   $g_nFallingLanguageID = $g_aSupportedLanguages[$g_sLangDir][Consts::IND_FALLING_LANGUAGE_ID];
 }
+
 //-------------- extract the current language - end
 
 

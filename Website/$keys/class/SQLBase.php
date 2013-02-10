@@ -497,9 +497,20 @@ abstract class SQLBase
       if ($nKeyID == 0)
         throw new Exception("UpdateString failed. String key was not set for update operation of: " . $sString);
       
-      $sSQL = " UPDATE Tlng_String SET sString = :String " .
-                  " WHERE KeyID = :Key AND LangID = :Lang ;";
-      $this->RunSQLWithParams( $sSQL, array("String" => $sString, "Key" => $nKeyID, "Lang" => $nLangID) );
+      $sSQLWhere = " WHERE KeyID = :Key AND LangID = :Lang ;";
+      
+      $sSQLQuery = "SELECT COUNT(*) as nCount FROM Tlng_String " . $sSQLWhere;
+      $this->RunSQLWithParams( $sSQLQuery, array("Key" => $nKeyID, "Lang" => $nLangID) );
+      $res = $this->fetch();
+      if (!isset($res) || $res["nCount"] == 0)
+      {
+        $this->InsertString ($nKeyID, $nLangID, $sString);
+        return;
+      }
+      
+      $sSQLUpdate = " UPDATE Tlng_String SET sString = :String " .
+                  $sSQLWhere;
+      $this->RunSQLWithParams( $sSQLUpdate, array("String" => $sString, "Key" => $nKeyID, "Lang" => $nLangID) );
     }
     
     protected function UpdateStrings($nDataIndex, $nKeyID)
@@ -733,6 +744,14 @@ abstract class SQLBase
       $this->RunSQL($sSQL);
       
       return $this->fetchAll();
+    }
+    
+    protected function GetLangPropertyVal($PropertyID, $sLang)
+    {
+      if ( isset( $this->m_aData[$PropertyID][$sLang] ))
+        return $this->m_aData[$PropertyID][$sLang];
+      
+      return '';
     }
 
 }

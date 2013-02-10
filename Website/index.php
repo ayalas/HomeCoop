@@ -7,7 +7,7 @@ define("LANG_PARAM", "lang");
 define("SESSION_LANG_ID", "LangID");
 
 //DEFAULT LANGUAGE
-$sLangDir = 'en';
+$sLangDir = 'he';
 
 if (isset($_GET[LANG_PARAM]))
 {    

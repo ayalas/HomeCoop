@@ -55,7 +55,7 @@ class Producer extends SQLBase
         if ($g_sLangDir == '')
           return $this->m_aData[self::PROPERTY_PRODUCER_NAMES][0];
         else
-          return $this->m_aData[self::PROPERTY_PRODUCER_NAMES][$g_sLangDir];
+          return $this->GetLangPropertyVal(self::PROPERTY_PRODUCER_NAMES,$g_sLangDir);
      
       default:
         return parent::__get($name);

@@ -66,6 +66,11 @@ label
 {
   font-size: 12px;
 }
+p.brochure
+{
+  font-family: Loma, Arial, Serif;
+  font-size: 16px;
+}
 select
 {
   font-size: 12px;
@@ -234,7 +239,11 @@ list-style-type: none;
   width: 110px;
   background-color:#FFFFFF;
 }
-
+.headbig
+{
+  font-size: 24px;
+  font-weight: bold;
+}
 .headdata
 {
   font-size: 14px;

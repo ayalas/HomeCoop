@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <supported-languages>
 <language name="English" key="en"  />
+<language name="עברית" key="he"  dir="rtl" falling-language="en" />
 </supported-languages>
 
