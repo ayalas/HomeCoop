@@ -313,21 +313,46 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
-    $sSQL =   " UPDATE T_CoopOrderProduct " .
-              " SET mProducerPrice =  ?, " . 
-              " mCoopPrice = ? ," .
-              " fMaxUserOrder = ? ," .
-              " fMaxCoopOrder = ? ," .
-              " fBurden = ? " .
-              " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
-              " AND ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . ";";
+    //if burden has changed, and product has orders - they need to be updated
+    $bNeedsRecalculate = ( ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0) 
+      && ($this->m_aOriginalData[self::PROPERTY_BURDEN] != $this->m_aData[self::PROPERTY_BURDEN])
+      );
+    
+    try
+    {
+      if ($bNeedsRecalculate)
+        $this->BeginTransaction ();
 
-    $this->RunSQLWithParams( $sSQL, array(  $this->m_aData[self::PROPERTY_PRODUCER_PRICE],
-                                            $this->m_aData[self::PROPERTY_COOP_PRICE],
-                                            $this->m_aData[self::PROPERTY_MAX_USER_ORDER],
-                                            $this->m_aData[self::PROPERTY_MAX_COOP_ORDER],
-                                            $this->m_aData[self::PROPERTY_BURDEN]
-        ) );
+      $sSQL =   " UPDATE T_CoopOrderProduct " .
+                " SET mProducerPrice =  ?, " . 
+                " mCoopPrice = ? ," .
+                " fMaxUserOrder = ? ," .
+                " fMaxCoopOrder = ? ," .
+                " fBurden = ? " .
+                " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+                " AND ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . ";";
+
+      $this->RunSQLWithParams( $sSQL, array(  $this->m_aData[self::PROPERTY_PRODUCER_PRICE],
+                                              $this->m_aData[self::PROPERTY_COOP_PRICE],
+                                              $this->m_aData[self::PROPERTY_MAX_USER_ORDER],
+                                              $this->m_aData[self::PROPERTY_MAX_COOP_ORDER],
+                                              $this->m_aData[self::PROPERTY_BURDEN]
+          ) );
+
+      if ($bNeedsRecalculate)
+      {
+        $oCalculate = new CoopOrderCalculate( $this->m_aData[self::PROPERTY_COOP_ORDER_ID] );
+        $oCalculate->Run();
+        $this->CommitTransaction();
+        unset($oCalculate);
+      }
+    }
+    catch(Exception $e)
+    {
+      if ($bNeedsRecalculate)
+        $this->RollbackTransaction();
+      throw $e;
+    }
 
     //preserve data after postback
     $this->m_aData[self::PROPERTY_PRODUCER_COORDINATING_GROUP_ID] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_COORDINATING_GROUP_ID];    

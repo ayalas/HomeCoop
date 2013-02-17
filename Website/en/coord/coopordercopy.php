@@ -25,8 +25,8 @@ try
     
     //collect data if status is active or draft
     $oRecord->Names = ComplexPostData::GetNames('txtName');
-    $oRecord->Start = ComplexPostData::GetDate('Start');
-    $oRecord->End = ComplexPostData::GetDate('End');
+    $oRecord->Start = ComplexPostData::GetDateTime('Start',array(0,0,0));
+    $oRecord->End = ComplexPostData::GetDateTime('End',array(23,59,0));
     $oRecord->Delivery = ComplexPostData::GetDate('Delivery');
     
     if (isset($_POST['selPricesSource']))
@@ -171,6 +171,7 @@ function Save()
                 <?php                 
                  $dpDelivery = new HtmlDatePicker('Delivery', 'Delivery', $oRecord->Delivery);
                  $dpDelivery->Required = TRUE;
+                 $dpDelivery->TimeSetting = HtmlDatePicker::TIME_NOT_DISPLAYED;
                  $dpDelivery->EchoHtml();
                  unset($dpDelivery);
                  

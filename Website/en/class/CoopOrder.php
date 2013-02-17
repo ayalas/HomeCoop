@@ -728,6 +728,7 @@ class CoopOrder extends SQLBase {
     //save inserted data before loading existing record
     $aNewData = $this->m_aData;
     
+    //has permission to copy
     if (!$this->CanCopy())
     {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
@@ -743,7 +744,7 @@ class CoopOrder extends SQLBase {
     $this->m_bCopyMode = TRUE;
     
     if (!$this->LoadRecord( $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID] ) )
-      return false;
+      return FALSE;
     
     //override data
     $this->m_aData[self::PROPERTY_ID] = 0;
@@ -753,7 +754,11 @@ class CoopOrder extends SQLBase {
     $this->m_aData[self::PROPERTY_DELIVERY] = $aNewData[self::PROPERTY_DELIVERY];
     $this->m_aData[self::PROPERTY_NAMES] = $aNewData[self::PROPERTY_NAMES];
     
-    
+    if (!$this->Validate())
+    {
+      $this->m_nLastOperationStatus = parent::OPERATION_STATUS_VALIDATION_FAILED;
+      return FALSE;
+    }
     
     //now $this->m_aData[self::PROPERTY_ID] contains the new order id
     
