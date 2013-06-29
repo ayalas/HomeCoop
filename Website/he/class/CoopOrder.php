@@ -828,6 +828,26 @@ class CoopOrder extends SQLBase {
     
   }
   
+  public function JumpDates()
+  {
+    $di = NULL;
+    switch(COPY_ORDER_DEFAULT_DATE_JUMP)
+    {
+      case Consts::COPY_ORDER_JUMP_WEEK:
+        $di = new DateInterval('P1W');
+        $this->m_aData[self::PROPERTY_END]->add($di);
+        $this->m_aData[self::PROPERTY_DELIVERY]->add($di);
+        break;
+        
+      case Consts::COPY_ORDER_JUMP_MONTH:
+        $di = new DateInterval('P1M');
+        $this->AddDatePreserveDW(self::PROPERTY_END, $di);
+        $this->AddDatePreserveDW(self::PROPERTY_DELIVERY, $di);        
+        break;
+      default:
+        return;
+    }
+  }
   //calculate coop fee for existing orders
   //called when actual member orders are changed/placed
   protected function CalculateCoopFee()

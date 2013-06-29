@@ -20,6 +20,10 @@ class Consts
     const IND_LANGUAGE_ID = 3;
     const IND_FALLING_LANGUAGE_ID = 4;
     
+    const COPY_ORDER_JUMP_NONE = 0;
+    const COPY_ORDER_JUMP_WEEK = 1;
+    const COPY_ORDER_JUMP_MONTH = 2;
+    
     //sort order (used in coord/orders)
     const SORT_ORDER_ASCENDING = 1;
     const SORT_ORDER_DESCENDING = 2;

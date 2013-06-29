@@ -753,6 +753,22 @@ abstract class SQLBase
       
       return '';
     }
-
+    
+    protected function AddDatePreserveDW($PropertyID, $di)
+    {
+      $orig = clone $this->m_aData[$PropertyID];
+      //jump by given date interval
+      $this->m_aData[$PropertyID]->add($di);
+      
+      //get day of the week for both original and new dates
+      $dwOrig = $orig->format('w')+0;
+      $dwNew = $this->m_aData[$PropertyID]->format('w')+0;
+      
+      //stay on the same jumped-to week and same day of the week by checking which date of the week is later
+      if ($dwNew > $dwOrig)
+        $this->m_aData[$PropertyID]->sub(new DateInterval('P' . ($dwNew - $dwOrig) . 'D'));
+      else if ($dwOrig > $dwNew)
+        $this->m_aData[$PropertyID]->add(new DateInterval('P' . ($dwOrig - $dwNew) . 'D'));
+    }
 }
 ?>

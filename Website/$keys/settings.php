@@ -218,6 +218,9 @@ define ('ROUND_SETTING_COOP_TOTAL', Rounding::ROUND_TYPE_ROUND_PRECISION_1);
 define ('ROUND_SETTING_PRODUCT_PRODUCER_TOTAL', Rounding::ROUND_TYPE_ROUND_PRECISION_2);
 define ('ROUND_SETTING_PRODUCT_COOP_TOTAL', Rounding::ROUND_TYPE_ROUND_PRECISION_1);
 
+//copy order default date jump
+define ('COPY_ORDER_DEFAULT_DATE_JUMP', Consts::COPY_ORDER_JUMP_MONTH);
+
 //handles a persistant connection to the database
 $g_oDBAccess = new DBAccess;
 

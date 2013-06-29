@@ -50,12 +50,19 @@ try
   else if (isset($_GET['id']))
   {
     $oRecord->SourceCoopOrderID = intval($_GET['id']);
+
     //check permissions for source order
     if (!$oRecord->LoadSourceOrderInitalData())
     {
       RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
       exit;
     }
+    
+    //set default values
+    $oRecord->Start = new DateTime('now',$g_oTimeZone );
+    
+    $oRecord->JumpDates();
+          
   }
 
   switch($oRecord->LastOperationStatus)
