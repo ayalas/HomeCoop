@@ -162,12 +162,14 @@ function SelectAll(bCheck)
                 <tr>
                   <td class="columntitletiny"></td>
                   <td class="columntitlelong">שם</td>
+                  <td class="columntitle">הצטרפות</td>
                   <td class="columntitle">שם כניסה</td>
                   <td class="columntitletiny">יתרה</td>
                   <td class="columntitle">יתרה בקופה</td>
                   <td class="columntitlelong">שיטת תשלום</td>
                   <td class="columntitlelong">כתובת דוא&quot;ל</td>
-                  <td class="columntitlenowidth">הצטרפות</td>
+                  <td class="columntitletiny"></td>
+                  
                 </tr>
 <?php
                 if (!$recTable)
@@ -202,8 +204,12 @@ function SelectAll(bCheck)
                       //name
                       echo "<td><a href='member.php?id=",$recTable["MemberID"],"' >"  , htmlspecialchars( $recTable["sName"] ) ,  "</a></td>";
                       
+                      //joined on
+                      $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
+                      echo '<td>' , $oDate->format('j.n.Y') ,  '</td>';
+                      
                       //login name
-                      echo "<td>", htmlspecialchars( $recTable["sLoginName"] ) ,  "</td>";
+                      echo '<td>', htmlspecialchars( $recTable["sLoginName"] ) ,  '</td>';
                       
                       //balance
                       echo '<td>' , $recTable["mBalance"] , '</td>';
@@ -230,9 +236,6 @@ function SelectAll(bCheck)
                       
                       echo '</td>';
 
-                      //joined on
-                      $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
-                      echo "<td>" , $oDate->format('j.n.Y') ,  "</td>";
                       
                       
                       //comments
@@ -244,6 +247,9 @@ function SelectAll(bCheck)
                              htmlspecialchars($recTable["sComments"]),
                              '</span></a>'; 
                       }
+                      
+                      echo '</td>';
+                      
                       
                       echo '</tr>';
    

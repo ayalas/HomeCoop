@@ -162,12 +162,14 @@ function SelectAll(bCheck)
                 <tr>
                   <td class="columntitletiny"></td>
                   <td class="columntitlelong">Name</td>
+                  <td class="columntitle">Joined On</td>
                   <td class="columntitle">User name</td>
                   <td class="columntitletiny">Balance</td>
                   <td class="columntitle">Balance Held</td>
                   <td class="columntitlelong">Payment Method</td>
                   <td class="columntitlelong">Email address</td>
-                  <td class="columntitlenowidth">Joined On</td>
+                  <td class="columntitletiny"></td>
+                  
                 </tr>
 <?php
                 if (!$recTable)
@@ -202,8 +204,12 @@ function SelectAll(bCheck)
                       //name
                       echo "<td><a href='member.php?id=",$recTable["MemberID"],"' >"  , htmlspecialchars( $recTable["sName"] ) ,  "</a></td>";
                       
+                      //joined on
+                      $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
+                      echo '<td>' , $oDate->format('n.j.Y') ,  '</td>';
+                      
                       //login name
-                      echo "<td>", htmlspecialchars( $recTable["sLoginName"] ) ,  "</td>";
+                      echo '<td>', htmlspecialchars( $recTable["sLoginName"] ) ,  '</td>';
                       
                       //balance
                       echo '<td>' , $recTable["mBalance"] , '</td>';
@@ -230,9 +236,6 @@ function SelectAll(bCheck)
                       
                       echo '</td>';
 
-                      //joined on
-                      $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
-                      echo "<td>" , $oDate->format('n.j.Y') ,  "</td>";
                       
                       
                       //comments
@@ -244,6 +247,9 @@ function SelectAll(bCheck)
                              htmlspecialchars($recTable["sComments"]),
                              '</span></a>'; 
                       }
+                      
+                      echo '</td>';
+                      
                       
                       echo '</tr>';
    

@@ -162,12 +162,14 @@ function SelectAll(bCheck)
                 <tr>
                   <td class="columntitletiny"></td>
                   <td class="columntitlelong"><!$FIELD_MEMBER_NAME$!></td>
+                  <td class="columntitle"><!$FIELD_JOINED_ON$!></td>
                   <td class="columntitle"><!$FIELD_LOGIN_NAME$!></td>
                   <td class="columntitletiny"><!$FIELD_BALANCE$!></td>
                   <td class="columntitle"><!$FIELD_BALANCE_HELD$!></td>
                   <td class="columntitlelong"><!$FIELD_PAYMENT_METHOD$!></td>
                   <td class="columntitlelong"><!$FIELD_EMAIL$!></td>
-                  <td class="columntitlenowidth"><!$FIELD_JOINED_ON$!></td>
+                  <td class="columntitletiny"></td>
+                  
                 </tr>
 <?php
                 if (!$recTable)
@@ -202,8 +204,12 @@ function SelectAll(bCheck)
                       //name
                       echo "<td><a href='member.php?id=",$recTable["MemberID"],"' >"  , htmlspecialchars( $recTable["sName"] ) ,  "</a></td>";
                       
+                      //joined on
+                      $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
+                      echo '<td>' , $oDate->format('<!$DATE_PICKER_DATE_FORMAT$!>') ,  '</td>';
+                      
                       //login name
-                      echo "<td>", htmlspecialchars( $recTable["sLoginName"] ) ,  "</td>";
+                      echo '<td>', htmlspecialchars( $recTable["sLoginName"] ) ,  '</td>';
                       
                       //balance
                       echo '<td>' , $recTable["mBalance"] , '</td>';
@@ -230,9 +236,6 @@ function SelectAll(bCheck)
                       
                       echo '</td>';
 
-                      //joined on
-                      $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
-                      echo "<td>" , $oDate->format('<!$DATE_PICKER_DATE_FORMAT$!>') ,  "</td>";
                       
                       
                       //comments
@@ -244,6 +247,9 @@ function SelectAll(bCheck)
                              htmlspecialchars($recTable["sComments"]),
                              '</span></a>'; 
                       }
+                      
+                      echo '</td>';
+                      
                       
                       echo '</tr>';
    
