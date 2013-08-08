@@ -46,6 +46,14 @@ try
     $oRecord->Balance = NULL;
     if ( isset( $_POST['txtBalance'] ) && !empty($_POST['txtBalance']))
       $oRecord->Balance = 0 + trim($_POST['txtBalance']);
+    
+    $oRecord->BalanceHeld = NULL;
+    if ( isset( $_POST['txtBalanceHeld'] ) && !empty($_POST['txtBalanceHeld']))
+      $oRecord->BalanceHeld = 0 + trim($_POST['txtBalanceHeld']);
+    
+    $oRecord->BalanceInvested = NULL;
+    if ( isset( $_POST['txtBalanceInvested'] ) && !empty($_POST['txtBalanceInvested']))
+      $oRecord->BalanceInvested = 0 + trim($_POST['txtBalanceInvested']);
 
     $oRecord->PercentOverBalance = NULL;
     if ( isset( $_POST['txtPercentOverBalance'] ) && !empty($_POST['txtPercentOverBalance']))
@@ -65,6 +73,10 @@ try
     
     if ( isset( $_POST['ctlIsDisabled'] ))
       $oRecord->IsDisabled = (intval($_POST['ctlIsDisabled']) == 1);
+    
+    $oRecord->Comments = NULL;
+    if ( isset( $_POST['txtComments'] ) && !empty($_POST['txtComments']))
+      $oRecord->Comments = trim($_POST['txtComments']);
     
     if (!empty( $_POST['hidPostAction'] ))
     {
@@ -315,7 +327,6 @@ function VerifyPassword()
                 <td><span id="spVerifyResult" name="spVerifyResult"></span></td>
                 </tr>
                 
-                
                 <tr>
                   <?php                     
                     $txtBalance = new HtmlTextEditNumeric('<!$FIELD_BALANCE$!>', 'txtBalance', $oRecord->Balance);
@@ -326,7 +337,25 @@ function VerifyPassword()
                   <td>&nbsp;</td>
                 </tr>
                 
+                <tr>
+                  <?php                     
+                    $txtBalanceHeld = new HtmlTextEditNumeric('<!$FIELD_BALANCE_HELD$!>', 'txtBalanceHeld', $oRecord->BalanceHeld);
+                    $txtBalanceHeld->ReadOnly = !$oRecord->CanModify;
+                    $txtBalanceHeld->EchoHtml();
+                    unset($txtBalanceHeld);
+                  ?>
+                  <td>&nbsp;</td>
+                </tr>
                 
+                <tr>
+                  <?php                     
+                    $txtBalanceInvested = new HtmlTextEditNumeric('<!$FIELD_BALANCE_INVESTED$!>', 'txtBalanceInvested', $oRecord->BalanceInvested);
+                    $txtBalanceInvested->ReadOnly = !$oRecord->CanModify;
+                    $txtBalanceInvested->EchoHtml();
+                    unset($txtBalanceInvested);
+                  ?>
+                  <td>&nbsp;</td>
+                </tr>
                 
                   <?php          
                   if ($oRecord->CanModify)
@@ -450,6 +479,22 @@ function VerifyPassword()
                   echo '<td>&nbsp;</td></tr>';
                 }
                 ?>
+                
+                <tr>
+                <?php
+                                                
+                $txtComments = new HtmlTextEditOneLang('<!$FIELD_MEMBER_COMMENTS$!>', 'txtComments', $oRecord->Comments);
+                $txtComments->ReadOnly = !$oRecord->CanModify;
+                $txtComments->ControlType = HtmlTextEdit::TEXTAREA;
+                $txtComments->Rows = 5;
+                $txtComments->MaxLength = 300;
+                $txtComments->EchoHtml();
+                unset($txtComments);
+                
+                ?>
+                <td>&nbsp;</td>
+                </tr>
+                
                 
                 </table>
                 </td></tr></table>

@@ -24,7 +24,7 @@ class CachierTotals extends SQLBase {
       return FALSE;
     }
     
-    $sSQL = " SELECT SUM(mBalance) as SumBalance FROM T_Member;";
+    $sSQL = " SELECT SUM(mBalanceHeld) as SumBalance FROM T_Member;";
     $this->RunSQL($sSQL);
         
     $recSum = $this->fetch();

@@ -1437,7 +1437,17 @@
 <str>
     <key>FIELD_BALANCE</key>
     <value>Balance</value>
-    <pages>coord/orders</pages>
+    <pages>coord/orders, member</pages>
+</str>
+<str>
+    <key>FIELD_BALANCE_HELD</key>
+    <value>Balance Held</value>
+    <pages>coord/orders, member</pages>
+</str>
+<str>
+    <key>FIELD_BALANCE_INVESTED</key>
+    <value>Balance Invested</value>
+    <pages>coord/orders, member</pages>
 </str>
 <str>
     <key>PAGE_TITLE_SUFFIX_PARTIAL_ORDERS</key>

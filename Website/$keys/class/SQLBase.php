@@ -763,5 +763,12 @@ abstract class SQLBase
       
       $this->m_aData[$PropertyID]->sub(new DateInterval('P' . $days . 'D'));
     }
+    
+    protected function IfEmpty($value, $replace) {
+        if (empty($value)) {
+            return $replace;
+        }
+        return $value;
+    }
 }
 ?>

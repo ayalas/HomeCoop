@@ -38,7 +38,7 @@ class Members extends SQLBase {
       $sSearchPhrase = $this->m_aData[self::PROPERTY_SEARCH_PHRASE];
 
       $sSQL =   " SELECT M.MemberID, M.sName, M.sLoginName, M.sEMail, M.PaymentMethodKeyID, M.dJoined, M.mBalance, M.fPercentOverBalance, M.sEMail2, " . 
-                       " M.sEMail3, M.sEMail4, M.bDisabled, " .
+                       " M.sEMail3, M.sEMail4, M.bDisabled, M.mBalanceHeld, M.mBalanceInvested, M.sComments, " .
                        $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PAYMENT_METHODS, 'sPaymentMethod') .
                 " FROM T_Member M INNER JOIN T_PaymentMethod PM ON M.PaymentMethodKeyID = PM.PaymentMethodKeyID " . 
                 $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PAYMENT_METHODS);
@@ -171,6 +171,12 @@ class Members extends SQLBase {
     $ch = $this->m_oXmlDoc->createElement('colheader', 'יתרה');
     $colh->appendChild($ch);
     
+    $ch = $this->m_oXmlDoc->createElement('colheader', 'יתרה בקופה');
+    $colh->appendChild($ch);
+    
+    $ch = $this->m_oXmlDoc->createElement('colheader', 'יתרה בהשקעה');
+    $colh->appendChild($ch);
+    
     $ch = $this->m_oXmlDoc->createElement('colheader', 'שיטת תשלום');
     $colh->appendChild($ch);
     
@@ -202,13 +208,19 @@ class Members extends SQLBase {
       $rd = $this->m_oXmlDoc->createElement('lname', $recMember["sLoginName"]);
       $row->appendChild($rd);
       
-      $rd = $this->m_oXmlDoc->createElement('mbal', $recMember["mBalance"]);
+      $rd = $this->m_oXmlDoc->createElement('mbal', $this->IfEmpty($recMember["mBalance"],0));
+      $row->appendChild($rd);
+      
+      $rd = $this->m_oXmlDoc->createElement('mbalh', $this->IfEmpty($recMember["mBalanceHeld"],0));
+      $row->appendChild($rd);
+      
+      $rd = $this->m_oXmlDoc->createElement('mbali', $this->IfEmpty($recMember["mBalanceInvested"],0));
       $row->appendChild($rd);
       
       $rd = $this->m_oXmlDoc->createElement('paym', $recMember["sPaymentMethod"]);
       $row->appendChild($rd);
       
-      $rd = $this->m_oXmlDoc->createElement('pob', $recMember["fPercentOverBalance"]);
+      $rd = $this->m_oXmlDoc->createElement('pob', $this->IfEmpty($recMember["fPercentOverBalance"],0));
       $row->appendChild($rd);
       
       $sEMails = $recMember["sEMail"];

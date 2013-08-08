@@ -164,6 +164,7 @@ function SelectAll(bCheck)
                   <td class="columntitlelong">שם</td>
                   <td class="columntitle">שם כניסה</td>
                   <td class="columntitletiny">יתרה</td>
+                  <td class="columntitle">יתרה בקופה</td>
                   <td class="columntitlelong">שיטת תשלום</td>
                   <td class="columntitlelong">כתובת דוא&quot;ל</td>
                   <td class="columntitlenowidth">הצטרפות</td>
@@ -207,6 +208,8 @@ function SelectAll(bCheck)
                       //balance
                       echo '<td>' , $recTable["mBalance"] , '</td>';
                       
+                      echo '<td>' , $recTable["mBalanceHeld"] , '</td>';
+                      
                       //payment method
                       echo '<td>';
                       if ($recTable["PaymentMethodKeyID"] == Consts::PAYMENT_METHOD_PLUS_EXTRA)
@@ -230,6 +233,17 @@ function SelectAll(bCheck)
                       //joined on
                       $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
                       echo "<td>" , $oDate->format('j.n.Y') ,  "</td>";
+                      
+                      
+                      //comments
+                      echo '<td>';
+                      
+                      if ($recTable["sComments"] != NULL)
+                      {
+                        echo '<a href="#" class="tooltiphelp" >...<span>',
+                             htmlspecialchars($recTable["sComments"]),
+                             '</span></a>'; 
+                      }
                       
                       echo '</tr>';
    

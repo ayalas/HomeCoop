@@ -22,6 +22,8 @@ class Member extends SQLBase  {
   const PROPERTY_PAYMENT_METHOD_NAME = "PaymentMethodName";
   const PROPERTY_JOINED_ON = "JoinedOn";
   const PROPERTY_BALANCE = "Balance";
+  const PROPERTY_BALANCE_HELD = "BalanceHeld";
+  const PROPERTY_BALANCE_INVESTED = "BalanceInvested";
   const PROPERTY_PERCENT_OVER_BALANCE ="PercentOverBalance";
   const PROPERTY_IS_COORDINATOR = "IsCoordinator"; 
   const PROPERTY_CAN_MODIFY = "CanModify";
@@ -31,6 +33,7 @@ class Member extends SQLBase  {
   const PROPERTY_IS_DISABLED = "IsDisabled";
   const PROPERTY_MAX_ORDER = "MaxOrder";
   const PROPERTY_CACHIER_PICKUP_LOCATION_ID = "PickupLocationID";
+  const PROPERTY_COMMENTS = "Comments";
   
   public function __construct()
   {
@@ -44,7 +47,9 @@ class Member extends SQLBase  {
                             self::PROPERTY_PAYMENT_METHOD_ID => DEFAULT_PAYMENT_METHOD_FOR_NEW_MEMBERS,
                             self::PROPERTY_PAYMENT_METHOD_NAME => NULL,
                             self::PROPERTY_JOINED_ON => NULL,
-                            self::PROPERTY_BALANCE => NULL,
+                            self::PROPERTY_BALANCE => 0,
+                            self::PROPERTY_BALANCE_HELD => 0,
+                            self::PROPERTY_BALANCE_INVESTED => NULL,
                             self::PROPERTY_PERCENT_OVER_BALANCE => DEFAULT_PERCENT_OVER_BALANCE_FOR_NEW_MEMBERS,
                             self::PROPERTY_IS_COORDINATOR => FALSE,
                             self::PROPERTY_NEW_PASSWORD => NULL,
@@ -56,7 +61,8 @@ class Member extends SQLBase  {
                             self::PROPERTY_IS_REGULAR_MEMBER => FALSE,
                             self::PROPERTY_IS_DISABLED => FALSE,
                             self::PROPERTY_MAX_ORDER => FALSE,
-                            self::PROPERTY_CACHIER_PICKUP_LOCATION_ID => 0
+                            self::PROPERTY_CACHIER_PICKUP_LOCATION_ID => 0,
+                            self::PROPERTY_COMMENTS => NULL
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData; 
@@ -134,10 +140,11 @@ class Member extends SQLBase  {
         return FALSE;
     }
     
-    $sSQL =   " SELECT M.MemberID, M.sName, M.sLoginName, M.sEMail, M.PaymentMethodKeyID, M.dJoined, M.mBalance, M.fPercentOverBalance, M.sEMail2, " . 
-             " M.bDisabled, M.sEMail3, M.sEMail4, (SELECT CG.CoordinatingGroupID FROM T_CoordinatingGroupMember CGM INNER JOIN " .
-              " T_CoordinatingGroup CG ON CGM.CoordinatingGroupID = CG.CoordinatingGroupID " . 
-            " WHERE CGM.MemberID = M.MemberID AND CG.sCoordinatingGroup IS NULL LIMIT 1) as CoordinatingGroupID, " .
+    $sSQL =   " SELECT M.MemberID, M.sName, M.sLoginName, M.sEMail, sComments,
+             M.PaymentMethodKeyID, M.dJoined, IfNull(M.mBalance,0) mBalance, IfNull(M.mBalanceHeld,0) mBalanceHeld, M.mBalanceInvested, M.fPercentOverBalance, M.sEMail2, 
+             M.bDisabled, M.sEMail3, M.sEMail4, (SELECT CG.CoordinatingGroupID FROM T_CoordinatingGroupMember CGM INNER JOIN
+             T_CoordinatingGroup CG ON CGM.CoordinatingGroupID = CG.CoordinatingGroupID
+            WHERE CGM.MemberID = M.MemberID AND CG.sCoordinatingGroup IS NULL LIMIT 1) as CoordinatingGroupID, " .
             $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PAYMENT_METHODS, 'sPaymentMethod') .
             " FROM T_Member M INNER JOIN T_PaymentMethod PM ON M.PaymentMethodKeyID = PM.PaymentMethodKeyID " . 
              $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PAYMENT_METHODS) .
@@ -168,10 +175,13 @@ class Member extends SQLBase  {
     $this->m_aData[self::PROPERTY_EMAIL3] = $rec["sEMail3"];
     $this->m_aData[self::PROPERTY_EMAIL4] = $rec["sEMail4"];
     $this->m_aData[self::PROPERTY_IS_DISABLED] = $rec["bDisabled"];
+    $this->m_aData[self::PROPERTY_COMMENTS] = $rec["sComments"];
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] = $rec["PaymentMethodKeyID"];
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_NAME] = $rec["sPaymentMethod"];
     $this->m_aData[self::PROPERTY_JOINED_ON] = new DateTime($rec["dJoined"], $g_oTimeZone);
     $this->m_aData[self::PROPERTY_BALANCE] = $rec["mBalance"];
+    $this->m_aData[self::PROPERTY_BALANCE_HELD] = $rec["mBalanceHeld"];
+    $this->m_aData[self::PROPERTY_BALANCE_INVESTED] = $rec["mBalanceInvested"];
     $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $rec["fPercentOverBalance"];
     
     $this->m_aData[self::PROPERTY_MAX_ORDER] = self::CalculateMaxOrder(
@@ -210,13 +220,17 @@ class Member extends SQLBase  {
       $this->m_bUseClassConnection = TRUE;
       
       $this->BeginTransaction();
-
+      
       //insert the record
-      $sSQL =  " INSERT INTO T_Member( sName, sLoginName, sPassword, PaymentMethodKeyID, dJoined, sEMail, sEMail2, sEMail3, sEMail4 " .
+      $sSQL =  " INSERT INTO T_Member( sName, sLoginName, sPassword, PaymentMethodKeyID, dJoined, sEMail, sEMail2, sEMail3, sEMail4, sComments " .
               $this->ConcatColIfNotNull(self::PROPERTY_BALANCE, "mBalance") .
+              $this->ConcatColIfNotNull(self::PROPERTY_BALANCE_HELD, "mBalanceHeld") .
+              $this->ConcatColIfNotNull(self::PROPERTY_BALANCE_INVESTED, "mBalanceInvested") .
               $this->ConcatColIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE, "fPercentOverBalance").  " ) VALUES( :mname, :lname , md5(:pwd) ," .
-          $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . ", :joined, :email1, :email2, :email3, :email4 " .
+          $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . ", :joined, :email1, :email2, :email3, :email4, :comments " .
              $this->ConcatValIfNotNull(self::PROPERTY_BALANCE) .
+             $this->ConcatValIfNotNull(self::PROPERTY_BALANCE_HELD) .
+             $this->ConcatValIfNotNull(self::PROPERTY_BALANCE_INVESTED) .
              $this->ConcatValIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE) . " ); " ;
 
       $this->RunSQLWithParams($sSQL, array( "mname" => $this->m_aData[self::PROPERTY_MEMBER_NAME],
@@ -226,7 +240,8 @@ class Member extends SQLBase  {
                                             "email1" => $this->m_aData[self::PROPERTY_EMAIL],
                                             "email2" => $this->m_aData[self::PROPERTY_EMAIL2],
                                             "email3" => $this->m_aData[self::PROPERTY_EMAIL3],
-                                            "email4" => $this->m_aData[self::PROPERTY_EMAIL4]
+                                            "email4" => $this->m_aData[self::PROPERTY_EMAIL4],
+                                            'comments' => $this->m_aData[self::PROPERTY_COMMENTS],
           ));
 
       $this->m_aData[self::PROPERTY_NEW_PASSWORD] = NULL; //don't send passwords back to client
@@ -249,10 +264,10 @@ class Member extends SQLBase  {
       $this->RunSQL($sSQL); 
       
       //check if need to update cachier
-      if ($this->m_aData[self::PROPERTY_BALANCE] != 0 &&
+      if ($this->m_aData[self::PROPERTY_BALANCE_HELD] != 0 &&
           $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
       {
-        $sSQL = " UPDATE T_PickupLocation SET mCachier = mCachier + " . $this->m_aData[self::PROPERTY_BALANCE] .
+        $sSQL = " UPDATE T_PickupLocation SET mCachier = IFNULL(mCachier,0) + " . $this->m_aData[self::PROPERTY_BALANCE_HELD] .
                 " WHERE PickupLocationKeyID = ". $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
         $this->RunSQL($sSQL); 
       }
@@ -335,11 +350,16 @@ class Member extends SQLBase  {
       if ($this->m_aData[self::PROPERTY_IS_COORDINATOR])
       {
          $sSQL .= " , PaymentMethodKeyID = " . $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . 
-                  ", mBalance = :Balance, fPercentOverBalance = :PercentOverBalance, bDisabled = :Disabled ";
+                  ", mBalance = :BalanceOrder, mBalanceHeld = :BalanceHeld, mBalanceInvested = :BalanceInvested, 
+                   fPercentOverBalance = :PercentOverBalance, bDisabled = :Disabled, sComments = :Comments ";
 
-         $arrParams["Balance"] = $this->m_aData[self::PROPERTY_BALANCE];
+         $arrParams["BalanceOrder"] = $this->m_aData[self::PROPERTY_BALANCE];
+         $arrParams["BalanceHeld"] = $this->m_aData[self::PROPERTY_BALANCE_HELD];
+         $arrParams["BalanceInvested"] = $this->m_aData[self::PROPERTY_BALANCE_INVESTED];
+         
          $arrParams["PercentOverBalance"] = $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE];
          $arrParams["Disabled"] = $this->m_aData[self::PROPERTY_IS_DISABLED];
+         $arrParams["Comments"] = $this->m_aData[self::PROPERTY_COMMENTS];
       }
 
       if ($this->m_aData[self::PROPERTY_NEW_PASSWORD] != NULL)
@@ -353,11 +373,11 @@ class Member extends SQLBase  {
       $this->RunSQLWithParams( $sSQL, $arrParams );
       
       //check if need to update cachier
-      if ($this->m_aData[self::PROPERTY_BALANCE] != $this->m_aOriginalData[self::PROPERTY_BALANCE] &&
+      if ($this->m_aData[self::PROPERTY_BALANCE_HELD] != $this->m_aOriginalData[self::PROPERTY_BALANCE_HELD] &&
           $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
       {
-        $sSQL = " UPDATE T_PickupLocation SET mCachier = mCachier + (" . 
-                ($this->m_aData[self::PROPERTY_BALANCE] - $this->m_aOriginalData[self::PROPERTY_BALANCE]) .
+        $sSQL = " UPDATE T_PickupLocation SET mCachier = IFNULL(mCachier,0) + (" . 
+                ($this->m_aData[self::PROPERTY_BALANCE_HELD] - $this->m_aOriginalData[self::PROPERTY_BALANCE_HELD]) .
                 ") WHERE PickupLocationKeyID = ". $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
         $this->RunSQL($sSQL); 
       }
@@ -581,6 +601,8 @@ class Member extends SQLBase  {
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] = $this->m_aOriginalData[self::PROPERTY_PAYMENT_METHOD_ID];
     $this->m_aData[self::PROPERTY_PAYMENT_METHOD_NAME] = $this->m_aOriginalData[self::PROPERTY_PAYMENT_METHOD_NAME];
     $this->m_aData[self::PROPERTY_BALANCE] = $this->m_aOriginalData[self::PROPERTY_BALANCE];
+    $this->m_aData[self::PROPERTY_BALANCE_INVESTED] = $this->m_aOriginalData[self::PROPERTY_BALANCE_INVESTED];
+    $this->m_aData[self::PROPERTY_BALANCE_HELD] = $this->m_aOriginalData[self::PROPERTY_BALANCE_HELD];
     $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $this->m_aOriginalData[self::PROPERTY_PERCENT_OVER_BALANCE];
   }
   

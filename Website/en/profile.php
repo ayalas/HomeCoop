@@ -209,6 +209,28 @@ function VerifyPassword()
                   <td>&nbsp;</td>
                 </tr>
                 
+                <?php
+                    if ($oRecord->BalanceHeld != $oRecord->Balance) {
+                        echo '<tr>';
+                        $txtBalanceHeld = new HtmlTextLabel('Balance Held', 'txtBalanceHeld', $oRecord->BalanceHeld);
+                        $txtBalanceHeld->EchoHtml();
+                        unset($txtBalanceHeld);
+                        echo '<td>&nbsp;</td>',
+                         '</tr>';
+                    }
+                ?>
+                
+                <?php
+                    if ($oRecord->BalanceInvested != NULL && $oRecord->BalanceInvested != 0) {
+                        echo '<tr>';
+                        $txtBalanceInvested = new HtmlTextLabel('Balance Invested', 'txtBalanceInvested', $oRecord->BalanceInvested);
+                        $txtBalanceInvested->EchoHtml();
+                        unset($txtBalanceInvested);
+                        echo '<td>&nbsp;</td>',
+                         '</tr>';
+                    }
+                ?>
+                
                 <tr>
                   <?php                     
                     $txtPaymentMethod = new HtmlTextLabel('Payment Method', 'txtPaymentMethod', $oRecord->PaymentMethodName);

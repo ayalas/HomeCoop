@@ -277,7 +277,7 @@ function Sort(nField)
                         $rec = $oOrderItems->GetComments($recTable["OrderID"]);
                         while($rec)
                         {
-                          echo $rec["sProduct"] , ':&nbsp;' , $rec["sMemberComments"] , '<br/>';
+                          echo $rec["sProduct"] , ':&nbsp;' , htmlspecialchars($rec["sMemberComments"]) , '<br/>';
                           $rec = $oOrderItems->fetch();
                         }
                         echo '</span></a>'; 

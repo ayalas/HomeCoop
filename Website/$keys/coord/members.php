@@ -164,6 +164,7 @@ function SelectAll(bCheck)
                   <td class="columntitlelong"><!$FIELD_MEMBER_NAME$!></td>
                   <td class="columntitle"><!$FIELD_LOGIN_NAME$!></td>
                   <td class="columntitletiny"><!$FIELD_BALANCE$!></td>
+                  <td class="columntitle"><!$FIELD_BALANCE_HELD$!></td>
                   <td class="columntitlelong"><!$FIELD_PAYMENT_METHOD$!></td>
                   <td class="columntitlelong"><!$FIELD_EMAIL$!></td>
                   <td class="columntitlenowidth"><!$FIELD_JOINED_ON$!></td>
@@ -207,6 +208,8 @@ function SelectAll(bCheck)
                       //balance
                       echo '<td>' , $recTable["mBalance"] , '</td>';
                       
+                      echo '<td>' , $recTable["mBalanceHeld"] , '</td>';
+                      
                       //payment method
                       echo '<td>';
                       if ($recTable["PaymentMethodKeyID"] == Consts::PAYMENT_METHOD_PLUS_EXTRA)
@@ -230,6 +233,17 @@ function SelectAll(bCheck)
                       //joined on
                       $oDate = new DateTime($recTable["dJoined"], $g_oTimeZone);
                       echo "<td>" , $oDate->format('<!$DATE_PICKER_DATE_FORMAT$!>') ,  "</td>";
+                      
+                      
+                      //comments
+                      echo '<td>';
+                      
+                      if ($recTable["sComments"] != NULL)
+                      {
+                        echo '<a href="#" class="tooltiphelp" >...<span>',
+                             htmlspecialchars($recTable["sComments"]),
+                             '</span></a>'; 
+                      }
                       
                       echo '</tr>';
    

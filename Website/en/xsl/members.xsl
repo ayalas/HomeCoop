@@ -361,6 +361,16 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
      <text:p><xsl:value-of select="mbal" /></text:p>
     </table:table-cell>
     
+    <table:table-cell table:style-name="strdata" office:value-type="float" >
+        <xsl:attribute name="office:value"><xsl:value-of select="mbalh"/></xsl:attribute>
+     <text:p><xsl:value-of select="mbalh" /></text:p>
+    </table:table-cell>
+    
+    <table:table-cell table:style-name="strdata" office:value-type="float" >
+        <xsl:attribute name="office:value"><xsl:value-of select="mbali"/></xsl:attribute>
+     <text:p><xsl:value-of select="mbali" /></text:p>
+    </table:table-cell>
+    
     <table:table-cell table:style-name="strdata" office:value-type="string" >
      <text:p><xsl:value-of select="paym" /></text:p>
     </table:table-cell>

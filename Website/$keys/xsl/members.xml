@@ -9,13 +9,17 @@
         <colheader>Emails</colheader>
         <colheader>Balance</colheader>
         <colheader>% Over Balance</colheader>
+        <colheader>Balance Held</colheader>
+        <colheader>Balance Invested</colheader>
     </colh>
     <row>
-      <rowcell>Hard Tofu</rowcell>
-      <rowcell>1 Kg</rowcell>
-      <rowcell>13.5</rowcell>
-      <rowcell>1 Kg</rowcell>
-      <rowcell>1</rowcell>
+      <rowcell>Member One</rowcell>
+      <rowcell>user</rowcell>
+      <rowcell>user@example.com</rowcell>
+      <rowcell>100</rowcell>
+      <rowcell>20</rowcell>
+      <rowcell>100</rowcell>
+      <rowcell>0</rowcell>
     </row>
 </sheet>
 </document>
