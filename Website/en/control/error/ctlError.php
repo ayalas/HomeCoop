@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*the following files should all be included in a php file to incorporate the Error control:
 control/error/hdError.php - in the upper most include_once section

@@ -63,7 +63,7 @@ UserSessionBase::Close();
                   <tr>
                     <td colspan="5"><a href="pickuploc.php" ><img border="0" title="הוספה" src="../img/edit-add-2.png" /></a></td>
                   </tr>
-                  <?
+                  <?php
                   }
                   ?>
                 <tr>
