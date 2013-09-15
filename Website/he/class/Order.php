@@ -895,7 +895,7 @@ class Order extends SQLBase {
         if ($bHasCoordPermission && 
              ($this->m_aData[CoopOrder::PROPERTY_STATUS] == CoopOrder::STATUS_DRAFT 
               || $this->m_aData[CoopOrder::PROPERTY_STATUS] == CoopOrder::STATUS_LOCKED ))
-          $this->AddError('הרשאת חבר/ת קואופרטיב נעקפה: לא ניתן לעדכן את הזמנה זו כיוון שהזמנת הקואופרטיב אינה פעילה.'); 
+          $this->AddError('הרשאת חבר/ת קואופרטיב נעקפה: לא ניתן לעדכן את הזמנה זו כיוון שהזמנת הקואופרטיב אינה פעילה.', 'warning'); 
         else
         {
           $this->AddError('לא ניתן לעדכן את הזמנה זו כיוון שהזמנת הקואופרטיב אינה פעילה.');
@@ -917,7 +917,7 @@ class Order extends SQLBase {
           return FALSE;
         }
         else
-          $this->AddError('הרשאת חבר/ת קואופרטיב נעקפה: לא ניתן לעדכן את הזמנה זו בשל מגבלת טווח התאריכים של הזמנת הקואופרטיב.'); 
+          $this->AddError('הרשאת חבר/ת קואופרטיב נעקפה: לא ניתן לעדכן את הזמנה זו בשל מגבלת טווח התאריכים של הזמנת הקואופרטיב.', 'warning'); 
       }
 
      if ($this->m_aData[CoopOrder::PROPERTY_MAX_BURDEN] == NULL)
@@ -981,7 +981,7 @@ class Order extends SQLBase {
         }
         else
           $this->AddError(sprintf('הרשאת חבר/ת קואופרטיב נעקפה:  לא ניתן להגדיל את ההזמנה מעבר לסכום מוצרים כולל של %s',
-                  $this->m_aData[self::PROPERTY_MAX_ORDER])); 
+                  $this->m_aData[self::PROPERTY_MAX_ORDER]), 'warning'); 
       }
     }
 
@@ -1097,7 +1097,7 @@ class Order extends SQLBase {
   }
   
   //allow suppresssion of message when the class is used from the orderitems page
-  protected function AddError($sError)
+  protected function AddError($sError, $sType = 'error')
   {
     //if to supress messages:
     //the part about running totals validation means that if the order originally couldn't be enlarged
@@ -1107,7 +1107,7 @@ class Order extends SQLBase {
     
     global $g_oError;
     
-    $g_oError->AddError($sError);
+    $g_oError->AddError($sError, $sType);
   }
 }
 

@@ -36,7 +36,7 @@ try
     $fDeficit = fmod($oData->TotalOrder, $oData->PackageSize);
 
     if ($fDeficit == 0)
-      $g_oError->AddError('All partial orders add up to a complete cooperative order.');
+      $g_oError->AddError('All partial orders add up to a complete cooperative order.', 'ok');
     else
       $fDeficit = $oData->PackageSize - $fDeficit; //real defecit
   }
@@ -152,7 +152,7 @@ UserSessionBase::Close();
                   {
                    ?>
               <script type="text/javascript">
-                SetError('Attention: Even after setting quantities as suggested, product quantities won&#x27;t add up to producer-required multiples');
+                SetError('Attention: Even after setting quantities as suggested, product quantities won&#x27;t add up to producer-required multiples', 'warning');
               </script>
                    <?php
                   }

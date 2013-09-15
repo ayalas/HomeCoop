@@ -50,7 +50,7 @@ try
           
           if ( $bSuccess )
           {
-            $g_oError->PushError('המוצרים המוזמנים נשמרו בהצלחה.');
+            $g_oError->PushError('המוצרים המוזמנים נשמרו בהצלחה.', 'ok');
             //reload table if products view mode has changed
             if ($nMode != $oTable->ProductsViewMode)
               $oTable->LoadTable();
@@ -129,7 +129,7 @@ try
   
   if ( $oRecord->ItemsChangedByCoordinator )
   {
-    $g_oError->AddError('הכמות המוזמנת של חלק מהפריטים שונתה ע&quot;י מתאמ/ת קואופרטיב. השורות ששונו צבועות בצבע שונה והכמויות המקוריות מוצגות בסוגריים');
+    $g_oError->AddError('הכמות המוזמנת של חלק מהפריטים שונתה ע&quot;י מתאמ/ת קואופרטיב. השורות ששונו צבועות בצבע שונה והכמויות המקוריות מוצגות בסוגריים', 'warning');
   }
 }
 catch(Exception $e)

@@ -74,7 +74,7 @@ try
 
           if ( $bSuccess )
           {
-            $g_oError->AddError('<!$RECORD_SAVED$!>');   
+            $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');   
             
             if(!$oRecord->LoadRecord())
             {
@@ -134,7 +134,7 @@ try
   //check if empty list
   if (!is_array($arrPickupLocs) || count($arrPickupLocs) == 0)
   {
-    $g_oError->AddError('<!$COOP_ORDER_PICKUP_LOCATION_LIST_IS_EMPTY$!>');
+    $g_oError->AddError('<!$COOP_ORDER_PICKUP_LOCATION_LIST_IS_EMPTY$!>', 'warning');
     $bReadOnly = TRUE;
   }
   

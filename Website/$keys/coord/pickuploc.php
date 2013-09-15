@@ -65,7 +65,7 @@ try
 
           if ( $bSuccess )
           {
-              $g_oError->AddError('<!$RECORD_SAVED$!>');
+              $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');
               $sPageTitle = $oRecord->Name;
           }
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)

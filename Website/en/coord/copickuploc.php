@@ -74,7 +74,7 @@ try
 
           if ( $bSuccess )
           {
-            $g_oError->AddError('Record saved successfully.');   
+            $g_oError->AddError('Record saved successfully.', 'ok');   
             
             if(!$oRecord->LoadRecord())
             {
@@ -134,7 +134,7 @@ try
   //check if empty list
   if (!is_array($arrPickupLocs) || count($arrPickupLocs) == 0)
   {
-    $g_oError->AddError('No pickup locations to select. It may be that there are no records in the system that are not already defined in the current cooperative order or that you do not have sufficient permissions.');
+    $g_oError->AddError('No pickup locations to select. It may be that there are no records in the system that are not already defined in the current cooperative order or that you do not have sufficient permissions.', 'warning');
     $bReadOnly = TRUE;
   }
   

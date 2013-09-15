@@ -96,7 +96,7 @@ try
         case  Coordinate::POST_ACTION_REMOVE_GROUP:
           $bSuccess = $oCoordinate->RemoveGroup();
           if ($bSuccess)
-            $g_oError->PushError('מתאמות/ים הוסרו בהצלחה.');
+            $g_oError->PushError('מתאמות/ים הוסרו בהצלחה.', 'ok');
           else
             $g_oError->PushError('כישלון בהסרת מתאמות/ים.');
           break;
@@ -109,7 +109,7 @@ try
           }
           $bSuccess = $oCoordinate->DeleteGroup();
           if ($bSuccess)
-            $g_oError->PushError('המחיקה התבצעה בהצלחה.');
+            $g_oError->PushError('המחיקה התבצעה בהצלחה.', 'ok');
           else
             $g_oError->PushError('המחיקה נכשלה.');
         break;
@@ -119,7 +119,7 @@ try
             $nNewCoordinator = intval($_POST['hidPostValue']);
             $bSuccess = $oCoordinate->SetMemberAsCoordinator($nNewCoordinator);
             if ($bSuccess)
-              $g_oError->PushError('הנתונים נשמרו בהצלחה.');
+              $g_oError->PushError('הנתונים נשמרו בהצלחה.', 'ok');
             else
               $g_oError->PushError('הנתונים לא נשמרו.');
           }
@@ -181,7 +181,7 @@ try
           $bSuccess = $oCoordinate->Save();
 
           if ($bSuccess)
-            $g_oError->PushError('הנתונים נשמרו בהצלחה.');
+            $g_oError->PushError('הנתונים נשמרו בהצלחה.', 'ok');
           else
             $g_oError->PushError('הנתונים לא נשמרו.');
           
@@ -251,11 +251,11 @@ try
       {
         $bGroupPickWithUnauthorizedMembers = TRUE;
         $g_oError->AddError(sprintf('הקבוצה שנבחרה לא יכולה להיקבע כמתאמת כיוון שלחלק מחבריה אין הרשאת תיאום ל%1$s. החברים ללא הרשאות הן: %2$s ', $oCoordinate->RecordName,
-          $oCoordinate->GetUnauthorizedMemberNames()));
+          $oCoordinate->GetUnauthorizedMemberNames()), 'warning');
       }
       else
         $g_oError->AddError(sprintf('לחלק מחברי הקבוצה כבר אין הרשאת תיאום ל%1$s. החברים ללא הרשאות הן: %2$s ', $oCoordinate->RecordName,
-          $oCoordinate->GetUnauthorizedMemberNames()));
+          $oCoordinate->GetUnauthorizedMemberNames()), 'warning');
     }
   }
 

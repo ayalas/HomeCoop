@@ -115,7 +115,7 @@ try
           }
           
           if ( $bSuccess )
-            $g_oError->AddError('הרשומה נשמרה בהצלחה.');   
+            $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');   
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.');
           break;
@@ -171,7 +171,7 @@ try
     
     if ( !$recProducers )
     {
-      $g_oError->AddError('אין יצרנים בהזמנה הנוכחית. יש להוסיף תחילה יצרנים');
+      $g_oError->AddError('אין יצרנים בהזמנה הנוכחית. יש להוסיף תחילה יצרנים', 'warning');
       $bReadOnly = TRUE;
     }
     else
@@ -187,7 +187,7 @@ try
 
       //check if empty list
       if (!is_array( $arrProducts ) || count( $arrProducts ) == 0)
-        $g_oError->AddError('לא מוגדרים במערכת מוצרים פעילים, שלא נבחרו כבר בהזמנה הנוכחית');
+        $g_oError->AddError('לא מוגדרים במערכת מוצרים פעילים, שלא נבחרו כבר בהזמנה הנוכחית', 'warning');
     }
   }
   

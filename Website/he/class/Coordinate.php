@@ -863,7 +863,7 @@ class Coordinate extends SQLBase {
             " AND MemberID IN (" . $sUnauthorizedMemberIDs . ");";
     $this->RunSQL($sSQL);
     
-    $g_oError->AddError(sprintf('לחלק מחברי הקבוצה כבר אין הרשאת תיאום והן הוסרו מהקבוצה. החברים ללא הרשאות הן: %s', $sUnauthorizedMembers));
+    $g_oError->AddError(sprintf('לחלק מחברי הקבוצה כבר אין הרשאת תיאום והן הוסרו מהקבוצה. החברים ללא הרשאות הן: %s', $sUnauthorizedMembers), "warning");
     return TRUE;
   }
 

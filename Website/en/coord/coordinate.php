@@ -96,7 +96,7 @@ try
         case  Coordinate::POST_ACTION_REMOVE_GROUP:
           $bSuccess = $oCoordinate->RemoveGroup();
           if ($bSuccess)
-            $g_oError->PushError('Coordinator(s) removed successfully.');
+            $g_oError->PushError('Coordinator(s) removed successfully.', 'ok');
           else
             $g_oError->PushError('Failed to remove coordinator(s).');
           break;
@@ -109,7 +109,7 @@ try
           }
           $bSuccess = $oCoordinate->DeleteGroup();
           if ($bSuccess)
-            $g_oError->PushError('Delete operation completed successfully.');
+            $g_oError->PushError('Delete operation completed successfully.', 'ok');
           else
             $g_oError->PushError('Delete operation failed.');
         break;
@@ -119,7 +119,7 @@ try
             $nNewCoordinator = intval($_POST['hidPostValue']);
             $bSuccess = $oCoordinate->SetMemberAsCoordinator($nNewCoordinator);
             if ($bSuccess)
-              $g_oError->PushError('Data was saved successfully.');
+              $g_oError->PushError('Data was saved successfully.', 'ok');
             else
               $g_oError->PushError('Data was not saved.');
           }
@@ -181,7 +181,7 @@ try
           $bSuccess = $oCoordinate->Save();
 
           if ($bSuccess)
-            $g_oError->PushError('Data was saved successfully.');
+            $g_oError->PushError('Data was saved successfully.', 'ok');
           else
             $g_oError->PushError('Data was not saved.');
           
@@ -251,11 +251,11 @@ try
       {
         $bGroupPickWithUnauthorizedMembers = TRUE;
         $g_oError->AddError(sprintf('The selected group cannot be set as the coordinating group because some of its members are not authorized to coordinate %1$s. Those unauthorized members are: %2$s ', $oCoordinate->RecordName,
-          $oCoordinate->GetUnauthorizedMemberNames()));
+          $oCoordinate->GetUnauthorizedMemberNames()), 'warning');
       }
       else
         $g_oError->AddError(sprintf('Some of the group members are no longer authorized to coordinate %1$s. Those unauthorized members are: %2$s ', $oCoordinate->RecordName,
-          $oCoordinate->GetUnauthorizedMemberNames()));
+          $oCoordinate->GetUnauthorizedMemberNames()), 'warning');
     }
   }
 

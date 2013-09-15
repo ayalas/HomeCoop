@@ -36,7 +36,7 @@ try
     $fDeficit = fmod($oData->TotalOrder, $oData->PackageSize);
 
     if ($fDeficit == 0)
-      $g_oError->AddError('ההזמנות החלקיות מצטברות לכדי הזמנת קואופרטיב שלמה');
+      $g_oError->AddError('ההזמנות החלקיות מצטברות לכדי הזמנת קואופרטיב שלמה', 'ok');
     else
       $fDeficit = $oData->PackageSize - $fDeficit; //real defecit
   }
@@ -152,7 +152,7 @@ UserSessionBase::Close();
                   {
                    ?>
               <script type="text/javascript">
-                SetError('שימו לב: גם אחרי קביעת הכמות המוצעת כאן, הכמויות של המוצר לא ישלימו לכפולות הנדרשות ע&quot;י היצרן');
+                SetError('שימו לב: גם אחרי קביעת הכמות המוצעת כאן, הכמויות של המוצר לא ישלימו לכפולות הנדרשות ע&quot;י היצרן', 'warning');
               </script>
                    <?php
                   }

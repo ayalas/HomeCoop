@@ -863,7 +863,7 @@ class Coordinate extends SQLBase {
             " AND MemberID IN (" . $sUnauthorizedMemberIDs . ");";
     $this->RunSQL($sSQL);
     
-    $g_oError->AddError(sprintf('<!$SOME_UNAUTHORIZED_MEMBERS_REMOVED_FROM_COORDINATING$!>', $sUnauthorizedMembers));
+    $g_oError->AddError(sprintf('<!$SOME_UNAUTHORIZED_MEMBERS_REMOVED_FROM_COORDINATING$!>', $sUnauthorizedMembers), "warning");
     return TRUE;
   }
 

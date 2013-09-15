@@ -2121,4 +2121,14 @@
     <value>Cashier of balance change</value>
     <pages>coord/member</pages>
 </str>
+<str>
+    <key>MESSAGE_PADDING</key>
+    <value>10px 10px 10px 50px</value>
+    <pages>style/main.css</pages>
+</str>
+<str>
+    <key>MESSAGE_BG_POSITION</key>
+    <value>8px 8px</value>
+    <pages>style/main.css</pages>
+</str>
 </strings>

@@ -78,7 +78,7 @@ try
           }
 
           if ( $bSuccess )
-            $g_oError->AddError('הרשומה נשמרה בהצלחה.');   
+            $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');   
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.');
           break;
@@ -139,7 +139,7 @@ try
     //check if empty list
     if (!is_array($arrProducers) || count($arrProducers) == 0)
     {
-      $g_oError->AddError('אין יצרנים פעילים להוספה');
+      $g_oError->AddError('אין יצרנים פעילים להוספה','warning');
       $bReadOnly = TRUE;
     }
   }

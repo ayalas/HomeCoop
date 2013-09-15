@@ -9,7 +9,12 @@ control/error/ctlError.php - inside the Html document where the error messages s
 if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
    return;
    
+$sErrorControlClasses = '';
+if ($g_oError->Message != NULL) {
+  $sErrorControlClasses = ' class="message ' . $g_oError->Type . '" ';
+}
+
 ?>
-<div id="ctlError" name="ctlError">
-    <span id="ctlError" name="ctlError" class="message"><?php echo $g_oError->Message; ?></span>
+<div id="ctlError" name="ctlError" <?php echo $sErrorControlClasses; ?>>
+    <ul><?php echo $g_oError->Message; ?></ul>
 </div>

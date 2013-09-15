@@ -39,11 +39,11 @@ try
           $arrOrdersUpdated = $oCoopOrderJoinProducts->OrdersUpdated;
           if (is_array($arrOrdersUpdated) && count($arrOrdersUpdated)>0)
           {
-            $g_oError->AddError('Products items were joined successfully into larger cost-saving packages. The following orders, marked in color, were modified.');
+            $g_oError->AddError('Products items were joined successfully into larger cost-saving packages. The following orders, marked in color, were modified.', 'ok');
             $bOrdersChanged = TRUE;
           }
           else
-            $g_oError->AddError('No products required joining.');
+            $g_oError->AddError('No products required joining.', 'warning');
           break;
         case Orders::POST_ACTION_UNJOIN_PRODUCTS:
           $oData->PreserveSort();
@@ -53,11 +53,11 @@ try
           $arrOrdersUpdated = $oCoopOrderJoinProducts->OrdersUpdated;
           if (is_array($arrOrdersUpdated) && count($arrOrdersUpdated)>0)
           {
-            $g_oError->AddError('Products items were unjoined successfully into smaller more costly packages. The following orders, marked in color, were modified.');
+            $g_oError->AddError('Products items were unjoined successfully into smaller more costly packages. The following orders, marked in color, were modified.', 'ok');
             $bOrdersChanged = TRUE;
           }
           else
-            $g_oError->AddError('No products required unjoining.');
+            $g_oError->AddError('No products required unjoining.', 'warning');
           break;
       }
     }

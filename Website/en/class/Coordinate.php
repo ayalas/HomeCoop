@@ -863,7 +863,7 @@ class Coordinate extends SQLBase {
             " AND MemberID IN (" . $sUnauthorizedMemberIDs . ");";
     $this->RunSQL($sSQL);
     
-    $g_oError->AddError(sprintf('Some of the group members are no longer authorized to coordinate it and were removed. Those unauthorized members are: %s', $sUnauthorizedMembers));
+    $g_oError->AddError(sprintf('Some of the group members are no longer authorized to coordinate it and were removed. Those unauthorized members are: %s', $sUnauthorizedMembers), "warning");
     return TRUE;
   }
 

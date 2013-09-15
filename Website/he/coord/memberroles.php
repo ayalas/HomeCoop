@@ -28,7 +28,7 @@ try
           $bSuccess = $oTable->AddRole($nRoleID);
           
           if ($bSuccess)
-            $g_oError->AddError('הרשומה נשמרה בהצלחה.');
+            $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');
           else if ($oTable->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.');
           break;
@@ -36,7 +36,7 @@ try
           $bSuccess = $oTable->RemoveRole($nRoleID);
             
           if ($bSuccess)
-            $g_oError->AddError('הרשומה נמחקה בהצלחה.');
+            $g_oError->AddError('הרשומה נמחקה בהצלחה.', 'ok');
           else if ($oTable->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('הרשומה לא נמחקה.');
           break;

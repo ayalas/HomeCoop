@@ -54,7 +54,7 @@ try
           && $oData->Status != CoopOrder::STATUS_LOCKED )
   {
     $bReadOnly = TRUE;
-    $g_oError->AddError('לא ניתן לעדכן את הזמנת הקואופרטיב במצב הנוכחי שלה');
+    $g_oError->AddError('לא ניתן לעדכן את הזמנת הקואופרטיב במצב הנוכחי שלה', 'warning');
   }
 }
 catch(Exception $e)

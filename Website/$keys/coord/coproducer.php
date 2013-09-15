@@ -78,7 +78,7 @@ try
           }
 
           if ( $bSuccess )
-            $g_oError->AddError('<!$RECORD_SAVED$!>');   
+            $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');   
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('<!$RECORD_NOT_SAVED$!>');
           break;
@@ -139,7 +139,7 @@ try
     //check if empty list
     if (!is_array($arrProducers) || count($arrProducers) == 0)
     {
-      $g_oError->AddError('<!$COOP_ORDER_PRODUCER_LIST_IS_EMPTY$!>');
+      $g_oError->AddError('<!$COOP_ORDER_PRODUCER_LIST_IS_EMPTY$!>','warning');
       $bReadOnly = TRUE;
     }
   }

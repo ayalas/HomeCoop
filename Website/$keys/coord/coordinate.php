@@ -96,7 +96,7 @@ try
         case  Coordinate::POST_ACTION_REMOVE_GROUP:
           $bSuccess = $oCoordinate->RemoveGroup();
           if ($bSuccess)
-            $g_oError->PushError('<!$GROUP_REMOVE_SUCESS$!>');
+            $g_oError->PushError('<!$GROUP_REMOVE_SUCESS$!>', 'ok');
           else
             $g_oError->PushError('<!$GROUP_REMOVE_FAILURE$!>');
           break;
@@ -109,7 +109,7 @@ try
           }
           $bSuccess = $oCoordinate->DeleteGroup();
           if ($bSuccess)
-            $g_oError->PushError('<!$COMPLEX_DELETE_SUCESS$!>');
+            $g_oError->PushError('<!$COMPLEX_DELETE_SUCESS$!>', 'ok');
           else
             $g_oError->PushError('<!$COMPLEX_DELETE_FAILURE$!>');
         break;
@@ -119,7 +119,7 @@ try
             $nNewCoordinator = intval($_POST['hidPostValue']);
             $bSuccess = $oCoordinate->SetMemberAsCoordinator($nNewCoordinator);
             if ($bSuccess)
-              $g_oError->PushError('<!$COMPLEX_SAVE_SUCESS$!>');
+              $g_oError->PushError('<!$COMPLEX_SAVE_SUCESS$!>', 'ok');
             else
               $g_oError->PushError('<!$COMPLEX_SAVE_FAILURE$!>');
           }
@@ -181,7 +181,7 @@ try
           $bSuccess = $oCoordinate->Save();
 
           if ($bSuccess)
-            $g_oError->PushError('<!$COMPLEX_SAVE_SUCESS$!>');
+            $g_oError->PushError('<!$COMPLEX_SAVE_SUCESS$!>', 'ok');
           else
             $g_oError->PushError('<!$COMPLEX_SAVE_FAILURE$!>');
           
@@ -251,11 +251,11 @@ try
       {
         $bGroupPickWithUnauthorizedMembers = TRUE;
         $g_oError->AddError(sprintf('<!$SOME_MEMBERS_UNAUTHORIZED_FOR_COORDINATING$!> ', $oCoordinate->RecordName,
-          $oCoordinate->GetUnauthorizedMemberNames()));
+          $oCoordinate->GetUnauthorizedMemberNames()), 'warning');
       }
       else
         $g_oError->AddError(sprintf('<!$SOME_MEMBERS_UNAUTHORIZED_FOR_COORDINATING_IN_LOADED_RECORD$!> ', $oCoordinate->RecordName,
-          $oCoordinate->GetUnauthorizedMemberNames()));
+          $oCoordinate->GetUnauthorizedMemberNames()), 'warning');
     }
   }
 

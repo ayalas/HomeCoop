@@ -44,7 +44,7 @@ try
 
           if ( $bSuccess )
           {
-              $g_oError->AddError('Record saved successfully.');
+              $g_oError->AddError('Record saved successfully.', 'ok');
               $sPageTitle = $oRecord->ProducerName;
           }
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)

@@ -7,11 +7,13 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 class ErrorHandler {
   const PROPERTY_MESSAGE = "Message";
   const PROPERTY_HAD_ERROR = "HadError";
+  const PROPERTY_TYPE = "Type";
   
   protected $m_aData = array
   (
       self::PROPERTY_MESSAGE => '',
-      self::PROPERTY_HAD_ERROR => FALSE
+      self::PROPERTY_HAD_ERROR => FALSE,
+      self::PROPERTY_TYPE => ''
   );
   
   public function __get( $name ) {
@@ -74,19 +76,30 @@ class ErrorHandler {
     }
   }
   
-  public function AddError( $sErr )
+  public function AddError( $sErr, $sType = 'error' )
   {
-      $this->m_aData[self::PROPERTY_MESSAGE] .= $sErr .'<br/>';
+      $this->m_aData[self::PROPERTY_MESSAGE] .= '<li>' . $sErr . '</li>';
+      $this->SetType($sType);
   }
 
-  public function SetError( $sErr )
+  public function SetError( $sErr, $sType = 'error' )
   {
-      $this->m_aData[self::PROPERTY_MESSAGE] = $sErr .'<br/>';
+      $this->m_aData[self::PROPERTY_MESSAGE] = '<li>' .$sErr . '</li>';
+      $this->SetType($sType);
   }
 
-  public function PushError( $sErr )
+  public function PushError( $sErr, $sType = 'error' )
   {
-      $this->m_aData[self::PROPERTY_MESSAGE] = $sErr .'<br/>' . $this->m_aData[self::PROPERTY_MESSAGE];
+      $this->m_aData[self::PROPERTY_MESSAGE] = '<li>' .$sErr .'</li>' . $this->m_aData[self::PROPERTY_MESSAGE];
+      $this->SetType($sType);
+  }
+  
+  protected function SetType($sType)
+  {
+    //do not allow overriding a more severe error
+    if ($this->m_aData[self::PROPERTY_TYPE] != 'error' &&
+        ($this->m_aData[self::PROPERTY_TYPE] != 'warning' || $sType != 'ok') )
+      $this->m_aData[self::PROPERTY_TYPE] = $sType;
   }
 }
 

@@ -760,8 +760,9 @@ abstract class SQLBase
       $this->m_aData[$PropertyID]->add($di);
       
       $days = ($this->m_aData[$PropertyID]->format('w')+0) - ($orig->format('w')+0);
-      
-      $this->m_aData[$PropertyID]->sub(new DateInterval('P' . $days . 'D'));
+      if ($days > 0) {
+        $this->m_aData[$PropertyID]->sub(new DateInterval('P' . $days . 'D'));
+      }
     }
     
     protected function IfEmpty($value, $replace) {

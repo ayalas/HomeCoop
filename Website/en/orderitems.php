@@ -50,7 +50,7 @@ try
           
           if ( $bSuccess )
           {
-            $g_oError->PushError('Ordered products were saved successfully.');
+            $g_oError->PushError('Ordered products were saved successfully.', 'ok');
             //reload table if products view mode has changed
             if ($nMode != $oTable->ProductsViewMode)
               $oTable->LoadTable();
@@ -129,7 +129,7 @@ try
   
   if ( $oRecord->ItemsChangedByCoordinator )
   {
-    $g_oError->AddError('Some order items&#x27; quantities have been modified by a coordinator. The modified rows are marked in color and the original quantities are displayed in parenthesis');
+    $g_oError->AddError('Some order items&#x27; quantities have been modified by a coordinator. The modified rows are marked in color and the original quantities are displayed in parenthesis', 'warning');
   }
 }
 catch(Exception $e)

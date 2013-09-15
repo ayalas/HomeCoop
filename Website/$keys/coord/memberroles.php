@@ -28,7 +28,7 @@ try
           $bSuccess = $oTable->AddRole($nRoleID);
           
           if ($bSuccess)
-            $g_oError->AddError('<!$RECORD_SAVED$!>');
+            $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');
           else if ($oTable->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('<!$RECORD_NOT_SAVED$!>');
           break;
@@ -36,7 +36,7 @@ try
           $bSuccess = $oTable->RemoveRole($nRoleID);
             
           if ($bSuccess)
-            $g_oError->AddError('<!$DELETE_SUCCESS$!>');
+            $g_oError->AddError('<!$DELETE_SUCCESS$!>', 'ok');
           else if ($oTable->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('<!$DELETE_FAILURE$!>');
           break;

@@ -36,7 +36,7 @@ try
     $fDeficit = fmod($oData->TotalOrder, $oData->PackageSize);
 
     if ($fDeficit == 0)
-      $g_oError->AddError('<!$ALL_PARTIAL_ORDERS_ADD_UP_TO_COMPLETE_COOP_ORDER$!>');
+      $g_oError->AddError('<!$ALL_PARTIAL_ORDERS_ADD_UP_TO_COMPLETE_COOP_ORDER$!>', 'ok');
     else
       $fDeficit = $oData->PackageSize - $fDeficit; //real defecit
   }
@@ -152,7 +152,7 @@ UserSessionBase::Close();
                   {
                    ?>
               <script type="text/javascript">
-                SetError('<!$DEFICIT_IS_NOT_FIXED$!>');
+                SetError('<!$DEFICIT_IS_NOT_FIXED$!>', 'warning');
               </script>
                    <?php
                   }

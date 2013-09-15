@@ -74,7 +74,7 @@ try
           }
           
           if ( $bSuccess )
-              $g_oError->PushError('הרשומה נשמרה בהצלחה.');
+              $g_oError->PushError('הרשומה נשמרה בהצלחה.', 'ok');
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
               $g_oError->PushError('הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.');
           else
@@ -87,7 +87,7 @@ try
         case SQLBase::POST_ACTION_DELETE:
           $bSuccess = $oRecord->Delete();
           if ( $bSuccess )
-              $g_oError->AddError('הרשומה נמחקה בהצלחה.');
+              $g_oError->AddError('הרשומה נמחקה בהצלחה.', 'ok');
           else
               $g_oError->AddError('הרשומה לא נמחקה.');
           

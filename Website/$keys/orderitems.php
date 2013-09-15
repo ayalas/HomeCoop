@@ -50,7 +50,7 @@ try
           
           if ( $bSuccess )
           {
-            $g_oError->PushError('<!$ORDER_ITEMS_SAVE_SUCESS$!>');
+            $g_oError->PushError('<!$ORDER_ITEMS_SAVE_SUCESS$!>', 'ok');
             //reload table if products view mode has changed
             if ($nMode != $oTable->ProductsViewMode)
               $oTable->LoadTable();
@@ -129,7 +129,7 @@ try
   
   if ( $oRecord->ItemsChangedByCoordinator )
   {
-    $g_oError->AddError('<!$ORDER_ITEMS_CHANGED_BY_COORDINATOR$!>');
+    $g_oError->AddError('<!$ORDER_ITEMS_CHANGED_BY_COORDINATOR$!>', 'warning');
   }
 }
 catch(Exception $e)

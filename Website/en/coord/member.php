@@ -98,7 +98,7 @@ try
             $bSuccess = $oRecord->Add();
 
           if ( $bSuccess )
-            $g_oError->AddError('Record saved successfully.');
+            $g_oError->AddError('Record saved successfully.','ok');
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('Record was not saved. You may not have sufficent permissions or an error has occured.');
           break;
@@ -115,13 +115,13 @@ try
           break;
         case MEMBER::POST_ACTION_DEACTIVATE:
           if ($oRecord->Deactivate())
-            $g_oError->AddError('Permissions removed successfully');
+            $g_oError->AddError('Permissions removed successfully', 'ok');
           else
             $g_oError->AddError('Permissions remove failed');
           break;
         case MEMBER::POST_ACTION_ACTIVATE:
           if ($oRecord->Activate())
-            $g_oError->AddError('Permissions restored successfully');
+            $g_oError->AddError('Permissions restored successfully', 'ok');
           else
             $g_oError->AddError('Permissions restore failed');
           break;

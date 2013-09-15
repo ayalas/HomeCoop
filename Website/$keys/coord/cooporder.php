@@ -82,7 +82,7 @@ try
 
           if ( $bSuccess )
           {
-              $g_oError->AddError('<!$RECORD_SAVED$!>');
+              $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');
               if (!$oRecord->LoadRecord($oRecord->ID))
                 throw new Exception('<!$LOAD_RECORD_FAILED$!>');      
           }

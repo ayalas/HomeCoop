@@ -82,7 +82,7 @@ try
 
           if ( $bSuccess )
           {
-              $g_oError->AddError('הרשומה נשמרה בהצלחה.');
+              $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');
               if (!$oRecord->LoadRecord($oRecord->ID))
                 throw new Exception('העלאת הרשומה נכשלה.');      
           }

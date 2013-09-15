@@ -120,7 +120,7 @@ th
 }
 ul
 {
-list-style-type: none;
+  list-style-type: none;
 }
 .alarmingdata
 {
@@ -288,11 +288,6 @@ list-style-type: none;
   height:300px;
   background-color:#FFFFFF;
 }
-.message
-{
-   color: #600000;
-   font-weight: bold;
-}
 .normalcolor
 {
   color: #000000;
@@ -389,4 +384,43 @@ list-style-type: none;
   font-size: 12px;
   width: 65px;
   background-color:#FFFFFF;
+}
+
+div.message
+{
+  background-position: 99% 8px;
+  background-repeat: no-repeat;
+  border: 1px solid;
+  margin: 6px;
+  padding: 10px 50px 10px 10px;
+  box-sizing: border-box;
+}
+div.error
+{
+  color: #8c2e0b;
+  border-color: #ed541d;
+  background-image: url(../img/message-24-error.png);
+  background-color: #fef5f1;
+}
+div.warning
+{
+  color: #840;
+  background-image: url(../img/message-24-warning.png);
+  border-color: #ed5;
+  background-color: #fffce5;
+}
+div.ok
+{
+  color: #234600;
+  background-image: url(../img/message-24-ok.png);
+  border-color: #be7;
+  background-color: #f8fff0;
+}
+
+div.message ul {
+  margin: 0 0 0 1em; /* LTR */
+  padding: 0;
+}
+div.message ul li {
+  list-style-image: none;
 }

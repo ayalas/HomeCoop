@@ -74,7 +74,7 @@ try
 
           if ( $bSuccess )
           {
-            $g_oError->AddError('הרשומה נשמרה בהצלחה.');   
+            $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');   
             
             if(!$oRecord->LoadRecord())
             {
@@ -134,7 +134,7 @@ try
   //check if empty list
   if (!is_array($arrPickupLocs) || count($arrPickupLocs) == 0)
   {
-    $g_oError->AddError('אין מקומות איסוף לבחירה. ייתכן שלא מוגדרים במערכת מקומות איסוף פעילים שלא נבחרו כבר בהזמנה הנוכחית או שאין לך הרשאות מספיקות');
+    $g_oError->AddError('אין מקומות איסוף לבחירה. ייתכן שלא מוגדרים במערכת מקומות איסוף פעילים שלא נבחרו כבר בהזמנה הנוכחית או שאין לך הרשאות מספיקות', 'warning');
     $bReadOnly = TRUE;
   }
   

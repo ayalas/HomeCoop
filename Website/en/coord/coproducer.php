@@ -78,7 +78,7 @@ try
           }
 
           if ( $bSuccess )
-            $g_oError->AddError('Record saved successfully.');   
+            $g_oError->AddError('Record saved successfully.', 'ok');   
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('Record was not saved. You may not have sufficent permissions or an error has occured.');
           break;
@@ -139,7 +139,7 @@ try
     //check if empty list
     if (!is_array($arrProducers) || count($arrProducers) == 0)
     {
-      $g_oError->AddError('There are no producer records to add.');
+      $g_oError->AddError('There are no producer records to add.','warning');
       $bReadOnly = TRUE;
     }
   }

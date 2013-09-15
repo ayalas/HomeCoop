@@ -98,7 +98,7 @@ try
             $bSuccess = $oRecord->Add();
 
           if ( $bSuccess )
-            $g_oError->AddError('הרשומה נשמרה בהצלחה.');
+            $g_oError->AddError('הרשומה נשמרה בהצלחה.','ok');
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.');
           break;
@@ -115,13 +115,13 @@ try
           break;
         case MEMBER::POST_ACTION_DEACTIVATE:
           if ($oRecord->Deactivate())
-            $g_oError->AddError('ההרשאות הוסרו בהצלחה');
+            $g_oError->AddError('ההרשאות הוסרו בהצלחה', 'ok');
           else
             $g_oError->AddError('הסרת ההרשאות נכשלה');
           break;
         case MEMBER::POST_ACTION_ACTIVATE:
           if ($oRecord->Activate())
-            $g_oError->AddError('ההרשאות הוחזרו בהצלחה');
+            $g_oError->AddError('ההרשאות הוחזרו בהצלחה', 'ok');
           else
             $g_oError->AddError('החזרת ההרשאות נכשלה');
           break;

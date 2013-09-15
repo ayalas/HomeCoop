@@ -54,7 +54,7 @@ try
           && $oData->Status != CoopOrder::STATUS_LOCKED )
   {
     $bReadOnly = TRUE;
-    $g_oError->AddError('<!$COOP_ORDER_CANNOT_BE_UPDATED_AT_THIS_STATUS$!>');
+    $g_oError->AddError('<!$COOP_ORDER_CANNOT_BE_UPDATED_AT_THIS_STATUS$!>', 'warning');
   }
 }
 catch(Exception $e)

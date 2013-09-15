@@ -1,11 +1,12 @@
-function SetError(sErr)
+function SetError(sErr, sType)
 {
         var ctlError = document.getElementById("ctlError");
         
-        if (ctlError)
+        if (ctlError != null)
         {
-            ctlError.innerHTML= '<div class="message">' + sErr + '</div>' ;
+            ctlError.innerHTML= '<div class="message ' + sType + '">' + sErr + '</div>' ;
         }
-        else
-          alert(sErr);
+        else {
+          alert(unescape(sErr));
+        }
 }

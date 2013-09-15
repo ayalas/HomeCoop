@@ -54,7 +54,7 @@ try
           $bSuccess = $oRecord->Edit();
           
           if ( $bSuccess )
-            $g_oError->AddError('<!$RECORD_SAVED$!>');
+            $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('<!$RECORD_NOT_SAVED$!>');
           break;

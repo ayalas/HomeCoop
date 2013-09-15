@@ -115,7 +115,7 @@ try
           }
           
           if ( $bSuccess )
-            $g_oError->AddError('Record saved successfully.');   
+            $g_oError->AddError('Record saved successfully.', 'ok');   
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('Record was not saved. You may not have sufficent permissions or an error has occured.');
           break;
@@ -171,7 +171,7 @@ try
     
     if ( !$recProducers )
     {
-      $g_oError->AddError('There are no producers in the current cooperative order. Please add some producers.');
+      $g_oError->AddError('There are no producers in the current cooperative order. Please add some producers.', 'warning');
       $bReadOnly = TRUE;
     }
     else
@@ -187,7 +187,7 @@ try
 
       //check if empty list
       if (!is_array( $arrProducts ) || count( $arrProducts ) == 0)
-        $g_oError->AddError('There are no product records that are not already defined.');
+        $g_oError->AddError('There are no product records that are not already defined.', 'warning');
     }
   }
   

@@ -39,11 +39,11 @@ try
           $arrOrdersUpdated = $oCoopOrderJoinProducts->OrdersUpdated;
           if (is_array($arrOrdersUpdated) && count($arrOrdersUpdated)>0)
           {
-            $g_oError->AddError('פריטי מוצרים צורפו בהצלחה לחבילות גדולות יותר לצורך חסכון בעלויות. ההזמנות הבאות, המסומנות בצבע, עודכנו.');
+            $g_oError->AddError('פריטי מוצרים צורפו בהצלחה לחבילות גדולות יותר לצורך חסכון בעלויות. ההזמנות הבאות, המסומנות בצבע, עודכנו.', 'ok');
             $bOrdersChanged = TRUE;
           }
           else
-            $g_oError->AddError('לא נמצאו מוצרים לצירוף.');
+            $g_oError->AddError('לא נמצאו מוצרים לצירוף.', 'warning');
           break;
         case Orders::POST_ACTION_UNJOIN_PRODUCTS:
           $oData->PreserveSort();
@@ -53,11 +53,11 @@ try
           $arrOrdersUpdated = $oCoopOrderJoinProducts->OrdersUpdated;
           if (is_array($arrOrdersUpdated) && count($arrOrdersUpdated)>0)
           {
-            $g_oError->AddError('פריטי מוצרים הופרדו בהצלחה לחבילות קטנות ויקרות יותר. ההזמנות הבאות, המסומנות בצבע, עודכנו.');
+            $g_oError->AddError('פריטי מוצרים הופרדו בהצלחה לחבילות קטנות ויקרות יותר. ההזמנות הבאות, המסומנות בצבע, עודכנו.', 'ok');
             $bOrdersChanged = TRUE;
           }
           else
-            $g_oError->AddError('לא נמצאו מוצרים להפרדה.');
+            $g_oError->AddError('לא נמצאו מוצרים להפרדה.', 'warning');
           break;
       }
     }

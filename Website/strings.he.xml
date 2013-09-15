@@ -2014,4 +2014,14 @@
     <value>הקופה שבה נעשה שינוי היתרה</value>
     <pages>coord/member</pages>
 </str>
+<str>
+    <key>MESSAGE_PADDING</key>
+    <value>10px 50px 10px 10px</value>
+    <pages>style/main.css</pages>
+</str>
+<str>
+    <key>MESSAGE_BG_POSITION</key>
+    <value>99% 8px</value>
+    <pages>style/main.css</pages>
+</str>
 </strings>

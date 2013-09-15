@@ -74,7 +74,7 @@ try
           }
           
           if ( $bSuccess )
-              $g_oError->PushError('Record saved successfully.');
+              $g_oError->PushError('Record saved successfully.', 'ok');
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
               $g_oError->PushError('Record was not saved. You may not have sufficent permissions or an error has occured.');
           else
@@ -87,7 +87,7 @@ try
         case SQLBase::POST_ACTION_DELETE:
           $bSuccess = $oRecord->Delete();
           if ( $bSuccess )
-              $g_oError->AddError('The record was deleted successfully.');
+              $g_oError->AddError('The record was deleted successfully.', 'ok');
           else
               $g_oError->AddError('The record was not deleted.');
           

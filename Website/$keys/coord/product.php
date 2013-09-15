@@ -101,7 +101,7 @@ try
           else if (isset($_POST['ctlPicUpload1']))
           {
             $sErrPicUpload1 = sprintf('<!$ERR_COULD_NOT_UPLOAD_FILE$!>', $_POST['ctlPicUpload1'] );
-            $g_oError->AddError($sErrPicUpload1);
+            $g_oError->AddError($sErrPicUpload1, 'warning');
           }
 
           if ( isset($_FILES['ctlPicUpload2']))
@@ -109,7 +109,7 @@ try
           else if (isset($_POST['ctlPicUpload2']))
           {
             $sErrPicUpload2 = sprintf('<!$ERR_COULD_NOT_UPLOAD_FILE$!>', $_POST['ctlPicUpload2'] );
-            $g_oError->AddError($sErrPicUpload2);
+            $g_oError->AddError($sErrPicUpload2, 'warning');
           }
           
           if ( isset($_POST['txtPic1FileName']))
@@ -132,7 +132,7 @@ try
 
           if ( $bSuccess )
           {
-              $g_oError->AddError('<!$RECORD_SAVED$!>');
+              $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');
               $sPageTitle = $oRecord->ProductName;
           }
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)

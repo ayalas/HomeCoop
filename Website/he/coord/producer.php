@@ -44,7 +44,7 @@ try
 
           if ( $bSuccess )
           {
-              $g_oError->AddError('הרשומה נשמרה בהצלחה.');
+              $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');
               $sPageTitle = $oRecord->ProducerName;
           }
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)

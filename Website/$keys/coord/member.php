@@ -98,7 +98,7 @@ try
             $bSuccess = $oRecord->Add();
 
           if ( $bSuccess )
-            $g_oError->AddError('<!$RECORD_SAVED$!>');
+            $g_oError->AddError('<!$RECORD_SAVED$!>','ok');
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('<!$RECORD_NOT_SAVED$!>');
           break;
@@ -115,13 +115,13 @@ try
           break;
         case MEMBER::POST_ACTION_DEACTIVATE:
           if ($oRecord->Deactivate())
-            $g_oError->AddError('<!$MEMBER_DEACTIVATE_SUCCESS$!>');
+            $g_oError->AddError('<!$MEMBER_DEACTIVATE_SUCCESS$!>', 'ok');
           else
             $g_oError->AddError('<!$MEMBER_DEACTIVATE_FAILURE$!>');
           break;
         case MEMBER::POST_ACTION_ACTIVATE:
           if ($oRecord->Activate())
-            $g_oError->AddError('<!$MEMBER_ACTIVATE_SUCCESS$!>');
+            $g_oError->AddError('<!$MEMBER_ACTIVATE_SUCCESS$!>', 'ok');
           else
             $g_oError->AddError('<!$MEMBER_ACTIVATE_FAILURE$!>');
           break;

@@ -74,7 +74,7 @@ try
           }
           
           if ( $bSuccess )
-              $g_oError->PushError('<!$RECORD_SAVED$!>');
+              $g_oError->PushError('<!$RECORD_SAVED$!>', 'ok');
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
               $g_oError->PushError('<!$RECORD_NOT_SAVED$!>');
           else
@@ -87,7 +87,7 @@ try
         case SQLBase::POST_ACTION_DELETE:
           $bSuccess = $oRecord->Delete();
           if ( $bSuccess )
-              $g_oError->AddError('<!$DELETE_SUCCESS$!>');
+              $g_oError->AddError('<!$DELETE_SUCCESS$!>', 'ok');
           else
               $g_oError->AddError('<!$DELETE_FAILURE$!>');
           

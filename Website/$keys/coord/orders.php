@@ -39,11 +39,11 @@ try
           $arrOrdersUpdated = $oCoopOrderJoinProducts->OrdersUpdated;
           if (is_array($arrOrdersUpdated) && count($arrOrdersUpdated)>0)
           {
-            $g_oError->AddError('<!$JOIN_PRODUCTS_SUCCESS$!>');
+            $g_oError->AddError('<!$JOIN_PRODUCTS_SUCCESS$!>', 'ok');
             $bOrdersChanged = TRUE;
           }
           else
-            $g_oError->AddError('<!$JOIN_PRODUCTS_NO_UPDATE$!>');
+            $g_oError->AddError('<!$JOIN_PRODUCTS_NO_UPDATE$!>', 'warning');
           break;
         case Orders::POST_ACTION_UNJOIN_PRODUCTS:
           $oData->PreserveSort();
@@ -53,11 +53,11 @@ try
           $arrOrdersUpdated = $oCoopOrderJoinProducts->OrdersUpdated;
           if (is_array($arrOrdersUpdated) && count($arrOrdersUpdated)>0)
           {
-            $g_oError->AddError('<!$UNJOIN_PRODUCTS_SUCCESS$!>');
+            $g_oError->AddError('<!$UNJOIN_PRODUCTS_SUCCESS$!>', 'ok');
             $bOrdersChanged = TRUE;
           }
           else
-            $g_oError->AddError('<!$UNJOIN_PRODUCTS_NO_UPDATE$!>');
+            $g_oError->AddError('<!$UNJOIN_PRODUCTS_NO_UPDATE$!>', 'warning');
           break;
       }
     }
