@@ -12,7 +12,7 @@ class Consts
     const URL_ACCESS_DENIED = 'AccessDenied.php';
     const URL_HOME = 'home.php';
     const URL_CACHE_DIR = 'cache';
-   
+       
     //indexes of the languages array, $g_aSupportedLanguages, defined in settings.php
     const IND_LANGUAGE_NAME = 0;
     const IND_LANGUAGE_REQUIRED = 1;
@@ -104,6 +104,7 @@ class Consts
     const PERMISSION_AREA_SPECIFICATION = 12;
     const PERMISSION_AREA_UNITS = 11;
     const PERMISSION_AREA_UNIT_ABBREVIATION = 18;
+    const PERMISSION_AREA_STORAGE_AREAS = 105;
     const PERMISSION_SCOPE_COOP = 38;
     const PERMISSION_SCOPE_GROUP = 39;
     const PERMISSION_TYPE_ADD = 47;

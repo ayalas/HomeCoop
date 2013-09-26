@@ -27,7 +27,7 @@ try
     if ( isset( $_POST['hidOriginalData'] ) )
       $oRecord->SetSerializedOriginalData( $_POST["hidOriginalData"] );
 
-    $oRecord->CopyCoopOrderData();
+    $oRecord->PreserveData();
     
     $oRecord->ProducerPrice = NULL;
     if ( isset($_POST['txtProducerPrice']) && !empty($_POST['txtProducerPrice']))
@@ -298,7 +298,7 @@ function Save()
                 <tr><td>
                 <table cellspacing="0" cellpadding="2" width="100%">
                 <tr>
-                <td></td>
+                <td colspan="2"></td>
                 <?php
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
@@ -324,6 +324,7 @@ function Save()
                     }
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php
@@ -350,6 +351,7 @@ function Save()
                     }
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr> 
                 <tr>
                   <?php
@@ -362,6 +364,7 @@ function Save()
                       $lblQuantity->EchoHtml();
                       unset($lblQuantity);
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                      
@@ -372,6 +375,7 @@ function Save()
                      
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 
                 <tr>
@@ -383,6 +387,7 @@ function Save()
                      
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                      
@@ -393,6 +398,7 @@ function Save()
                      
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                      
@@ -402,6 +408,7 @@ function Save()
                      unset($txtMaxUserOrder);
                      
                      HtmlTextEditMultiLang::EchoHelpText('מקסימום כמות מהמוצר לכל חבר/ה');
+                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -412,6 +419,7 @@ function Save()
                      unset($txtMaxCoopOrder);
                      
                      HtmlTextEditMultiLang::EchoHelpText('מקסימום כמות מהמוצר לכל הזמנת הקואופרטיב');
+                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -420,7 +428,10 @@ function Save()
                               $oRecord->TotalCoopOrder );
                       $lblTotalCoopOrder->EchoHtml();
                       unset($lblTotalCoopOrder);
+                      
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                   <td></td>
                 </tr>
                 <tr>
                   <?php
@@ -428,7 +439,10 @@ function Save()
                               $oRecord->ProducerTotal );
                       $lblProducerTotal->EchoHtml();
                       unset($lblProducerTotal);
+                      
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 
                 <tr>
@@ -440,6 +454,7 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 
                 <?php
@@ -452,6 +467,26 @@ function Save()
                       echo 'לכמות של המוצר הזה צורפה כמות ממוצר מקושר';
                     echo '</td>';
                     
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                    
+                    echo '<td></td></tr>';
+                  }
+                  
+                  //PICKUP LOCATIONS STORAGE
+                  HtmlTextEditMultiLang::EchoTitleLine('אחסון');
+                  
+                  foreach($oRecord->PickupLocationsStorage as $PickupLocationID => $Sections)
+                  {
+                    echo '<tr>';
+                    
+                    $selStorageArea = new HtmlSelectArray('StorageAreaFor_' . $PickupLocationID,
+                        htmlspecialchars($Sections['Data']['sPickupLocation']), 
+                        $Sections['List'], $Sections['Data']['StorageAreaKeyID']);
+                    $selStorageArea->ReadOnly = $bReadOnly;
+                    $selStorageArea->EmptyText = 'לא פעיל';
+                    $selStorageArea->EchoHtml();
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('מקום האחסון בנקודת האיסוף אליו מיועד המוצר.');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                     
                     echo '</tr>';

@@ -6,6 +6,7 @@ include_once '../authenticate.php';
 $sPageTitle = 'מקוף איסוף חדש';
 
 $oRecord = new PickupLocation;
+$nStorageCount = 0;
 
 try
 {
@@ -138,6 +139,91 @@ function Save()
 {
   document.getElementById("hidPostAction").value = <?php echo SQLBase::POST_ACTION_SAVE; ?>;
 }
+function AddStorageArea()
+{
+  var nCount = document.getElementById("hidStorageAreaCount").value;
+  nCount++;
+  var sHtml = '<?php HtmlTextEditMultiLang::EchoSeparatorLine(); ?>';
+  
+  sHtml += '<tr>';
+  
+  var sNamePrefix = '<?php echo HtmlStorageArea::CTL_NEW_NAME_PREFIX; ?>';
+  var sDisabledPrefix = '<?php echo HtmlStorageArea::CTL_NEW_DISABLED_PREFIX; ?>';
+  var sDefaultPrefix = '<?php echo HtmlStorageArea::CTL_NEW_DEFAULT_PREFIX; ?>';
+  var sDefaultGroup = '<?php echo HtmlStorageArea::CTL_DEFAULT_GROUP; ?>';
+  var sCapacityPrefix = '<?php echo HtmlStorageArea::CTL_NEW_MAX_BURDEN_PREFIX; ?>';
+  var sOtherLangsEmptyCells = '<?php HtmlTextEditMultiLang::OtherLangsEmptyCells(); ?>';
+  var nMinNewControlsNum = <?php echo HtmlStorageArea::MIN_NEW_CONTROLS_NUM; ?>;
+  
+  <?php
+      //using language dirs?
+      if ($g_nCountLanguages > 0)
+      {         
+        //current language is always first
+        $sIDSuffix = HtmlTextEditMultiLang::ID_LINK . $g_sLangDir;
+        ?>
+            sHtml += '<td nowrap><label  for="' + sNamePrefix + nCount + 
+              '<?php echo $sIDSuffix; ?>">מקום אחסון‏‏:‏</label></td><td><input class="dataentry" type="text" maxlength="100" dir="<?php
+              echo $g_aSupportedLanguages[$g_sLangDir][Consts::IND_LANGUAGE_DIRECTION];
+              ?>" id="' + 
+              sNamePrefix + nCount + '<?php echo $sIDSuffix; ?>" name="' + sNamePrefix + nCount + 
+              '<?php echo $sIDSuffix; ?>" value="" /></td>';
+        <?php
+
+        foreach($g_aSupportedLanguages as $lkey => $larr)
+        {
+          if ($lkey != $g_sLangDir)
+          {
+            $sIDSuffix = HtmlTextEditMultiLang::ID_LINK . $lkey;
+            ?>
+                sHtml += '<td><input class="dataentry" type="text" maxlength="100" dir="<?php 
+                echo $g_aSupportedLanguages[$lkey][Consts::IND_LANGUAGE_DIRECTION];
+                ?>" id="' + 
+                  sNamePrefix + nCount + '<?php echo $sIDSuffix; ?>" name="' + sNamePrefix + nCount + 
+                  '<?php echo $sIDSuffix; ?>" value="" /></td>';
+            <?php
+          }
+        }
+      }
+      else
+      {
+        ?>
+          sHtml += '<td nowrap><label for="' + sNamePrefix + nCount + 
+            '">מקום אחסון‏‏:‏</label></td><td><input class="dataentry" type="text" maxlength="100" id="' + 
+            sNamePrefix + nCount + '" name="' + sNamePrefix + nCount + 
+            '" value="" /></td>';
+        <?php
+      }
+  ?>
+      
+  sHtml += '<td></td></tr>';
+  
+  var sCapacityMaxLength = '<?php echo HtmlTextEditNumeric::NUMBER_DEFAULT_MAX_LENGTH; ?>';
+  var nNewID = nMinNewControlsNum + nCount;
+  
+  //capacity
+  sHtml += '<tr><td nowrap ><label for="' + sCapacityPrefix + nCount + 
+        '">קבולת אחסון‏‏:‏‏</label></td><td><input type="text"  maxlength="' + 
+        sCapacityMaxLength + '"  dir="ltr"  id="' + sCapacityPrefix + nCount + 
+        '" name="' + sCapacityPrefix + nCount + 
+        '"  class="dataentry"  value="" /></td>' + sOtherLangsEmptyCells;
+ 
+  sHtml += '<td></td></tr>';
+ 
+  //disabled, default
+  sHtml += '<tr><td></td><td><select id="' + sDisabledPrefix
+      + nCount + '" class="requiredselect" name="' + sDisabledPrefix + nCount + 
+      '" ><option value="0" selected >פעיל</option><option value="1" >לא פעיל</option></select></td>' + 
+      '<td><input type="radio" value="' + nNewID +
+        '" id="' + sDefaultPrefix + nCount + '" name="' +
+          sDefaultGroup + '" /><span>ברירת מחדל</span></td>' + 
+      sOtherLangsEmptyCells;
+    
+  sHtml += '</tr><tr id="trPlaceHolder" name="trPlaceHolder"></tr>';      
+      
+  document.getElementById("trPlaceHolder").outerHTML = sHtml;
+  document.getElementById("hidStorageAreaCount").value = nCount;
+}
 </script>
 </head>
 <body class="centered">
@@ -172,7 +258,7 @@ function Save()
                   </td>
                 </tr>
                 <tr><td>
-                <table cellspacing="0" cellpadding="2" width="100%">
+                <table id="tblRows" cellspacing="0" cellpadding="2" width="100%">
                 <tr>
                 <td></td>
                 <?php
@@ -238,6 +324,7 @@ function Save()
                     unset($oIsDisabled);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                 <td></td>
                 </tr>
                 
                 <tr>
@@ -248,15 +335,17 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                 <td></td>
                 </tr>
                 
                 <tr>
                   <?php                     
-                    $txtMaxBurden = new HtmlTextEditNumeric('קיבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
+                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת אחסון', 'txtMaxBurden', $oRecord->MaxBurden);
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
                     
                     HtmlTextEditMultiLang::EchoHelpText('הקיבולת המקסימאלית של מקום האיסוף במונחים של שדה המוצר &quot;מעמסה&quot;. הסכום של המעמסות של כל המוצרים כפול הכמות שהוזמנה מכל מוצר יושווה לערך זה עבור כל הזמנות החברות/ים שמקום איסוף זה נבחר בהם. זהו רק ערך ברירת מחדל, וניתן להחליפו בהגדרות מקום האיסוף של הזמנת הקואופרטיב. אם לא הוחלף הערך בהגדרות מקום האיסוף של הזמנת הקואופרטיב,  חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr> 
                 
@@ -268,11 +357,11 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                 <td></td>
                 </tr>
                 
                 <tr>
                   <?php
-                  
                     $sDate = '';
                     if ($oRecord->CachierDate != NULL)
                       $sDate = $oRecord->CachierDate->format('j.n.Y G:i');
@@ -284,17 +373,19 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                 <td></td>
                 </tr>
                 
                 <tr>
                   <?php
-                  
                     $lblPrevCachier = new HtmlTextLabel('קופה קודמת', 'lblPrevCachier', $oRecord->PrevCachier);
+                    $lblPrevCachier->SetAttribute('dir','ltr');
                     $lblPrevCachier->EchoHtml();
                     unset($lblPrevCachier);
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                 <td></td>
                 </tr>
                 
                 <tr>
@@ -306,10 +397,62 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                 <td></td>
                 </tr> 
                 
+                <?php
+                  // Storage Areas
+                  $oStorageAreaRow = NULL;
+                  $nTotalCount = 0;
+                  
+                  if ($oRecord->ID > 0) 
+                  {
+                    foreach($oRecord->StorageAreas as $sa)
+                    {
+                      HtmlTextEditMultiLang::EchoSeparatorLine();
+                      
+                      $nStorageCount++;
+                      $oStorageAreaRow = new HtmlStorageArea($sa, $nStorageCount);
+                      $oStorageAreaRow->EchoHtml();
+                    }
+                  }
+                  $nTotalCount += $nStorageCount;
+                  //restore unsaved new entries after validation errors
+                  if (count($oRecord->NewStorageAreas) > 0)
+                  {
+                    foreach($oRecord->NewStorageAreas as $sa)
+                    {
+                      HtmlTextEditMultiLang::EchoSeparatorLine();
+                      
+                      $nStorageCount++;
+                      $nTotalCount++;
+                      
+                      $oStorageAreaRow = new HtmlStorageArea($sa, $nStorageCount);
+                      $oStorageAreaRow->IsNew = TRUE;
+                      $oStorageAreaRow->Required = ($nTotalCount == 1);
+                      $oStorageAreaRow->EchoHtml(); 
+                    }
+                  }
+                  //default behaviour for new form with no unsaved new entries to restore
+                  elseif ($oRecord->ID == 0)
+                  {
+                    $nStorageCount = 1;
+                    //add default storage area if not added
+                    $oStorageAreaRow = new HtmlStorageArea();
+                    $oStorageAreaRow->IsNew = TRUE;
+                    $oStorageAreaRow->EchoHtml();
+                  }
+                  unset($oStorageAreaRow);
+                  
+                ?>   
+                <tr id="trPlaceHolder" name="trPlaceHolder"></tr>
                 </table>
-                </td></tr></table>
+                </td></tr>
+                <tr>
+                  <td><button type="button" onclick="JavaScript:AddStorageArea();" id="btn_add_storage" 
+                              name="btn_add_storage">הוספת מקום אחסון</button></td>
+                </tr>
+                </table>
                 </td>
                 <td width="128" >
                 <?php 
@@ -328,6 +471,8 @@ function Save()
       </td>
     </tr>
 </table>
+<input type="hidden" id="hidStorageAreaCount" name="hidStorageAreaCount" 
+                      value="<?php echo $nStorageCount; ?>" />
 </form>
  </body>
 </html>

@@ -11,6 +11,7 @@ class HtmlFileUploader {
  const PROPERTY_READ_ONLY = "ReadOnly";
  const PROPERTY_LABEL = "Label";
  const PROPERTY_FILE_SIZE = "MaxFileSize";
+ const PROPERTY_LABEL_SLOT_IS_HTML = "UseLabelSlotAsHtml";
    
  protected $m_aData = NULL;
   
@@ -21,7 +22,8 @@ class HtmlFileUploader {
          self::PROPERTY_REQUIRED => FALSE,
          self::PROPERTY_READ_ONLY => FALSE,
          self::PROPERTY_LABEL => $sLabel,
-         self::PROPERTY_FILE_SIZE => $nMaxFileSize
+         self::PROPERTY_FILE_SIZE => $nMaxFileSize,
+         self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
         );
  }
  
@@ -60,16 +62,23 @@ class HtmlFileUploader {
  
   //echo directly to html document to save some string concats/retrieval
   public function EchoHtml()
-  {     
-    echo '<td nowrap ><label ';
-    if ($this->m_aData[self::PROPERTY_REQUIRED])
-      echo ' class="required" ';
+  {        
+    echo '<td nowrap >';
+    
+    if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+      echo $this->m_aData[self::PROPERTY_LABEL];
+    else
+    {
+     echo '<label ';
+      if ($this->m_aData[self::PROPERTY_REQUIRED])
+        echo ' class="required" ';
       
-    echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '">' , $this->m_aData[self::PROPERTY_LABEL] , 
-            '‏:‏</label></td>',
-    
-       '<td>';
-    
+      echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '">' , $this->m_aData[self::PROPERTY_LABEL] , 
+          '‏:‏</label>';
+    }
+ 
+    echo '</td><td>';
+        
     if ($this->m_aData[self::PROPERTY_FILE_SIZE] > 0)
       echo '<input type="hidden" name="MAX_FILE_SIZE" value="' , $this->m_aData[self::PROPERTY_FILE_SIZE] , '" />';
    

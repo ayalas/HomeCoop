@@ -104,7 +104,7 @@ UserSessionBase::Close();
             </tr>
             <tr>
               <td class="columntitlelong">יצרן</td>
-              <td class="columntitle"><a class="tooltip" href="#" >קיבולת משלוח<span>הגבלת גודל המשלוח ליצרן זה לפי הקיבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</span></a></td>              
+              <td class="columntitle"><a class="tooltip" href="#" >קבולת משלוח<span>הגבלת גודל המשלוח ליצרן זה לפי הקבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</span></a></td>              
               <td class="columntitle">סכום ליצרן</td>
               <td class="columntitle">סכום לקואופ</td>
               <td class="columntitlenowidth">סה&quot;כ משלוח</td>
@@ -129,13 +129,14 @@ UserSessionBase::Close();
                       //burden
                       echo '<td>' , $recTable["fMaxBurden"];
                       if ($oCoopOrderCapacity->Burden->CanCompute)
-                        echo ' (' , $oCoopOrderCapacity->Burden->PercentRounded , '%)';
+                        LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
+                      
                       echo '</td>';                  
                       
                       //ProducerTotal
                       echo '<td>' , $recTable["mProducerTotal"];
                       if ($oCoopOrderCapacity->Total->CanCompute)
-                        echo ' (' , $oCoopOrderCapacity->Total->PercentRounded , '%)';                      
+                        LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
                       echo '</td>';
        
                       //CoopTotal

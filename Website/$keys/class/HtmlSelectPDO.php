@@ -23,6 +23,7 @@ class HtmlSelectPDO {
   const PROPERTY_REQUIRED_IF_ONE_OPTION = "RequiredIfOneOption";
   const PROPERTY_FETCHED = "Fetched";
   const PROPERTY_SELECT_FIRST_IF_ONE_OPTION = "SelectFirstIfOneOption";
+  const PROPERTY_LABEL_SLOT_IS_HTML = "UseLabelSlotAsHtml";
   
   protected $m_aData = array( self::PROPERTY_LABEL => NULL,
                               self::PROPERTY_DATA_ROW => NULL,
@@ -36,7 +37,8 @@ class HtmlSelectPDO {
                               self::PROPERTY_ON_CHANGE => NULL,
                               self::PROPERTY_REQUIRED_IF_ONE_OPTION => FALSE,
                               self::PROPERTY_FETCHED => 0,
-                              self::PROPERTY_SELECT_FIRST_IF_ONE_OPTION => FALSE
+                              self::PROPERTY_SELECT_FIRST_IF_ONE_OPTION => FALSE,
+                              self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
                       );
   
   public function __construct($sLabel, &$row, &$oSQLBase, $nValue, $sTextField, $sValueField) {
@@ -147,13 +149,21 @@ class HtmlSelectPDO {
         $sOptions = '<option value="' . self::EMPTY_VALUE . '" >' . $this->m_aData[self::PROPERTY_EMPTY_TEXT] . '</option>'
               . $sOptions;
     }
-
-    echo '<td nowrap><label ';
-    if ($this->m_aData[self::PROPERTY_REQUIRED])
+       
+    echo '<td nowrap>';
+    
+    if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+      echo $this->m_aData[self::PROPERTY_LABEL];
+    else
+    {
+      echo '<label ';
+      if ($this->m_aData[self::PROPERTY_REQUIRED])
         echo ' class="required" ';
-    echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '" >' , $this->m_aData[self::PROPERTY_LABEL] ,
-           '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label></td>';
-    echo '<td><select id="' , $this->m_aData[self::PROPERTY_ID] , '" name="' , $this->m_aData[self::PROPERTY_ID] , '"';
+      echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '" >' , $this->m_aData[self::PROPERTY_LABEL] ,
+          '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label>';
+    }
+
+    echo '</td><td><select id="' , $this->m_aData[self::PROPERTY_ID] , '" name="' , $this->m_aData[self::PROPERTY_ID] , '"';
     
     if ($this->m_aData[self::PROPERTY_REQUIRED])
       echo ' class="requiredselect" ';

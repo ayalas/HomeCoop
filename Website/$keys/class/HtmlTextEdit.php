@@ -22,6 +22,7 @@ class HtmlTextEdit {
   const PROPERTY_ENCLOSE_IN_HTML_CELL = "EncloseInHtmlCell";
   const PROPERTY_ON_CHANGE = "OnChange";
   const PROPERTY_PROPERTIES = "Properties";
+  const PROPERTY_LABEL_SLOT_IS_HTML = 'UseLabelSlotAsHtml';
   
   protected $m_aData = NULL;
   
@@ -38,7 +39,8 @@ class HtmlTextEdit {
          self::PROPERTY_TEXTAREA_ROWS => NULL,
          self::PROPERTY_ENCLOSE_IN_HTML_CELL => TRUE,
          self::PROPERTY_ON_CHANGE => NULL,
-         self::PROPERTY_PROPERTIES => array()
+         self::PROPERTY_PROPERTIES => array(),
+         self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
         );
   }
     

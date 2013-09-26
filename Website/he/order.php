@@ -260,7 +260,7 @@ function Save()
               </tr>
               <tr>
                 <td>
-                  <button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" 
+                  <button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" 
                 <?php if ($g_oError->HadError || !$oRecord->CanModify) echo ' disabled="disabled" '; ?>><?php
                 if ($oRecord->ID > 0)
                   echo 'שמירת כותר ההזמנה';

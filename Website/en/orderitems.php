@@ -231,7 +231,7 @@ function SetDirty()
                 {
                 ?><tr>
                   <td class="nowrapping">
-                    <button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" >Save Ordered Products</button>&nbsp;
+                    <button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" >Save Ordered Products</button>&nbsp;
                   </td>
                   <td width="100%">
                     <select id="selProductsView" name="selProductsView" onchange="JavaScript:SwitchViewMode();" >

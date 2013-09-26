@@ -195,6 +195,7 @@ function Save()
                   
                   HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                <td></td>
                 </tr>
                 
                 

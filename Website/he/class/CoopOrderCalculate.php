@@ -17,12 +17,16 @@ class CoopOrderCalculate extends SQLBase {
   
   protected $m_recPickupLocations = NULL;
   protected $m_aPickupLocationsFees = NULL;
+  protected $m_aPickupLocationsStorageSums = NULL;
   protected $m_recProducers = NULL;
   protected $m_recProducts = NULL;
   protected $m_recPickupLocsProducts = NULL;
   protected $m_recPickupLocsProducers = NULL;
+  protected $m_recStorageAreas = NULL;
   protected $m_bCalculateProducersOnly = FALSE;
-    
+  protected $m_sOrdersListToCalculate = NULL;
+  protected $m_fStorageBurden = 0;
+
   public function __construct($nCoopOrderID)
   {
     $this->m_aData = array(CoopOrder::PROPERTY_ID => $nCoopOrderID,
@@ -36,8 +40,8 @@ class CoopOrderCalculate extends SQLBase {
         CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE => NULL,
         CoopOrder::PROPERTY_SMALL_ORDER => NULL,
         CoopOrder::PROPERTY_COOP_FEE => NULL,
-        CoopOrder::PROPERTY_COOP_FEE_PERCENT => NULL
-        );
+        CoopOrder::PROPERTY_COOP_FEE_PERCENT => NULL,
+    );
     
     if ($nCoopOrderID == 0)
       throw new Exception('Error in CoopOrderCalculate.Run: ID provided is 0');
@@ -46,8 +50,6 @@ class CoopOrderCalculate extends SQLBase {
   //recalcualte entire coop order
   public function Run()
   {
-    global $g_oError;
-
     $this->CalculateProducts();
 
     $this->CalculateOrders();
@@ -57,7 +59,61 @@ class CoopOrderCalculate extends SQLBase {
     $this->CalculateProducers();
 
     $this->UpdateCoopOrder();
+  }
+  
+  //called when changing a pickup location or placing/updating an order
+  //updates also pickup location sub tables: products and producers
+  public function CalculatePickupLocs($bCalculateAll)
+  {
+    //must be run first, because retreives data for pickup location update
+    $this->CalculateStorageAreas();
+    
+    $sJoin = NULL;
+    if ($bCalculateAll)
+      $sJoin = " LEFT JOIN ";
+    else
+    {
+      $sJoin = " INNER JOIN ";
+    }
+    
+    //get total fee for each pickup location as a key-pair array
+    $sSQL = " SELECT COPL.PickupLocationKeyID, IfNull(SUM(O.mCoopFee),0) TotalFee " .
+            " FROM T_CoopOrderPickupLocation COPL" .
+          $sJoin . " T_Order O ON O.CoopOrderKeyID = COPL.CoopOrderKeyID AND COPL.PickupLocationKeyID = O.PickupLocationKeyID " .
+          " WHERE COPL.CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] . 
+          " GROUP BY COPL.PickupLocationKeyID; ";
+    
+    $this->RunSQL( $sSQL );
+    $this->m_aPickupLocationsFees = $this->fetchAllKeyPair();    
+    
+    $sSQL =   " SELECT COPL.PickupLocationKeyID, SUM(OI.mCoopPrice) as TotalCoopPrice, " . 
+          " IfNull(SUM(IfNull(COPRD.fBurden,0) * IfNull( OI.fQuantity/NullIf(PRD.fQuantity,0),0) ),0) as TotalBurden " .
+          " FROM T_CoopOrderPickupLocation COPL " . 
+          $sJoin . " T_Order O ON O.CoopOrderKeyID = COPL.CoopOrderKeyID AND COPL.PickupLocationKeyID = O.PickupLocationKeyID " .
+          $sJoin . " T_OrderItem OI ON O.OrderID = OI.OrderID " .
+          $sJoin . " T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID AND OI.ProductKeyID = COPRD.ProductKeyID " .
+          $sJoin . " T_Product PRD ON OI.ProductKeyID = PRD.ProductKeyID " .
+          " WHERE COPL.CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
+          " GROUP BY COPL.PickupLocationKeyID; ";
 
+    $this->RunSQL( $sSQL );
+    
+    while($this->m_recPickupLocations = $this->fetch())
+    {
+      $this->UpdatePickupLocation();
+    }
+    
+    $this->CalculatePickupLocsProducts();
+    $this->CalculatePickupLocsProducers();
+  }
+  
+  //update coop order summaries
+  public function CalculateCoopOrder()
+  {
+    $this->m_bCalculateProducersOnly = TRUE;
+    $this->CalculateProducers();
+    
+    $this->UpdateCoopOrder();
   }
   
   protected function CalculateProducts()
@@ -90,101 +146,33 @@ class CoopOrderCalculate extends SQLBase {
   //causes to update orders: changes in products prices, un/joining of products, delivery costs, coop fees
   protected function CalculateOrders()
   {
-    if ($this->m_aData[self::PROPERTY_ORDERS_LIST_TO_CALCULATE] == NULL)
+    if ($this->m_aData[self::PROPERTY_ORDERS_LIST_TO_CALCULATE] != NULL)
+      $this->m_sOrdersListToCalculate = implode(',', $this->m_aData[self::PROPERTY_ORDERS_LIST_TO_CALCULATE]);
+    else
       return;
     
     $sSQL =  " SELECT O.OrderID, SUM(OI.mProducerPrice) mProducerTotal, SUM(OI.mCoopPrice) mCoopTotal " .
              " FROM T_Order O INNER JOIN T_OrderItem OI ON O.OrderID = OI.OrderID " .
              " WHERE O.CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
-             " AND O.OrderID IN (" . $this->m_aData[self::PROPERTY_ORDERS_LIST_TO_CALCULATE] . " ) " .
+             " AND O.OrderID IN (" . $this->m_sOrdersListToCalculate . " ) " .
              " GROUP BY O.OrderID;";
     $this->RunSQL( $sSQL );
+        
+    $arrOrdersToProcess = array_flip($this->m_aData[self::PROPERTY_ORDERS_LIST_TO_CALCULATE]);
     
-    $recOrder = $this->fetch();
-    
-    while($recOrder)
+    while($recOrder = $this->fetch())
     {
-      $oOrder = new Order();
-      
-      $oOrder->CoopTotal = Rounding::Round( $recOrder["mCoopTotal"], ROUND_SETTING_ORDER_COOP_TOTAL );
-
-      $oOrder->CoopFee = $this->m_aData[CoopOrder::PROPERTY_COOP_FEE];
-      $oOrder->SmallOrder = $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER];
-      $oOrder->SmallOrderCoopFee = $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE];
-      $oOrder->CoopFeePercent = $this->m_aData[CoopOrder::PROPERTY_COOP_FEE_PERCENT];
-      $oOrder->CalculateCoopFee();
-
-      //Save Order details
-      $sSQL =   " UPDATE T_Order SET mCoopTotal = ?, mCoopTotalIncFee = ?, mProducerTotal = ?, mCoopFee = ? WHERE OrderID = " . 
-           $recOrder["OrderID"] . ';';
-      
-      $this->m_bUseSecondSqlPreparedStmt = TRUE;
-
-      $this->RunSQLWithParams( $sSQL, array(
-              $oOrder->CoopTotal, 
-              $oOrder->CoopTotalIncludingFee,
-              $recOrder["mProducerTotal"], 
-              $oOrder->OrderCoopFee));
-      
-      $this->m_bUseSecondSqlPreparedStmt = FALSE;
-      
-      $recOrder = $this->fetch();
-    }
-  }
-  
-  //called when changing a pickup location or placing/updating an order
-  //updates also pickup location sub tables: products and producers
-  public function CalculatePickupLocs($bCalculateAll)
-  {
-    $sJoin = NULL;
-    if ($bCalculateAll)
-      $sJoin = " LEFT JOIN ";
-    else
-      $sJoin = " INNER JOIN ";
-    
-    //get total fee for each pickup location as a key-pair array
-    
-    $sSQL = " SELECT COPL.PickupLocationKeyID, IfNull(SUM(O.mCoopFee),0) TotalFee " .
-            " FROM T_CoopOrderPickupLocation COPL" .
-          $sJoin . " T_Order O ON O.CoopOrderKeyID = COPL.CoopOrderKeyID AND COPL.PickupLocationKeyID = O.PickupLocationKeyID " .
-          " WHERE COPL.CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
-          " GROUP BY COPL.PickupLocationKeyID; ";
-    
-    $this->RunSQL( $sSQL );
-    $this->m_aPickupLocationsFees = $this->fetchAllKeyPair();    
-    
-    $sSQL =   " SELECT COPL.PickupLocationKeyID, SUM(OI.mCoopPrice) as TotalCoopPrice, " . 
-          " IfNull(SUM(IfNull(COPRD.fBurden,0) * IfNull( OI.fQuantity/NullIf(PRD.fQuantity,0),0) ),0) as TotalBurden " .
-          " FROM T_CoopOrderPickupLocation COPL " . 
-          $sJoin . " T_Order O ON O.CoopOrderKeyID = COPL.CoopOrderKeyID AND COPL.PickupLocationKeyID = O.PickupLocationKeyID " .
-          $sJoin . " T_OrderItem OI ON O.OrderID = OI.OrderID " .
-          $sJoin . " T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID AND OI.ProductKeyID = COPRD.ProductKeyID " .
-          $sJoin . " T_Product PRD ON OI.ProductKeyID = PRD.ProductKeyID " .
-          " WHERE COPL.CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
-          " GROUP BY COPL.PickupLocationKeyID; ";
-
-    $this->RunSQL( $sSQL );
-
-    $this->m_recPickupLocations = $this->fetch();
-    
-    while($this->m_recPickupLocations)
-    {
-      $this->UpdatePickupLocation();
-      
-      $this->m_recPickupLocations = $this->fetch();
+      $this->UpdateOrder($recOrder["OrderID"], $recOrder["mCoopTotal"], $recOrder["mProducerTotal"]);
+            
+      //mark this order as processed
+      unset($arrOrdersToProcess[$recOrder["OrderID"]]);
     }
     
-    $this->CalculatePickupLocsProducts();
-    $this->CalculatePickupLocsProducers();
-  }
-  
-  //update coop order summaries
-  public function CalculateCoopOrder()
-  {
-    $this->m_bCalculateProducersOnly = TRUE;
-    $this->CalculateProducers();
-    
-    $this->UpdateCoopOrder();
+    //go through all the non-processed orders and nullify them
+    foreach($arrOrdersToProcess as $OrderID => $index)
+    {
+      $this->UpdateOrder($OrderID, 0, 0);
+    }
   }
   
   protected function CalculateProducers()
@@ -198,14 +186,10 @@ class CoopOrderCalculate extends SQLBase {
           " GROUP BY COP.ProducerKeyID, COP.mMaxDelivery, COP.mMinDelivery, COP.mDelivery, COP.fDelivery ;";
 
     $this->RunSQL( $sSQL );
-
-    $this->m_recProducers = $this->fetch();
     
-    while($this->m_recProducers)
+    while($this->m_recProducers = $this->fetch())
     {
       $this->UpdateProducer();
-      
-      $this->m_recProducers = $this->fetch();
     }
   }
   
@@ -231,14 +215,10 @@ class CoopOrderCalculate extends SQLBase {
           " GROUP BY COPL.PickupLocationKeyID, COPRD.ProductKeyID, COPLPRD.PickupLocationKeyID, PRD.nItems, COPRD.mProducerPrice;";
     
     $this->RunSQL( $sSQL );
-
-    $this->m_recPickupLocsProducts = $this->fetch();
     
-    while($this->m_recPickupLocsProducts)
+    while($this->m_recPickupLocsProducts = $this->fetch())
     {
       $this->ModifyPickupLocProduct();
-      
-      $this->m_recPickupLocsProducts = $this->fetch();
     }
     
   }
@@ -257,16 +237,54 @@ class CoopOrderCalculate extends SQLBase {
           " GROUP BY COPL.PickupLocationKeyID, COP.ProducerKeyID, COPLP.PickupLocationKeyID;";
 
     $this->RunSQL( $sSQL );
-
-    $this->m_recPickupLocsProducers = $this->fetch();
     
-    while($this->m_recPickupLocsProducers)
+    while($this->m_recPickupLocsProducers = $this->fetch())
     {
       $this->ModifyPickupLocProducer();
-      
-      $this->m_recPickupLocsProducers = $this->fetch();
     }
+  }
+  
+  protected function CalculateStorageAreas($bCalculateAll = TRUE)
+  {
+    $sJoin = NULL;
+    if ($bCalculateAll)
+      $sJoin = " LEFT JOIN ";
+    else
+      $sJoin = " INNER JOIN ";
     
+     $sSQL =   " SELECT COSA.StorageAreaKeyID, PLSA.PickupLocationKeyID, " . 
+          " IfNull(SUM(IfNull(COPRD.fBurden,0) * IfNull( OI.fQuantity/NullIf(PRD.fQuantity,0),0) ),0) as TotalBurden " .
+          " FROM T_CoopOrderStorageArea COSA INNER JOIN T_PickupLocationStorageArea PLSA ON PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " . 
+          $sJoin . " T_CoopOrderProductStorage COPS ON COSA.CoopOrderKeyID = COPS.CoopOrderKeyID AND COSA.StorageAreaKeyID = COPS.StorageAreaKeyID " . 
+          $sJoin . " T_Order O ON O.CoopOrderKeyID = COPS.CoopOrderKeyID AND COPS.PickupLocationKeyID = O.PickupLocationKeyID " .
+          $sJoin . " T_OrderItem OI ON O.OrderID = OI.OrderID " .
+                   " AND OI.ProductKeyID = COPS.ProductKeyID " .
+          $sJoin . " T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID AND OI.ProductKeyID = COPRD.ProductKeyID " .
+          $sJoin . " T_Product PRD ON OI.ProductKeyID = PRD.ProductKeyID " .
+          " WHERE COSA.CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
+          " GROUP BY COSA.StorageAreaKeyID, PLSA.PickupLocationKeyID; ";
+
+    $this->RunSQL( $sSQL );
+    
+    $this->m_aPickupLocationsStorageSums = array();
+    
+    $PLID = NULL;
+    
+    while($this->m_recStorageAreas = $this->fetch())
+    {
+      $this->UpdateStorageArea();
+
+      $PLID = $this->m_recStorageAreas['PickupLocationKeyID'];
+            
+      if (!isset($this->m_aPickupLocationsStorageSums[$PLID]['fStorageBurden']))
+        $this->m_aPickupLocationsStorageSums[$PLID]['fStorageBurden'] = 0;
+            
+      $this->m_aPickupLocationsStorageSums[$PLID]['fStorageBurden'] += 
+          $this->m_recStorageAreas['TotalBurden'];
+      
+      //collect data for coop order update
+      $this->m_fStorageBurden += $this->m_recStorageAreas['TotalBurden'];
+    }
   }
   
   protected function UpdateCoopOrder()
@@ -279,7 +297,11 @@ class CoopOrderCalculate extends SQLBase {
     
     $mCoopTotal = Rounding::Round($this->m_aData[self::PROPERTY_TOTAL_COOP] + $rec["TotalFee"], ROUND_SETTING_COOP_TOTAL);
     
-    $sSQL = " UPDATE T_CoopOrder SET fBurden = ?, mCoopTotal = ?, mProducerTotal =?, mTotalDelivery = ? ";
+    if ($this->m_fStorageBurden == 0)
+      $this->m_fStorageBurden = NULL;
+    
+    $sSQL = " UPDATE T_CoopOrder SET fBurden = :Burden, mCoopTotal = :CoopTotal, mProducerTotal = :ProducerTotal, mTotalDelivery = :TotalDelivery, " .
+        " fStorageBurden = :StorageBurden ";
     
     if ($this->m_aData[CoopOrder::PROPERTY_HAS_JOINED_PRODUCTS] !== NULL)
     {
@@ -292,10 +314,11 @@ class CoopOrderCalculate extends SQLBase {
     $sSQL .= " WHERE CoopOrderKeyID = " . 
             $this->m_aData[CoopOrder::PROPERTY_ID] . " ;";
     $this->RunSQLWithParams($sSQL, array(
-        $this->m_aData[self::PROPERTY_TOTAL_BURDEN],
-        $mCoopTotal,
-        $this->m_aData[self::PROPERTY_TOTAL_PRODUCERS],
-        $this->m_aData[self::PROPERTY_TOTAL_DELIVERY]
+              'Burden' => $this->m_aData[self::PROPERTY_TOTAL_BURDEN],
+              'CoopTotal' => $mCoopTotal,
+              'ProducerTotal' => $this->m_aData[self::PROPERTY_TOTAL_PRODUCERS],
+              'TotalDelivery' => $this->m_aData[self::PROPERTY_TOTAL_DELIVERY],
+              'StorageBurden' => $this->m_fStorageBurden,
             )
         );
   }
@@ -304,15 +327,25 @@ class CoopOrderCalculate extends SQLBase {
   {
     $this->m_bUseSecondSqlPreparedStmt = TRUE; //to allow fetch operations to continue on original one
     
-    $mCoopTotal = $this->m_recPickupLocations["TotalCoopPrice"] + 
-            $this->m_aPickupLocationsFees[$this->m_recPickupLocations["PickupLocationKeyID"]];
+    $PLID = $this->m_recPickupLocations["PickupLocationKeyID"];
     
-    $sSQL = " UPDATE T_CoopOrderPickupLocation SET fBurden = ?, mCoopTotal = ? WHERE CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
-          " AND PickupLocationKeyID = " . $this->m_recPickupLocations["PickupLocationKeyID"] . ";";
+    $mCoopTotal = $this->m_recPickupLocations["TotalCoopPrice"] + $this->m_aPickupLocationsFees[$PLID];
+    
+    $fStorageBurden = NULL;
+    
+    if (isset($this->m_aPickupLocationsStorageSums[$PLID]))
+    {      
+      if ($this->m_aPickupLocationsStorageSums[$PLID]['fStorageBurden'] > 0)
+        $fStorageBurden = $this->m_aPickupLocationsStorageSums[$PLID]['fStorageBurden'];
+    }
+    
+    $sSQL = " UPDATE T_CoopOrderPickupLocation SET fBurden = :Burden, mCoopTotal = :CoopTotal, fStorageBurden = :StorageBurden WHERE CoopOrderKeyID = " . 
+        $this->m_aData[CoopOrder::PROPERTY_ID] . " AND PickupLocationKeyID = " . $PLID . ";";
     $this->RunSQLWithParams($sSQL, array(
-        $this->m_recPickupLocations["TotalBurden"],
-        $mCoopTotal
-            )
+            'Burden' => $this->m_recPickupLocations["TotalBurden"],
+            'CoopTotal' => $mCoopTotal,
+            'StorageBurden' => $fStorageBurden,
+           )
         );
     
     $this->m_bUseSecondSqlPreparedStmt = FALSE;
@@ -353,6 +386,35 @@ class CoopOrderCalculate extends SQLBase {
 
       $this->m_bUseSecondSqlPreparedStmt = FALSE;
     }
+  }
+  
+  protected function UpdateOrder($OrderId, $mCoopTotal, $mProducerTotal)
+  {
+    $oOrder = new Order();
+      
+    $oOrder->CoopTotal = Rounding::Round( $mCoopTotal, ROUND_SETTING_ORDER_COOP_TOTAL );
+
+    $oOrder->CoopFee = $this->m_aData[CoopOrder::PROPERTY_COOP_FEE];
+    $oOrder->SmallOrder = $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER];
+    $oOrder->SmallOrderCoopFee = $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE];
+    $oOrder->CoopFeePercent = $this->m_aData[CoopOrder::PROPERTY_COOP_FEE_PERCENT];
+    $oOrder->CalculateCoopFee();
+
+    //Save Order details
+    $sSQL =   " UPDATE T_Order SET mCoopTotal = ?, mCoopTotalIncFee = ?, mProducerTotal = ?, mCoopFee = ? WHERE OrderID = " . 
+         $OrderId . ';';
+
+    $this->m_bUseSecondSqlPreparedStmt = TRUE;
+
+    $this->RunSQLWithParams( $sSQL, array(
+            $oOrder->CoopTotal, 
+            $oOrder->CoopTotalIncludingFee,
+            $mProducerTotal, 
+            $oOrder->OrderCoopFee));
+
+    $this->m_bUseSecondSqlPreparedStmt = FALSE;
+    
+    unset($oOrder);
   }
   
   //update or insert pickup location producer based on actual member orders data
@@ -428,6 +490,20 @@ class CoopOrderCalculate extends SQLBase {
           " AND ProductKeyID = " . $this->m_recProducts["ProductKeyID"] . ";";
     $this->RunSQLWithParams($sSQL, array(
         $mProducerTotal, $mCoopTotal, $fTotalCoopOrder
+            )
+        );
+    
+    $this->m_bUseSecondSqlPreparedStmt = FALSE;
+  }
+  
+  protected function UpdateStorageArea()
+  {
+    $this->m_bUseSecondSqlPreparedStmt = TRUE; //to allow fetch operations to continue on original one
+        
+    $sSQL = " UPDATE T_CoopOrderStorageArea SET fBurden = :Burden WHERE CoopOrderKeyID = " . $this->m_aData[CoopOrder::PROPERTY_ID] .
+          " AND StorageAreaKeyID = " . $this->m_recStorageAreas["StorageAreaKeyID"] . ";";
+    $this->RunSQLWithParams($sSQL, array(
+        'Burden' => $this->m_recStorageAreas["TotalBurden"],
             )
         );
     

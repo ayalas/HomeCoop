@@ -18,10 +18,14 @@ ini_set('display_errors', '1');
 //rtl/ltr align
 //language id (from db)
 //falling language id (from db. language to look in when a string is not found in the current langauge)
+
+//SET TO NULL FOR NO LANGUAGE DIRS. Otherwise, the langauge key is added to the path.
 $g_aSupportedLanguages = array( 
                     'he' => array('עברית', true, 'rtl',2, 1), 
                     'en' => array('English', true, 'ltr', 1, 0) 
  );
+
+$g_nCountLanguages = is_array($g_aSupportedLanguages)? count($g_aSupportedLanguages): 0;
 
 //db access
 define('DB_HOST',  '127.0.01');

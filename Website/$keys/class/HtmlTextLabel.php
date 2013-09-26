@@ -15,6 +15,7 @@ class HtmlTextLabel {
   const PROPERTY_WINDOW_OPEN_PARAMS = "WindowParams";
   const PROPERTY_PROPERTIES = "Properties";
   const PROPERTY_USE_HTML_ESCAPE = "UseHtmlEscape";
+  const PROPERTY_LABEL_SLOT_IS_HTML = "UseLabelSlotAsHtml";
   
   protected $m_aData = NULL;
   
@@ -26,8 +27,9 @@ class HtmlTextLabel {
          self::PROPERTY_LINK_URL => NULL,
          self::PROPERTY_WINDOW_OPEN_PARAMS => NULL,
          self::PROPERTY_PROPERTIES => array(),
-         self::PROPERTY_USE_HTML_ESCAPE => TRUE
-        );
+         self::PROPERTY_USE_HTML_ESCAPE => TRUE,
+         self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
+      );
   }
 
   public function __get( $name ) {
@@ -72,10 +74,16 @@ class HtmlTextLabel {
   //echo directly to html document to save some string concats/retrieval
   public function EchoHtml()
   {    
-    echo '<td nowrap ><label ';
+    
+    echo '<td nowrap >';
+    
+    if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+      echo $this->m_aData[self::PROPERTY_LABEL];
+    else
+      echo '<label  for="' , $this->m_aData[self::PROPERTY_ID] , '" >' , $this->m_aData[self::PROPERTY_LABEL] ,
+        '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label>';
       
-    echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '" >' , $this->m_aData[self::PROPERTY_LABEL] ,
-        '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label></td><td>';
+    echo '</td><td>';
     
     if ($this->m_aData[self::PROPERTY_LINK_URL] != NULL)
     {

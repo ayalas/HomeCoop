@@ -274,7 +274,7 @@ function OnChangeUnit()
                 <?php
                   HtmlTextEditMultiLang::EchoColumnHeaders();
                 ?>
-                <td></td>
+                <td width="100%">&nbsp;</td>
                 </tr>
                 <tr>
                 <?php
@@ -287,7 +287,7 @@ function OnChangeUnit()
                 unset($txtProduct);
                 
                 ?>
-                <td width="100%">&nbsp;</td>
+                <td></td>
                 </tr>
                 <tr>
                   <?php                    
@@ -300,6 +300,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                 <?php
@@ -325,6 +326,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                     
@@ -337,6 +339,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                     
@@ -346,6 +349,7 @@ function OnChangeUnit()
                     unset($txtUnitInterval);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_UNIT_INTERVAL$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -357,6 +361,7 @@ function OnChangeUnit()
                     unset($txtProducerPrice);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$HELP_PRODUCT_PRICE$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -368,6 +373,7 @@ function OnChangeUnit()
                     unset($txtCoopPrice);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$HELP_PRODUCT_PRICE$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -378,6 +384,7 @@ function OnChangeUnit()
                     unset($txtSortOrder);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_SORT_ORDER$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -388,6 +395,7 @@ function OnChangeUnit()
                     unset($txtPackageSize);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_PACKAGE_SIZE$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -399,6 +407,7 @@ function OnChangeUnit()
                     unset($txtBurden);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_BURDEN$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -411,6 +420,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                  <tr>
                   <?php
@@ -420,6 +430,7 @@ function OnChangeUnit()
                     unset($selItemUnit);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                   <td></td>
                 </tr>
                 <tr>
                   <?php                     
@@ -430,6 +441,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php
@@ -438,6 +450,7 @@ function OnChangeUnit()
                     $selItemUnit->EchoHtml();
                     unset($selItemUnit);
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_JOIN_TO_PRODUCT$!>'); 
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -448,6 +461,7 @@ function OnChangeUnit()
                     unset($txtMaxUserOrder);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_USER_MAX_ORDER$!>'); 
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -460,6 +474,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                   <?php   
                     if ($oRecord->CheckImageUploadsPermission())
@@ -471,6 +486,7 @@ function OnChangeUnit()
                       unset($oPic1Upload);
 
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_HELP$!>', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
 
                       echo '</tr>';
                       
@@ -482,6 +498,7 @@ function OnChangeUnit()
                       unset($oPic1FileName);
 
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_FILE_NAME_HELP$!>', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
                       if ($oRecord->Image1FileName != NULL)
@@ -489,12 +506,12 @@ function OnChangeUnit()
                         echo '<tr><td colspan="2"><input type="checkbox" name="chkRemoveImage1" id="chkRemoveImage1" value="1" ><!$LBL_REMOVE_IMAGE$!>',
                              '</input></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                         
                         echo '<tr><td colspan="2"><img border="0" height="', PRODUCT_IMAGE_HEIGHT_SMALL,
                                 '" src="..', URL_UPLOAD_DIR, $oRecord->Image1FileName, '" /></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                       }
                       
                       echo '<tr>';
@@ -505,6 +522,7 @@ function OnChangeUnit()
                       unset($oPic2Upload);
 
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_HELP$!>', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
                       echo '<tr>';
@@ -515,6 +533,7 @@ function OnChangeUnit()
                       unset($oPic2FileName);
                       
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_FILE_NAME_HELP$!>', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
                       if ($oRecord->Image2FileName != NULL)
@@ -522,12 +541,12 @@ function OnChangeUnit()
                         echo '<tr><td colspan="2"><input type="checkbox" name="chkRemoveImage2" id="chkRemoveImage2" value="1" ><!$LBL_REMOVE_IMAGE$!>',
                              '</input></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                         
                         echo '<tr><td colspan="2"><img border="0" height="', PRODUCT_IMAGE_HEIGHT_SMALL,
                                 '" src="..', URL_UPLOAD_DIR, $oRecord->Image2FileName, '" /></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                       }
                     }
                   ?>

@@ -139,7 +139,8 @@ UserSessionBase::Close();
                       //burden
                       echo '<td>' , Rounding::Round($recTable["fBurden"], ROUND_SETTING_BURDEN);
                       if ($oCoopOrderCapacity->Burden->CanCompute)
-                        echo ' (' , $oCoopOrderCapacity->Burden->PercentRounded , '%)';
+                        LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
+                      
                       echo '</td>';                  
                       
                       //CoopTotal
@@ -148,7 +149,7 @@ UserSessionBase::Close();
                       {
                         echo $recTable["mCoopTotal"];
                         if ($oCoopOrderCapacity->Total->CanCompute)
-                          echo ' (' , $oCoopOrderCapacity->Total->PercentRounded , '%)';                      
+                          LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
                       }
                       echo '</td>',
 

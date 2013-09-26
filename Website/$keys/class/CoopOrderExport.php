@@ -191,7 +191,7 @@ class CoopOrderExport extends CoopOrderSubBase {
     {
      $nProducerID = $this->m_aData[self::PROPERTY_ID] - CoopOrderExport::LIST_ITEM_TYPE_MAILS - CoopOrderExport::LIST_ITEM_PRODUCER;
 
-     $sSQL .= " AND (SELECT COUNT(*) FROM T_OrderItem OI INNER JOIN T_Product PRD ON OI.ProductKeyID = PRD.ProductKeyID " .
+     $sSQL .= " AND (SELECT COUNT(1) FROM T_OrderItem OI INNER JOIN T_Product PRD ON OI.ProductKeyID = PRD.ProductKeyID " .
              " WHERE OI.OrderID = O.OrderID AND PRD.ProducerKeyID = " . $nProducerID . ") > 0;";
     }
     else if ( ($this->m_aData[self::PROPERTY_ID] & CoopOrderExport::LIST_ITEM_PICKUP_LOCATION) === CoopOrderExport::LIST_ITEM_PICKUP_LOCATION )
@@ -203,7 +203,7 @@ class CoopOrderExport extends CoopOrderSubBase {
     {
     if ($this->m_aData[self::PROPERTY_PRODUCT_IDS] == NULL)
       return NULL;
-     $sSQL .= " AND (SELECT COUNT(*) FROM T_OrderItem OI " .
+     $sSQL .= " AND (SELECT COUNT(1) FROM T_OrderItem OI " .
              " WHERE OI.OrderID = O.OrderID AND OI.ProductKeyID IN (" .  $this->m_aData[self::PROPERTY_PRODUCT_IDS] . ")) > 0;";
     }
     else if ($this->m_aData[self::PROPERTY_ID] !== CoopOrderExport::LIST_ITEM_TYPE_MAILS) 

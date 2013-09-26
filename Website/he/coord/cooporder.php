@@ -30,7 +30,10 @@ try
       $oRecord->ID = intval($_POST['hidPostValue']);
     
     if ( isset( $_POST['hidOriginalData'] ) )
+    {
       $oRecord->SetSerializedOriginalData( $_POST["hidOriginalData"] );
+      $oRecord->PreserveData();
+    }
     
     if (!empty( $_POST['hidPostAction'] ))
     {
@@ -126,7 +129,8 @@ try
 
   $bReadOnly = !$oRecord->HasPermission(SQLBase::PERMISSION_EDIT);
 
-  $oCoopOrderCapacity = new CoopOrderCapacity($oRecord->MaxBurden, $oRecord->TotalBurden, $oRecord->MaxCoopTotal, $oRecord->CoopTotal);
+  $oCoopOrderCapacity = new CoopOrderCapacity($oRecord->MaxBurden, $oRecord->TotalBurden, $oRecord->MaxCoopTotal, $oRecord->CoopTotal,
+      $oRecord->MaxStorageBurden, $oRecord->StorageBurden);
 
   if ($oRecord->ID > 0)
   {
@@ -262,6 +266,7 @@ function Save()
                     unset($selStatus);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                <td></td>
                 </tr>
                 <tr>
                 <?php
@@ -273,8 +278,8 @@ function Save()
                  unset($dpStart);
                  
                  HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
-                <td></td>
                 </tr>
                 <tr>
                 <?php                 
@@ -286,8 +291,8 @@ function Save()
                  unset($dpEnd);
                  
                  HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
-                <td></td>
                 </tr>
                 <tr>
                 <?php                 
@@ -298,7 +303,7 @@ function Save()
                  $dpDelivery->EchoHtml();
                  unset($dpDelivery);
                  
-                 HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
                 <td></td>
                 </tr> 
@@ -308,11 +313,13 @@ function Save()
                 ?>
                 <tr>
                   <?php 
-                    $txtMaxBurden = new HtmlTextEditNumeric('קיבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
+                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
                     $txtMaxBurden->ReadOnly = $bStatusOnly || $bReadOnly;
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
-                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל ההזמנה לפי הקיבולת הכוללת שלה, ע&quot;י השוואת סיכום של המעמסות של כל מוצר כפול כמות ההזמנה ממנו. ניתן לקבוע הגבלה כזו גם פר מקום איסוף. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל ההזמנה לפי הקבולת הכוללת שלה, ע&quot;י השוואת סיכום של המעמסות של כל מוצר כפול כמות ההזמנה ממנו. ניתן לקבוע הגבלה כזו גם פר מקום איסוף. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -323,6 +330,7 @@ function Save()
                     unset($txtMaxCoopTotal);
                     
                     HtmlTextEditMultiLang::EchoHelpText('מגבילה את הסכום הכולל של הזמנת הקואופרטיב. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();                
                   ?>
                 </tr>
                 <tr>
@@ -333,6 +341,7 @@ function Save()
                     unset($txtCoopFee);
                     
                     HtmlTextEditMultiLang::EchoHelpText('סכום קבוע שמשולם ע&quot;י כל חבר/ה פר הזמנה בנוסף לסכום המוצרים, לכיסוי הוצאות הרכישה המרוכזת');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -343,6 +352,7 @@ function Save()
                     unset($txtSmallOrder);
                     
                     HtmlTextEditMultiLang::EchoHelpText('ערך המגדיר רף הזמנה קטנה, עבורה עמלת הקואופרטיב מופחתת');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -354,6 +364,7 @@ function Save()
                     unset($txtSmallOrderCoopFee);
                     
                     HtmlTextEditMultiLang::EchoHelpText('עמלת קואופרטיב מופחתת עבור הזמנה קטנה');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -365,13 +376,14 @@ function Save()
                     unset($txtCoopFeePercent);
                     
                     HtmlTextEditMultiLang::EchoHelpText('Defines a cooperative fee by percents from the total amount paid for ordered products');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>                
                  <tr>
                   <?php 
                     $sCoopTotal = $oRecord->CoopTotal;
                     if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Total->CanCompute)
-                      $sCoopTotal .= ' (' . $oCoopOrderCapacity->Total->PercentRounded . '%)';
+                      $sCoopTotal .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
                   
                     $lblCoopTotal = new HtmlTextLabel('סכום לקואופ', 'txtCoopTotal', $sCoopTotal);
                     $lblCoopTotal->EchoHtml();
@@ -379,6 +391,7 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                   <td></td>
                 </tr>
                 <tr>
                   <?php                                       
@@ -388,6 +401,7 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 
                 <tr>
@@ -398,13 +412,14 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                   <td></td>
                 </tr>
                 
                 <tr>
                   <?php    
                     $sTotalBurden = $oRecord->TotalBurden;
                     if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Burden->CanCompute)
-                      $sTotalBurden .= ' (' . $oCoopOrderCapacity->Burden->PercentRounded . '%)';
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
                   
                     $lblTotalBurden = new HtmlTextLabel('סה&quot;כ מעמסה', 'txtTotalBurden', $sTotalBurden);
                     
@@ -412,8 +427,38 @@ function Save()
                     unset($lblTotalBurden);
                     
                     HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב כפול מספר הפעמים שהוזמן');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
+                
+                <tr>
+                  <?php
+                    $lblMaxStorageBurden = new HtmlTextLabel('סה&quot;כ קיבולת אחסון', 'lblMaxStorageBurden', 
+                        $oRecord->MaxStorageBurden);
+                    $lblMaxStorageBurden->EchoHtml();
+                    unset($lblMaxStorageBurden);
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  ?>
+                </tr>
+                
+                <tr>
+                  <?php
+                    $sTotalBurden = $oRecord->StorageBurden;
+                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->StorageBurden->CanCompute)
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->StorageBurden->PercentRounded . '%)');
+                    
+                    $lblStorageBurden = new HtmlTextLabel('סה&quot;כ תפוסת אחסון', 'lblStorageBurden', 
+                        $sTotalBurden);
+                    $lblStorageBurden->EchoHtml();
+                    unset($lblStorageBurden);
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ תפוסת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  ?>
+                </tr>
+                
                   <?php    
                   } //end of ShowSums
                     if (!$bReadOnly)
@@ -425,7 +470,7 @@ function Save()
 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
 
-                      echo '</tr>';
+                      echo ' <td></td></tr>';
                     }
                 ?>
                 </table>

@@ -416,11 +416,22 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
              " AND PRD.bDisabled = 0;";
     
     $this->RunSQL($sSQL);
+    
+    //add default storage areas for the products
+    $sSQL = " INSERT INTO T_CoopOrderProductStorage (CoopOrderKeyID, ProductKeyID, PickupLocationKeyID, StorageAreaKeyID) " .
+        " SELECT COSA.CoopOrderKeyID , PRD.ProductKeyID, PLSA.PickupLocationKeyID , PLSA.StorageAreaKeyID " .
+        " FROM T_Product PRD CROSS JOIN T_CoopOrderStorageArea COSA " .
+        " INNER JOIN T_PickupLocationStorageArea PLSA ON PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " .
+        " WHERE COSA.CoopOrderKeyID = ". $this->m_aData[self::PROPERTY_COOP_ORDER_ID] . 
+        " AND PRD.ProducerKeyID = " . $this->m_aData[self::PROPERTY_PRODUCER_ID] . 
+        " AND PRD.bDisabled = 0 AND PLSA.bDefault = 1;";
+    
+    $this->RunSQL($sSQL);
   }
   
   protected function DeleteProducerProducts()
   {
-    //add producer products
+    //delete producer products
     $sSQL =  " DELETE COPRD FROM T_CoopOrderProduct COPRD INNER JOIN T_Product PRD ON COPRD.ProductKeyID = PRD.ProductKeyID " .
              " WHERE COPRD.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] . " AND PRD.ProducerKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCER_ID]  . ";";
     

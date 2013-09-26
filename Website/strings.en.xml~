@@ -53,10 +53,6 @@
     <notes>For a left to right language (like English), keep this value as "right". For a right to left language, set this value to "left"</notes>
 </str>
 <str>
-    <key>LANGUAGE_DIRECTION_MARK</key>
-    <value>&#8206;</value>
-</str>
-<str>
     <key>GRID_COLUMN_PIXELS_PER_LETTER</key>
     <value>7</value>
     <notes>allows truncating cell contents when displayed in a grid, and displaying the full text in a tooltip</notes>

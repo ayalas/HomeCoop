@@ -113,8 +113,8 @@ function OpenPartialOrders(nProductID)
                 ?></td>
             </tr>
             <tr>
-              <td class="columntitlelong"><!$FIELD_PRODUCER$!></td>
               <td class="columntitlelong"><!$FIELD_PRODUCT$!></td>
+              <td class="columntitlelong"><!$FIELD_PRODUCER$!></td>
               <td class="columntitletiny"><!$FIELD_COOP_ORDER_PRODUCT_TOTAL_QUANTITY$!></td>
               <td class="columntitleshort"><!$FIELD_COOP_ORDER_PRODUCT_PRODUCER_TOTAL$!></td>
               <td class="columntitleshort"><!$FIELD_PRODUCER_PRICE_SHORT$!></td>
@@ -146,13 +146,7 @@ function OpenPartialOrders(nProductID)
                       }
                       
                       echo "<tr>";
-                      
-                      //producer
-                      echo "<td><a href='coproducer.php?pid=" , $recTable["ProducerKeyID"] , "&coid=" ,  
-                              $oData->CoopOrderID , "' >" , htmlspecialchars($recTable["sProducer"]),
-                      
-                       "</a></td>";
-                              
+
                       //product name
                       echo "<td><a ";
                       if ($bTooltip)
@@ -164,6 +158,9 @@ function OpenPartialOrders(nProductID)
                       if ($bTooltip)
                         echo "<span>" , $sTooltipLines , "</span>";
                       echo "</a></td>";
+                      
+                      //producer
+                      echo "<td>" , htmlspecialchars($recTable["sProducer"]),"</td>";
                       
                       //quantity
                       $fPackageSize = $recTable["fPackageSize"];

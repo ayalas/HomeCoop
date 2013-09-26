@@ -22,19 +22,29 @@ class HtmlTextEditOneLang extends HtmlTextEdit {
          self::PROPERTY_TEXTAREA_ROWS => NULL,
          self::PROPERTY_ENCLOSE_IN_HTML_CELL => TRUE,
          self::PROPERTY_ON_CHANGE => NULL,
-         self::PROPERTY_PROPERTIES => array()
+         self::PROPERTY_PROPERTIES => array(),
+         self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
         );
   }
   
   //echo directly to html document to save some string concats/retrieval
   public function EchoHtml()
-  {
-    echo '<td nowrap ><label ';
-    if ($this->m_aData[self::PROPERTY_REQUIRED])
-      echo ' class="required" ';
-      
-    echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '">' , $this->m_aData[self::PROPERTY_LABEL] ,
-         '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label></td>';
+  {   
+    echo '<td nowrap >';
+    
+    if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+      echo $this->m_aData[self::PROPERTY_LABEL];
+    else
+    {
+     echo '<label ';
+      if ($this->m_aData[self::PROPERTY_REQUIRED])
+        echo ' class="required" ';
+
+      echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '">' , $this->m_aData[self::PROPERTY_LABEL] ,
+         '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label>'; 
+    }
+    
+    echo '</td>';
     $this->EchoEditPartHtml();
   }
 }

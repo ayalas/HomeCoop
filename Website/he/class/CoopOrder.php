@@ -50,6 +50,9 @@ class CoopOrder extends SQLBase {
   const PROPERTY_HAS_JOINED_PRODUCTS = "HasJoinedProducts";
   const PROPERTY_PRICES_FROM_PRODUCTS = "PricesFromProducts";
   
+  const PROPERTY_MAX_STOARGE_BURDEN = "MaxStorageBurden";
+  const PROPERTY_STOARGE_BURDEN = "StorageBurden";
+  
   protected $m_bCopyMode = FALSE;
 
   public function __construct()
@@ -75,7 +78,9 @@ class CoopOrder extends SQLBase {
                             self::PROPERTY_COORDINATING_GROUP_ID => 0,
                             self::PROPERTY_SOURCE_COOP_ORDER_ID => 0,
                             self::PROPERTY_HAS_JOINED_PRODUCTS => FALSE,
-                            self::PROPERTY_PRICES_FROM_PRODUCTS => FALSE
+                            self::PROPERTY_PRICES_FROM_PRODUCTS => FALSE,
+                            self::PROPERTY_MAX_STOARGE_BURDEN => NULL,
+                            self::PROPERTY_STOARGE_BURDEN => NULL,
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;
@@ -176,7 +181,7 @@ class CoopOrder extends SQLBase {
     $this->m_aData[self::PROPERTY_ID] = $nID;
     
     $sSQL =   " SELECT CO.CoopOrderKeyID, CO.dStart, CO.dEnd, CO.dDelivery, CO.mCoopFee, CO.mSmallOrder, " . 
-              " CO.bHasJoinedProducts, " .
+              " CO.bHasJoinedProducts, CO.fMaxStorageBurden, CO.fStorageBurden, " .
               " CO.mSmallOrderCoopFee, CO.fCoopFee, CO.ModifiedByMemberID, " .
               " CO.nStatus, CO.CoordinatingGroupID, CO.mMaxCoopTotal,  CO.fMaxBurden, " .
               " IfNull(CO.fBurden,0) fBurden, CO.mCoopTotal, CO.mProducerTotal, M.sName as ModifierName, mTotalDelivery " .
@@ -216,6 +221,7 @@ class CoopOrder extends SQLBase {
     $this->m_aData[self::PROPERTY_SMALL_ORDER_COOP_FEE] = $rec["mSmallOrderCoopFee"];
     $this->m_aData[self::PROPERTY_COOP_FEE_PERCENT] = $rec["fCoopFee"];
     $this->m_aData[self::PROPERTY_MODIFIER_ID] = $rec["ModifiedByMemberID"];
+    $this->m_aData[self::PROPERTY_MODIFIER_NAME] = $rec["ModifierName"];
     $this->m_aData[self::PROPERTY_STATUS] = $rec["nStatus"];
     $this->m_aData[self::PROPERTY_MAX_COOP_TOTAL] = $rec["mMaxCoopTotal"];
     $this->m_aData[self::PROPERTY_MAX_BURDEN] = $rec["fMaxBurden"];
@@ -224,6 +230,8 @@ class CoopOrder extends SQLBase {
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $rec["mProducerTotal"];
     $this->m_aData[self::PROPERTY_TOTAL_DELIVERY] = $rec["mTotalDelivery"];
     $this->m_aData[self::PROPERTY_HAS_JOINED_PRODUCTS] = $rec["bHasJoinedProducts"];
+    $this->m_aData[self::PROPERTY_MAX_STOARGE_BURDEN] = $rec["fMaxStorageBurden"];
+    $this->m_aData[self::PROPERTY_STOARGE_BURDEN] = $rec["fStorageBurden"];
     $this->m_aData[self::PROPERTY_NAMES] = $this->GetKeyStrings($this->m_aData[self::PROPERTY_ID]);
 
     $this->m_aOriginalData = $this->m_aData;
@@ -270,7 +278,7 @@ class CoopOrder extends SQLBase {
         
         try
         {
-          $this->m_bUseClassConnection = TRUE; //counting on last inserted id, so better to use private connection
+          $this->m_bUseClassConnection = TRUE; //counting on last inserted id+used in Copy()
           
           $this->BeginTransaction();
         
@@ -650,12 +658,12 @@ class CoopOrder extends SQLBase {
     {
       if (!is_numeric($this->m_aData[self::PROPERTY_MAX_BURDEN]))
       {
-        $g_oError->AddError( sprintf('%s חייב להכיל ערך מספרי', 'קיבולת משלוח'));
+        $g_oError->AddError( sprintf('%s חייב להכיל ערך מספרי', 'קבולת משלוח'));
         $bValid = FALSE;
       }
       else if ($this->m_aData[self::PROPERTY_MAX_BURDEN] < 0)
       {
-        $g_oError->AddError( sprintf('%s לא יכול להכיל ערך שלילי', 'קיבולת משלוח'));
+        $g_oError->AddError( sprintf('%s לא יכול להכיל ערך שלילי', 'קבולת משלוח'));
         $bValid = FALSE;
       }
     }
@@ -663,7 +671,17 @@ class CoopOrder extends SQLBase {
     return $bValid;
   }
   
-  
+  public function PreserveData()
+  {
+    $this->m_aData[self::PROPERTY_STOARGE_BURDEN]  = $this->m_aOriginalData[self::PROPERTY_STOARGE_BURDEN];
+    $this->m_aData[self::PROPERTY_TOTAL_BURDEN] = $this->m_aOriginalData[self::PROPERTY_TOTAL_BURDEN];
+    $this->m_aData[self::PROPERTY_MODIFIER_ID] = $this->m_aOriginalData[self::PROPERTY_MODIFIER_ID];
+    $this->m_aData[self::PROPERTY_MODIFIER_NAME] = $this->m_aOriginalData[self::PROPERTY_MODIFIER_NAME];
+    $this->m_aData[self::PROPERTY_TOTAL_BURDEN] = $this->m_aOriginalData[self::PROPERTY_TOTAL_BURDEN];
+    $this->m_aData[self::PROPERTY_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL];
+    $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
+    $this->m_aData[self::PROPERTY_TOTAL_DELIVERY] = $this->m_aOriginalData[self::PROPERTY_TOTAL_DELIVERY];
+  }
   //validate status change
   protected function ValidateStatus()
   {   
@@ -768,19 +786,33 @@ class CoopOrder extends SQLBase {
       
       $this->BeginTransaction();
       
-      //add can fall on validations
+      //Add can fall on validations
       if (!$this->Add( $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID] ) )
       {
         $this->RollbackTransaction();
         return false;
       }
 
-      //copy order pickup locations
+      //copy order pickup locations that are still active
       $sSQL =  " INSERT INTO T_CoopOrderPickupLocation( CoopOrderKeyID, PickupLocationKeyID, fMaxBurden, mMaxCoopTotal  ) " . 
                " SELECT " .  $this->m_aData[self::PROPERTY_ID] . 
                " , SRC.PickupLocationKeyID, SRC.fMaxBurden, SRC.mMaxCoopTotal " .
-               " FROM T_CoopOrderPickupLocation SRC WHERE SRC.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID];
+               " FROM T_CoopOrderPickupLocation SRC ". 
+               " INNER JOIN T_PickupLocation PL ON PL.PickupLocationKeyID = SRC.PickupLocationKeyID " .
+               " WHERE SRC.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID] .
+               " AND PL.bDisabled = 0;";
 
+      $this->RunSQL($sSQL);
+      
+      //copy order storage areas that are still active
+      $sSQL =  " INSERT INTO T_CoopOrderStorageArea (CoopOrderKeyID, StorageAreaKeyID, fMaxBurden) " .
+               " SELECT " .  $this->m_aData[self::PROPERTY_ID] . " , COSA.StorageAreaKeyID, COSA.fMaxBurden " .
+               " FROM T_CoopOrderStorageArea COSA INNER JOIN T_PickupLocationStorageArea PLSA " .
+               " ON COSA.StorageAreaKeyID = PLSA.StorageAreaKeyID " .
+               " INNER JOIN T_PickupLocation PL ON PL.PickupLocationKeyID = PLSA.PickupLocationKeyID " .
+               " WHERE COSA.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID] .
+               " AND PLSA.bDisabled = 0 AND PL.bDisabled = 0;";
+      
       $this->RunSQL($sSQL);
 
       //copy order producers
@@ -793,8 +825,8 @@ class CoopOrder extends SQLBase {
 
       $this->RunSQL($sSQL);
 
-      //copy order products
-      $sSQL =  " INSERT INTO T_CoopOrderProduct( CoopOrderKeyID, ProductKeyID, mProducerPrice, mCoopPrice, fMaxUserOrder, fBurden) " .
+      //copy order products that are still active
+      $sSQL =  " INSERT INTO T_CoopOrderProduct( CoopOrderKeyID, ProductKeyID, mProducerPrice, mCoopPrice, fMaxUserOrder, fBurden, fMaxCoopOrder) " .
                " SELECT " .  $this->m_aData[self::PROPERTY_ID] . " , SRC.ProductKeyID, ";
       
       if ($aNewData[self::PROPERTY_PRICES_FROM_PRODUCTS])
@@ -802,13 +834,25 @@ class CoopOrder extends SQLBase {
       else
         $sSQL .= " SRC.mProducerPrice, SRC.mCoopPrice, "; 
       
-      $sSQL .= " SRC.fMaxUserOrder, SRC.fBurden FROM T_CoopOrderProduct SRC ";
+      $sSQL .= " SRC.fMaxUserOrder, SRC.fBurden, SRC.fMaxCoopOrder FROM T_CoopOrderProduct SRC ";
       
-      if ($aNewData[self::PROPERTY_PRICES_FROM_PRODUCTS])
-        $sSQL .= " INNER JOIN T_Product PRD ON PRD.ProductKeyID = SRC.ProductKeyID ";
+      $sSQL .= " INNER JOIN T_Product PRD ON PRD.ProductKeyID = SRC.ProductKeyID ";
       
-      $sSQL .= " WHERE SRC.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID];
+      $sSQL .= " WHERE SRC.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID] .
+               " AND PRD.bDisabled = 0;";
 
+      $this->RunSQL($sSQL);
+      
+      //copy order products storages that are still active
+      $sSQL =  " INSERT INTO T_CoopOrderProductStorage (CoopOrderKeyID, ProductKeyID, PickupLocationKeyID, StorageAreaKeyID) " .
+               " SELECT " .  $this->m_aData[self::PROPERTY_ID] . " , COPS.ProductKeyID,  COPS.PickupLocationKeyID, COPS.StorageAreaKeyID " .
+               " FROM T_CoopOrderProductStorage COPS INNER JOIN T_CoopOrderStorageArea COSA " .
+               " ON COSA.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_ID] .
+               " AND COPS.StorageAreaKeyID = COSA.StorageAreaKeyID " .
+               " INNER JOIN T_Product PRD ON PRD.ProductKeyID = COPS.ProductKeyID " .
+               " WHERE COPS.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID] .
+               " AND PRD.bDisabled = 0;";
+      
       $this->RunSQL($sSQL);
     
       $this->CommitTransaction();

@@ -61,7 +61,8 @@ try
       $sActiveOrderStatus = $oActiveOrderStatus->StatusName;
       
       $oCoopOrderCapacity = new CoopOrderCapacity($recTable["fMaxBurden"], $recTable["fBurden"], 
-              $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"]);
+              $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"],
+              $recTable["fMaxStorageBurden"], $recTable["fStorageBurden"]);
       
       if ($recTable["nStatus"] == CoopOrder::STATUS_LOCKED)
         $sOrderCssClass = ' class="closedorder" ';
@@ -149,14 +150,14 @@ try
          }
          else
           echo htmlspecialchars($recPickupLoc["sPickupLocation"]);
-         
-         
+                  
          $oCoopOrderPickupCapacity = new CoopOrderCapacity($recPickupLoc["fMaxBurden"], $recPickupLoc["fBurden"], 
-                              $recPickupLoc["mMaxCoopTotal"], $recPickupLoc["mCoopTotal"]);
+                              $recPickupLoc["mMaxCoopTotal"], $recPickupLoc["mCoopTotal"],
+                              $recPickupLoc["fMaxStorageBurden"], $recPickupLoc["fStorageBurden"]);
          
          //% full
         if ($oCoopOrderPickupCapacity->SelectedType != CoopOrderCapacity::TypeNone)
-          echo '&nbsp;(' , $oCoopOrderPickupCapacity->PercentRounded , '%)';
+          LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderPickupCapacity->PercentRounded . '%)');
          
          echo '</span></td></tr>';
          
@@ -200,13 +201,13 @@ try
       //existing order button
       if ($recTable["OrderID"] != NULL)
       {
-        echo '<button type="button" id="btnOrder" name="btnOrder" onclick="JavaScript:OpenOrder(\'',
+        echo '<button type="button" id="btnOrder" class="order" name="btnOrder" onclick="JavaScript:OpenOrder(\'',
                $g_sRootRelativePath , '\',' ,  $recTable["OrderID"] , ');" >My Order</button>';
       }
       //new order button
       else if ($oActiveOrderStatus->Status == ActiveCoopOrderStatus::Open && $oCoopOrderCapacity->Percent < 100)
       {
-        echo '<button type="button" id="btnOrder" name="btnOrder" onclick="JavaScript:NewOrder(\'',
+        echo '<button type="button" id="btnOrder" class="order" name="btnOrder" onclick="JavaScript:NewOrder(\'',
                $g_sRootRelativePath , '\',' ,  $recTable["CoopOrderKeyID"] , ');" >Order Now</button>';
       }
       
@@ -251,7 +252,7 @@ try
         
         //% full
         if ($oCoopOrderProducerCapacity->SelectedType != CoopOrderCapacity::TypeNone)
-          echo ' (' , $oCoopOrderProducerCapacity->PercentRounded , '%)';
+          LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderProducerCapacity->PercentRounded . '%)');
         
         $sProducerSeparator = ', ';
         

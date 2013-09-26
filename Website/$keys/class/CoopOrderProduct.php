@@ -29,8 +29,9 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
   const PROPERTY_TOTAL_COOP_ORDER = "TotalCoopOrder";
   const PROPERTY_PRODUCER_TOTAL = "ProducerTotal";
   const PROPERTY_COOP_TOTAL = "ProductCoopTotal";
+  const PROPERTY_PICKUP_LOCATIONS_STORAGE = "PickupLocationsStorage";
   const PROPERTY_PRODUCER_COORDINATING_GROUP_ID = "ProducerCoordinatingGroupID";
-  
+    
   public function __construct()
   {
     $this->m_aDefaultData = array( 
@@ -70,7 +71,8 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
                             CoopOrder::PROPERTY_COOP_FEE => 0,
                             CoopOrder::PROPERTY_SMALL_ORDER => 0,
                             CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE => 0,
-                            CoopOrder::PROPERTY_COOP_FEE_PERCENT => 0
+                            CoopOrder::PROPERTY_COOP_FEE_PERCENT => 0,
+                            self::PROPERTY_PICKUP_LOCATIONS_STORAGE => array(),
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;
@@ -166,7 +168,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       $sSQL =   " SELECT COPRD.ProductKeyID, PRD.fQuantity, PRD.nItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, P.ProducerKeyID , " . 
               " COPRD.fMaxCoopOrder, IfNull(COPRD.fBurden,0) fBurden, COPRD.nJoinedStatus, IfNUll(COPRD.mProducerTotal,0) mProducerTotal, " . 
               " IfNUll(COPRD.mCoopTotal,0) mCoopTotal, P.CoordinatingGroupID, " . 
-              " IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder, COPRD.mProducerPrice, COPRD.mCoopPrice, COPRD.fMaxUserOrder, " . 
+              " IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder, COPRD.mProducerPrice, COPRD.mCoopPrice, COPRD.fMaxUserOrder,  " . 
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
             "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
             "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_SPECIFICATION, 'sSpec') .
@@ -230,6 +232,52 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       $this->m_aData[self::PROPERTY_JOINED_STATUS] = $rec["nJoinedStatus"];
       
       $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
+      
+      //load pickup locations storage area
+      $sSQL = " SELECT COPS.PickupLocationKeyID, COPS.StorageAreaKeyID, " .
+              $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATIONS, 'sPickupLocation') .
+              " FROM T_CoopOrderProductStorage COPS " .
+              " INNER JOIN T_PickupLocation PL ON COPS.PickupLocationKeyID = PL.PickupLocationKeyID " .
+              $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PICKUP_LOCATIONS) .
+              " WHERE COPS.CoopOrderKeyID  = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+              " AND COPS.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . "; ";
+      $this->RunSQL( $sSQL );
+      
+      while($rec = $this->fetch())
+      {
+        $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$rec['PickupLocationKeyID']]['Data'] = $rec;
+        $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$rec['PickupLocationKeyID']]['Data']['ProductKeyID'] = 
+            $this->m_aData[self::PROPERTY_PRODUCT_ID]; //signify these are saved records
+        $this->GetStorageAreaList($rec['PickupLocationKeyID']);      
+      }
+    }
+      
+    //complete the list of pickup locations with default storage areas
+    $sSQL = " SELECT PLSA.PickupLocationKeyID, PLSA.StorageAreaKeyID, " .    
+             $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATIONS, 'sPickupLocation') .
+             " FROM T_CoopOrderStorageArea COSA " .
+             " INNER JOIN T_PickupLocationStorageArea PLSA ON PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " .
+             " INNER JOIN T_PickupLocation PL ON PLSA.PickupLocationKeyID = PL.PickupLocationKeyID " .
+             $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PICKUP_LOCATIONS) .
+             " WHERE COSA.CoopOrderKeyID  = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+             " AND PLSA.bDefault = 1; ";
+
+    $this->RunSQL( $sSQL );
+    
+    while($rec = $this->fetch())
+    {
+      //if there is no saved value in T_CoopOrderProductStorage -> 
+      if (!isset($this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$rec['PickupLocationKeyID']]))
+      {
+        $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$rec['PickupLocationKeyID']]['Data'] = $rec;
+        //load the default only for a new record
+        if ($this->m_aData[self::PROPERTY_PRODUCT_ID] > 0)
+          $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$rec['PickupLocationKeyID']]['Data']['StorageAreaKeyID'] = NULL;
+        
+        $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$rec['PickupLocationKeyID']]['Data']['ProductKeyID'] = NULL;
+
+        $this->GetStorageAreaList($rec['PickupLocationKeyID']);
+      }
     }
     
     $this->m_aOriginalData = $this->m_aData;
@@ -259,6 +307,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
+    $this->CollectStoragePostData();
 
     if (!$this->Validate())
     {
@@ -266,20 +315,36 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       return FALSE;
     }
 
-    //insert the record
-    $sSQL =  " INSERT INTO T_CoopOrderProduct( CoopOrderKeyID, ProductKeyID, mProducerPrice, mCoopPrice " . 
-            $this->ConcatColIfNotNull(self::PROPERTY_MAX_USER_ORDER, "fMaxUserOrder") . 
-            $this->ConcatColIfNotNull(self::PROPERTY_MAX_COOP_ORDER, "fMaxCoopOrder") . 
-            $this->ConcatColIfNotNull(self::PROPERTY_BURDEN, "fBurden");
+    try
+    {
+      $this->BeginTransaction();
+      
+      //insert the record
+      $sSQL =  " INSERT INTO T_CoopOrderProduct( CoopOrderKeyID, ProductKeyID, mProducerPrice, mCoopPrice " . 
+              $this->ConcatColIfNotNull(self::PROPERTY_MAX_USER_ORDER, "fMaxUserOrder") . 
+              $this->ConcatColIfNotNull(self::PROPERTY_MAX_COOP_ORDER, "fMaxCoopOrder") . 
+              $this->ConcatColIfNotNull(self::PROPERTY_BURDEN, "fBurden");
 
-    $sSQL .= ") VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   ", "  . $this->m_aData[self::PROPERTY_PRODUCT_ID] 
-            .   ", "  . $this->m_aData[self::PROPERTY_PRODUCER_PRICE]  .   ", "  . $this->m_aData[self::PROPERTY_COOP_PRICE]  .
-            $this->ConcatValIfNotNull(self::PROPERTY_MAX_USER_ORDER) .
-            $this->ConcatValIfNotNull(self::PROPERTY_MAX_COOP_ORDER) .
-            $this->ConcatValIfNotNull(self::PROPERTY_BURDEN) .
-            " )";
+      $sSQL .= ") VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   ", "  . 
+              $this->m_aData[self::PROPERTY_PRODUCT_ID] .   ", "  . 
+              $this->m_aData[self::PROPERTY_PRODUCER_PRICE]  .   ", "  . 
+              $this->m_aData[self::PROPERTY_COOP_PRICE]  .
+              $this->ConcatValIfNotNull(self::PROPERTY_MAX_USER_ORDER) .
+              $this->ConcatValIfNotNull(self::PROPERTY_MAX_COOP_ORDER) .
+              $this->ConcatValIfNotNull(self::PROPERTY_BURDEN) .
+              " )";
 
-    $this->RunSQL($sSQL);
+      $this->RunSQL($sSQL);
+
+      $this->SaveStorageData();
+
+      $this->CommitTransaction();
+    }
+    catch(Exception $e)
+    {
+      $this->RollbackTransaction();
+      throw $e;
+    }
     
     $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
     $this->m_aOriginalData = $this->m_aData;
@@ -306,6 +371,8 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_SUFFICIENT_DATA_PROVIDED;
       return FALSE;
     }
+    
+    $this->CollectStoragePostData();
         
     if (!$this->Validate())
     {
@@ -320,8 +387,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
     
     try
     {
-      if ($bNeedsRecalculate)
-        $this->BeginTransaction ();
+      $this->BeginTransaction();
 
       $sSQL =   " UPDATE T_CoopOrderProduct " .
                 " SET mProducerPrice =  ?, " . 
@@ -336,40 +402,57 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
                                               $this->m_aData[self::PROPERTY_COOP_PRICE],
                                               $this->m_aData[self::PROPERTY_MAX_USER_ORDER],
                                               $this->m_aData[self::PROPERTY_MAX_COOP_ORDER],
-                                              $this->m_aData[self::PROPERTY_BURDEN]
-          ) );
+                                              $this->m_aData[self::PROPERTY_BURDEN],
+                                        )
+      );
+      
+      $this->SaveStorageData();
 
       if ($bNeedsRecalculate)
       {
         $oCalculate = new CoopOrderCalculate( $this->m_aData[self::PROPERTY_COOP_ORDER_ID] );
         $oCalculate->Run();
-        $this->CommitTransaction();
-        unset($oCalculate);
       }
+      
+      $this->CommitTransaction();
     }
     catch(Exception $e)
     {
-      if ($bNeedsRecalculate)
-        $this->RollbackTransaction();
+      $this->RollbackTransaction();
       throw $e;
     }
 
-    //preserve data after postback
+    $this->m_aOriginalData = $this->m_aData;
+
+    return TRUE;
+  }
+  
+  public function PreserveData()
+  {
+    $this->CopyCoopOrderData();
+    
     $this->m_aData[self::PROPERTY_PRODUCER_COORDINATING_GROUP_ID] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_COORDINATING_GROUP_ID];    
     $this->m_aData[Producer::PROPERTY_PRODUCER_ID] = $this->m_aOriginalData[Producer::PROPERTY_PRODUCER_ID];
     $this->m_aData[self::PROPERTY_PRODUCT_ID] = $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID];
     $this->m_aData[Producer::PROPERTY_PRODUCER_NAME] = $this->m_aOriginalData[Producer::PROPERTY_PRODUCER_NAME];
-    $this->m_aData[Product::PROPERTY_PRODUCT_NAME] = $this->m_aOriginalData[Product::PROPERTY_PRODUCT_NAME];
+    $this->m_aData[Product::PROPERTY_PRODUCT_NAME] = $this->m_aOriginalData[Product::PROPERTY_PRODUCT_NAME];    
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
     $this->m_aData[self::PROPERTY_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL];
     
     $this->m_aData[self::PROPERTY_TOTAL_COOP_ORDER] = $this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER];
     $this->m_aData[self::PROPERTY_JOINED_STATUS] = $this->m_aOriginalData[self::PROPERTY_JOINED_STATUS];
  
-    $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
-    $this->m_aOriginalData = $this->m_aData;
-
-    return TRUE;
+    $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = $this->m_aOriginalData[self::PROPERTY_IS_EXISTING_RECORD];   
+    
+    //load storage area that cannot change
+    foreach($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE] as $PLID => $Sections)
+    {
+      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['List'] = $Sections['List'];
+      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['sPickupLocation'] = $Sections['Data']['sPickupLocation'];
+      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['PickupLocationKeyID'] = $Sections['Data']['PickupLocationKeyID'];
+      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['ProductKeyID'] = $Sections['Data']['ProductKeyID'];
+      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['StorageAreaKeyID'] = $Sections['Data']['StorageAreaKeyID'];
+    }
   }
   
   public function Delete()
@@ -410,7 +493,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       
       $arrOrders = $this->fetchAllOneColumn();
       
-      $oCalc->OrdersListToCalculate = implode(",", $arrOrders);
+      $oCalc->OrdersListToCalculate = $arrOrders;
       
       
       //delete the order items of this product
@@ -426,16 +509,16 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
                 " AND ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] . ";";
 
       $this->RunSQL($sSQL);
-      
-      //recalculate coop order and orders data
-      
+            
+      //this line just makes the products calculation skipped - adding a filter that returns no result (because the product was already deleted)
       $oCalc->ProductsListToCalculate = $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID]; 
+      
       $oCalc->CoopFee = $this->CoopFee;
       $oCalc->SmallOrder = $this->SmallOrder;
       $oCalc->SmallOrderCoopFee = $this->SmallOrderCoopFee;
       $oCalc->CoopFeePercent = $this->CoopFeePercent; 
     
-      $oCalc->Run();
+      $oCalc->Run(); //recalculate coop order and orders data
 
       $this->CommitTransaction();
     }
@@ -542,9 +625,156 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
         $bValid = FALSE;
     }
     
+    if (!$this->ValidateStorageAreas())
+      $bValid = FALSE;
+    
     return $bValid;
   }  
+  
+  protected function SaveStorageData()
+  {
+    $NewData = null;
+    //compare data to original data and decide whether to delete, update, insert or skip (no change)
+    foreach($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE] as $PLID => $Orig)
+    {
+      $NewData = $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data'];
+      
+      //ProductKeyID signs that the record existed and the selected value wasn't just a default
+      $bOrigIsEmpty = empty($Orig['Data']['ProductKeyID']);
+      $bNewIsEmpty = empty($NewData['StorageAreaKeyID']);
 
+      if ($bOrigIsEmpty && !$bNewIsEmpty)
+        $this->InsertStorageData($PLID, $NewData['StorageAreaKeyID']);
+      elseif (!$bOrigIsEmpty && $bNewIsEmpty)
+        $this->DeleteStorageData($PLID);
+      elseif ($bOrigIsEmpty == $bNewIsEmpty && $Orig['Data']['StorageAreaKeyID'] == $NewData['StorageAreaKeyID'])
+        continue; //no change
+      elseif (!$bNewIsEmpty)
+        $this->UpdateStorageData($PLID, $NewData['StorageAreaKeyID']);
+    }
+  }
+  
+  protected function ValidateStorageAreas()
+  {
+    $bValid = TRUE;
+    global $g_oError;
+    $arrValidated = array();
+    //validate deletes: make sure there are no orders on these pickup locations+current product combinations
+    foreach($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE] as $PLID => $Orig)
+    {
+      if (!empty($Orig['Data']['ProductKeyID']) &&
+          empty($this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['StorageAreaKeyID']))
+      {
+        if (!isset($arrValidated[$PLID]))
+        {
+          //validate that there are no orders on $Orig['Data']['PickupLocationKeyID'] for this product
+          $sSQL = " SELECT COUNT(1) nCount FROM T_OrderItem OI INNER JOIN T_Order O " .
+              " ON OI.OrderId = O.OrderID " .
+              " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+              " AND OI.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . 
+              " AND O.PickupLocationKeyID = " . $PLID . "; ";
+
+          $this->RunSQL($sSQL);
+          $rec = $this->fetch();
+          if ($rec != NULL && $rec['nCount'] > 0)
+          {
+            $g_oError->AddError(
+                sprintf('<!$CANNOT_DISABLE_PICKUP_LOCATION_ASSOCIATED_WITH_ORDERED_PRODUCTS$!>',
+                    htmlspecialchars($Orig['Data']['sPickupLocation'])));
+            $bValid = FALSE;
+          }
+          $arrValidated[$PLID] = 1;
+        }
+      }
+    }
+    
+    return $bValid;
+  }
+  
+  protected function InsertStorageData($PLID, $SAID)
+  {
+    $sSQL = " INSERT INTO T_CoopOrderProductStorage(CoopOrderKeyID, ProductKeyID, PickupLocationKeyID, StorageAreaKeyID) " . 
+        " VALUES (:CoopOrderKeyID, :ProductKeyID, :PickupLocationKeyID, :StorageAreaKeyID ) ;";
+    $this->RunSQLWithParams($sSQL, array(
+        'CoopOrderKeyID' => $this->m_aData[self::PROPERTY_COOP_ORDER_ID],
+        'ProductKeyID' => $this->m_aData[self::PROPERTY_PRODUCT_ID],
+        'PickupLocationKeyID' => $PLID,
+        'StorageAreaKeyID' => $SAID,
+        )
+    );
+  }
+  protected function UpdateStorageData($PLID, $SAID)
+  {
+    $sSQL = " UPDATE T_CoopOrderProductStorage SET StorageAreaKeyID = " . $SAID .
+        " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+        " AND ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . 
+        " AND PickupLocationKeyID = " . $PLID . "; ";
+    $this->RunSQL($sSQL);
+  }
+  protected function DeleteStorageData($PLID)
+  {
+    $sSQL = " DELETE FROM T_CoopOrderProductStorage " .
+        " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+        " AND ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . 
+        " AND PickupLocationKeyID = " . $PLID . "; ";
+    $this->RunSQL($sSQL);
+  }
+  
+  protected function GetStorageAreaList($PickupLocationKeyID)
+  {
+      if (isset($this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PickupLocationKeyID]['List']))
+        return;
+      
+      //if the list was already loaded, do not load again
+      if (isset($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PickupLocationKeyID]['List']))
+      {
+        $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PickupLocationKeyID]['List'] = 
+            $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PickupLocationKeyID]['List'];
+        return;
+      }
+    
+      $this->m_bUseSecondSqlPreparedStmt = TRUE;
+      
+      //load also the list of possible values, since different for each pickup location
+      $sSQL = " SELECT COSA.StorageAreaKeyID, " .
+               $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'sStorageArea') .
+              " FROM T_CoopOrderStorageArea COSA " .
+               " INNER JOIN T_PickupLocationStorageArea PLSA ON PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " .
+               $this->ConcatStringsJoin(Consts::PERMISSION_AREA_STORAGE_AREAS) .
+               " WHERE COSA.CoopOrderKeyID  = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+               " AND PLSA.PickupLocationKeyID = " . $PickupLocationKeyID . "; ";
+
+      $this->RunSQL( $sSQL );
+      
+      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PickupLocationKeyID]['List'] = $this->fetchAllKeyPair();
+      
+      $this->m_bUseSecondSqlPreparedStmt = FALSE;
+  }
+  
+  //process post data
+  protected function CollectStoragePostData()
+  {
+    global $_POST;
+    $sPrefix = HtmlSelectArray::PREFIX . 'StorageAreaFor_';
+    $nPrefixLen = strlen($sPrefix);
+    
+    //load storage area that cannot change
+    foreach($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE] as $PLID => $Sections)
+    {
+      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['StorageAreaKeyID'] = NULL; //inital value, to track empty values
+    }
+
+    foreach($_POST as $key => $value)
+    {
+      //if found in position 0
+      if (strpos($key, $sPrefix) === 0)
+      {
+        $nPickupLocationKeyID = 0 + substr($key, $nPrefixLen );
+        
+        $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$nPickupLocationKeyID]['Data']['StorageAreaKeyID'] = $value;
+      }
+    }
+  }
           
 }
 

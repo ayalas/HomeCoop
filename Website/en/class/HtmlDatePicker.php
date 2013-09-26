@@ -20,13 +20,15 @@ class HtmlDatePicker {
   const PROPERTY_REQUIRED = "Required";
   const PROPERTY_READ_ONLY = "ReadOnly";
   const PROPERTY_TIME_SETTING = "TimeSetting";
+  const PROPERTY_LABEL_SLOT_IS_HTML = "UseLabelSlotAsHtml";
   
   protected $m_aData = array( self::PROPERTY_LABEL => NULL,
                               self::PROPERTY_VALUE => NULL,
                               self::PROPERTY_REQUIRED => FALSE,
                               self::PROPERTY_READ_ONLY => FALSE,
                               self::PROPERTY_ID => NULL,
-                              self::PROPERTY_TIME_SETTING => self::TIME_DISPLAYED
+                              self::PROPERTY_TIME_SETTING => self::TIME_DISPLAYED,
+                              self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
                       );
   
   public function __construct($sLabel, $sIDSufix, $dValue) {
@@ -90,12 +92,22 @@ class HtmlDatePicker {
     $sValue = NULL;
     
     $sDateId = self::PREFIX . $this->m_aData[self::PROPERTY_ID];
+        
+    echo '<td nowrap>';
     
-    echo '<td nowrap><label ';
+    if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+      echo $this->m_aData[self::PROPERTY_LABEL];
+    else
+    {
+      echo '<label ';
+    
     if ($this->m_aData[self::PROPERTY_REQUIRED])
       echo ' class="required" ';
+    
+      echo ' for="' , $sDateId , '">' , $this->m_aData[self::PROPERTY_LABEL] , '‏:‏</label>';
+    }
 
-    echo ' for="' , $sDateId , '">' , $this->m_aData[self::PROPERTY_LABEL] , '‏:‏</label></td>';
+    echo '</td>';
 
     echo '<td nowrap><input type="text" maxlength="15" id ="' , $sDateId , '" name = "' , $sDateId , 
             '" value="';

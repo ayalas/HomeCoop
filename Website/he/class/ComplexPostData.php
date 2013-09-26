@@ -8,14 +8,11 @@ class ComplexPostData {
   {
     global $g_aSupportedLanguages;
     global $_POST;
+    global $g_nCountLanguages;
     global $g_sLangDir;
     
-    $nCount = 0;
-    
-    if (is_array($g_aSupportedLanguages))
-      $nCount = count($g_aSupportedLanguages);
-    
-    if ($nCount > 0)
+    //using language dirs?
+    if ($g_nCountLanguages > 0)
     {
       $aValues = array();
 

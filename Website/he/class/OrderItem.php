@@ -34,6 +34,9 @@ class OrderItem extends SQLBase {
   const PROPERTY_PRODUCT_BURDEN = "ProductBurden";
   const PROPERTY_PRODUCT_TOTAL_COOP_ORDER_QUANTITY = "ProductTotalCoopOrderQuantity";
   const PROPERTY_ITEM_BURDEN = "Burden";
+  
+  const PROPERTY_STORAGE_AREA_BURDEN = "StorageAreaBurden";
+  const PROPERTY_STORAGE_AREA_MAX_BURDEN = "StorageAreaMaxBurden";
  
   const PROPERTY_PRODUCT_PACKAGE_SIZE = "PackageSize";
   const PROPERTY_UNIT_INTERVAL = "UnitInterval";
@@ -89,7 +92,9 @@ class OrderItem extends SQLBase {
         self::PROPERTY_ITEM_CHANGED_BY_COORD => FALSE,
         self::PROPERTY_ORDERS_CHANGED => NULL,
         self::PROPERTY_COORDINATING_GROUP_ID => 0,
-        self::PROPERTY_VISIBLE => TRUE
+        self::PROPERTY_VISIBLE => TRUE,
+        self::PROPERTY_STORAGE_AREA_BURDEN => NULL,
+        self::PROPERTY_STORAGE_AREA_MAX_BURDEN => NULL,
        );
   }
   
@@ -151,8 +156,7 @@ class OrderItem extends SQLBase {
        $this->m_aData[self::PROPERTY_ITEM_BURDEN] = 0;
      
      return $this->m_aData[self::PROPERTY_ITEM_BURDEN];
-  }
-        
+  }        
 }
 
 ?>

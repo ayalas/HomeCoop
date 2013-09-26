@@ -10,43 +10,66 @@ class CoopOrderCapacity {
  const TypeNone = 0;
  const TypeBurden = 1;
  const TypeTotal = 2;
+ const TypeStorageBurden = 3;
   
  const PROPERTY_PERCENT = "Percent";
  const PROPERTY_PERCENT_ROUNDED = "PercentRounded";
  const PROPERTY_TYPE = "SelectedType";
  const PROPERTY_BURDEN = "Burden";
+ const PROPERTY_STORAGE_BURDEN = "StorageBurden";
  const PROPERTY_TOTAL = "Total";
  
- 
  protected $m_aData = NULL;
-  
- public function __construct( $fMaxBurden, $fBurden, $mMaxTotal, $mTotal )
+
+ public function __construct( $fMaxBurden, $fBurden, $mMaxTotal, $mTotal, $fStorageBurden = NULL, $fStorageMaxBurden = NULL )
  {
    $this->m_aData = array(self::PROPERTY_PERCENT => 0, 
        self::PROPERTY_PERCENT_ROUNDED => 0, 
        self::PROPERTY_TYPE => self::TypeNone,
        self::PROPERTY_BURDEN => new CoopOrderSubCapacity($fMaxBurden, $fBurden),
-       self::PROPERTY_TOTAL => new CoopOrderSubCapacity($mMaxTotal, $mTotal));
+       self::PROPERTY_TOTAL => new CoopOrderSubCapacity($mMaxTotal, $mTotal),
+       self::PROPERTY_STORAGE_BURDEN => new CoopOrderSubCapacity($fStorageMaxBurden, $fStorageBurden),
+     );
    
   //determine which percentage is higher and hence should be considered as the capacity
-  if ($this->m_aData[self::PROPERTY_BURDEN]->CanCompute && $this->m_aData[self::PROPERTY_BURDEN]->Percent >
-          $this->m_aData[self::PROPERTY_TOTAL]->Percent)
+  $arrPercentages = array(); //sorted array, so kept simple
+  $aOtherData = array(); //other data should be stored here (with same key)
+  
+  if ($this->m_aData[self::PROPERTY_BURDEN]->CanCompute)
   {
+    $arrPercentages[self::PROPERTY_BURDEN] = $this->m_aData[self::PROPERTY_BURDEN]->Percent;
+    $aOtherData[self::PROPERTY_BURDEN] = array(
+          self::PROPERTY_TYPE => self::TypeBurden,
+        );
+  }
+  if ($this->m_aData[self::PROPERTY_TOTAL]->CanCompute)
+  {
+    $arrPercentages[self::PROPERTY_TOTAL] = $this->m_aData[self::PROPERTY_TOTAL]->Percent;
+    $aOtherData[self::PROPERTY_TOTAL] = array(
+          self::PROPERTY_TYPE => self::TypeTotal,
+        );
+  }
+  if ($this->m_aData[self::PROPERTY_STORAGE_BURDEN]->CanCompute)
+  {
+    $arrPercentages[self::PROPERTY_STORAGE_BURDEN] = $this->m_aData[self::PROPERTY_STORAGE_BURDEN]->Percent;
+    $aOtherData[self::PROPERTY_STORAGE_BURDEN] = array(
+          self::PROPERTY_TYPE => self::TypeStorageBurden,
+        );
+  }
+  
+  //get the highest percentage
+  if (count($arrPercentages) == 0)
     $this->m_aData[self::PROPERTY_TYPE] = self::TypeBurden;
-    $this->m_aData[self::PROPERTY_PERCENT] = $this->m_aData[self::PROPERTY_BURDEN]->Percent;
-    $this->m_aData[self::PROPERTY_PERCENT_ROUNDED] = $this->m_aData[self::PROPERTY_BURDEN]->PercentRounded;
-  }
-  else if ($this->m_aData[self::PROPERTY_TOTAL]->CanCompute)
+  else
   {
-    $this->m_aData[self::PROPERTY_TYPE] = self::TypeTotal;
-    $this->m_aData[self::PROPERTY_PERCENT] = $this->m_aData[self::PROPERTY_TOTAL]->Percent;
-    $this->m_aData[self::PROPERTY_PERCENT_ROUNDED] = $this->m_aData[self::PROPERTY_TOTAL]->PercentRounded;
+    arsort($arrPercentages, SORT_NUMERIC);
+    $sElement = key($arrPercentages); //get first key (highest)
+
+    $this->m_aData[self::PROPERTY_TYPE] = $aOtherData[$sElement][self::PROPERTY_TYPE];
+    $this->m_aData[self::PROPERTY_PERCENT] = $arrPercentages[$sElement];
+    $this->m_aData[self::PROPERTY_PERCENT_ROUNDED] = $this->m_aData[$sElement]->PercentRounded;
   }
-  else if ($this->m_aData[self::PROPERTY_BURDEN]->CanCompute)
-  {
-    $this->m_aData[self::PROPERTY_TYPE] = self::TypeBurden;
-  }
- } 
+ }
  
  public function __get( $name ) {
     if ( array_key_exists( $name, $this->m_aData) )

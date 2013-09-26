@@ -99,7 +99,7 @@ class MemberRoles extends SQLBase {
     $sSQL = " SELECT R.RoleKeyID, " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_ROLES, 'sRole') . 
             " FROM T_Role R  " .
             $this->ConcatStringsJoin(Consts::PERMISSION_AREA_ROLES) .
-            " WHERE 0 = (SELECT Count(*) FROM T_MemberRole MR WHERE MR.RoleKeyID = R.RoleKeyID AND MR.MemberID = " . 
+            " WHERE 0 = (SELECT Count(1) FROM T_MemberRole MR WHERE MR.RoleKeyID = R.RoleKeyID AND MR.MemberID = " . 
                     $this->m_aData[self::PROPERTY_ID] .
             ") ORDER BY R_S.sString;";
 

@@ -48,19 +48,19 @@ class ErrorHandler {
     else
     {
       $sErrorMessage = sprintf('Technical Info:<br/><div dir="ltr">Message: %s<br/>Trace: %s</div>', 
-            $sException, nl2br($e->getTraceAsString () ) );
+            htmlspecialchars($sException), nl2br(htmlspecialchars($e->getTraceAsString ()) ) );
     }
     
     //remove db user name from messages
-    if (!$bTransformed && stripos($sErrorMessage,DB_USERNAME) > 0 )
+    if (!$bTransformed && stripos($sErrorMessage,htmlspecialchars(DB_USERNAME)) > 0 )
     {
-      $sErrorMessage = str_replace(DB_USERNAME, '[USER NAME]', $sErrorMessage);
+      $sErrorMessage = str_replace(htmlspecialchars(DB_USERNAME), '[USER NAME]', $sErrorMessage);
     }
     
     //remove db password
-    if (!$bTransformed && stripos($sErrorMessage,DB_PASSWORD) > 0 )
+    if (!$bTransformed && stripos($sErrorMessage,htmlspecialchars(DB_PASSWORD)) > 0 )
     {
-      $sErrorMessage = str_replace(DB_PASSWORD, '[pwd]', $sErrorMessage);
+      $sErrorMessage = str_replace(htmlspecialchars(DB_PASSWORD), '[pwd]', $sErrorMessage);
     }
   
     if (USE_ERROR_PAGE && isset($g_oMemberSession) && $g_oMemberSession->IsLoggedIn)

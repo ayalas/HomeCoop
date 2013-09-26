@@ -80,7 +80,7 @@ class CoopOrderPickupLocations extends CoopOrderSubBase {
       return NULL;
     }
 
-    $sSQL =   " SELECT COPL.PickupLocationKeyID, COPL.fMaxBurden, COPL.fBurden, COPL.mMaxCoopTotal, " . 
+    $sSQL =   " SELECT COPL.PickupLocationKeyID, COPL.fMaxBurden, COPL.fBurden, COPL.mMaxCoopTotal, COPL.fMaxStorageBurden, COPL.fStorageBurden, " . 
             " PL.sExportFileName, COPL.mCoopTotal, PL.CoordinatingGroupID," .
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATIONS, 'sPickupLocation') .
           " FROM T_CoopOrderPickupLocation COPL INNER JOIN T_PickupLocation PL ON COPL.PickupLocationKeyID = PL.PickupLocationKeyID " . 

@@ -129,13 +129,14 @@ UserSessionBase::Close();
                       //burden
                       echo '<td>' , $recTable["fMaxBurden"];
                       if ($oCoopOrderCapacity->Burden->CanCompute)
-                        echo ' (' , $oCoopOrderCapacity->Burden->PercentRounded , '%)';
+                        LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
+                      
                       echo '</td>';                  
                       
                       //ProducerTotal
                       echo '<td>' , $recTable["mProducerTotal"];
                       if ($oCoopOrderCapacity->Total->CanCompute)
-                        echo ' (' , $oCoopOrderCapacity->Total->PercentRounded , '%)';                      
+                        LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
                       echo '</td>';
        
                       //CoopTotal

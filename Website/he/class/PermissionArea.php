@@ -96,6 +96,11 @@ class PermissionArea {
         $this->m_aData[self::PROPERTY_TABLE_PRIMARY_KEY] = 'RoleKeyID';
         $this->m_aData[self::PROPERTY_TABLE_ALIAS] = 'R';
         break;
+      case Consts::PERMISSION_AREA_STORAGE_AREAS:
+        $this->m_aData[self::PROPERTY_TABLE_NAME] = 'T_PickupLocationStorageArea';
+        $this->m_aData[self::PROPERTY_TABLE_PRIMARY_KEY] = 'StorageAreaKeyID';
+        $this->m_aData[self::PROPERTY_TABLE_ALIAS] = 'PLSA';
+        break;
     }
   }
   

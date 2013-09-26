@@ -313,7 +313,7 @@ class CoopOrderJoinProducts extends SQLBase {
 
     $this->m_oCalculate->HasJoinedProducts = $this->m_aData[CoopOrder::PROPERTY_HAS_JOINED_PRODUCTS];
     $this->m_oCalculate->ProductsListToCalculate = implode(",", $this->m_aProductsForUpdate);
-    $this->m_oCalculate->OrdersListToCalculate = implode(",", $this->m_aData[self::PROPERTY_ORDERS_UPDATED]);
+    $this->m_oCalculate->OrdersListToCalculate = $this->m_aData[self::PROPERTY_ORDERS_UPDATED];
     
     //load coop order fee values    
     $sSQL =   " SELECT CO.mCoopFee, CO.mSmallOrder, CO.mSmallOrderCoopFee, CO.fCoopFee " .

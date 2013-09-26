@@ -248,7 +248,6 @@ class Order extends SQLBase {
   
   public function LoadRecord($nID)
   {
-    global $g_oMemberSession;
     global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
@@ -277,7 +276,7 @@ class Order extends SQLBase {
     ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATION_ADDRESS, 'sPickupLocationAddress') .
     ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATION_PUBLISHED_COMMENTS, 'sPickupLocationComments') .
     " FROM T_Order O INNER JOIN T_Member M ON M.MemberID = O.MemberID " . 
-    " LEFT JOIN T_PickupLocation PL ON PL.PickupLocationKeyID = O.PickupLocationKeyID " . 
+    " INNER JOIN T_PickupLocation PL ON PL.PickupLocationKeyID = O.PickupLocationKeyID " . 
     " LEFT JOIN T_Member MC ON MC.MemberID = O.CreatedByMemberID  " . 
     " LEFT JOIN T_Member MM ON MM.MemberID = O.ModifiedByMemberID  " . 
     $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PICKUP_LOCATIONS) .
@@ -350,6 +349,7 @@ class Order extends SQLBase {
   }
   
   //help get contact info
+  //note: this code is not really needed - serialize is completely capable of dealing with multi-dimentional arrays
   protected function GetContactsForGroup(&$arrContacts, $nPropertyIndex, $nGroup)
   {
     if ($this->m_aData[$nPropertyIndex] != NULL)
@@ -393,9 +393,8 @@ class Order extends SQLBase {
       $arrParams = array( "created" => $sNow, "modified" => $sNow, "comments" => $this->m_aData[self::PROPERTY_MEMBER_COMMENTS] );
 
       //insert the record
-      $sSQL =  " INSERT INTO T_Order( CoopOrderKeyID, MemberID, dCreated, dModified, CreatedByMemberID, ModifiedByMemberID " .
-                $this->ConcatColIfNotValue(self::PROPERTY_PICKUP_LOCATION_ID, "PickupLocationKeyID", 0)  . 
-                " ,sMemberComments ";
+      $sSQL =  " INSERT INTO T_Order( CoopOrderKeyID, MemberID, dCreated, dModified, CreatedByMemberID, ModifiedByMemberID, " . 
+          " PickupLocationKeyID ,sMemberComments  ";
       
       $sSQLSuffix = "";
       
@@ -419,8 +418,8 @@ class Order extends SQLBase {
       $sSQL .=  ") " .
                " VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   ", " . 
               $this->m_aData[self::PROPERTY_MEMBER_ID] .    
-              ", :created , :modified, " . $g_oMemberSession->MemberID .   ", " .  $g_oMemberSession->MemberID .   
-              $this->ConcatValIfNotValue(self::PROPERTY_PICKUP_LOCATION_ID, 0) . ", :comments " .
+              ", :created , :modified, " . $g_oMemberSession->MemberID .   ", " .  $g_oMemberSession->MemberID . ", "  .
+              $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] . ", :comments " .
          $sSQLSuffix . ");";
 
       $this->RunSQLWithParams($sSQL, $arrParams);
@@ -483,13 +482,8 @@ class Order extends SQLBase {
       
       $sSQL .=  " WHERE OrderID = " . $this->m_aData[self::PROPERTY_ID] . ';';
 
-      $nPickupLocationID = NULL;
-      //allow null for pickup location
-      if ($this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] > 0)
-        $nPickupLocationID = $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID];
-
       $this->RunSQLWithParams( $sSQL, array(
-                "PickupLocationKeyID" => $nPickupLocationID,
+                "PickupLocationKeyID" => $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID],
                 "Modified" => $sNow,
                 "ModifiedByMemberID" => $g_oMemberSession->MemberID,
                 "MemberComments" => $this->m_aData[self::PROPERTY_MEMBER_COMMENTS]
@@ -620,7 +614,9 @@ class Order extends SQLBase {
     global $g_oError;
     
     $bValid = TRUE;
+    $bShowEnlargeError = FALSE;
     
+    //enlarging capacities
     $this->m_aData[self::PROPERTY_PICKUP_LOCATION_COOP_TOTAL] = $this->m_aData[self::PROPERTY_PICKUP_LOCATION_COOP_TOTAL]
          + $this->m_aData[self::PROPERTY_COOP_TOTAL];
     
@@ -641,6 +637,7 @@ class Order extends SQLBase {
         if ($this->HasPermission(self::PERMISSION_COORD))
           $g_oError->AddError('The cooperative order&#x27;s pickup location field Total Coop has exeeded the value of the pickup location&#x27;s Max. Coop Total‏.');
         $bValid = FALSE;
+        $bShowEnlargeError = TRUE;
       }
     }
     
@@ -653,11 +650,60 @@ class Order extends SQLBase {
         if ($this->HasPermission(self::PERMISSION_COORD))
           $g_oError->AddError('The cooperative order&#x27;s pickup location field Total Burden has exeeded the value of the pickup location&#x27;s Delivery Capacity.');
         $bValid = FALSE;
+        $bShowEnlargeError = TRUE;
       }
     }
     
-    if (!$bValid)
+    if ($bShowEnlargeError)
       $g_oError->AddError('This order cannot be enlarged beyond the full capacity of the cooperative order&#x27;s pickup location.');
+    
+    //STORAGE AREAS VALIDATIONS
+    
+    //items do not need this kind of storage areas validation - everything is loaded and validated in-memory
+    if (!$bFromItems && $this->m_aData[self::PROPERTY_ID] > 0) 
+    {
+      //validate change of pickup location for existing order -
+      //to see if order items will be hidden in new pickup location
+      $sSQL = " SELECT COUNT(1) nCount FROM T_Order O INNER JOIN T_OrderItem OI ON OI.OrderID = O.OrderID " . 
+          " LEFT JOIN T_CoopOrderProductStorage COPS ON COPS.CoopOrderKeyID = O.CoopOrderKeyID " .
+          " AND COPS.ProductKeyID = OI.ProductKeyID " .
+          " AND COPS.PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
+          " WHERE O.OrderID = " . $this->m_aData[self::PROPERTY_ID] .
+          " AND COPS.CoopOrderKeyID IS NULL;";
+
+      $this->RunSQL( $sSQL );
+
+      $rec = $this->fetch();
+      if ($rec != NULL && $rec['nCount'] > 0)
+      {
+        $g_oError->AddError('The pickup location you have chosen does not store some of the ordered products.');
+        $bValid = FALSE;
+      }
+      
+      //for each item in this order see if adding its burden to the new storage exceeds the maximum burden
+      $sSQL = " SELECT COSA.StorageAreaKeyID, COSA.fBurden, COSA.fMaxBurden, SUM(IfNull(COPRD.fBurden * (OI.fQuantity / NUllIf(PRD.fQuantity,0)),0)) fItemsBurden   " . 
+              " FROM T_Order O INNER JOIN T_OrderItem OI ON OI.OrderID = O.OrderID " .
+              " INNER JOIN T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID " .
+              " AND COPRD.ProductKeyID = OI.ProductKeyID " .
+              " INNER JOIN T_CoopOrderProductStorage COPS ON COPS.CoopOrderKeyID = O.CoopOrderKeyID " .
+              " AND COPS.ProductKeyID = COPRD.ProductKeyID " .
+              " AND COPS.PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
+              " INNER JOIN T_CoopOrderStorageArea COSA ON COSA.CoopOrderKeyID =  COPS.CoopOrderKeyID " .
+              " AND COSA.StorageAreaKeyID = COPS.StorageAreaKeyID " .
+              " INNER JOIN T_Product PRD ON PRD.ProductKeyID = OI.ProductKeyID " .
+              " WHERE O.OrderID = " . $this->m_aData[self::PROPERTY_ID] .
+              " GROUP BY COSA.StorageAreaKeyID, COSA.fBurden, COSA.fMaxBurden;";
+      $this->RunSQL( $sSQL );
+      while($rec = $this->fetch())
+      {
+        if ($rec['fBurden'] + $rec['fItemsBurden'] > $rec['fMaxBurden'])
+        {
+          $g_oError->AddError('The pickup location you have chosen does not have enough free storage area for some of the ordered products.');
+          $bValid = FALSE;
+          break;
+        }
+      }  
+    }
     
     return $bValid;
   }

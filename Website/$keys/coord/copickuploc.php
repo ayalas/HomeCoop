@@ -52,6 +52,7 @@ try
             {
                $oRecord->MaxBurden = $oPickupLocation->MaxBurden;
                $oRecord->PickupLocationName = $oPickupLocation->Name;
+               $oRecord->StorageAreas = $oPickupLocation->StorageAreas;
             }
             $oRecord->AddCoordinatorPermissionBridges();
           }
@@ -156,7 +157,8 @@ try
   
   $oCoopOrderCapacity = new CoopOrderCapacity(
                               $oRecord->MaxBurden, $oRecord->TotalBurden, 
-                              $oRecord->MaxCoopTotal, $oRecord->CoopTotal );
+                              $oRecord->MaxCoopTotal, $oRecord->CoopTotal,
+                              $oRecord->MaxStorageBurden, $oRecord->StorageBurden);
   
   $oPLTabInfo = new CoopOrderPickupLocationTabInfo( $oRecord->CoopOrderID, $oRecord->PickupLocationID, $oRecord->PickupLocationName, 
         CoopOrderPickupLocationTabInfo::PAGE_PICKUP_LOCATION );
@@ -202,7 +204,13 @@ function SelectPickupLocation()
   document.getElementById("hidPostAction").value = <?php echo CoopOrderPickupLocation::POST_ACTION_SELECT_LOCATION; ?>;
   document.frmMain.submit();
 }
-
+function ActivateStorageArea(sTargetElement, sSourceElement)
+{
+  if (document.getElementById(sSourceElement).value == "0")
+    document.getElementById(sTargetElement).removeAttribute("readonly");
+  else
+    document.getElementById(sTargetElement).setAttribute("readonly", "1");
+}
 </script>
 </head>
 <body class="centered">
@@ -219,7 +227,7 @@ function SelectPickupLocation()
             <table cellspacing="0" cellpadding="0" width="100%">
             <tr>
                 <td width="<!$COORD_PAGE_WIDTH$!>" >
-                <table cellspacing="0" cellpadding="0" width="100%">
+                <table cellspacing="0" cellpadding="0"  width="100%">
                 <tr>
                   <td><?php include_once '../control/coopordertab.php'; ?></td>
                 </tr>
@@ -241,7 +249,7 @@ function SelectPickupLocation()
                 <tr><td>
                 <table cellspacing="0" cellpadding="2" width="100%">
                 <tr>
-                <td></td>
+                <td colspan="2"></td>
                 <?php
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
@@ -257,6 +265,7 @@ function SelectPickupLocation()
                     unset($selPickupLoc);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php 
@@ -266,19 +275,21 @@ function SelectPickupLocation()
                     unset($txtMaxBurden);
 
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_MAX_BURDEN$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
                   <?php    
                     $sTotalBurden = $oRecord->TotalBurden;
                     if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Burden->CanCompute)
-                      $sTotalBurden .= ' (' . $oCoopOrderCapacity->Burden->PercentRounded . '%)';
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
                   
                     $lblTotalBurden = new HtmlTextLabel('<!$FIELD_COOP_ORDER_TOTAL_BURDEN$!>', 'txtTotalBurden', $sTotalBurden);
                     $lblTotalBurden->EchoHtml();
                     unset($lblTotalBurden);
                     
                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_BURDEN$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -296,6 +307,7 @@ function SelectPickupLocation()
                      
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php    
@@ -303,7 +315,7 @@ function SelectPickupLocation()
                     {
                       $sCoopTotal = $oRecord->CoopTotal;
                       if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Total->CanCompute)
-                        $sCoopTotal .= ' (' . $oCoopOrderCapacity->Total->PercentRounded . '%)';
+                        $sCoopTotal .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
 
                       $txtCoopTotal = new HtmlTextLabel('<!$FIELD_COOP_ORDER_COOP_TOTAL$!>', 'txtCoopTotal', $sCoopTotal);
                       $txtCoopTotal->EchoHtml();
@@ -314,8 +326,108 @@ function SelectPickupLocation()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 
+                <tr>
+                  <?php
+                    $lblMaxStorageBurden = new HtmlTextLabel('<!$FIELD_TOTAL_MAX_STORAGE_BURDEN$!>', 'lblMaxStorageBurden', 
+                        $oRecord->MaxStorageBurden);
+                    $lblMaxStorageBurden->EchoHtml();
+                    unset($lblMaxStorageBurden);
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_MAX_STORAGE_BURDEN$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  ?>
+                </tr>
+                
+                <tr>
+                  <?php
+                    $sTotalBurden = $oRecord->StorageBurden;
+                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->StorageBurden->CanCompute)
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->StorageBurden->PercentRounded . '%)');
+                    
+                    $lblStorageBurden = new HtmlTextLabel('<!$FIELD_TOTAL_STORAGE_BURDEN$!>', 'lblStorageBurden', 
+                        $sTotalBurden);
+                    $lblStorageBurden->EchoHtml();
+                    unset($lblStorageBurden);
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_STORAGE_BURDEN$!>');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  ?>
+                </tr>
+                
+                <?php
+                //STORAGE AREAS
+                $nCount = 0;
+                foreach ($oRecord->StorageAreas as $aStorageArea)
+                {
+                  HtmlTextEditMultiLang::EchoSeparatorLine();
+                  
+                  $nCount++;
+
+                  echo '<tr>';
+
+                  $lblStorageArea = new HtmlTextLabel(sprintf('<!$FIELD_STORAGE_AREA_INDEX$!>', $nCount), 
+                      'lblStorageArea_' . $aStorageArea['StorageAreaKeyID'], $aStorageArea['sStorageArea']);
+                  $lblStorageArea->EchoHtml();
+                  unset($lblStorageArea);
+
+                  //put inactive/active dropdown without label in help slot
+                  $selIsDisabled = new HtmlSelectBoolean(CoopOrderPickupLocation::CTL_STORAGE_AREA_DISABLED . $aStorageArea['StorageAreaKeyID'], '',
+                    $aStorageArea['bDisabled'], '<!$FIELD_VALUE_DISABLED$!>', 
+                    '<!$FIELD_VALUE_ENABLED$!>');
+                  $selIsDisabled->OmitLabel = TRUE;
+                  $selIsDisabled->ReadOnly = $bReadOnly;
+                  $selIsDisabled->OnChange = 'JavaScript:ActivateStorageArea(\'' . CoopOrderPickupLocation::CTL_STORAGE_AREA_MAX_BURDEN . 
+                      $aStorageArea['StorageAreaKeyID'] . '\', \'' . CoopOrderPickupLocation::CTL_STORAGE_AREA_DISABLED . 
+                      $aStorageArea['StorageAreaKeyID']  . '\');';
+                  $selIsDisabled->EchoHtml();
+                  
+                  //CoopOrderPickupLocation::CTL_STORAGE_AREA_MAX_BURDEN . $aStorageArea['StorageAreaKeyID']
+
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  echo '</tr>',
+                       '<tr>';
+
+                  $txtMaxBurden = new HtmlTextEditNumeric('<!$FIELD_PICKUP_LOCATION_MAX_BURDEN$!>', 
+                      CoopOrderPickupLocation::CTL_STORAGE_AREA_MAX_BURDEN . $aStorageArea['StorageAreaKeyID'], $aStorageArea['fMaxBurden']);
+                  $txtMaxBurden->ReadOnly = $bReadOnly  || $aStorageArea['bDisabled'];
+                  $txtMaxBurden->EchoHtml();
+                  unset($txtMaxBurden);
+
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_MAX_BURDEN$!>');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+
+                  echo '</tr>';
+                  
+                  echo '<tr>';
+
+                  $sTotalBurden = $aStorageArea['fBurden']; 
+                  
+                  if (isset($aStorageArea['fBurden']))
+                  {
+                    $oCoopOrderCapacity = new CoopOrderCapacity(
+                            $aStorageArea['fMaxBurden'], $aStorageArea['fBurden'], 
+                            NULL, NULL );
+                    if ($oCoopOrderCapacity->Burden->CanCompute)
+                    {                      
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
+                    }
+                  }
+
+                  $lblTotalBurden = new HtmlTextLabel('<!$FIELD_COOP_ORDER_TOTAL_BURDEN$!>', 'lblTotalBurden_' .
+                      $aStorageArea['StorageAreaKeyID'], $sTotalBurden);
+                  $lblTotalBurden->EchoHtml();
+                  unset($lblTotalBurden);
+
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_STORAGE_TOTAL_BURDEN$!>');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+
+                  echo '</tr>';
+                }
+                //END STORAGE AREAS
+                ?>
                 </table>
                 </td></tr></table>
                 </td>

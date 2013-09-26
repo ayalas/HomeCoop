@@ -230,7 +230,7 @@ function Save()
                 <tr><td>
                 <table cellspacing="0" cellpadding="2" width="100%">
                 <tr>
-                <td></td>
+                <td colspan="2"></td>
                 <?php
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
@@ -253,6 +253,7 @@ function Save()
                     }
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php 
@@ -263,6 +264,7 @@ function Save()
 
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                      
@@ -274,6 +276,7 @@ function Save()
                      
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                      
@@ -285,6 +288,7 @@ function Save()
                      
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                      
@@ -296,6 +300,7 @@ function Save()
                      
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                      
@@ -307,12 +312,13 @@ function Save()
                      
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php   
                     $sProducerTotal = $oRecord->ProducerTotal;
                     if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Total->CanCompute)
-                      $sProducerTotal .= ' (' . $oCoopOrderCapacity->Total->PercentRounded . '%)';
+                      $sProducerTotal .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
                   
                     $txtProducerTotal = new HtmlTextLabel('סכום ליצרן', 'txtProducerTotal', $sProducerTotal);
                     $txtProducerTotal->EchoHtml();
@@ -320,29 +326,32 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 
                 <tr>
                   <?php 
-                    $txtMaxBurden = new HtmlTextEditNumeric('קיבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
+                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
                     $txtMaxBurden->ReadOnly = $bReadOnly;
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
 
-                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח ליצרן זה לפי הקיבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח ליצרן זה לפי הקבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
                   <?php           
                     $sTotalBurden = $oRecord->TotalBurden;
-                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Burden->CanCompute)
-                      $sTotalBurden .= ' (' . $oCoopOrderCapacity->Burden->PercentRounded . '%)';
+                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Burden->CanCompute)                    
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
 
                     $lblTotalBurden = new HtmlTextLabel('סה&quot;כ מעמסה', 'txtTotalBurden', $sTotalBurden);
                     $lblTotalBurden->EchoHtml();
                     unset($lblTotalBurden);
                     
                     HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור היצרן כפול מספר הפעמים שהוזמן');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 
@@ -355,6 +364,7 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 
                 <tr>
@@ -366,6 +376,7 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
+                  <td></td>
                 </tr>
                 
                 

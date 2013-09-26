@@ -97,12 +97,18 @@ class OrderItems extends SQLBase {
             " COPRD.fMaxUserOrder, PRD.JoinToProductKeyID, NullIf(JPRD.nItems,0) JoinedProductItems, P.CoordinatingGroupID,  " .
             " IfNull(JCOPRD.mCoopPrice,0) JoinedCoopPrice,  IfNUll(JCOPRD.mProducerPrice,0) JoinedProducerPrice, OI.nJoinedItems, " .
             " NUllIf(PRD.fQuantity,0) ProductQuantity, PRD.nItems ProductItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
+            " COSA.fBurden StorageAreaBurden, COSA.fMaxBurden StorageAreaMaxBurden, " .
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_JOINED_PRODUCTS, 'sJoinedProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
           "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, 'sUnitAbbrev') .
           "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, 'sItemUnitAbbrev') .
           " FROM T_Order O INNER JOIN T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID " . 
+          " INNER JOIN T_CoopOrderProductStorage COPS ON COPS.CoopOrderKeyID = O.CoopOrderKeyID " .
+          " AND COPS.ProductKeyID = COPRD.ProductKeyID " .
+          " AND COPS.PickupLocationKeyID = O.PickupLocationKeyID " .
+          " INNER JOIN T_CoopOrderStorageArea COSA ON COSA.CoopOrderKeyID =  COPS.CoopOrderKeyID " .
+          " AND COSA.StorageAreaKeyID = COPS.StorageAreaKeyID " .
           " INNER JOIN T_Product PRD ON PRD.ProductKeyID = COPRD.ProductKeyID " .
           " INNER JOIN T_Producer P ON P.ProducerKeyID = PRD.ProducerKeyID " .
           " INNER JOIN T_Unit UT ON UT.UnitKeyID = PRD.UnitKeyID " .
@@ -170,6 +176,9 @@ class OrderItems extends SQLBase {
       $oItem->ProductMaxCoopOrder = $recItem["fMaxCoopOrder"];
       $oItem->ProductBurden = $recItem["fBurden"];
       $oItem->ProductTotalCoopOrderQuantity = $recItem["fTotalCoopOrder"];
+      $oItem->StorageAreaBurden  = $recItem["StorageAreaBurden"];
+      $oItem->StorageAreaMaxBurden = $recItem["StorageAreaMaxBurden"];
+      
       $oItem->CalculateBurden();
       
       $this->SetItemChangedByCoordinator($oItem);
@@ -266,7 +275,7 @@ class OrderItems extends SQLBase {
           " FROM T_Order O INNER JOIN T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID " . 
           " INNER JOIN T_Product PRD ON PRD.ProductKeyID = COPRD.ProductKeyID " .
           " INNER JOIN T_OrderItem OI ON OI.OrderID = O.OrderID AND OI.ProductKeyID = COPRD.ProductKeyID " .
-          " LEFT JOIN T_PickupLocation PL ON O.PickupLocationKeyID = PL.PickupLocationKeyID " .
+          " INNER JOIN T_PickupLocation PL ON O.PickupLocationKeyID = PL.PickupLocationKeyID " .
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCTS) .
           " WHERE O.OrderID = " . $OrderID . ' AND OI.sMemberComments IS NOT NULL ';
    
@@ -431,12 +440,9 @@ class OrderItems extends SQLBase {
    }
 
    //validate pickup location
-   if ($this->m_oOrder->PickupLocationID != 0)
-   {
-     $this->m_oOrder->LoadCoopOrderPickupLocation();
-     if (!$this->m_oOrder->ValidatePickupLocation(TRUE))
-        $bValid = FALSE;
-   }
+   $this->m_oOrder->LoadCoopOrderPickupLocation();
+   if (!$this->m_oOrder->ValidatePickupLocation(TRUE))
+      $bValid = FALSE;
    
    //validate producers
    $recProducer = $this->GetProducersListForModify();
@@ -485,7 +491,7 @@ class OrderItems extends SQLBase {
           $oOrderItem->ValidationMessage .= 'לא ניתן להזין הערה ללא הזמנה. הערות כאלה יש להזין בכותר ההזמנה<br/>';  
        }
      }
-     else //validations for max user and coop order per product
+     else //order item product related validations
        $this->ValidateProduct($oOrderItem, $oOriginalItem);
 
      if ($oOrderItem->InvalidEntry)
@@ -679,6 +685,9 @@ class OrderItems extends SQLBase {
     $oItem->ChangedByCoordinator  = $oOriginalItem->ChangedByCoordinator;
     $oItem->ProductTotalCoopOrderQuantity = $oOriginalItem->ProductTotalCoopOrderQuantity;
     
+    $oItem->StorageAreaBurden  = $oOriginalItem->StorageAreaBurden;
+    $oItem->StorageAreaMaxBurden = $oOriginalItem->StorageAreaMaxBurden;
+        
     $this->m_aData[self::PROPERTY_ORDER_ITEMS][$nProductID] = $oItem;
    }
    
@@ -768,7 +777,7 @@ class OrderItems extends SQLBase {
         {
           //add error reason for coordinators
           if ($this->m_oOrder->HasPermission(SQLBase::PERMISSION_COORD))
-            $g_oError->AddError(sprintf('שדה סה&quot;כ מעמסה עבור היצרן %s של הזמנת הקואופרטיב חרג מהמגבלה שהוגדרה בשדה קיבולת משלוח של היצרן.',$recProducer["sProducer"]));
+            $g_oError->AddError(sprintf('שדה סה&quot;כ מעמסה עבור היצרן %s של הזמנת הקואופרטיב חרג מהמגבלה שהוגדרה בשדה קבולת משלוח של היצרן.',$recProducer["sProducer"]));
           $bValid = FALSE;
         }
      }
@@ -847,6 +856,17 @@ class OrderItems extends SQLBase {
           $oOrderItem->InvalidEntry = TRUE;
           $oOrderItem->ValidationMessage .= 'הכמות שהוזנה גורמת לקואופרטיב לחרוג ממכסת ההזמנה הכוללת עבור המוצר<br/>';
        }
+     }
+   }
+   
+   //validate storage area burden, if there's been an increase
+   if ($oOrderItem->StorageAreaMaxBurden > 0 && $oOrderItem->Burden > $oOriginalItem->Burden)
+   {
+     $fAddedBurden = $oOrderItem->Burden - $oOriginalItem->Burden;
+     if ($oOrderItem->StorageAreaBurden + $fAddedBurden > $oOrderItem->StorageAreaMaxBurden)
+     {
+       $oOrderItem->InvalidEntry = TRUE;
+       $oOrderItem->ValidationMessage .= 'לא ניתן להגדיל את הכמות המוזמנת ממוצר זה עקב מגבלה שהוגדרה עבור מקום האחסון של המוצר<br/>';
      }
    }
  }

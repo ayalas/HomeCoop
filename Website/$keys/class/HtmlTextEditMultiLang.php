@@ -13,6 +13,7 @@ class HtmlTextEditMultiLang {
   const PROPERTY_REQUIRED = "Required";
   const PROPERTY_READ_ONLY = "ReadOnly";
   const PROPERTY_MAX_LENGTH = "MaxLength";
+  const PROPERTY_LABEL_SLOT_IS_HTML = "UseLabelSlotAsHtml";
 
   const ID_LINK = "-";
   
@@ -26,7 +27,8 @@ class HtmlTextEditMultiLang {
          self::PROPERTY_VALUES => $arrValues,
          self::PROPERTY_REQUIRED => FALSE,
          self::PROPERTY_READ_ONLY => FALSE,
-         self::PROPERTY_MAX_LENGTH => NULL
+         self::PROPERTY_MAX_LENGTH => NULL,
+         self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
         );
   }
   
@@ -66,17 +68,29 @@ class HtmlTextEditMultiLang {
   public function EchoHtml()
   {
     global $g_aSupportedLanguages;
+    global $g_nCountLanguages;
     global $g_sLangDir;
     
     $oTextEdit = NULL;
-        
-    if ( is_array($g_aSupportedLanguages) && count($g_aSupportedLanguages) > 0 )
+     
+    //using language dirs?
+    if ( $g_nCountLanguages > 0 )
     {
+    
       $sID = $this->m_aData[self::PROPERTY_ID] . self::ID_LINK . $g_sLangDir;
-      echo '<td nowrap><label ';
-      if ($this->m_aData[self::PROPERTY_REQUIRED])
-        echo ' class="required" ';
-      echo 'for="' , $sID , '">' , $this->m_aData[self::PROPERTY_LABEL] , '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label></td>';
+      echo '<td nowrap>';
+      
+      if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+        echo $this->m_aData[self::PROPERTY_LABEL];
+      else
+      {
+        echo '<label ';
+        if ($this->m_aData[self::PROPERTY_REQUIRED])
+          echo ' class="required" ';
+        echo 'for="' , $sID , '">' , $this->m_aData[self::PROPERTY_LABEL] , '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label>';
+      }
+      
+      echo '</td>';
       //first get current language
       $oTextEdit = new HtmlTextEdit( $sID, $g_aSupportedLanguages[$g_sLangDir][Consts::IND_LANGUAGE_DIRECTION], 
               $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $this->GetLangPropertyVal(self::PROPERTY_VALUES,$g_sLangDir) );
@@ -92,7 +106,7 @@ class HtmlTextEditMultiLang {
           $sID = $this->m_aData[self::PROPERTY_ID] . self::ID_LINK . $lkey;
           
           $oTextEdit = new HtmlTextEdit($sID, $larr[Consts::IND_LANGUAGE_DIRECTION], 
-              $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $this->m_aData[self::PROPERTY_VALUES][ $lkey ] );
+              $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $this->GetLangPropertyVal(self::PROPERTY_VALUES, $lkey ) );
           $oTextEdit->MaxLength = $this->m_aData[self::PROPERTY_MAX_LENGTH];
           $oTextEdit->ReadOnly = $this->m_aData[self::PROPERTY_READ_ONLY];
           $oTextEdit->Required = $this->m_aData[self::PROPERTY_REQUIRED] && $larr[Consts::IND_LANGUAGE_REQUIRED];     
@@ -102,10 +116,20 @@ class HtmlTextEditMultiLang {
     }
     else
     {
-      echo '<td nowrap><label ';
-      if ($this->m_aData[self::PROPERTY_REQUIRED])
-        echo ' class="required" ';
-      echo 'for="' , $this->m_aData[self::PROPERTY_ID] , '">' , $sLabel , '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label></td>';
+      echo '<td nowrap>';
+      
+      if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+        echo $this->m_aData[self::PROPERTY_LABEL];
+      else
+      {
+        echo '<label ';
+        if ($this->m_aData[self::PROPERTY_REQUIRED])
+          echo ' class="required" ';
+        echo 'for="' , $this->m_aData[self::PROPERTY_ID] , '">' , $this->m_aData[self::PROPERTY_LABEL] , 
+            '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label>';
+      }
+      
+      echo '</td>';
       
       $oTextEdit = new HtmlTextEdit($this->m_aData[self::PROPERTY_ID], NULL, 
           $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $this->m_aData[self::PROPERTY_VALUES][ 0 ] );
@@ -122,9 +146,11 @@ class HtmlTextEditMultiLang {
   public static function EchoColumnHeaders()
   {
     global $g_aSupportedLanguages;
+    global $g_nCountLanguages;
     global $g_sLangDir;
     
-    if ( is_array($g_aSupportedLanguages) && count($g_aSupportedLanguages) > 0 )
+    //using language dirs?
+    if ( $g_nCountLanguages > 0 )
     {
         //first get current language
         echo "<td class='coordlangtitle' ><span>" , $g_aSupportedLanguages[$g_sLangDir][Consts::IND_LANGUAGE_NAME] , "</span></td>";
@@ -135,40 +161,47 @@ class HtmlTextEditMultiLang {
             echo "<td class='coordlangtitle' ><span>" , $aLang[Consts::IND_LANGUAGE_NAME]  , "</span></td>";
         }
     }
-    else
-      echo "<td></td>";
   }
   
   public static function OtherLangsEmptyCells()
   {
-    global $g_aSupportedLanguages;
+    global $g_nCountLanguages;
     
-    $nCount = 0;   
-    
-    if ( is_array($g_aSupportedLanguages) )
-      $nCount = count($g_aSupportedLanguages);
-
-    if ( $nCount > 0 )
-      echo '<td colspan="' . ($nCount) . '" ></td>';
+    if ( $g_nCountLanguages > 1 )
+      echo '<td colspan="' , ($g_nCountLanguages -1) , '" ></td>';
   }
   
   public static function EchoHelpText($sHelpText)
-  {
-    global $g_aSupportedLanguages;
-        
-    $nCount = 0;   
-    
-    if ( is_array($g_aSupportedLanguages) )
-      $nCount = count($g_aSupportedLanguages);
-
-    echo '<td';
-    
-    if ( $nCount > 0 )
-      echo ' colspan="' , $nCount , '" ';
-    
-    echo '><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span>' , $sHelpText,
+  {        
+    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span>' , $sHelpText,
       '</span></a></td>';
-   
+  }
+  
+  public static function EchoSeparatorLine()
+  {
+    global $g_nCountLanguages;
+    
+    $nCount = 2; //help column + label column
+    if ($g_nCountLanguages == 0)
+      $nCount++; //one language deployment
+    else
+      $nCount+= $g_nCountLanguages;
+      
+    echo '<tr><td colspan="' , $nCount , '" ><div class="sepline"></div></td></tr>';
+  }
+  
+  public static function EchoTitleLine($sTitle)
+  {
+    global $g_nCountLanguages;
+    
+    $nCount = 2; //help column + label column
+    if ($g_nCountLanguages == 0)
+      $nCount++; //one language deployment
+    else
+      $nCount+= $g_nCountLanguages;
+      
+    echo '<tr><td colspan="' , $nCount , '" ><div class="titleline">', 
+        htmlspecialchars($sTitle), '</div></td></tr>';
   }
   
   protected function GetLangPropertyVal($PropertyID, $sLang)

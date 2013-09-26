@@ -274,7 +274,7 @@ function OnChangeUnit()
                 <?php
                   HtmlTextEditMultiLang::EchoColumnHeaders();
                 ?>
-                <td></td>
+                <td width="100%">&nbsp;</td>
                 </tr>
                 <tr>
                 <?php
@@ -287,7 +287,7 @@ function OnChangeUnit()
                 unset($txtProduct);
                 
                 ?>
-                <td width="100%">&nbsp;</td>
+                <td></td>
                 </tr>
                 <tr>
                   <?php                    
@@ -300,6 +300,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                 <?php
@@ -325,6 +326,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                     
@@ -337,6 +339,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php                     
@@ -346,6 +349,7 @@ function OnChangeUnit()
                     unset($txtUnitInterval);
                     
                     HtmlTextEditMultiLang::EchoHelpText('Interval between orderable weights/capacities. Irrelevant for products provided by item quantity');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -357,6 +361,7 @@ function OnChangeUnit()
                     unset($txtProducerPrice);
                     
                     HtmlTextEditMultiLang::EchoHelpText('This is the default price for the product. The actual product price can be set to a different value in each cooperative order');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -368,6 +373,7 @@ function OnChangeUnit()
                     unset($txtCoopPrice);
                     
                     HtmlTextEditMultiLang::EchoHelpText('This is the default price for the product. The actual product price can be set to a different value in each cooperative order');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -378,6 +384,7 @@ function OnChangeUnit()
                     unset($txtSortOrder);
                     
                     HtmlTextEditMultiLang::EchoHelpText('A number representing the sorting order of the product wherever a products list is displayed. Smaller numbers display higher on the list.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -388,6 +395,7 @@ function OnChangeUnit()
                     unset($txtPackageSize);
                     
                     HtmlTextEditMultiLang::EchoHelpText('Package size for a large package that the cooperative allows ordering portions/slices of.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -399,6 +407,7 @@ function OnChangeUnit()
                     unset($txtBurden);
                     
                     HtmlTextEditMultiLang::EchoHelpText('An index that indicates how much this product &quot;burdens&quot; a delivery. Helps to uphold a cooperative order&#x27;s Delivery Capacity, if set');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -411,6 +420,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                  <tr>
                   <?php
@@ -420,6 +430,7 @@ function OnChangeUnit()
                     unset($selItemUnit);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                   <td></td>
                 </tr>
                 <tr>
                   <?php                     
@@ -430,6 +441,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 <tr>
                   <?php
@@ -438,6 +450,7 @@ function OnChangeUnit()
                     $selItemUnit->EchoHtml();
                     unset($selItemUnit);
                     HtmlTextEditMultiLang::EchoHelpText('Join Items to Cost-Saving Larger Product'); 
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -448,6 +461,7 @@ function OnChangeUnit()
                     unset($txtMaxUserOrder);
                     
                     HtmlTextEditMultiLang::EchoHelpText('Max. product quantity per member'); 
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
                 <tr>
@@ -460,6 +474,7 @@ function OnChangeUnit()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                   <?php   
                     if ($oRecord->CheckImageUploadsPermission())
@@ -471,6 +486,7 @@ function OnChangeUnit()
                       unset($oPic1Upload);
 
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('Supported formats: jpg, gif, png. Max. size: %sKB', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
 
                       echo '</tr>';
                       
@@ -482,6 +498,7 @@ function OnChangeUnit()
                       unset($oPic1FileName);
 
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('When uploading this field is not mandatory and the system can set it automatically. It is included in cases when you do not have permissions to upload files and want to correlate products with already uploaded image files. Image files must then be uploaded to the upload directory: %s', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
                       if ($oRecord->Image1FileName != NULL)
@@ -489,12 +506,12 @@ function OnChangeUnit()
                         echo '<tr><td colspan="2"><input type="checkbox" name="chkRemoveImage1" id="chkRemoveImage1" value="1" >Remove Picture',
                              '</input></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                         
                         echo '<tr><td colspan="2"><img border="0" height="', PRODUCT_IMAGE_HEIGHT_SMALL,
                                 '" src="..', URL_UPLOAD_DIR, $oRecord->Image1FileName, '" /></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                       }
                       
                       echo '<tr>';
@@ -505,6 +522,7 @@ function OnChangeUnit()
                       unset($oPic2Upload);
 
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('Supported formats: jpg, gif, png. Max. size: %sKB', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
                       echo '<tr>';
@@ -515,6 +533,7 @@ function OnChangeUnit()
                       unset($oPic2FileName);
                       
                       HtmlTextEditMultiLang::EchoHelpText(sprintf('When uploading this field is not mandatory and the system can set it automatically. It is included in cases when you do not have permissions to upload files and want to correlate products with already uploaded image files. Image files must then be uploaded to the upload directory: %s', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
                       if ($oRecord->Image2FileName != NULL)
@@ -522,12 +541,12 @@ function OnChangeUnit()
                         echo '<tr><td colspan="2"><input type="checkbox" name="chkRemoveImage2" id="chkRemoveImage2" value="1" >Remove Picture',
                              '</input></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                         
                         echo '<tr><td colspan="2"><img border="0" height="', PRODUCT_IMAGE_HEIGHT_SMALL,
                                 '" src="..', URL_UPLOAD_DIR, $oRecord->Image2FileName, '" /></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                        echo '</tr>';
+                        echo '<td></td></tr>';
                       }
                     }
                   ?>

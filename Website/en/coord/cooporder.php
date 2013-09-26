@@ -30,7 +30,10 @@ try
       $oRecord->ID = intval($_POST['hidPostValue']);
     
     if ( isset( $_POST['hidOriginalData'] ) )
+    {
       $oRecord->SetSerializedOriginalData( $_POST["hidOriginalData"] );
+      $oRecord->PreserveData();
+    }
     
     if (!empty( $_POST['hidPostAction'] ))
     {
@@ -126,7 +129,8 @@ try
 
   $bReadOnly = !$oRecord->HasPermission(SQLBase::PERMISSION_EDIT);
 
-  $oCoopOrderCapacity = new CoopOrderCapacity($oRecord->MaxBurden, $oRecord->TotalBurden, $oRecord->MaxCoopTotal, $oRecord->CoopTotal);
+  $oCoopOrderCapacity = new CoopOrderCapacity($oRecord->MaxBurden, $oRecord->TotalBurden, $oRecord->MaxCoopTotal, $oRecord->CoopTotal,
+      $oRecord->MaxStorageBurden, $oRecord->StorageBurden);
 
   if ($oRecord->ID > 0)
   {
@@ -262,6 +266,7 @@ function Save()
                     unset($selStatus);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                <td></td>
                 </tr>
                 <tr>
                 <?php
@@ -273,8 +278,8 @@ function Save()
                  unset($dpStart);
                  
                  HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
-                <td></td>
                 </tr>
                 <tr>
                 <?php                 
@@ -286,8 +291,8 @@ function Save()
                  unset($dpEnd);
                  
                  HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
-                <td></td>
                 </tr>
                 <tr>
                 <?php                 
@@ -298,7 +303,7 @@ function Save()
                  $dpDelivery->EchoHtml();
                  unset($dpDelivery);
                  
-                 HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
                 <td></td>
                 </tr> 
@@ -312,7 +317,9 @@ function Save()
                     $txtMaxBurden->ReadOnly = $bStatusOnly || $bReadOnly;
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
+                    
                     HtmlTextEditMultiLang::EchoHelpText('Limits the size of this cooperative order to the overall order&#x27;s capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. A limitation can also be set for a specific pickup location. Members will not be able to place an order that exceeds the limitation set here.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -323,6 +330,7 @@ function Save()
                     unset($txtMaxCoopTotal);
                     
                     HtmlTextEditMultiLang::EchoHelpText('Limits the total amount of the cooperative order. Members will not be able to place an order that exceeds the limitation set here.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();                
                   ?>
                 </tr>
                 <tr>
@@ -333,6 +341,7 @@ function Save()
                     unset($txtCoopFee);
                     
                     HtmlTextEditMultiLang::EchoHelpText('A fixed amount that is paid by each member per order, in addition to the sum cost of the products, to cover expenses');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -343,6 +352,7 @@ function Save()
                     unset($txtSmallOrder);
                     
                     HtmlTextEditMultiLang::EchoHelpText('Defines a small member&#x27;s order, that has a reduced cooperative fee attached to it');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -354,6 +364,7 @@ function Save()
                     unset($txtSmallOrderCoopFee);
                     
                     HtmlTextEditMultiLang::EchoHelpText('A reduced cooperative fee, for a small order');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
                 <tr>
@@ -365,13 +376,14 @@ function Save()
                     unset($txtCoopFeePercent);
                     
                     HtmlTextEditMultiLang::EchoHelpText('Defines a cooperative fee by percents from the total amount paid for ordered products');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>                
                  <tr>
                   <?php 
                     $sCoopTotal = $oRecord->CoopTotal;
                     if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Total->CanCompute)
-                      $sCoopTotal .= ' (' . $oCoopOrderCapacity->Total->PercentRounded . '%)';
+                      $sCoopTotal .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
                   
                     $lblCoopTotal = new HtmlTextLabel('Total Coop', 'txtCoopTotal', $sCoopTotal);
                     $lblCoopTotal->EchoHtml();
@@ -379,6 +391,7 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                   <td></td>
                 </tr>
                 <tr>
                   <?php                                       
@@ -388,6 +401,7 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                  <td></td>
                 </tr>
                 
                 <tr>
@@ -398,13 +412,14 @@ function Save()
                     
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
+                   <td></td>
                 </tr>
                 
                 <tr>
                   <?php    
                     $sTotalBurden = $oRecord->TotalBurden;
                     if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Burden->CanCompute)
-                      $sTotalBurden .= ' (' . $oCoopOrderCapacity->Burden->PercentRounded . '%)';
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
                   
                     $lblTotalBurden = new HtmlTextLabel('Total Burden', 'txtTotalBurden', $sTotalBurden);
                     
@@ -412,8 +427,38 @@ function Save()
                     unset($lblTotalBurden);
                     
                     HtmlTextEditMultiLang::EchoHelpText('The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
+                
+                <tr>
+                  <?php
+                    $lblMaxStorageBurden = new HtmlTextLabel('Total max. storage', 'lblMaxStorageBurden', 
+                        $oRecord->MaxStorageBurden);
+                    $lblMaxStorageBurden->EchoHtml();
+                    unset($lblMaxStorageBurden);
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון במקום האיסוף');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  ?>
+                </tr>
+                
+                <tr>
+                  <?php
+                    $sTotalBurden = $oRecord->StorageBurden;
+                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->StorageBurden->CanCompute)
+                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->StorageBurden->PercentRounded . '%)');
+                    
+                    $lblStorageBurden = new HtmlTextLabel('Total storage full', 'lblStorageBurden', 
+                        $sTotalBurden);
+                    $lblStorageBurden->EchoHtml();
+                    unset($lblStorageBurden);
+                    
+                    HtmlTextEditMultiLang::EchoHelpText('Total storage areas used space.');
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  ?>
+                </tr>
+                
                   <?php    
                   } //end of ShowSums
                     if (!$bReadOnly)
@@ -425,7 +470,7 @@ function Save()
 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
 
-                      echo '</tr>';
+                      echo ' <td></td></tr>';
                     }
                 ?>
                 </table>

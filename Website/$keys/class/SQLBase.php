@@ -53,6 +53,13 @@ abstract class SQLBase
     const OPERATION_STATUS_PERMISSION_AREA_NOT_LOADED = 0x1000;
     const OPERATION_STATUS_CANT_REMOVE_OWN_PERMISSION = 0x2000;
     const OPERATION_STATUS_VALIDATION_FAILED = 0x4000;
+    
+    const VALIDATE_NAMES_OK = 0;
+    const VALIDATE_NAMES_EMPTY_ARRAY = 1;
+    const VALIDATE_NAMES_CURRENT_LANGUAGE_EMPTY = 2;
+    const VALIDATE_NAMES_OTHER_LANGUAGE_EMPTY = 3;
+    const VALIDATE_NAMES_ALL_LANGUAGES_EMPTY = 4;
+    
 
     protected $m_nLastOperationStatus = 0;
   
@@ -499,7 +506,7 @@ abstract class SQLBase
       
       $sSQLWhere = " WHERE KeyID = :Key AND LangID = :Lang ;";
       
-      $sSQLQuery = "SELECT COUNT(*) as nCount FROM Tlng_String " . $sSQLWhere;
+      $sSQLQuery = "SELECT COUNT(1) as nCount FROM Tlng_String " . $sSQLWhere;
       $this->RunSQLWithParams( $sSQLQuery, array("Key" => $nKeyID, "Lang" => $nLangID) );
       $res = $this->fetch();
       if (!isset($res) || $res["nCount"] == 0)
@@ -526,6 +533,21 @@ abstract class SQLBase
       }
       else
         $this->UpdateString($nKeyID, $g_oMemberSession->GetLangIDByKey(''), $this->m_aData[$nDataIndex][0]);
+    }
+    
+    protected function UpdateStringsFromArray($aArrStrings, $nKeyID)
+    {
+      global $g_oMemberSession;
+      
+      if ($g_oMemberSession->LangID > 0)
+      {
+        foreach($aArrStrings as $key => $str)
+        {
+          $this->UpdateString($nKeyID, $g_oMemberSession->GetLangIDByKey($key), $str);
+        }
+      }
+      else
+        $this->UpdateString($nKeyID, $g_oMemberSession->GetLangIDByKey(''), $aArrStrings[0]);
     }
     
     protected function InsertString($nKeyID, $nLangID, $sString)
@@ -733,6 +755,50 @@ abstract class SQLBase
       }
       
       return TRUE;
+    }
+    
+    protected function ValidateNames($arrNames)
+    {
+      global $g_sLangDir;
+      global $g_aSupportedLanguages;
+      
+      //VALIDATE_NAMES_ALL_LANGUAGES_EMPTY
+      
+      if (!is_array($arrNames))
+        return self::VALIDATE_NAMES_EMPTY_ARRAY;
+      else if ($g_sLangDir != '')
+      {
+        $nRes = self::VALIDATE_NAMES_OK;
+        $bAllLangaugeEmpty = TRUE;
+        
+        if ($arrNames[$g_sLangDir] == NULL)
+          $nRes = self::VALIDATE_NAMES_CURRENT_LANGUAGE_EMPTY;
+        else
+          $bAllLangaugeEmpty = FALSE;
+
+        //check other languages
+        foreach($g_aSupportedLanguages as $Lkey => $aLang)
+        {
+          if ($aLang[Consts::IND_LANGUAGE_REQUIRED] && $arrNames[$Lkey] == NULL)
+          {
+            if ($nRes == self::VALIDATE_NAMES_OK)
+              $nRes = self::VALIDATE_NAMES_OTHER_LANGUAGE_EMPTY;
+          }
+          else 
+            $bAllLangaugeEmpty = FALSE;
+        }
+        
+        if ($bAllLangaugeEmpty)
+          return self::VALIDATE_NAMES_ALL_LANGUAGES_EMPTY;
+        
+        return $nRes;
+      }
+      else if ($arrNames[0] == NULL) //one-language deployment
+      {
+        return self::VALIDATE_NAMES_ALL_LANGUAGES_EMPTY;
+      }
+      
+      return self::VALIDATE_NAMES_OK;
     }
     
     

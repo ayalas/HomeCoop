@@ -43,7 +43,7 @@
 </str>
 <str>
     <key>LANGUAGE_DIRECTION_MARK</key>
-    <value>&#8207;</value>
+    <value> &#8207;</value>
 </str>
 <str>
     <key>GRID_COLUMN_PIXELS_PER_LETTER</key>

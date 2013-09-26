@@ -18,6 +18,7 @@ class HtmlSelectArray {
   const PROPERTY_ON_CHANGE = "OnChange";
   const PROPERTY_VALUE_FOUND = "ValueFound";
   const PROPERTY_ENCODE_HTML = "EncodeHtml";
+  const PROPERTY_LABEL_SLOT_IS_HTML = "UseLabelSlotAsHtml";
   
   protected $m_aData = array( self::PROPERTY_LABEL => NULL,
                               self::PROPERTY_ARRAY => NULL,
@@ -28,7 +29,8 @@ class HtmlSelectArray {
                               self::PROPERTY_ID => NULL,
                               self::PROPERTY_ON_CHANGE => NULL,
                               self::PROPERTY_VALUE_FOUND => FALSE,
-                              self::PROPERTY_ENCODE_HTML => TRUE
+                              self::PROPERTY_ENCODE_HTML => TRUE,
+                              self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
                       );
   
   public function __construct($sIDSufix, $sLabel, &$arr, $nValue) {
@@ -86,14 +88,22 @@ class HtmlSelectArray {
     
   //echo directly to html document to save some string concats/retrieval
   public function EchoHtml()
-  {
-
-    echo '<td nowrap><label ';
-    if ($this->m_aData[self::PROPERTY_REQUIRED])
+  {   
+    echo '<td nowrap>';
+    
+    if ($this->m_aData[self::PROPERTY_LABEL_SLOT_IS_HTML])
+      echo $this->m_aData[self::PROPERTY_LABEL];
+    else
+    {
+      echo '<label ';
+      if ($this->m_aData[self::PROPERTY_REQUIRED])
         echo ' class="required" ';
-    echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '" >' , $this->m_aData[self::PROPERTY_LABEL] ,
-            '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label></td>';
-    echo '<td><select id="' , $this->m_aData[self::PROPERTY_ID] , '" name="' , $this->m_aData[self::PROPERTY_ID] , '"';
+      
+      echo ' for="' , $this->m_aData[self::PROPERTY_ID] , '" >' , $this->m_aData[self::PROPERTY_LABEL] ,
+              '<!$FIELD_DISPLAY_NAME_SUFFIX$!></label>';
+    }
+
+    echo '</td><td><select id="' , $this->m_aData[self::PROPERTY_ID] , '" name="' , $this->m_aData[self::PROPERTY_ID] , '"';
     
     if ($this->m_aData[self::PROPERTY_REQUIRED])
       echo ' class="requiredselect" ';

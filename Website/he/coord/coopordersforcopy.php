@@ -84,7 +84,7 @@ UserSessionBase::Close();
                      
                        "סה&quot;כ משלוח‏:‏ " , $recTable["mTotalDelivery"] , "<br/>",
                        "סה&quot;כ מעמסה‏:‏ " , Rounding::Round($recTable["fBurden"], ROUND_SETTING_BURDEN) , "<br/>",
-                       "קיבולת משלוח‏:‏ " , $recTable["fMaxBurden"] , "<br/>",
+                       "קבולת משלוח‏:‏ " , $recTable["fMaxBurden"] , "<br/>",
                        "עודכן לאחרונה ע&quot;י‏:‏ " , $recTable["ModifierName"],
                       
                        "</span></a></td>";
