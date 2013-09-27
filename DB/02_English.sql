@@ -197,6 +197,11 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_ORDER
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'Order - Set Max. Order' );
 
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_STORAGE_AREAS');
+
+INSERT INTO Tlng_String ( KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'Storage Areas' );
+
 /* Permission Scopes - strings NOT IN USE (no translation required) */
 SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_SCOPE_COOP');
 

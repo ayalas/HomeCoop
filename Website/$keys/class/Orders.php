@@ -38,6 +38,8 @@ class Orders extends CoopOrderSubBase {
                             self::PROPERTY_COOP_ORDER_MAX_BURDEN => NULL,
                             self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL => NULL,
                             self::PROPERTY_COOP_ORDER_COOP_TOTAL => 0,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE => NULL,
                             CoopOrder::PROPERTY_SMALL_ORDER => NULL,
                             CoopOrder::PROPERTY_COOP_FEE => NULL,

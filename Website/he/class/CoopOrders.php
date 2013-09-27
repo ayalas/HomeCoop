@@ -42,7 +42,8 @@ class CoopOrders extends SQLBase {
          Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
 
       $sSQL =   " SELECT CO.CoopOrderKeyID, CO.dStart, CO.dEnd, CO.dDelivery, CO.ModifiedByMemberID, M.sName as ModifierName, CO.nStatus, CO.CoordinatingGroupID," .
-                " CO.mMaxCoopTotal, CO.fMaxBurden, CO.mCoopTotal, CO.mProducerTotal, IfNull(CO.fBurden,2) fBurden, CO.mTotalDelivery, " . 
+                " CO.mMaxCoopTotal, CO.fMaxBurden, CO.mCoopTotal, CO.mProducerTotal, IfNull(CO.fBurden,2) fBurden, CO.mTotalDelivery, " .
+                " CO.fMaxStorageBurden, CO.fStorageBurden, " .
                        $this->ConcatStringsSelect(Consts::PERMISSION_AREA_COOP_ORDERS, 'sCoopOrder') .
                 " FROM T_CoopOrder CO INNER JOIN T_Member M ON M.MemberID = CO.ModifiedByMemberID " . 
                 $this->ConcatStringsJoin(Consts::PERMISSION_AREA_COOP_ORDERS);

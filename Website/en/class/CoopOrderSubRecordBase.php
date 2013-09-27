@@ -73,6 +73,9 @@ class CoopOrderSubRecordBase extends CoopOrderSubBase {
     $this->m_aDefaultData[self::PROPERTY_COOP_ORDER_MAX_BURDEN] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_MAX_BURDEN];
     $this->m_aDefaultData[self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL];
     $this->m_aDefaultData[self::PROPERTY_COOP_ORDER_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_COOP_TOTAL];
+    
+    $this->m_aDefaultData[self::PROPERTY_COOP_ORDER_STORAGE_BURDEN] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_STORAGE_BURDEN];
+    $this->m_aDefaultData[self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN];
         
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;

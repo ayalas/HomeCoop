@@ -268,6 +268,8 @@ CREATE TABLE `T_CoopOrder` (
   `mProducerTotal` decimal(10,2) DEFAULT '0.00',
   `mTotalDelivery` decimal(10,2) DEFAULT '0.00',
   `bHasJoinedProducts` tinyint(1) NOT NULL,
+  `fMaxStorageBurden` FLOAT UNSIGNED NULL, 
+  `fStorageBurden` FLOAT UNSIGNED NULL,
   PRIMARY KEY (`CoopOrderKeyID`),
   KEY `indModifiedByMemberID` (`ModifiedByMemberID`),
   KEY `indCoordinatingGroupID` (`CoordinatingGroupID`) USING BTREE,
@@ -575,6 +577,8 @@ CREATE TABLE `T_CoopOrderPickupLocation` (
   `fBurden` float unsigned DEFAULT NULL,
   `mMaxCoopTotal` decimal(10,2) unsigned DEFAULT NULL,
   `mCoopTotal` decimal(10,2) unsigned DEFAULT NULL,
+  `fMaxStorageBurden` FLOAT UNSIGNED NULL, 
+  `fStorageBurden` FLOAT UNSIGNED NULL,
   PRIMARY KEY (`CoopOrderKeyID`,`PickupLocationKeyID`),
   KEY `fkPickupLocationKeyID2` (`PickupLocationKeyID`),
   CONSTRAINT `fkCoopOrder2` FOREIGN KEY (`CoopOrderKeyID`) REFERENCES `T_CoopOrder` (`CoopOrderKeyID`) ON DELETE CASCADE,
@@ -627,5 +631,61 @@ CREATE TABLE `T_Member` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+DROP TABLE IF EXISTS `T_PickupLocationStorageArea`;
+CREATE  TABLE `T_PickupLocationStorageArea` (
+  `StorageAreaKeyID` BIGINT UNSIGNED NOT NULL ,
+  `PickupLocationKeyID` BIGINT UNSIGNED NOT NULL ,
+  `fMaxBurden` FLOAT UNSIGNED NULL ,
+  `bDisabled` TINYINT(1) NULL,
+  `bDefault` TINYINT(1) NULL,
+  PRIMARY KEY (`StorageAreaKeyID`),
+  CONSTRAINT `fkPLSA_PLID` FOREIGN KEY (`PickupLocationKeyID`) REFERENCES `T_PickupLocation` (`PickupLocationKeyID`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  INDEX `indPLSAPLID` (`PickupLocationKeyID`  ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+DROP TABLE IF EXISTS `T_CoopOrderStorageArea`;
+CREATE  TABLE `T_CoopOrderStorageArea` (
+  `CoopOrderKeyID` BIGINT UNSIGNED NOT NULL ,
+  `StorageAreaKeyID` BIGINT UNSIGNED NOT NULL ,
+  `fMaxBurden` FLOAT UNSIGNED NULL ,
+  `fBurden` FLOAT UNSIGNED NULL ,
+  PRIMARY KEY (`CoopOrderKeyID`, `StorageAreaKeyID`) ,
+  INDEX `fkCOSA_SAID` (`StorageAreaKeyID` ASC) ,
+  CONSTRAINT `fkCOSA_COID`
+    FOREIGN KEY (`CoopOrderKeyID` )
+    REFERENCES `T_CoopOrder` (`CoopOrderKeyID` )
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fkCOSA_SAID`
+    FOREIGN KEY (`StorageAreaKeyID` )
+    REFERENCES `T_PickupLocationStorageArea` (`StorageAreaKeyID` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+DROP TABLE IF EXISTS `T_CoopOrderProductStorage`;
+CREATE  TABLE `T_CoopOrderProductStorage` (
+  `CoopOrderKeyID` BIGINT UNSIGNED NOT NULL ,
+  `ProductKeyID` BIGINT UNSIGNED NOT NULL ,
+  `PickupLocationKeyID` BIGINT UNSIGNED NOT NULL ,
+  `StorageAreaKeyID` BIGINT UNSIGNED NOT NULL ,
+  PRIMARY KEY (`CoopOrderKeyID`, `ProductKeyID`, `PickupLocationKeyID`) ,
+  INDEX `fkCOPS_CoopOrderProduct` (`CoopOrderKeyID` ASC, `ProductKeyID` ASC) ,
+  INDEX `fkCOPS_StorageArea` (`PickupLocationKeyID` ASC, `StorageAreaKeyID` ASC) ,
+  CONSTRAINT `fkCOPS_CoopOrderProduct`
+    FOREIGN KEY (`CoopOrderKeyID` , `ProductKeyID` )
+    REFERENCES `T_CoopOrderProduct` (`CoopOrderKeyID` , `ProductKeyID` )
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fkCOPS_StorageArea`
+    FOREIGN KEY (`PickupLocationKeyID` , `StorageAreaKeyID` )
+    REFERENCES `T_PickupLocationStorageArea` (`PickupLocationKeyID` , `StorageAreaKeyID` )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 -- Dump completed on 2012-09-14 17:57:29

@@ -43,7 +43,8 @@ try
   $oTabInfo->CoordinatingGroupID = $oData->CoordinatingGroupID;
   $oTabInfo->StatusObj = new ActiveCoopOrderStatus($oData->End, $oData->Delivery, $oData->Status);
   $oTabInfo->CoopTotal = $oData->CoopOrderCoopTotal; 
-  $oPercent = new CoopOrderCapacity($oData->CoopOrderMaxBurden, $oData->CoopOrderBurden, $oData->CoopOrderMaxCoopTotal, $oData->CoopOrderCoopTotal);
+  $oPercent = new CoopOrderCapacity($oData->CoopOrderMaxBurden, $oData->CoopOrderBurden, $oData->CoopOrderMaxCoopTotal, $oData->CoopOrderCoopTotal,
+      $oData->CoopOrderMaxStorageBurden, $oData->CoopOrderStorageBurden);
   if ($oPercent->SelectedType != CoopOrderCapacity::TypeNone)
     $oTabInfo->Capacity = $oPercent->PercentRounded . '%';
   unset($oPercent);
@@ -108,6 +109,7 @@ UserSessionBase::Close();
               <td class="columntitlelong">Location Name</td>
               <td class="columntitlelong">Address</td>
               <td class="columntitle"><a class="tooltip" href="#" >Total Burden<span>The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered, per pickup location</span></a></td>
+              <td class="columntitle"><a class="tooltip" href="#" >Total storage full<span>Total storage areas used space.</span></a></td>
               <td class="columntitlenowidth"><?php if ($bShowSums) echo 'Total Coop'; ?></td>
             </tr>
             <?php
@@ -134,14 +136,22 @@ UserSessionBase::Close();
 
                       $oCoopOrderCapacity = new CoopOrderCapacity(
                               $recTable["fMaxBurden"], $recTable["fBurden"], 
-                              $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"] );
+                              $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"], 
+                              $recTable["fMaxStorageBurden"], $recTable["fStorageBurden"] );
                      
                       //burden
                       echo '<td>' , Rounding::Round($recTable["fBurden"], ROUND_SETTING_BURDEN);
                       if ($oCoopOrderCapacity->Burden->CanCompute)
                         LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
                       
-                      echo '</td>';                  
+                      echo '</td>';   
+                      
+                      //storage burden
+                      echo '<td>' , Rounding::Round($recTable["fStorageBurden"], ROUND_SETTING_BURDEN);
+                      if ($oCoopOrderCapacity->Burden->CanCompute)
+                        LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->StorageBurden->PercentRounded . '%)');
+                      
+                      echo '</td>'; 
                       
                       //CoopTotal
                       echo '<td>';

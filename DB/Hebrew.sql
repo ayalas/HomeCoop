@@ -201,6 +201,11 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_ORDER
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'הזמנה - קביעת מכסה' );
 
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_STORAGE_AREAS');
+
+INSERT INTO Tlng_String ( KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'מקומות אחסון' );
+
 /* Permission Scopes */
 SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_SCOPE_COOP');
 

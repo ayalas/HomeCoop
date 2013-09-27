@@ -63,6 +63,8 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
                             self::PROPERTY_COOP_ORDER_MAX_BURDEN => NULL,
                             self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL => NULL,
                             self::PROPERTY_COOP_ORDER_COOP_TOTAL => 0,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             self::PROPERTY_PRODUCER_TOTAL => 0,
                             self::PROPERTY_COOP_TOTAL => 0,
                             self::PROPERTY_JOINED_STATUS => self::JOIN_STATUS_NONE,

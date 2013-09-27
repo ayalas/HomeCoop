@@ -55,7 +55,9 @@ class CoopOrderExport extends CoopOrderSubBase {
                             self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL => NULL,
                             self::PROPERTY_COOP_ORDER_COOP_TOTAL => 0,
                             self::PROPERTY_PRODUCERS => NULL,
-                            self::PROPERTY_PICKUP_LOCATIONS => NULL
+                            self::PROPERTY_PICKUP_LOCATIONS => NULL,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             );
     
     $this->m_aOriginalData = $this->m_aData;

@@ -303,6 +303,14 @@ SET @prmAreaOrderSetMax = LAST_INSERT_ID();
 INSERT INTO T_PermissionArea( PermissionAreaKeyID)
 VALUES( @prmAreaOrderSetMax );
 
+INSERT INTO T_Key( sStringKey )
+VALUES( 'PERMISSION_AREA_STORAGE_AREAS' );
+
+SET @prmAreaStorageAreas = LAST_INSERT_ID();
+
+INSERT INTO T_PermissionArea( PermissionAreaKeyID)
+VALUES( @prmAreaStorageAreas );
+
 /* Permission Scopes */
 INSERT INTO T_Key( sStringKey )
 VALUES( 'PERMISSION_SCOPE_COOP' );

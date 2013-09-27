@@ -16,6 +16,9 @@ class CoopOrderSubBase extends SQLBase {
   const PROPERTY_COOP_ORDER_COOP_TOTAL = "CoopOrderCoopTotal";
   const PROPERTY_COOP_ORDER_MAX_COOP_TOTAL = "CoopOrderMaxCoopTotal";
   
+  const PROPERTY_COOP_ORDER_STORAGE_BURDEN = "CoopOrderStorageBurden";
+  const PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN = "CoopOrderMaxStorageBurden";
+  
   const PROPERTY_PERMISSION_COOP_ORDER_VIEW = 200;
   const PROPERTY_PERMISSION_COOP_ORDER_EDIT = 201;
   
@@ -31,7 +34,9 @@ class CoopOrderSubBase extends SQLBase {
                             self::PROPERTY_COOP_ORDER_BURDEN => 0,
                             self::PROPERTY_COOP_ORDER_MAX_BURDEN => NULL,
                             self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL => NULL,
-                            self::PROPERTY_COOP_ORDER_COOP_TOTAL => 0
+                            self::PROPERTY_COOP_ORDER_COOP_TOTAL => 0,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             );
   }
   
@@ -87,6 +92,9 @@ class CoopOrderSubBase extends SQLBase {
     $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL];
     $this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_COOP_TOTAL];    
     
+    $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN];    
+    $this->m_aData[self::PROPERTY_COOP_ORDER_STORAGE_BURDEN] = $this->m_aOriginalData[self::PROPERTY_COOP_ORDER_STORAGE_BURDEN];    
+    
     if (array_key_exists(CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE, $this->m_aData))
       $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE] = $this->m_aOriginalData[CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE];
 
@@ -126,7 +134,7 @@ class CoopOrderSubBase extends SQLBase {
     {
       $sSQL =   " SELECT CO.nStatus, CO.mMaxCoopTotal,  CO.fMaxBurden, CO.bHasJoinedProducts,  " . 
                 " CO.mSmallOrderCoopFee, CO.mSmallOrder, CO.mCoopFee, CO.fCoopFee, " .
-              " IfNull(CO.fBurden,0) fBurden, CO.mCoopTotal, CO.CoordinatingGroupID,CO.dEnd,CO.dDelivery, " .
+              " IfNull(CO.fBurden,0) fBurden, CO.mCoopTotal, CO.CoordinatingGroupID,CO.dEnd,CO.dDelivery, CO.fMaxStorageBurden, CO.fStorageBurden, " .
                 $this->ConcatStringsSelect(Consts::PERMISSION_AREA_COOP_ORDERS, 'sCoopOrder') .
                 " FROM T_CoopOrder CO " . 
                 $this->ConcatStringsJoin(Consts::PERMISSION_AREA_COOP_ORDERS) .
@@ -155,6 +163,9 @@ class CoopOrderSubBase extends SQLBase {
       $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_BURDEN] = $rec["fMaxBurden"];
       $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL] = $rec["mMaxCoopTotal"];
       $this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL] = $rec["mCoopTotal"];
+      
+      $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN] = $rec["fMaxStorageBurden"];
+      $this->m_aData[self::PROPERTY_COOP_ORDER_STORAGE_BURDEN] = $rec["fStorageBurden"];
       
       if (array_key_exists(CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE, $this->m_aData))
         $this->m_aData[CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE] = $rec["mSmallOrderCoopFee"];

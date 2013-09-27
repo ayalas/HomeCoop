@@ -67,7 +67,8 @@ try
   $oTabInfo->CoordinatingGroupID = $oData->CoordinatingGroupID;
   $oTabInfo->StatusObj = new ActiveCoopOrderStatus($oData->End, $oData->Delivery, $oData->Status);
   $oTabInfo->CoopTotal = $oData->CoopOrderCoopTotal; 
-  $oPercent = new CoopOrderCapacity($oData->CoopOrderMaxBurden, $oData->CoopOrderBurden, $oData->CoopOrderMaxCoopTotal, $oData->CoopOrderCoopTotal);
+  $oPercent = new CoopOrderCapacity($oData->CoopOrderMaxBurden, $oData->CoopOrderBurden, $oData->CoopOrderMaxCoopTotal, $oData->CoopOrderCoopTotal,
+      $oData->CoopOrderMaxStorageBurden, $oData->CoopOrderStorageBurden);
   if ($oPercent->SelectedType != CoopOrderCapacity::TypeNone)
     $oTabInfo->Capacity = $oPercent->PercentRounded . '%';
   unset($oPercent);

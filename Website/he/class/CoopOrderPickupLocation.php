@@ -47,6 +47,8 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
                             self::PROPERTY_STORAGE_AREAS => array(),
                             self::PROPERTY_MAX_STOARGE_BURDEN => NULL,
                             self::PROPERTY_STOARGE_BURDEN => NULL,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;
@@ -494,7 +496,8 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
       {
         $nStorageAreaKeyID = $this->InitStoragePostElement($key, $nMaxBurdenPrefixLen);
 
-        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$nStorageAreaKeyID]['fMaxBurden'] = 0 + $value;
+        if (!empty($value)) //allow null, do not allow 0
+          $this->m_aData[self::PROPERTY_STORAGE_AREAS][$nStorageAreaKeyID]['fMaxBurden'] = 0 + $value;
       }
     }
   }
@@ -623,6 +626,9 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
     }
     
     $this->CalculateMaxStorageBurden();
+    
+    if ($this->m_aData[self::PROPERTY_MAX_STOARGE_BURDEN] == 0)
+      $this->m_aData[self::PROPERTY_MAX_STOARGE_BURDEN] = NULL; //do not allow setting value to 0
   }
     
   protected function DeleteStorageArea($aStorageArea)
@@ -684,16 +690,15 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
     //collect entire pickup location sum
     $this->m_aData[self::PROPERTY_MAX_STOARGE_BURDEN] += $aStorageArea['fMaxBurden'];
   }
-    
+
   //calculate max storage burden for the coop order (by reducing prev amount)
   protected function CalculateMaxStorageBurden()
   {
-    
     if ($this->m_aOriginalData[self::PROPERTY_MAX_STOARGE_BURDEN] != $this->m_aData[self::PROPERTY_MAX_STOARGE_BURDEN])
     {
       $fAdd = $this->m_aData[self::PROPERTY_MAX_STOARGE_BURDEN] - $this->m_aOriginalData[self::PROPERTY_MAX_STOARGE_BURDEN];
       
-      $sSQL = " UPDATE T_CoopOrder SET fMaxStorageBurden = IfNull(fMaxStorageBurden,0) + (" . $fAdd . ") " .
+      $sSQL = " UPDATE T_CoopOrder SET fMaxStorageBurden = Nullif(IfNull(fMaxStorageBurden,0) + (" . $fAdd . "),0) " .
           " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] . ';';
       
       $this->RunSQL($sSQL);

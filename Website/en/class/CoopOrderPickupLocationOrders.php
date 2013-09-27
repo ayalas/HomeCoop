@@ -34,6 +34,8 @@ class CoopOrderPickupLocationOrders extends CoopOrderPickupLocationSubBase {
                             self::PROPERTY_COOP_ORDER_MAX_BURDEN => NULL,
                             self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL => NULL,
                             self::PROPERTY_COOP_ORDER_COOP_TOTAL => 0,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             CoopOrderPickupLocation::PROPERTY_PICKUP_LOCATION_ID => 0,
                             self::PROPERTY_PICKUP_LOCATION_COORD_GROUP_ID => 0,
                             self::PROPERTY_SORT_FIELD => self::SORT_FIELD_CREATE_DATE,

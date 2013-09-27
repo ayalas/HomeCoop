@@ -46,6 +46,8 @@ class CoopOrderProducer extends CoopOrderSubRecordBase {
                             self::PROPERTY_COOP_ORDER_MAX_BURDEN => NULL,
                             self::PROPERTY_COOP_ORDER_MAX_COOP_TOTAL => NULL,
                             self::PROPERTY_COOP_ORDER_COOP_TOTAL => 0,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             self::PROPERTY_PRODUCER_COORDINATING_GROUP_ID => 0
                             );
     $this->m_aData = $this->m_aDefaultData;

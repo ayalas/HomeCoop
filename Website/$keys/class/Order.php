@@ -38,6 +38,9 @@ class Order extends SQLBase {
   const PROPERTY_MODIFY_DATE = "DateModified";
   const PROPERTY_MODIFY_MEMBER_ID = "ModifiedByMemberID";
   const PROPERTY_MODIFY_MEMBER_NAME = "ModifiedByMemberName";
+  
+  const PROPERTY_COOP_ORDER_STORAGE_BURDEN = "CoopOrderStorageBurden";
+  const PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN = "CoopOrderMaxStorageBurden";
 
   const PROPERTY_CAN_MODIFY = "CanModify";
   const PROPERTY_CAN_ENLARGE = "CanEnlarge";
@@ -116,7 +119,9 @@ class Order extends SQLBase {
                             Member::PROPERTY_BALANCE => NULL,
                             self::PROPERTY_PERCENT_OVER_BALANCE => NULL,
                             self::PROPERTY_PAYMENT_METHOD_ID => NULL,
-                            self::PROPERTY_MAX_ORDER => NULL
+                            self::PROPERTY_MAX_ORDER => NULL,
+                            self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
+                            self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;
@@ -839,7 +844,7 @@ class Order extends SQLBase {
     $sSQL =   " SELECT CO.dStart, CO.dEnd, CO.dDelivery, CO.mCoopFee, CO.mSmallOrder, " .
               " CO.mSmallOrderCoopFee, CO.fCoopFee, CO.CoordinatingGroupID, " .
               " CO.nStatus, CO.mMaxCoopTotal,  CO.fMaxBurden, " .
-              " IfNull(CO.fBurden,0) fBurden, IfNull(CO.mCoopTotal,0) mCoopTotal, " .
+              " IfNull(CO.fBurden,0) fBurden, IfNull(CO.mCoopTotal,0) mCoopTotal, CO.fMaxStorageBurden, CO.fStorageBurden, " .
               $this->ConcatStringsSelect(Consts::PERMISSION_AREA_COOP_ORDERS, 'sCoopOrder') .
               " FROM T_CoopOrder CO " . 
               $this->ConcatStringsJoin(Consts::PERMISSION_AREA_COOP_ORDERS) .
@@ -872,6 +877,8 @@ class Order extends SQLBase {
     $this->m_aData[CoopOrder::PROPERTY_MAX_BURDEN] = $rec["fMaxBurden"];
     $this->m_aData[CoopOrder::PROPERTY_TOTAL_BURDEN] = $rec["fBurden"];
     $this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL] = $rec["mCoopTotal"];
+    $this->m_aData[self::PROPERTY_COOP_ORDER_STORAGE_BURDEN] = $rec["fStorageBurden"];
+    $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN] = $rec["fMaxStorageBurden"];
     
     //see if active coop order is open
     $this->m_aData[self::PROPERTY_COOP_ORDER_STATUS_OBJECT] = new ActiveCoopOrderStatus($this->m_aData[CoopOrder::PROPERTY_END], 

@@ -21,7 +21,7 @@ class CoopOrderCapacity {
  
  protected $m_aData = NULL;
 
- public function __construct( $fMaxBurden, $fBurden, $mMaxTotal, $mTotal, $fStorageBurden = NULL, $fStorageMaxBurden = NULL )
+ public function __construct( $fMaxBurden, $fBurden, $mMaxTotal, $mTotal, $fStorageMaxBurden = NULL, $fStorageBurden = NULL )
  {
    $this->m_aData = array(self::PROPERTY_PERCENT => 0, 
        self::PROPERTY_PERCENT_ROUNDED => 0, 
@@ -58,9 +58,7 @@ class CoopOrderCapacity {
   }
   
   //get the highest percentage
-  if (count($arrPercentages) == 0)
-    $this->m_aData[self::PROPERTY_TYPE] = self::TypeBurden;
-  else
+  if (count($arrPercentages) > 0)
   {
     arsort($arrPercentages, SORT_NUMERIC);
     $sElement = key($arrPercentages); //get first key (highest)

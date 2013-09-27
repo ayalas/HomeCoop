@@ -202,7 +202,8 @@ try
   $oTabInfo->CoordinatingGroupID = $oRecord->CoordinatingGroupID;
   $oTabInfo->StatusObj = new ActiveCoopOrderStatus($oRecord->End, $oRecord->Delivery, $oRecord->Status);
   $oTabInfo->CoopTotal = $oRecord->CoopOrderCoopTotal; 
-  $oPercent = new CoopOrderCapacity($oRecord->CoopOrderMaxBurden, $oRecord->CoopOrderBurden, $oRecord->CoopOrderMaxCoopTotal, $oRecord->CoopOrderCoopTotal);
+  $oPercent = new CoopOrderCapacity($oRecord->CoopOrderMaxBurden, $oRecord->CoopOrderBurden, $oRecord->CoopOrderMaxCoopTotal, $oRecord->CoopOrderCoopTotal,
+      $oRecord->CoopOrderMaxStorageBurden, $oRecord->CoopOrderStorageBurden);
   if ($oPercent->SelectedType != CoopOrderCapacity::TypeNone)
     $oTabInfo->Capacity = $oPercent->PercentRounded . '%';
   unset($oPercent);

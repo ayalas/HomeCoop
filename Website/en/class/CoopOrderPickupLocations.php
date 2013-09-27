@@ -38,7 +38,8 @@ class CoopOrderPickupLocations extends CoopOrderSubBase {
     $this->AddPermissionBridge(self::PERMISSION_SUMS, Consts::PERMISSION_AREA_COOP_ORDER_PICKUP_LOCATION_SUMS,
             Consts::PERMISSION_TYPE_VIEW, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
         
-    $sSQL =   " SELECT COPL.PickupLocationKeyID, COPL.fMaxBurden, IfNull(COPL.fBurden,0) fBurden, COPL.mMaxCoopTotal ,  COPL.mCoopTotal , PL.CoordinatingGroupID," .
+    $sSQL =   " SELECT COPL.PickupLocationKeyID, COPL.fMaxBurden, IfNull(COPL.fBurden,0) fBurden, COPL.mMaxCoopTotal , COPL.mCoopTotal ," . 
+              " PL.CoordinatingGroupID, COPL.fMaxStorageBurden, COPL.fStorageBurden, " .
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATIONS, 'sPickupLocation') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATION_ADDRESS, 'sAddress') .
           " FROM T_CoopOrderPickupLocation COPL INNER JOIN T_PickupLocation PL ON COPL.PickupLocationKeyID = PL.PickupLocationKeyID " . 

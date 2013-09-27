@@ -109,7 +109,8 @@ try
   
   $oOrderTabInfo = new OrderTabInfo($oRecord->ID, OrderTabInfo::PAGE_ITEMS, $oRecord->CoopTotal, $oRecord->OrderCoopFee);
   $oOrderTabInfo->StatusObj = $oRecord->StatusObj;
-  $oPercent = new CoopOrderCapacity($oRecord->MaxBurden, $oRecord->TotalBurden, $oRecord->MaxCoopTotal, $oRecord->CoopOrderCoopTotal);
+  $oPercent = new CoopOrderCapacity($oRecord->MaxBurden, $oRecord->TotalBurden, $oRecord->MaxCoopTotal, $oRecord->CoopOrderCoopTotal,
+      $oRecord->CoopOrderMaxStorageBurden, $oRecord->CoopOrderStorageBurden);
   if ($oPercent->SelectedType != CoopOrderCapacity::TypeNone)
     $oOrderTabInfo->Capacity = $oPercent->PercentRounded . '%';
   unset($oPercent);

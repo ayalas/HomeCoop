@@ -746,7 +746,8 @@ class PickupLocation extends SQLBase {
         $nStorageAreaKeyID = $this->InitStoragePostElement($key, $nMaxBurdenPrefixLen,
             self::PROPERTY_STORAGE_AREAS);
 
-        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$nStorageAreaKeyID]['fMaxBurden'] = 0 + $value;
+        if (!empty($value)) //allow null, do not allow 0
+          $this->m_aData[self::PROPERTY_STORAGE_AREAS][$nStorageAreaKeyID]['fMaxBurden'] = 0 + $value;
       }
       elseif (strpos($key, HtmlStorageArea::CTL_DELETE_PREFIX) === 0)
       {
@@ -774,7 +775,8 @@ class PickupLocation extends SQLBase {
         $nStorageAreaKeyID = $this->InitStoragePostElement($key, $nNewMaxBurdenPrefixLen,
             self::PROPERTY_NEW_STORAGE_AREAS);
 
-        $this->m_aData[self::PROPERTY_NEW_STORAGE_AREAS][$nStorageAreaKeyID]['fMaxBurden'] = 0 + $value;
+        if (!empty($value)) //allow null, do not allow 0
+          $this->m_aData[self::PROPERTY_NEW_STORAGE_AREAS][$nStorageAreaKeyID]['fMaxBurden'] = 0 + $value;
       }
     }
     

@@ -121,7 +121,8 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
                       
                       $oCoopOrderCapacity = new CoopOrderCapacity(
                               $recTable["fMaxBurden"], $recTable["fBurden"], 
-                              $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"] );
+                              $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"] ,
+                          $recTable["fMaxStorageBurden"], $recTable["fStorageBurden"]);
                       
                       //% full
                       echo '<td>';
