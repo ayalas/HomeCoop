@@ -767,7 +767,7 @@
 </str>
 <str>
     <key>FIELD_PICKUP_LOCATION_MAX_BURDEN</key>
-    <value>קבולת אחסון</value>
+    <value>קבולת משלוח</value>
 </str>
 <str>
     <key>FIELD_PICKUP_LOCATION_PUBLISHED_COMMENTS</key>

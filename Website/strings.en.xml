@@ -837,7 +837,7 @@
 </str>
 <str>
     <key>FIELD_PICKUP_LOCATION_MAX_BURDEN</key>
-    <value>Storage Capacity</value>
+    <value>Delivery Capacity</value>
 </str>
 <str>
     <key>FIELD_PICKUP_LOCATION_PUBLISHED_COMMENTS</key>

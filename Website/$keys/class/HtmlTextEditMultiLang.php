@@ -131,8 +131,12 @@ class HtmlTextEditMultiLang {
       
       echo '</td>';
       
+      $oOneLangValue = NULL;
+      if (isset($this->m_aData[self::PROPERTY_VALUES][ 0 ]))
+          $oOneLangValue = $this->m_aData[self::PROPERTY_VALUES][ 0 ];
+      
       $oTextEdit = new HtmlTextEdit($this->m_aData[self::PROPERTY_ID], NULL, 
-          $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $this->m_aData[self::PROPERTY_VALUES][ 0 ] );
+          $this->m_aData[HtmlTextEdit::PROPERTY_TYPE], $oOneLangValue );
       $oTextEdit->MaxLength = $this->m_aData[self::PROPERTY_MAX_LENGTH];
       $oTextEdit->ReadOnly = $this->m_aData[self::PROPERTY_READ_ONLY];
       $oTextEdit->Required = $this->m_aData[self::PROPERTY_REQUIRED];
@@ -160,6 +164,10 @@ class HtmlTextEditMultiLang {
           if ($key != $g_sLangDir)
             echo "<td class='coordlangtitle' ><span>" , $aLang[Consts::IND_LANGUAGE_NAME]  , "</span></td>";
         }
+    }
+    else 
+    {
+        echo '<td></td>';
     }
   }
   
