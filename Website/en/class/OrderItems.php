@@ -866,7 +866,7 @@ class OrderItems extends SQLBase {
      if ($oOrderItem->StorageAreaBurden + $fAddedBurden > $oOrderItem->StorageAreaMaxBurden)
      {
        $oOrderItem->InvalidEntry = TRUE;
-       $oOrderItem->ValidationMessage .= 'Cannot enlarge the ordered quantity for this item due to a configured restriction for its storage area.<br/>';
+       $oOrderItem->ValidationMessage .= 'Cannot save the requested quantity for this item since there is not enough free storage area.<br/>';
      }
    }
  }

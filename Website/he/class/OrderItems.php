@@ -866,7 +866,7 @@ class OrderItems extends SQLBase {
      if ($oOrderItem->StorageAreaBurden + $fAddedBurden > $oOrderItem->StorageAreaMaxBurden)
      {
        $oOrderItem->InvalidEntry = TRUE;
-       $oOrderItem->ValidationMessage .= 'לא ניתן להגדיל את הכמות המוזמנת ממוצר זה עקב מגבלה שהוגדרה עבור מקום האחסון של המוצר<br/>';
+       $oOrderItem->ValidationMessage .= 'לא ניתן לשמור את ההזמנה המבוקשת ממוצר זה כי אין מספיק מקום אחסון פנוי<br/>';
      }
    }
  }

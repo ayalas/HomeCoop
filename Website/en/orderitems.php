@@ -51,9 +51,8 @@ try
           if ( $bSuccess )
           {
             $g_oError->PushError('Ordered products were saved successfully.', 'ok');
-            //reload table if products view mode has changed
-            if ($nMode != $oTable->ProductsViewMode)
-              $oTable->LoadTable();
+            //always reload table to get latest storage areas values
+            $oTable->LoadTable();
           }
         break;
         case OrderItems::POST_ACTION_SWITCH_VIEW_MODE:

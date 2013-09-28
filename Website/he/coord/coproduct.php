@@ -483,6 +483,7 @@ function Save()
                     $selStorageArea = new HtmlSelectArray('StorageAreaFor_' . $PickupLocationID,
                         htmlspecialchars($Sections['Data']['sPickupLocation']), 
                         $Sections['List'], $Sections['Data']['StorageAreaKeyID']);
+                    $selStorageArea->ValueElement = 'sStorageArea';
                     $selStorageArea->ReadOnly = $bReadOnly;
                     $selStorageArea->EmptyText = 'לא פעיל';
                     $selStorageArea->EchoHtml();

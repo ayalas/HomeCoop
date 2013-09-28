@@ -19,6 +19,7 @@ class HtmlSelectArray {
   const PROPERTY_VALUE_FOUND = "ValueFound";
   const PROPERTY_ENCODE_HTML = "EncodeHtml";
   const PROPERTY_LABEL_SLOT_IS_HTML = "UseLabelSlotAsHtml";
+  const PROPERTY_VALUE_ELEMENT = "ValueElement";
   
   protected $m_aData = array( self::PROPERTY_LABEL => NULL,
                               self::PROPERTY_ARRAY => NULL,
@@ -31,6 +32,7 @@ class HtmlSelectArray {
                               self::PROPERTY_VALUE_FOUND => FALSE,
                               self::PROPERTY_ENCODE_HTML => TRUE,
                               self::PROPERTY_LABEL_SLOT_IS_HTML => FALSE,
+                              self::PROPERTY_VALUE_ELEMENT => NULL,
                       );
   
   public function __construct($sIDSufix, $sLabel, &$arr, $nValue) {
@@ -127,7 +129,7 @@ class HtmlSelectArray {
     if (is_array($this->m_aData[self::PROPERTY_ARRAY]))
     {
       foreach( $this->m_aData[self::PROPERTY_ARRAY] as $key => $str )
-      {
+      {        
         echo '<option value="' , $key , '" ';
 
         if ($this->m_aData[self::PROPERTY_VALUE] == $key)
@@ -137,15 +139,25 @@ class HtmlSelectArray {
         }
 
         echo  ' >';
-        if ($this->m_aData[self::PROPERTY_ENCODE_HTML])
-          echo htmlspecialchars($str);
+        
+        if ($this->m_aData[self::PROPERTY_VALUE_ELEMENT]!= NULL)
+          $this->EchoValue($str[$this->m_aData[self::PROPERTY_VALUE_ELEMENT]]);
         else
-          echo $str;
+          $this->EchoValue($str);
+        
         echo '</option>';
       }
     }
     
     echo '</select></td>';
+  }
+  
+  protected function EchoValue($val)
+  {
+    if ($this->m_aData[self::PROPERTY_ENCODE_HTML])
+      echo htmlspecialchars($val);
+    else
+      echo $val;
   }
 }
 

@@ -43,7 +43,7 @@
 </str>
 <str>
     <key>LANGUAGE_DIRECTION_MARK</key>
-    <value> &#8207;</value>
+    <value>&#8207;</value>
 </str>
 <str>
     <key>GRID_COLUMN_PIXELS_PER_LETTER</key>
@@ -2118,7 +2118,11 @@
 </str>
 <str>
     <key>ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
-    <value>לא ניתן להגדיל את הכמות המוזמנת ממוצר זה עקב מגבלה שהוגדרה עבור מקום האחסון של המוצר</value>
+    <value>לא ניתן לשמור את ההזמנה המבוקשת ממוצר זה כי אין מספיק מקום אחסון פנוי</value>
+</str>
+<str>
+    <key>PRODUCT_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
+    <value>לא ניתן לשנות את מקום האחסון של המוצר עבור %sכי אין מספיק מקום פנוי במקום האחסון שנבחר</value>
 </str>
 
 <str>

@@ -382,11 +382,6 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
-    //if burden has changed, and product has orders - they need to be updated
-    $bNeedsRecalculate = ( ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0) 
-      && ($this->m_aOriginalData[self::PROPERTY_BURDEN] != $this->m_aData[self::PROPERTY_BURDEN])
-      );
-    
     try
     {
       $this->BeginTransaction();
@@ -409,8 +404,9 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       );
       
       $this->SaveStorageData();
-
-      if ($bNeedsRecalculate)
+      
+      //if product have orders - must recalculate
+      if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0)
       {
         $oCalculate = new CoopOrderCalculate( $this->m_aData[self::PROPERTY_COOP_ORDER_ID] );
         $oCalculate->Run();
@@ -660,14 +656,23 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
   {
     $bValid = TRUE;
     global $g_oError;
-    $arrValidated = array();
-    //validate deletes: make sure there are no orders on these pickup locations+current product combinations
-    foreach($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE] as $PLID => $Orig)
+    
+    $nNewStorageAreaID = NULL;
+    
+    $fTotalProductBurden = 0;
+
+    //all validations are for ordered products only
+    if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0)
     {
-      if (!empty($Orig['Data']['ProductKeyID']) &&
-          empty($this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['StorageAreaKeyID']))
+      if ($this->m_aData[self::PROPERTY_BURDEN] > 0)
+        $fTotalProductBurden = $this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] * $this->m_aData[self::PROPERTY_BURDEN];
+      
+      //go through all storage areas
+      foreach($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE] as $PLID => $Orig)
       {
-        if (!isset($arrValidated[$PLID]))
+        $nNewStorageAreaID = $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['StorageAreaKeyID'];
+        //validate deletes: make sure there are no orders on these pickup locations+current product combinations
+        if (empty($nNewStorageAreaID))
         {
           //validate that there are no orders on $Orig['Data']['PickupLocationKeyID'] for this product
           $sSQL = " SELECT COUNT(1) nCount FROM T_OrderItem OI INNER JOIN T_Order O " .
@@ -685,7 +690,19 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
                     htmlspecialchars($Orig['Data']['sPickupLocation'])));
             $bValid = FALSE;
           }
-          $arrValidated[$PLID] = 1;
+        }
+        //validate storage changes: capacities
+        else if ($Orig['Data']['StorageAreaKeyID'] != $nNewStorageAreaID && $fTotalProductBurden > 0) 
+        {
+          //is the burden of the newly chosen storage area going to exceed its allowed maximum?
+          if ($Orig['List'][$nNewStorageAreaID]['fBurden'] + $fTotalProductBurden > 
+              $Orig['List'][$nNewStorageAreaID]['fMaxBurden'])
+          {
+            $g_oError->AddError(
+                sprintf('Cannot change the product&#x27;s storage area for %s since there is not enough available space in the selected storage area',
+                    htmlspecialchars($Orig['Data']['sPickupLocation'])));
+            $bValid = FALSE;
+          }
         }
       }
     }
@@ -738,7 +755,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       $this->m_bUseSecondSqlPreparedStmt = TRUE;
       
       //load also the list of possible values, since different for each pickup location
-      $sSQL = " SELECT COSA.StorageAreaKeyID, " .
+      $sSQL = " SELECT COSA.StorageAreaKeyID, COSA.fMaxBurden, COSA.fBurden, " .
                $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'sStorageArea') .
               " FROM T_CoopOrderStorageArea COSA " .
                " INNER JOIN T_PickupLocationStorageArea PLSA ON PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " .
@@ -748,7 +765,10 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
 
       $this->RunSQL( $sSQL );
       
-      $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PickupLocationKeyID]['List'] = $this->fetchAllKeyPair();
+      while($rec = $this->fetch())
+      {
+        $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PickupLocationKeyID]['List'][$rec['StorageAreaKeyID']] = $rec;
+      }
       
       $this->m_bUseSecondSqlPreparedStmt = FALSE;
   }

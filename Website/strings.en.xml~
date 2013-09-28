@@ -53,6 +53,10 @@
     <notes>For a left to right language (like English), keep this value as "right". For a right to left language, set this value to "left"</notes>
 </str>
 <str>
+    <key>LANGUAGE_DIRECTION_MARK</key>
+    <value>&#8206;</value>
+</str>
+<str>
     <key>GRID_COLUMN_PIXELS_PER_LETTER</key>
     <value>7</value>
     <notes>allows truncating cell contents when displayed in a grid, and displaying the full text in a tooltip</notes>
@@ -2216,7 +2220,7 @@
 </str>
 <str>
     <key>ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
-    <value>Cannot enlarge the ordered quantity for this item due to a configured restriction for its storage area.</value>
+    <value>Cannot save the requested quantity for this item since there is not enough free storage area.</value>
 </str>
 
 <str>
@@ -2244,5 +2248,10 @@
 <str>
     <key>TOOLTIP_COOP_ORDER_TOTAL_STORAGE_BURDEN</key>
     <value>Total storage areas used space.</value>
+</str>
+<str>
+    <key>PRODUCT_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
+    <value>לא ניתן לשנות את מקום האחסון של המוצר כי אין מספיק מקום פנוי במקום האחסון שנבחר</value>
+    <value>Cannot change the product's storage area for %s since there is not enough available space in the selected storage area</value>
 </str>
 </strings>

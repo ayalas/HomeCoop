@@ -48,6 +48,8 @@ class HtmlSelectPDO {
     $this->m_aData[self::PROPERTY_VALUE] = $nValue;
     $this->m_aData[self::PROPERTY_TEXT_FIELD] = $sTextField;
     $this->m_aData[self::PROPERTY_VALUE_FIELD] = $sValueField;
+    
+    $this->m_aData[self::PROPERTY_ID]= self::PREFIX . $this->m_aData[self::PROPERTY_VALUE_FIELD];
   }
   
   public function __get( $name ) {
@@ -74,12 +76,8 @@ class HtmlSelectPDO {
           else
             $this->m_aData[$name] = str_replace('"', '\'', $value); //replace double quotes to avoid javascript error
           break;
-        case self::PROPERTY_ID;
-          $trace = debug_backtrace();
-          throw new Exception(
-              'Undefined property via __set(): ' . $name .
-              ' in class '. get_class() .', file ' . $trace[0]['file'] .
-              ' on line ' . $trace[0]['line']);
+        case self::PROPERTY_VALUE_FIELD:
+          $this->m_aData[self::PROPERTY_ID]= self::PREFIX . $value;
           break;
         default:
         if (array_key_exists( $name, $this->m_aData))
@@ -98,9 +96,7 @@ class HtmlSelectPDO {
     
   //echo directly to html document to save some string concats/retrieval
   public function EchoHtml()
-  {
-    $this->m_aData[self::PROPERTY_ID]= self::PREFIX . $this->m_aData[self::PROPERTY_VALUE_FIELD];
-    
+  {    
     $sOptions = '';
     
     $bReplacePlaceholder = FALSE;
