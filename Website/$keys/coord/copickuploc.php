@@ -54,7 +54,8 @@ try
                $oRecord->PickupLocationName = $oPickupLocation->Name;
                $oRecord->StorageAreas = $oPickupLocation->StorageAreas;
             }
-            $oRecord->AddCoordinatorPermissionBridges();
+            
+            $oRecord->LoadStorageAreas();
           }
           break;
         case SQLBase::POST_ACTION_SAVE:

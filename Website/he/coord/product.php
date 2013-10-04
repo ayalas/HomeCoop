@@ -125,15 +125,22 @@ try
             $oRecord->Image2Remove = ($_POST['chkRemoveImage2'] == 1); //checked
 
           $bSuccess = false;
+          $bAdd = FALSE;
           if ($oRecord->ID > 0)
             $bSuccess = $oRecord->Edit();
           else
+          {
             $bSuccess = $oRecord->Add();
+            $bAdd = TRUE;
+          }
 
           if ( $bSuccess )
           {
               $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');
               $sPageTitle = $oRecord->ProductName;
+              //reload record after add, to load coordinating group from selected producer
+              if ($bAdd)
+                $oRecord->LoadRecord($oRecord->ID);
           }
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
               $g_oError->AddError('הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.');

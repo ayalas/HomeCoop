@@ -168,30 +168,41 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
       $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
       
       //load storage areas
-      $sSQL =     " SELECT PLSA.StorageAreaKeyID, CASE WHEN COSA.StorageAreaKeyID IS NULL THEN 1 ELSE 0 END as bDisabled, IfNull(COSA.fMaxBurden, " . 
-                  " PLSA.fMaxBurden) fMaxBurden, COSA.fBurden, " .
-                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'sStorageArea') .
-                  " FROM T_PickupLocationStorageArea PLSA LEFT JOIN T_CoopOrderStorageArea COSA " . 
-                  " ON COSA.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
-                  " AND PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " .
-                  $this->ConcatStringsJoin(Consts::PERMISSION_AREA_STORAGE_AREAS) .
-                  " WHERE PLSA.PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
-                  " AND (PLSA.bDisabled = 0 OR COSA.StorageAreaKeyID IS NOT NULL) " .
-                  " ORDER BY PLSA.StorageAreaKeyID;";
-
-      $this->RunSQL( $sSQL );
-
-      //key records by id
-      while($rec = $this->fetch())
-      {
-        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$rec["StorageAreaKeyID"]] = $rec;
-        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$rec["StorageAreaKeyID"]]['bDisabled'] = (intval($rec['bDisabled']) == 1);
-      }
+      $this->LoadStorageAreas();
     }
     
     $this->m_aOriginalData = $this->m_aData;
     
     return TRUE;
+  }
+  
+  public function LoadStorageAreas()
+  {
+    if (!$this->AddCoordinatorPermissionBridges())
+      return;
+    
+    $this->m_aData[self::PROPERTY_STORAGE_AREAS] = array();
+    
+    //load storage areas
+    $sSQL =     " SELECT PLSA.StorageAreaKeyID, CASE WHEN COSA.StorageAreaKeyID IS NULL THEN 1 ELSE 0 END as bDisabled, IfNull(COSA.fMaxBurden, " . 
+                " PLSA.fMaxBurden) fMaxBurden, COSA.fBurden, " .
+                $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'sStorageArea') .
+                " FROM T_PickupLocationStorageArea PLSA LEFT JOIN T_CoopOrderStorageArea COSA " . 
+                " ON COSA.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+                " AND PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " .
+                $this->ConcatStringsJoin(Consts::PERMISSION_AREA_STORAGE_AREAS) .
+                " WHERE PLSA.PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
+                " AND (PLSA.bDisabled = 0 OR COSA.StorageAreaKeyID IS NOT NULL) " .
+                " ORDER BY PLSA.StorageAreaKeyID;";
+
+    $this->RunSQL( $sSQL );
+
+    //key records by id
+    while($rec = $this->fetch())
+    {
+      $this->m_aData[self::PROPERTY_STORAGE_AREAS][$rec["StorageAreaKeyID"]] = $rec;
+      $this->m_aData[self::PROPERTY_STORAGE_AREAS][$rec["StorageAreaKeyID"]]['bDisabled'] = (intval($rec['bDisabled']) == 1);
+    }
   }
   
   public function Add()
@@ -444,9 +455,10 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
     $this->m_aData[self::PROPERTY_TOTAL_BURDEN] = $this->m_aOriginalData[self::PROPERTY_TOTAL_BURDEN];
     $this->m_aData[self::PROPERTY_MAX_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_MAX_COOP_TOTAL];
     $this->m_aData[self::PROPERTY_PICKUP_LOCATION_COORDINATING_GROUP_ID] = $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_COORDINATING_GROUP_ID];
+    $this->m_aData[self::PROPERTY_STORAGE_AREAS] = $this->m_aOriginalData[self::PROPERTY_STORAGE_AREAS];
   }
   
-  public function AddCoordinatorPermissionBridges()
+  protected function AddCoordinatorPermissionBridges()
   {
     $bEdit = $this->AddPermissionBridge(self::PERMISSION_EDIT, Consts::PERMISSION_AREA_COOP_ORDER_PICKUP_LOCATIONS, 
             Consts::PERMISSION_TYPE_MODIFY, Consts::PERMISSION_SCOPE_BOTH, 0, TRUE);
@@ -469,6 +481,8 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
       $this->CopyPermission (self::PERMISSION_VIEW, self::PERMISSION_PAGE_ACCESS);
     else
       $this->CopyPermission (self::PERMISSION_EDIT, self::PERMISSION_PAGE_ACCESS);
+    
+    return TRUE;
   }
   
   //process post data and return an unkeyed array with each element in this format
@@ -482,6 +496,8 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
     $nStorageAreaKeyID = 0;
     $nDisabledPrefixLen = strlen(self::CTL_STORAGE_AREA_DISABLED);
     $nMaxBurdenPrefixLen = strlen(self::CTL_STORAGE_AREA_MAX_BURDEN);
+    
+    $this->m_aData[self::PROPERTY_STORAGE_AREAS] = array();
 
     foreach($_POST as $key => $value)
     {

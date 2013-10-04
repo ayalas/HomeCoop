@@ -203,7 +203,7 @@ function AddStorageArea()
   
   //capacity
   sHtml += '<tr><td nowrap ><label for="' + sCapacityPrefix + nCount + 
-        '">קבולת אחסון‏‏:‏‏</label></td><td><input type="text"  maxlength="' + 
+        '">קבולת משלוח‏‏:‏‏</label></td><td><input type="text"  maxlength="' + 
         sCapacityMaxLength + '"  dir="ltr"  id="' + sCapacityPrefix + nCount + 
         '" name="' + sCapacityPrefix + nCount + 
         '"  class="dataentry"  value="" /></td>' + sOtherLangsEmptyCells;
@@ -340,7 +340,7 @@ function AddStorageArea()
                 
                 <tr>
                   <?php                     
-                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת אחסון', 'txtMaxBurden', $oRecord->MaxBurden);
+                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
                     

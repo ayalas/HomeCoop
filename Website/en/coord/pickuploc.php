@@ -203,7 +203,7 @@ function AddStorageArea()
   
   //capacity
   sHtml += '<tr><td nowrap ><label for="' + sCapacityPrefix + nCount + 
-        '">Storage Capacity‏‏:‏‏</label></td><td><input type="text"  maxlength="' + 
+        '">Delivery Capacity‏‏:‏‏</label></td><td><input type="text"  maxlength="' + 
         sCapacityMaxLength + '"  dir="ltr"  id="' + sCapacityPrefix + nCount + 
         '" name="' + sCapacityPrefix + nCount + 
         '"  class="dataentry"  value="" /></td>' + sOtherLangsEmptyCells;
@@ -340,7 +340,7 @@ function AddStorageArea()
                 
                 <tr>
                   <?php                     
-                    $txtMaxBurden = new HtmlTextEditNumeric('Storage Capacity', 'txtMaxBurden', $oRecord->MaxBurden);
+                    $txtMaxBurden = new HtmlTextEditNumeric('Delivery Capacity', 'txtMaxBurden', $oRecord->MaxBurden);
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
                     

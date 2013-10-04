@@ -54,7 +54,8 @@ try
                $oRecord->PickupLocationName = $oPickupLocation->Name;
                $oRecord->StorageAreas = $oPickupLocation->StorageAreas;
             }
-            $oRecord->AddCoordinatorPermissionBridges();
+            
+            $oRecord->LoadStorageAreas();
           }
           break;
         case SQLBase::POST_ACTION_SAVE:
@@ -270,7 +271,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                 </tr>
                 <tr>
                   <?php 
-                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת אחסון', 'txtMaxBurden', $oRecord->MaxBurden);
+                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
                     $txtMaxBurden->ReadOnly = $bReadOnly;
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
@@ -391,7 +392,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                   echo '</tr>',
                        '<tr>';
 
-                  $txtMaxBurden = new HtmlTextEditNumeric('קבולת אחסון', 
+                  $txtMaxBurden = new HtmlTextEditNumeric('קבולת משלוח', 
                       CoopOrderPickupLocation::CTL_STORAGE_AREA_MAX_BURDEN . $aStorageArea['StorageAreaKeyID'], $aStorageArea['fMaxBurden']);
                   $txtMaxBurden->ReadOnly = $bReadOnly  || $aStorageArea['bDisabled'];
                   $txtMaxBurden->EchoHtml();
