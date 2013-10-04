@@ -239,8 +239,8 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
               $this->ConcatColIfNotNull(self::PROPERTY_MAX_BURDEN, "fMaxBurden") .
               $this->ConcatColIfNotNull(self::PROPERTY_MAX_COOP_TOTAL, "mMaxCoopTotal");
 
-      $sSQL .= ") VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   ", "  . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
-              ", " . 
+      $sSQL .= ") VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   
+                           ", "  . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] .
               $this->ConcatValIfNotNull(self::PROPERTY_MAX_STOARGE_BURDEN) .
               $this->ConcatValIfNotNull(self::PROPERTY_MAX_BURDEN) . 
               $this->ConcatValIfNotNull(self::PROPERTY_MAX_COOP_TOTAL) . " )";

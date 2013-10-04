@@ -56,6 +56,8 @@ try
             }
             
             $oRecord->LoadStorageAreas();
+            
+            $oRecord->SaveOriginalData();
           }
           break;
         case SQLBase::POST_ACTION_SAVE:

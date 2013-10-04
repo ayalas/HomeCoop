@@ -146,6 +146,11 @@ abstract class SQLBase
       $this->m_aOriginalData = unserialize(base64_decode($sSerializedArray));
     }
     
+    public function SaveOriginalData()
+    {
+      $this->m_aOriginalData = $this->m_aData;
+    }
+    
     protected function InitPermissionBridgeSet()
     {
       if ($this->m_oPermissionBridgeSet == NULL)
