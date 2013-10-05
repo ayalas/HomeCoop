@@ -2149,4 +2149,8 @@
     <key>TOOLTIP_COOP_ORDER_TOTAL_STORAGE_BURDEN</key>
     <value>סה"כ תפוסת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב</value>
 </str>
+<str>
+    <key>FIELD_MAX_STORAGE_BURDEN</key>
+    <value>קיבולת אחסון</value>
+</str>
 </strings>

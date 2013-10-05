@@ -659,14 +659,9 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
     
     $nNewStorageAreaID = NULL;
     
-    $fTotalProductBurden = 0;
-
     //all validations are for ordered products only
     if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0)
-    {
-      if ($this->m_aData[self::PROPERTY_BURDEN] > 0)
-        $fTotalProductBurden = $this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] * $this->m_aData[self::PROPERTY_BURDEN];
-      
+    {      
       //go through all storage areas
       foreach($this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE] as $PLID => $Orig)
       {
@@ -692,16 +687,28 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
           }
         }
         //validate storage changes: capacities
-        else if ($Orig['Data']['StorageAreaKeyID'] != $nNewStorageAreaID && $fTotalProductBurden > 0) 
+        else if ($Orig['Data']['StorageAreaKeyID'] != $nNewStorageAreaID && $this->m_aData[self::PROPERTY_BURDEN] > 0) 
         {
-          //is the burden of the newly chosen storage area going to exceed its allowed maximum?
-          if ($Orig['List'][$nNewStorageAreaID]['fBurden'] + $fTotalProductBurden > 
-              $Orig['List'][$nNewStorageAreaID]['fMaxBurden'])
+          //get the total burden in the relevant pickup location
+          $sSQL = " SELECT SUM(IfNull( OI.fQuantity/NullIf(PRD.fQuantity,0),0)) fTotalQuantity FROM T_OrderItem OI INNER JOIN T_Order O " .
+              " ON OI.OrderId = O.OrderID INNER JOIN T_Product PRD ON PRD.ProductKeyID = OI.ProductKeyID " .
+              " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+              " AND OI.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . 
+              " AND O.PickupLocationKeyID = " . $PLID . "; ";
+
+          $this->RunSQL($sSQL);
+          $rec = $this->fetch();
+          if ($rec != NULL && $rec['fTotalQuantity'] != NULL)
           {
-            $g_oError->AddError(
-                sprintf('לא ניתן לשנות את מקום האחסון של המוצר עבור %s כי אין מספיק מקום פנוי במקום האחסון שנבחר',
-                    htmlspecialchars($Orig['Data']['sPickupLocation'])));
-            $bValid = FALSE;
+            //is the burden of the newly chosen storage area going to exceed its allowed maximum?
+            if ($Orig['List'][$nNewStorageAreaID]['fBurden'] + ($this->m_aData[self::PROPERTY_BURDEN]*$rec['fTotalQuantity']) > 
+                $Orig['List'][$nNewStorageAreaID]['fMaxBurden'])
+            {
+              $g_oError->AddError(
+                  sprintf('לא ניתן לשנות את מקום האחסון של המוצר עבור %s כי אין מספיק מקום פנוי במקום האחסון שנבחר',
+                      htmlspecialchars($Orig['Data']['sPickupLocation'])));
+              $bValid = FALSE;
+            }
           }
         }
       }

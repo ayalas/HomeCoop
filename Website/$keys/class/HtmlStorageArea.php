@@ -103,13 +103,13 @@ class HtmlStorageArea {
         if (isset($this->m_aData[self::PROPERTY_STORAGE_AREA]['fMaxBurden']))
           $oNewValue = $this->m_aData[self::PROPERTY_STORAGE_AREA]['fMaxBurden'];
         
-        $txtMaxBurden = new HtmlTextEditNumeric('<!$FIELD_PICKUP_LOCATION_MAX_BURDEN$!>', 
+        $txtMaxBurden = new HtmlTextEditNumeric('<!$FIELD_MAX_STORAGE_BURDEN$!>', 
             self::CTL_NEW_MAX_BURDEN_PREFIX . $this->m_aData[self::PROPERTY_LINE_NUMBER], $oNewValue);
         $txtMaxBurden->EchoHtml();
       }
       else
       {
-        $txtMaxBurden = new HtmlTextEditNumeric('<!$FIELD_PICKUP_LOCATION_MAX_BURDEN$!>', 
+        $txtMaxBurden = new HtmlTextEditNumeric('<!$FIELD_MAX_STORAGE_BURDEN$!>', 
             self::CTL_MAX_BURDEN_PREFIX . $said, $this->m_aData[self::PROPERTY_STORAGE_AREA]['fMaxBurden']);
         $txtMaxBurden->EchoHtml();
       }

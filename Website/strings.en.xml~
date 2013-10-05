@@ -837,7 +837,7 @@
 </str>
 <str>
     <key>FIELD_PICKUP_LOCATION_MAX_BURDEN</key>
-    <value>Storage Capacity</value>
+    <value>Delivery Capacity</value>
 </str>
 <str>
     <key>FIELD_PICKUP_LOCATION_PUBLISHED_COMMENTS</key>
@@ -2251,7 +2251,6 @@
 </str>
 <str>
     <key>PRODUCT_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
-    <value>לא ניתן לשנות את מקום האחסון של המוצר כי אין מספיק מקום פנוי במקום האחסון שנבחר</value>
     <value>Cannot change the product's storage area for %s since there is not enough available space in the selected storage area</value>
 </str>
 </strings>

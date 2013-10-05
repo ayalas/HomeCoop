@@ -388,13 +388,11 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                       $aStorageArea['StorageAreaKeyID']  . '\');';
                   $selIsDisabled->EchoHtml();
                   
-                  //CoopOrderPickupLocation::CTL_STORAGE_AREA_MAX_BURDEN . $aStorageArea['StorageAreaKeyID']
-
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   echo '</tr>',
                        '<tr>';
 
-                  $txtMaxBurden = new HtmlTextEditNumeric('Delivery Capacity', 
+                  $txtMaxBurden = new HtmlTextEditNumeric('Max. storage', 
                       CoopOrderPickupLocation::CTL_STORAGE_AREA_MAX_BURDEN . $aStorageArea['StorageAreaKeyID'], $aStorageArea['fMaxBurden']);
                   $txtMaxBurden->ReadOnly = $bReadOnly  || $aStorageArea['bDisabled'];
                   $txtMaxBurden->EchoHtml();

@@ -2253,4 +2253,8 @@
     <key>PRODUCT_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
     <value>Cannot change the product's storage area for %s since there is not enough available space in the selected storage area</value>
 </str>
+<str>
+    <key>FIELD_MAX_STORAGE_BURDEN</key>
+    <value>Max. storage</value>
+</str>
 </strings>
