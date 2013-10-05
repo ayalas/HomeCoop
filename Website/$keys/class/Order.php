@@ -1050,13 +1050,10 @@ class Order extends SQLBase {
     
     $bValid = TRUE;
     
-    if (ORDER_PICKUP_LOCATION_IS_REQUIRED) //global setting
+    if ($this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] <= 0)
     {
-      if ($this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] <= 0)
-      {
-        $g_oError->AddError(sprintf('<!$FIELD_SELECT_REQUIRED$!>', '<!$FIELD_PICKUP_LOCATION_NAME$!>'));
-        $bValid = FALSE;
-      }
+      $g_oError->AddError(sprintf('<!$FIELD_SELECT_REQUIRED$!>', '<!$FIELD_PICKUP_LOCATION_NAME$!>'));
+      $bValid = FALSE;
     }
     
     //validate pickup location change
