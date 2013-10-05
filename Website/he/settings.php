@@ -41,7 +41,7 @@ define('COOP_TIMEZONE',  'America/New_York');
 define('JOIN_PAGE', '');
 
 //relative to language root
-define('URL_UPLOAD_DIR', '/../uploadimg/' );
+define('URL_UPLOAD_DIR', '../uploadimg/' );
 
 //address to turn to in case of a no-balance inquiry
 define('COOP_ADDRESS_MEMBER_BALANCE', 'admin@myhomecoop.org'); 
