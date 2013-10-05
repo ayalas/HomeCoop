@@ -516,7 +516,7 @@ function OnChangeUnit()
                         echo '<td></td></tr>';
                         
                         echo '<tr><td colspan="2"><img border="0" height="', PRODUCT_IMAGE_HEIGHT_SMALL,
-                                '" src="..', URL_UPLOAD_DIR, $oRecord->Image1FileName, '" /></td>';
+                                '" src="../', URL_UPLOAD_DIR, $oRecord->Image1FileName, '" /></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                         echo '<td></td></tr>';
                       }
@@ -551,7 +551,7 @@ function OnChangeUnit()
                         echo '<td></td></tr>';
                         
                         echo '<tr><td colspan="2"><img border="0" height="', PRODUCT_IMAGE_HEIGHT_SMALL,
-                                '" src="..', URL_UPLOAD_DIR, $oRecord->Image2FileName, '" /></td>';
+                                '" src="../', URL_UPLOAD_DIR, $oRecord->Image2FileName, '" /></td>';
                         HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                         echo '<td></td></tr>';
                       }
