@@ -50,7 +50,7 @@ class CoopOrder extends SQLBase {
   const PROPERTY_HAS_JOINED_PRODUCTS = "HasJoinedProducts";
   const PROPERTY_PRICES_FROM_PRODUCTS = "PricesFromProducts";
   
-  const PROPERTY_MAX_STOARGE_BURDEN = "MaxStorageBurden";
+  const PROPERTY_MAX_STORAGE_BURDEN = "MaxStorageBurden";
   const PROPERTY_STOARGE_BURDEN = "StorageBurden";
   
   protected $m_bCopyMode = FALSE;
@@ -79,7 +79,7 @@ class CoopOrder extends SQLBase {
                             self::PROPERTY_SOURCE_COOP_ORDER_ID => 0,
                             self::PROPERTY_HAS_JOINED_PRODUCTS => FALSE,
                             self::PROPERTY_PRICES_FROM_PRODUCTS => FALSE,
-                            self::PROPERTY_MAX_STOARGE_BURDEN => NULL,
+                            self::PROPERTY_MAX_STORAGE_BURDEN => NULL,
                             self::PROPERTY_STOARGE_BURDEN => NULL,
                             );
     $this->m_aData = $this->m_aDefaultData;
@@ -230,7 +230,7 @@ class CoopOrder extends SQLBase {
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $rec["mProducerTotal"];
     $this->m_aData[self::PROPERTY_TOTAL_DELIVERY] = $rec["mTotalDelivery"];
     $this->m_aData[self::PROPERTY_HAS_JOINED_PRODUCTS] = $rec["bHasJoinedProducts"];
-    $this->m_aData[self::PROPERTY_MAX_STOARGE_BURDEN] = $rec["fMaxStorageBurden"];
+    $this->m_aData[self::PROPERTY_MAX_STORAGE_BURDEN] = $rec["fMaxStorageBurden"];
     $this->m_aData[self::PROPERTY_STOARGE_BURDEN] = $rec["fStorageBurden"];
     $this->m_aData[self::PROPERTY_NAMES] = $this->GetKeyStrings($this->m_aData[self::PROPERTY_ID]);
 
@@ -288,14 +288,16 @@ class CoopOrder extends SQLBase {
           //insert names     
           $this->InsertStrings($this->m_aData[self::PROPERTY_NAMES], $nKeyID);
 
-          //insert the record
+          //insert the record - some of these fields are filled when copying an order only
           $sSQL =  " INSERT INTO T_CoopOrder( CoopOrderKeyID, dStart, dEnd, dDelivery, ModifiedByMemberID, nStatus " . 
                   $this->ConcatColIfNotNull(self::PROPERTY_COOP_FEE, "mCoopFee") .
                   $this->ConcatColIfNotNull(self::PROPERTY_SMALL_ORDER, "mSmallOrder") .
                   $this->ConcatColIfNotNull(self::PROPERTY_SMALL_ORDER_COOP_FEE, "mSmallOrderCoopFee") .
                   $this->ConcatColIfNotNull(self::PROPERTY_COOP_FEE_PERCENT, "fCoopFee") .
                   $this->ConcatColIfNotNull(self::PROPERTY_MAX_COOP_TOTAL, "mMaxCoopTotal") .
-                  $this->ConcatColIfNotNull(self::PROPERTY_MAX_BURDEN, "fMaxBurden");
+                  $this->ConcatColIfNotNull(self::PROPERTY_MAX_BURDEN, "fMaxBurden") .
+		  $this->ConcatColIfNotNull(self::PROPERTY_MAX_STORAGE_BURDEN, "fMaxStorageBurden");
+
 
           if ( $this->GetPermissionScope(self::PERMISSION_EDIT) == Consts::PERMISSION_SCOPE_GROUP_CODE || $bUseSourceGroup )
               $sSQL .= ", CoordinatingGroupID ";
@@ -306,7 +308,8 @@ class CoopOrder extends SQLBase {
                   $this->ConcatValIfNotNull(self::PROPERTY_SMALL_ORDER_COOP_FEE) . 
                   $this->ConcatValIfNotNull(self::PROPERTY_COOP_FEE_PERCENT) . 
                   $this->ConcatValIfNotNull(self::PROPERTY_MAX_COOP_TOTAL) . 
-                  $this->ConcatValIfNotNull(self::PROPERTY_MAX_BURDEN);
+                  $this->ConcatValIfNotNull(self::PROPERTY_MAX_BURDEN) .
+                  $this->ConcatValIfNotNull(self::PROPERTY_MAX_STORAGE_BURDEN);
 
           if ($bUseSourceGroup)
           {
@@ -794,9 +797,9 @@ class CoopOrder extends SQLBase {
       }
 
       //copy order pickup locations that are still active
-      $sSQL =  " INSERT INTO T_CoopOrderPickupLocation( CoopOrderKeyID, PickupLocationKeyID, fMaxBurden, mMaxCoopTotal  ) " . 
+      $sSQL =  " INSERT INTO T_CoopOrderPickupLocation( CoopOrderKeyID, PickupLocationKeyID, fMaxBurden, mMaxCoopTotal , fMaxStorageBurden ) " . 
                " SELECT " .  $this->m_aData[self::PROPERTY_ID] . 
-               " , SRC.PickupLocationKeyID, SRC.fMaxBurden, SRC.mMaxCoopTotal " .
+               " , SRC.PickupLocationKeyID, SRC.fMaxBurden, SRC.mMaxCoopTotal, SRC.fMaxStorageBurden " .
                " FROM T_CoopOrderPickupLocation SRC ". 
                " INNER JOIN T_PickupLocation PL ON PL.PickupLocationKeyID = SRC.PickupLocationKeyID " .
                " WHERE SRC.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_SOURCE_COOP_ORDER_ID] .
