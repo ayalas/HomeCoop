@@ -286,8 +286,7 @@ function Save()
                   {
                     $selPickupLoc = new HtmlSelectPDO('Location Name', $recPickupLocs, $oPickupLocs, 
                             $oRecord->PickupLocationID, 'sPickupLocation', 'PickupLocationKeyID');
-                    $selPickupLoc->Required = ORDER_PICKUP_LOCATION_IS_REQUIRED;
-                    $selPickupLoc->RequiredIfOneOption = TRUE;
+                    $selPickupLoc->Required = TRUE;
                     $selPickupLoc->SelectFirstIfOneOption = TRUE;
                     $selPickupLoc->EchoHtml();
                   }

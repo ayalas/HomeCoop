@@ -148,7 +148,7 @@ UserSessionBase::Close();
                       
                       //storage burden
                       echo '<td>' , Rounding::Round($recTable["fStorageBurden"], ROUND_SETTING_BURDEN);
-                      if ($oCoopOrderCapacity->Burden->CanCompute)
+                      if ($oCoopOrderCapacity->StorageBurden->CanCompute)
                         LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderCapacity->StorageBurden->PercentRounded . '%)');
                       
                       echo '</td>'; 

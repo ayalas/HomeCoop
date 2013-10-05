@@ -43,9 +43,6 @@ define('JOIN_PAGE', '');
 //relative to language root
 define('URL_UPLOAD_DIR', '/../uploadimg/' );
 
-//Whether members must fill pickup location when ordering. FALSE or TRUE
-define('ORDER_PICKUP_LOCATION_IS_REQUIRED', TRUE);
-
 //address to turn to in case of a no-balance inquiry
 define('COOP_ADDRESS_MEMBER_BALANCE', 'admin@myhomecoop.org'); 
 //address to turn to if a user has a login problem
