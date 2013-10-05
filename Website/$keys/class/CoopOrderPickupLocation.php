@@ -184,8 +184,8 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
     $this->m_aData[self::PROPERTY_STORAGE_AREAS] = array();
     
     //load storage areas
-    $sSQL =     " SELECT PLSA.StorageAreaKeyID, CASE WHEN COSA.StorageAreaKeyID IS NULL THEN 1 ELSE 0 END as bDisabled, IfNull(COSA.fMaxBurden, " . 
-                " PLSA.fMaxBurden) fMaxBurden, COSA.fBurden, " .
+    $sSQL =     " SELECT PLSA.StorageAreaKeyID, COSA.StorageAreaKeyID ExistingID, " . 
+                " COSA.fMaxBurden, PLSA.fMaxBurden fMaxBurdenDefault, COSA.fBurden, " . 
                 $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'sStorageArea') .
                 " FROM T_PickupLocationStorageArea PLSA LEFT JOIN T_CoopOrderStorageArea COSA " . 
                 " ON COSA.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
@@ -196,12 +196,27 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
                 " ORDER BY PLSA.StorageAreaKeyID;";
 
     $this->RunSQL( $sSQL );
+    
+    $SAID = NULL;
 
     //key records by id
     while($rec = $this->fetch())
     {
-      $this->m_aData[self::PROPERTY_STORAGE_AREAS][$rec["StorageAreaKeyID"]] = $rec;
-      $this->m_aData[self::PROPERTY_STORAGE_AREAS][$rec["StorageAreaKeyID"]]['bDisabled'] = (intval($rec['bDisabled']) == 1);
+      $SAID = $rec['StorageAreaKeyID'];
+      $this->m_aData[self::PROPERTY_STORAGE_AREAS][$SAID]['StorageAreaKeyID'] = $SAID;
+      $this->m_aData[self::PROPERTY_STORAGE_AREAS][$SAID]['fBurden'] = $rec['fBurden'];
+      $this->m_aData[self::PROPERTY_STORAGE_AREAS][$SAID]['sStorageArea'] = $rec['sStorageArea'];
+      
+      if ($rec['ExistingID'] == NULL)
+      {
+        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$SAID]['bDisabled'] = TRUE;
+        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$SAID]['fMaxBurden'] = $rec['fMaxBurdenDefault'];
+      }
+      else
+      {
+        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$SAID]['bDisabled'] = FALSE;
+        $this->m_aData[self::PROPERTY_STORAGE_AREAS][$SAID]['fMaxBurden'] = $rec['fMaxBurden'];
+      }
     }
   }
   
