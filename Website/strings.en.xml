@@ -2233,7 +2233,6 @@
 </str>
 <str>
     <key>TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_MAX_STORAGE_BURDEN</key>
-    <value>סה"כ קיבולת אחסון של כל מקומות האחסון במקום האיסוף</value>
     <value>Total maximum storage areas capacity.</value>
 </str>
 <str>
@@ -2242,7 +2241,6 @@
 </str>
 <str>
     <key>TOOLTIP_COOP_ORDER_TOTAL_MAX_STORAGE_BURDEN</key>
-    <value>סה"כ קיבולת אחסון של כל מקומות האחסון במקום האיסוף</value>
     <value>Total maximum storage areas capacity.</value>
 </str>
 <str>
