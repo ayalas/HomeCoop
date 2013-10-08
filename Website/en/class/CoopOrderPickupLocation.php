@@ -733,6 +733,9 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
           " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] . ';';
       
       $this->RunSQL($sSQL);
+      
+      //also update internal variable for display
+      $this->m_aData[self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN] += $fAdd;
     }
   }
 }

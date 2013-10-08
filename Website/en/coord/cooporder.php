@@ -438,7 +438,7 @@ function Save()
                     $lblMaxStorageBurden->EchoHtml();
                     unset($lblMaxStorageBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון במקום האיסוף');
+                    HtmlTextEditMultiLang::EchoHelpText('Total maximum storage areas capacity.');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
