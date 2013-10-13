@@ -28,6 +28,7 @@ class SessionManager extends UserSessionBase
              case parent::KEY_BALANCE;
              case parent::KEY_PERCENT_OVER_BALANCE:
              case parent::KEY_COORDINATING_GROUP_ID;
+             case parent::KEY_EXPORT_FORMAT:
               $this->m_aData[$name] = $value;
               $_SESSION[ $name ] = $value;
               break;

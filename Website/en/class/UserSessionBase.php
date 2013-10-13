@@ -24,6 +24,7 @@ abstract class UserSessionBase extends SQLBase
     const KEY_LANGUAGES = "Languages";
     const KEY_COORDINATING_GROUP_ID = "CoordinatingGroupID"; //the group that represents this user alone
     const KEY_LAST_ERROR = "LastError";
+    const KEY_EXPORT_FORMAT = "ExportFormat";
 
     protected $m_bHasPermissions = false;
     protected $m_bIsLoggedIn = false;
@@ -45,7 +46,8 @@ abstract class UserSessionBase extends SQLBase
                                 self::KEY_PERMISSIONS => NULL,
                                 self::KEY_LANGUAGES => NULL,
                                 self::KEY_IS_ONLY_MEMBER => FALSE,
-                                self::KEY_LAST_ERROR => NULL
+                                self::KEY_LAST_ERROR => NULL,
+                                self::KEY_EXPORT_FORMAT => DEFAULT_EXPORT_FORMAT,
             );
       if (session_id() == '')
         session_start ();

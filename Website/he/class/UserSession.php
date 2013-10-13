@@ -27,7 +27,8 @@ class UserSession extends UserSessionBase
     public function __set( $name, $value ) {
         switch( $name )
         {
-             case parent::KEY_LAST_ERROR;
+             case parent::KEY_LAST_ERROR:
+             case parent::KEY_EXPORT_FORMAT:
               $this->m_aData[$name] = $value;
               $_SESSION[ $name ] = $value;
               break;

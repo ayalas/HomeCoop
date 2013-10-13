@@ -842,5 +842,23 @@ abstract class SQLBase
         }
         return $value;
     }
+    
+    //could be called from various classes
+    protected function SaveFileExportFormat()
+    {
+      global $g_oMemberSession;
+   
+      //save export format if changed
+      if ($this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT] == $g_oMemberSession->ExportFormat)
+       return;
+
+      //save is session
+      $g_oMemberSession->ExportFormat = $this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT];
+
+      //save in db
+      $sSQL = " UPDATE T_Member SET nExportFormat = :ExportFormat WHERE MemberID = " . $g_oMemberSession->MemberID . ";";
+      $this->RunSQLWithParams($sSQL, array('ExportFormat' => $this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT]));
+      
+    }
 }
 ?>

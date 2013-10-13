@@ -28,6 +28,10 @@ class Consts
     const SORT_ORDER_ASCENDING = 1;
     const SORT_ORDER_DESCENDING = 2;
     
+    //file formats for export
+    const EXPORT_FORMAT_MS_EXCEL_XML = 1;
+    const EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS = 2;
+    
     //truncating grid columns
     const TINY_COLUMN_WIDTH = 55;
     const SHORT_COLUMN_WIDTH = 75;

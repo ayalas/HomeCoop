@@ -199,6 +199,9 @@ if ($g_sLangDir != '')
 // PAYMENT_METHOD_PLUS_EXTRA- member can order up to hir balance + a specified percentage above that balance
 define ('DEFAULT_PAYMENT_METHOD_FOR_NEW_MEMBERS', Consts::PAYMENT_METHOD_PLUS_EXTRA);
 
+//default file format for exported data (members, cooperative order data)
+define ('DEFAULT_EXPORT_FORMAT', Consts::EXPORT_FORMAT_MS_EXCEL_XML);
+
 //Rounding
 //possible values (as defined in class\Rounding):
 //const ROUND_TYPE_DEFAULT = 0;

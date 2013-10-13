@@ -53,6 +53,13 @@ try
     if ( isset( $_POST[$sCtl] ))
       $oData->ID = intval($_POST[$sCtl]);  
     
+    $sCtl = HtmlSelectArray::PREFIX . 'FileFormat';
+    if ( isset( $_POST[$sCtl] ))
+    {
+      $oData->ExportFormat = intval($_POST[$sCtl]);
+      $oData->SaveExportFormat();
+    }
+    
     if (!empty( $_POST['hidPostAction'] ))
     {
       switch($_POST['hidPostAction'])
@@ -189,9 +196,20 @@ function SelectAll(bCheck)
                 <td colspan="4"><?php include_once '../control/error/ctlError.php'; ?></td>
               </tr>
               <tr>
+                <?php
+                  $arrFormats = array(Consts::EXPORT_FORMAT_MS_EXCEL_XML => 'MS Excel xml',
+                                      Consts::EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS => 'Libre Office flat ods');
+                  $formatList = new HtmlSelectArray('FileFormat', 'File Format',$arrFormats, $oData->ExportFormat
+                      );
+                  $formatList->EncodeHtml = FALSE; //already encoded
+                  $formatList->Required = TRUE;
+                  $formatList->EchoHtml();
+                ?>
+              </tr>
+              <tr>
                   <?php
                   $selList = new HtmlSelectArray('DataSet', 'Data Set', $arrList, $oData->ID);
-                  $selList->EncodeHtml = FALSE; //already encoded
+                  $selList->EncodeHtml = FALSE; //already encoded (from strings files)
                   $selList->Required = TRUE;
                   $selList->OnChange = "JavaScript:ListSelect();";
                   $selList->EchoHtml();

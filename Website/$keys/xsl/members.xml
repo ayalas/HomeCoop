@@ -2,6 +2,7 @@
 <document>
 <orientation>ltr</orientation>
 <sheet>
+    <orientation>ltr</orientation>
     <name>Members</name>
     <colh>
         <colheader>Name</colheader>

@@ -127,7 +127,7 @@ class Members extends SQLBase {
       return;
         
     //file name starts with delivery date
-    $sFileName = $g_dNow->format('Y_m_d') . '_<!$MEMBERS_EXPORT_FILE_NAME_SUFFIX$!>.<!$ORDER_EXPORT_FILE_EXTENTION$!>';
+    $sFileName = $g_dNow->format('Y_m_d') . '_<!$MEMBERS_EXPORT_FILE_NAME_SUFFIX$!>.ods';
     
     $sXslPath = $g_sRootRelativePath . 'xsl/members.xsl';
     

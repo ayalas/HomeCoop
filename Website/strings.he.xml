@@ -2153,4 +2153,16 @@
     <key>FIELD_MAX_STORAGE_BURDEN</key>
     <value>קיבולת אחסון</value>
 </str>
+<str>
+    <key>LBL_EXPORT_FORMAT</key>
+    <value>תבנית קובץ</value>
+</str>
+<str>
+    <key>EXPORT_FORMAT_MS_EXCEL_XML</key>
+    <value>MS Excel xml</value>
+</str>
+<str>
+    <key>EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS</key>
+    <value>Libre Office flat ods</value>
+</str>
 </strings>

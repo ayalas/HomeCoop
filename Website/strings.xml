@@ -110,10 +110,6 @@
     <value>||</value>
 </str>
 <str>
-    <key>ORDER_EXPORT_FILE_EXTENTION</key>
-    <value>ods</value>
-</str>
-<str>
     <key>ORDER_EXPORT_COOP_ORDER_SUMMARY_FILE_NAME_SUFFIX</key>
     <value>Coop</value>
 </str>

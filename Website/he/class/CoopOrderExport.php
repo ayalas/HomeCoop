@@ -4,7 +4,7 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     return;
 
 //export coop order data underlying class
-//exports data to Open Office Calc Flat-xml (fods format) file
+//exports data to xml file (fods/msexcel xml)
 class CoopOrderExport extends CoopOrderSubBase {
       
   const POST_ACTION_LIST_SELECT = 10;
@@ -39,6 +39,8 @@ class CoopOrderExport extends CoopOrderSubBase {
   protected $m_aOrders = NULL;
   protected $m_oXmlDoc = NULL;
   
+  protected $m_sDir = NULL;
+  
   public function __construct()
   {
     $this->m_aData = array( self::PROPERTY_ID => 0,
@@ -58,6 +60,7 @@ class CoopOrderExport extends CoopOrderSubBase {
                             self::PROPERTY_PICKUP_LOCATIONS => NULL,
                             self::PROPERTY_COOP_ORDER_STORAGE_BURDEN => 0,
                             self::PROPERTY_COOP_ORDER_MAX_STORAGE_BURDEN => NULL,
+                            UserSessionBase::KEY_EXPORT_FORMAT => NULL,
                             );
     
     $this->m_aOriginalData = $this->m_aData;
@@ -86,6 +89,8 @@ class CoopOrderExport extends CoopOrderSubBase {
        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
        return NULL;
      }
+     
+     $this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT] = $g_oMemberSession->ExportFormat;
      
      $fIndex = 0;
      $nID = 0;
@@ -229,6 +234,19 @@ class CoopOrderExport extends CoopOrderSubBase {
     return $this->m_sMailList;
   }
   
+  public function SaveExportFormat()
+  {
+     //basic permission check
+     if (!$this->AddPermissionBridge(self::PERMISSION_EXPORT_COOP_ORDER, Consts::PERMISSION_AREA_COOP_ORDERS, 
+             Consts::PERMISSION_TYPE_EXPORT, Consts::PERMISSION_SCOPE_BOTH, NULL, TRUE))
+     {
+       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
+       return;
+     }
+     
+     $this->SaveFileExportFormat();
+  }
+  
   protected function GetProducers($nScope)
   {    
       global $g_oMemberSession;
@@ -312,6 +330,7 @@ class CoopOrderExport extends CoopOrderSubBase {
   //get the xml for the fods file, based on xsl transformation
   public function EchoXML()
   {
+    global $g_oMemberSession;
     global $g_sRootRelativePath;
     $sXslPath = NULL;
     
@@ -324,11 +343,15 @@ class CoopOrderExport extends CoopOrderSubBase {
     
     if (!$this->HasPermission( $this->m_aData[self::PROPERTY_ID] ))
       return;
-    
+        
     //file name starts with delivery date
     $sFileName = $this->Delivery->format('Y_m_d');
     
-    $sXslPath = $g_sRootRelativePath . 'xsl/cooporder.xsl';
+    $sXslPath = $g_sRootRelativePath . 'xsl/cooporder'; 
+    if ($this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT] == Consts::EXPORT_FORMAT_MS_EXCEL_XML)
+      $sXslPath .= '-ms.xsl';
+    else
+      $sXslPath .= '.xsl';
     
     //strip ID
     if ( ($this->m_aData[self::PROPERTY_ID] & CoopOrderExport::LIST_ITEM_PRODUCER) === CoopOrderExport::LIST_ITEM_PRODUCER )
@@ -367,7 +390,10 @@ class CoopOrderExport extends CoopOrderSubBase {
     else
       return;
     
-    $sFileName .= '.ods';
+    if ($g_oMemberSession->ExportFormat == Consts::EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS)
+      $sFileName .= '.ods';
+    else
+      $sFileName .= '.xml';
     
     if ($this->m_oXmlDoc != NULL)
     {
@@ -396,8 +422,7 @@ class CoopOrderExport extends CoopOrderSubBase {
       $this->m_sMailList .= ', ' . $sEMailAddress;
   }
   
-  //helper functions to produce fods file based on xsl
-  
+  //helper functions to produce files based on xsl
   protected function ProducerQueryAndBuildXML()
   {
     $document = NULL;
@@ -551,12 +576,17 @@ class CoopOrderExport extends CoopOrderSubBase {
     
     $document = $this->m_oXmlDoc->createElement('document');
     
-    $sDir = LanguageSupport::GetCurrentHtmlDir();
-    if ($sDir == NULL)
-      $sDir = 'ltr';
+    $this->m_sDir = LanguageSupport::GetCurrentHtmlDir();
+    if ($this->m_sDir == NULL)
+      $this->m_sDir = 'ltr';
     
-    $orientation = $this->m_oXmlDoc->createElement('orientation', $sDir);
-    $document->appendChild($orientation);
+    $this->AddOrientation($document);
+  }
+  
+  protected function AddOrientation($parent)
+  {    
+    $orientation = $this->m_oXmlDoc->createElement('orientation', $this->m_sDir);
+    $parent->appendChild($orientation);
   }
   
   protected function BuildNewSheetXML($sSheetName, $bIncludeOrders, &$sheet)
@@ -565,6 +595,8 @@ class CoopOrderExport extends CoopOrderSubBase {
     
     $sheetname = $this->m_oXmlDoc->createElement('name', $sSheetName);
     $sheet->appendChild($sheetname);
+    
+    $this->AddOrientation($sheet);
     
     $colh = $this->m_oXmlDoc->createElement('colh');
     
@@ -716,6 +748,8 @@ class CoopOrderExport extends CoopOrderSubBase {
     
     $sheet->appendChild($sum);    
   }
+  
+  
   
   protected function QueryCoopOrderProducts()
   {    

@@ -2,6 +2,7 @@
 <document>
 <orientation>ltr</orientation>
 <sheet>
+    <orientation>ltr</orientation>
     <name>sample xml</name>
     <comment>This is a sample xml of the produced xml document that is transformed by cooporder.xsl</comment>
     <colh>
