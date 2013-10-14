@@ -50,6 +50,7 @@ class Consts
     
     //used to export members to an open office calc file - with the date they joined the cooperative
     const OPEN_OFFICE_DATE_VALUE_FORMAT = 'Y-m-d';
+    const MS_EXCEL_DATE_VALUE_FORMAT = 'Y-m-d\TH:i:s.u';
     
     //email - using preg_match() to validate email with the following pattern:
     //

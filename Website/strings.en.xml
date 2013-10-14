@@ -2267,4 +2267,8 @@
     <key>EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS</key>
     <value>Libre Office flat ods</value>
 </str>
+<str>
+    <key>HELP_EXPORT_FORMAT</key>
+    <value>The preferred file format for data exports.</value>
+</str>
 </strings>

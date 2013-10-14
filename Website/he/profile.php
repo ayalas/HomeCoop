@@ -38,6 +38,10 @@ try
     if ( isset( $_POST['txtEMail4'] ) && !empty($_POST['txtEMail4']))
       $oRecord->EMail4 = trim($_POST['txtEMail4']);
     
+    $sCtl = HtmlSelectArray::PREFIX . 'FileFormat';
+    if ( isset( $_POST[$sCtl] ))
+      $oRecord->ExportFormat = intval($_POST[$sCtl]);
+    
     if (!empty( $_POST['hidPostAction'] ))
     {
       switch($_POST['hidPostAction'])
@@ -310,8 +314,21 @@ function VerifyPassword()
                         
                   echo '<td>&nbsp;</td></tr>';
                 }
+
+                if (!$oRecord->IsRegularMember)
+                {
+                  echo '<tr>';
+
+                  $arrFormats = array(Consts::EXPORT_FORMAT_MS_EXCEL_XML => 'MS Excel xml',
+                                      Consts::EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS => 'Libre Office flat ods');
+                  $formatList = new HtmlSelectArray('FileFormat', 'תבנית קובץ',$arrFormats, $oRecord->ExportFormat
+                      );
+                  $formatList->EncodeHtml = FALSE; //already encoded
+                  $formatList->EchoHtml();
+
+                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>תבנית הקובץ המועדפת ליצוא נתונים.</span></a></td></tr>';
+                }
                 ?>
-                
                 </table>
                 </td></tr></table>
                 </td>

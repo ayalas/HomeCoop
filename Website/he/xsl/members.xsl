@@ -244,15 +244,18 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
    <style:paragraph-properties fo:margin-left="0in">
    <xsl:if test="orientation = 'rtl' ">
     <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
-   </xsl:if>
-  </style:paragraph-properties>
-  <style:paragraph-properties fo:margin-left="0in">
-   <xsl:if test="orientation = 'rtl' ">
-    <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
     <xsl:attribute name="fo:text-align">end</xsl:attribute>
    </xsl:if>
   </style:paragraph-properties>
   </style:style>
+  
+  <style:style style:name="ltrdata" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" />
+   <style:paragraph-properties fo:margin-left="0in">
+    <xsl:attribute name="style:writing-mode">lr-tb</xsl:attribute>
+  </style:paragraph-properties>
+  </style:style>
+  
   <style:page-layout style:name="pm1">
    <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" style:print-orientation="landscape" style:writing-mode="lr-tb"/>
    <style:header-style>
@@ -380,7 +383,7 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
      <text:p><xsl:value-of select="pob" /></text:p>
     </table:table-cell>
 
-    <table:table-cell table:style-name="strdata" office:value-type="string" >
+    <table:table-cell table:style-name="ltrdata" office:value-type="string" >
      <text:p><xsl:value-of select="email" /></text:p>
     </table:table-cell>
 

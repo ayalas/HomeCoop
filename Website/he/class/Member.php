@@ -62,7 +62,8 @@ class Member extends SQLBase  {
                             self::PROPERTY_IS_DISABLED => FALSE,
                             self::PROPERTY_MAX_ORDER => FALSE,
                             self::PROPERTY_CACHIER_PICKUP_LOCATION_ID => 0,
-                            self::PROPERTY_COMMENTS => NULL
+                            self::PROPERTY_COMMENTS => NULL,
+                            UserSessionBase::KEY_EXPORT_FORMAT => NULL,
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData; 
@@ -140,7 +141,7 @@ class Member extends SQLBase  {
         return FALSE;
     }
     
-    $sSQL =   " SELECT M.MemberID, M.sName, M.sLoginName, M.sEMail, sComments,
+    $sSQL =   " SELECT M.MemberID, M.sName, M.sLoginName, M.sEMail, sComments, M.nExportFormat,
              M.PaymentMethodKeyID, M.dJoined, IfNull(M.mBalance,0) mBalance, IfNull(M.mBalanceHeld,0) mBalanceHeld, M.mBalanceInvested, M.fPercentOverBalance, M.sEMail2, 
              M.bDisabled, M.sEMail3, M.sEMail4, (SELECT CG.CoordinatingGroupID FROM T_CoordinatingGroupMember CGM INNER JOIN
              T_CoordinatingGroup CG ON CGM.CoordinatingGroupID = CG.CoordinatingGroupID
@@ -183,6 +184,9 @@ class Member extends SQLBase  {
     $this->m_aData[self::PROPERTY_BALANCE_HELD] = $rec["mBalanceHeld"];
     $this->m_aData[self::PROPERTY_BALANCE_INVESTED] = $rec["mBalanceInvested"];
     $this->m_aData[self::PROPERTY_PERCENT_OVER_BALANCE] = $rec["fPercentOverBalance"];
+    
+    if ($rec['nExportFormat'] != NULL)
+      $this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT] = $rec['nExportFormat'];
     
     $this->m_aData[self::PROPERTY_MAX_ORDER] = self::CalculateMaxOrder(
             $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID],
@@ -366,6 +370,13 @@ class Member extends SQLBase  {
       {
         $sSQL .= ", sPassword = md5(:Password) ";
         $arrParams["Password"] = $this->m_aData[self::PROPERTY_NEW_PASSWORD];
+      }
+      
+      if ($this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT] != NULL)
+      {
+        $sSQL .= ", nExportFormat = :ExportFormat ";
+        $g_oMemberSession->ExportFormat = $this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT];
+        $arrParams["ExportFormat"] = $this->m_aData[UserSessionBase::KEY_EXPORT_FORMAT];
       }
 
       $sSQL .=  " WHERE MemberID = " . $this->m_aData[self::PROPERTY_ID];

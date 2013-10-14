@@ -8,7 +8,10 @@ UserSessionBase::Close();
 
 $oExport = new Members();
 
-header('content-type: application/vnd.oasis.opendocument.spreadsheet');
+if ($g_oMemberSession->ExportFormat == Consts::EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS)
+  header('content-type: application/vnd.oasis.opendocument.spreadsheet');
+else
+  header('content-type: application/vnd.ms-excel');
 
 $oExport->EchoXML();
 

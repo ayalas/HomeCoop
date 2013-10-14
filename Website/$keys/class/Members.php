@@ -17,6 +17,7 @@ class Members extends SQLBase {
  
  protected $m_sMailList = NULL;
  protected $m_oXmlDoc = NULL;
+ protected $m_sDir = NULL;
  
  public function __construct()
   {
@@ -119,17 +120,27 @@ class Members extends SQLBase {
   public function EchoXML()
   {
     global $g_sRootRelativePath;
+    global $g_oMemberSession;
     global $g_dNow;
-    $sXslPath = NULL;
     
     if (!$this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_MODIFY, 
          Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
       return;
         
     //file name starts with delivery date
-    $sFileName = $g_dNow->format('Y_m_d') . '_<!$MEMBERS_EXPORT_FILE_NAME_SUFFIX$!>.ods';
+    $sFileName = $g_dNow->format('Y_m_d') . '_<!$MEMBERS_EXPORT_FILE_NAME_SUFFIX$!>';
+    $sXslPath = $g_sRootRelativePath . 'xsl/members';
     
-    $sXslPath = $g_sRootRelativePath . 'xsl/members.xsl';
+    if ($g_oMemberSession->ExportFormat == Consts::EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS)
+    {
+      $sFileName .= '.ods';
+      $sXslPath .= '.xsl';
+    }
+    else
+    {
+      $sFileName .= '.xml';
+      $sXslPath .= '-ms.xsl';
+    }
     
     $this->BuildXmlDoc();
     
@@ -143,22 +154,26 @@ class Members extends SQLBase {
   protected function BuildXmlDoc()
   {
     global $g_oTimeZone;
+    global $g_oMemberSession;
+    
+    $bLibreOffice = ($g_oMemberSession->ExportFormat == Consts::EXPORT_FORMAT_LIBRE_OFFICE_FLAT_ODS);
     
     $this->m_oXmlDoc = new DOMDocument('1.0', 'utf-8');
     
     $document = $this->m_oXmlDoc->createElement('document');
     
-    $sDir = LanguageSupport::GetCurrentHtmlDir();
-    if ($sDir == NULL)
-      $sDir = 'ltr';
+    $this->m_sDir = LanguageSupport::GetCurrentHtmlDir();
+    if ($this->m_sDir == NULL)
+      $this->m_sDir = 'ltr';
     
-    $orientation = $this->m_oXmlDoc->createElement('orientation', $sDir);
-    $document->appendChild($orientation);
+    $this->AddOrientation($document);
         
     $sheet = $this->m_oXmlDoc->createElement('sheet');
     
     $sheetname = $this->m_oXmlDoc->createElement('name', '<!$MEMBERS_EXPORT_FILE_NAME_SUFFIX$!>');
     $sheet->appendChild($sheetname);
+    
+    $this->AddOrientation($sheet);
     
     $colh = $this->m_oXmlDoc->createElement('colh');
     
@@ -236,7 +251,11 @@ class Members extends SQLBase {
       
       $dJoined = new DateTime($recMember["dJoined"], $g_oTimeZone);
       
-      $rd = $this->m_oXmlDoc->createElement('djoin_v', $dJoined->format(Consts::OPEN_OFFICE_DATE_VALUE_FORMAT) );
+      if ($bLibreOffice)
+        $rd = $this->m_oXmlDoc->createElement('djoin_v', $dJoined->format(Consts::OPEN_OFFICE_DATE_VALUE_FORMAT) );
+      else
+        $rd = $this->m_oXmlDoc->createElement('djoin_v', $dJoined->format(Consts::MS_EXCEL_DATE_VALUE_FORMAT) );
+
       $row->appendChild($rd);
       
       $rd = $this->m_oXmlDoc->createElement('djoin', $dJoined->format('<!$DATE_PICKER_DATE_FORMAT$!>') );
@@ -250,6 +269,12 @@ class Members extends SQLBase {
     $document->appendChild($sheet);
     
     $this->m_oXmlDoc->appendChild($document);
+  }
+  
+  protected function AddOrientation($parent)
+  {    
+    $orientation = $this->m_oXmlDoc->createElement('orientation', $this->m_sDir);
+    $parent->appendChild($orientation);
   }
   
   protected function Transform($sXslPath) {   
