@@ -603,6 +603,7 @@ CREATE TABLE `T_Member` (
   `mBalance` decimal(10,2) DEFAULT NULL,
   `mBalanceInvested` DECIMAL(10,2) NULL, 
   `mBalanceHeld` DECIMAL(10,2) NULL,
+  `nExportFormat` tinyint unsigned NULL,
   `sName` varchar(100) NOT NULL,
   `fPercentOverBalance` float unsigned DEFAULT NULL,
   `sEMail2` varchar(100) DEFAULT NULL,
