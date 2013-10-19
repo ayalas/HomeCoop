@@ -7,11 +7,13 @@ class CachierTotals extends SQLBase {
   
   const PROPERY_TOTAL_BALANCE = "TotalMemberBalances";
   const PROPERY_TOTAL_CACHIER = "TotalPickupLocationCachiers";
+  const PROPERTY_TOTAL_CACHIER_BALANCE = "TotalCachierBalance";
   
   public function __construct()
   {
     $this->m_aData = array( self::PROPERY_TOTAL_BALANCE => 0,
-                            self::PROPERY_TOTAL_CACHIER => 0
+                            self::PROPERY_TOTAL_CACHIER => 0,
+                            self::PROPERTY_TOTAL_CACHIER_BALANCE => 0,
                             );
   }
   
@@ -37,6 +39,10 @@ class CachierTotals extends SQLBase {
     $recSum = $this->fetch();
     if ($recSum)
       $this->m_aData[self::PROPERY_TOTAL_CACHIER] = $recSum["SumCachier"];
+    
+    $this->m_aData[self::PROPERTY_TOTAL_CACHIER_BALANCE] = 
+        intval(Rounding::Round($this->m_aData[self::PROPERY_TOTAL_CACHIER] - $this->m_aData[self::PROPERY_TOTAL_BALANCE], 
+            Rounding::ROUND_TYPE_DEFAULT));
     
     return TRUE;
   }

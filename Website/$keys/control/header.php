@@ -14,10 +14,14 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
   if ($g_oMemberSession->Balance != 0 || $g_oMemberSession->PaymentMethod != Consts::PAYMENT_METHOD_AT_PICKUP)
   {
     $HelloMessage .= '. ' . '<!$HEADER_YOUR_BALNACE$!>: ' . $g_oMemberSession->Balance;
+    
+    if ($g_oMemberSession->Balance != $g_oMemberSession->BalanceHeld)
+      $HelloMessage .= ' ' . sprintf('<!$LBL_HEADER_BALANCE_HELD$!>', $g_oMemberSession->BalanceHeld);
 
     $mMaxOrder = $g_oMemberSession->GetMaxOrder();
     if ($mMaxOrder != NULL && $mMaxOrder != $g_oMemberSession->Balance) //if not payment at pickup
       $HelloMessage .= '. ' . '<!$HEADER_YOUR_MAX_ORDER$!>: ' . $mMaxOrder;
+      
   }
 }
 

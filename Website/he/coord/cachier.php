@@ -80,8 +80,7 @@ UserSessionBase::Close();
                 
                 <tr>
                 <?php                
-                $lblBalance = new HtmlTextLabel('סה&quot;כ מאזן', 'lblBalance', 
-                        ($oData->TotalPickupLocationCachiers - $oData->TotalMemberBalances));
+                $lblBalance = new HtmlTextLabel('סה&quot;כ מאזן', 'lblBalance', $oData->TotalCachierBalance);
                 $lblBalance->SetAttribute('dir', 'ltr');
                 $lblBalance->SetAttribute('class', 'headlabel');
                 $lblBalance->EchoHtml();

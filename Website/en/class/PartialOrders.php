@@ -17,6 +17,7 @@ class PartialOrders extends SQLBase {
   const PROPERTY_TOTAL_ORDER = "TotalOrder";
   const PROPERTY_PACKAGE_SIZE = "PackageSize";
   const PROPERTY_QUANTITY = "Quantity";
+  const PROPERTY_IS_PARTIAL = "IsPartial";
   
   public function __construct()
   {
@@ -26,7 +27,8 @@ class PartialOrders extends SQLBase {
         self::PROPERTY_PRODUER_NAME => NULL,
         self::PROPERTY_TOTAL_ORDER => 0,
         self::PROPERTY_PACKAGE_SIZE => NULL,
-        self::PROPERTY_QUANTITY => 0
+        self::PROPERTY_QUANTITY => 0,
+        self::PROPERTY_IS_PARTIAL => FALSE,
        );
   }
   
@@ -67,7 +69,7 @@ class PartialOrders extends SQLBase {
   
   protected function LoadProductData()
   {
-    $sSQL = " SELECT PRD.ProductKeyID, IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder,PRD.fQuantity, PRD.fPackageSize,  " . 
+    $sSQL = " SELECT PRD.UnitKeyID, PRD.fUnitInterval, PRD.ProductKeyID, IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder,PRD.fQuantity, PRD.fPackageSize,  " . 
                $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
             ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
             " FROM T_CoopOrderProduct COPRD " .
@@ -76,9 +78,7 @@ class PartialOrders extends SQLBase {
             $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCTS) .
             $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCERS) .
             " WHERE COPRD.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
-            " AND COPRD.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] .
-            " AND PRD.UnitKeyID != " . Consts::UNIT_ITEMS .
-            " AND (PRD.fUnitInterval IS NULL OR PRD.fUnitInterval != PRD.fQuantity); ";
+            " AND COPRD.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . ";";
     
     $this->RunSQL($sSQL);
         
@@ -90,6 +90,9 @@ class PartialOrders extends SQLBase {
       return FALSE;
     }
     
+    $this->m_aData[self::PROPERTY_IS_PARTIAL] = 
+        Product::AllowsPartialOrders($recProduct["UnitKeyID"], $recProduct["fQuantity"], $recProduct["fUnitInterval"], $recProduct["fPackageSize"]);
+
     $this->m_aData[self::PROPERTY_PRODUCT_NAME] = $recProduct["sProduct"];
     $this->m_aData[self::PROPERTY_PRODUER_NAME] = $recProduct["sProducer"];
     $this->m_aData[self::PROPERTY_TOTAL_ORDER] = $recProduct["fTotalCoopOrder"];

@@ -80,8 +80,7 @@ UserSessionBase::Close();
                 
                 <tr>
                 <?php                
-                $lblBalance = new HtmlTextLabel('Total Balance', 'lblBalance', 
-                        ($oData->TotalPickupLocationCachiers - $oData->TotalMemberBalances));
+                $lblBalance = new HtmlTextLabel('Total Balance', 'lblBalance', $oData->TotalCachierBalance);
                 $lblBalance->SetAttribute('dir', 'ltr');
                 $lblBalance->SetAttribute('class', 'headlabel');
                 $lblBalance->EchoHtml();

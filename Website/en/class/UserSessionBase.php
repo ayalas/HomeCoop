@@ -13,6 +13,7 @@ abstract class UserSessionBase extends SQLBase
     const KEY_FALLING_LANGID = 'FallingLangID';
     const KEY_PAYMENT_METHOD = "PaymentMethod";
     const KEY_BALANCE = "Balance";
+    const KEY_BALANCE_HELD = "BalanceHeld";
     const KEY_PERCENT_OVER_BALANCE = "PercentOverBalance";
     const KEY_JOINED_DATE = "JoinedOn";
     const KEY_HAS_PERMISSIONS = "HasPermissions";
@@ -41,6 +42,7 @@ abstract class UserSessionBase extends SQLBase
                                 self::KEY_PAYMENT_METHOD => 0,
                                 self::KEY_JOINED_DATE => NULL,
                                 self::KEY_BALANCE => 0,
+                                self::KEY_BALANCE_HELD => 0,
                                 self::KEY_PERCENT_OVER_BALANCE => 0,
                                 self::KEY_GROUPS => NULL,
                                 self::KEY_PERMISSIONS => NULL,

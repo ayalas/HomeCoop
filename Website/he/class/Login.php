@@ -55,7 +55,7 @@ class Login extends SQLBase
         try
         {
           $sSQL = "SELECT M.sName, M.MemberID, M.PaymentMethodKeyID, M.bDisabled, M.fPercentOverBalance, " . 
-                  " M.dJoined, M.mBalance, CG.CoordinatingGroupID, M.nExportFormat " . 
+                  " M.dJoined, M.mBalance, M.mBalanceHeld, CG.CoordinatingGroupID, M.nExportFormat " . 
                   " FROM T_Member M INNER JOIN T_CoordinatingGroupMember CGM ON CGM.MemberID = M.MemberID " . 
                   " INNER JOIN T_CoordinatingGroup CG ON CG.CoordinatingGroupID = CGM.CoordinatingGroupID AND CG.sCoordinatingGroup IS NULL " .
                   " WHERE M.sLoginName = :lname and M.sPassword = md5( :pwd ) ;";
@@ -95,6 +95,9 @@ class Login extends SQLBase
         $m_oSessionManager->CoordinatingGroupID = $result['CoordinatingGroupID'];
         if ( $result['mBalance'] != NULL)
             $m_oSessionManager->Balance = $result['mBalance'];
+        
+        if ( $result['mBalanceHeld'] != NULL)
+            $m_oSessionManager->BalanceHeld = $result['mBalanceHeld'];
         
         if ( $result['nExportFormat'] != NULL)
             $m_oSessionManager->ExportFormat = $result['nExportFormat'];

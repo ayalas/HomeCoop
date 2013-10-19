@@ -258,7 +258,7 @@
 </str>
 <str>
     <key>HEADER_YOUR_BALNACE</key>
-    <value>Your Balance</value>
+    <value>Your balance</value>
 </str>
 <str>
     <key>HEADER_YOUR_MAX_ORDER</key>
@@ -2270,5 +2270,9 @@
 <str>
     <key>HELP_EXPORT_FORMAT</key>
     <value>The preferred file format for data exports.</value>
+</str>
+<str>
+    <key>LBL_HEADER_BALANCE_HELD</key>
+    <value>&#8206;(in cachier: %s)&#8206;</value>
 </str>
 </strings>

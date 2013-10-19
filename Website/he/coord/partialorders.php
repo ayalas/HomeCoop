@@ -30,7 +30,7 @@ try
       exit;
   }
 
-  if ($oData->TotalOrder > 0)
+  if ($oData->IsPartial && $oData->TotalOrder > 0)
   {
     //first get wether there is a defecit. Value is NOT the real defecit
     $fDeficit = fmod($oData->TotalOrder, $oData->PackageSize);
@@ -106,17 +106,20 @@ UserSessionBase::Close();
                   {
                       $fItemQuantityToCompleteDeficit = 0;
                       
-                      if ($fDeficit > 0 && $recTable["fMaxFixQuantityAddition"] != NULL && $recTable["fMaxFixQuantityAddition"] > 0)
+                      if ($oData->IsPartial)
                       {
-                        if ($recTable["fMaxFixQuantityAddition"] >= $fDeficit)
+                        if ($fDeficit > 0 && $recTable["fMaxFixQuantityAddition"] != NULL && $recTable["fMaxFixQuantityAddition"] > 0)
                         {
-                          $fItemQuantityToCompleteDeficit = $fDeficit;
-                          $fDeficit = 0;
-                        }
-                        else
-                        {
-                          $fItemQuantityToCompleteDeficit = $recTable["fMaxFixQuantityAddition"];
-                          $fDeficit -= $fItemQuantityToCompleteDeficit;
+                          if ($recTable["fMaxFixQuantityAddition"] >= $fDeficit)
+                          {
+                            $fItemQuantityToCompleteDeficit = $fDeficit;
+                            $fDeficit = 0;
+                          }
+                          else
+                          {
+                            $fItemQuantityToCompleteDeficit = $recTable["fMaxFixQuantityAddition"];
+                            $fDeficit -= $fItemQuantityToCompleteDeficit;
+                          }
                         }
                       }
                       

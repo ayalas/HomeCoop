@@ -39,6 +39,7 @@ class ProductPackage {
        self::PROPERTY_SOLD_OUT => FALSE,
        self::PROPERTY_HAS_TOOLTIP => FALSE);
         
+    //"Left: X items" tooltip
     if ($fMaxCoopTotal > 0)
     {
       $this->m_aData[self::PROPERTY_HAS_TOOLTIP] = TRUE;

@@ -26,6 +26,7 @@ class SessionManager extends UserSessionBase
              case parent::KEY_NAME;
              case parent::KEY_PAYMENT_METHOD;
              case parent::KEY_BALANCE;
+             case parent::KEY_BALANCE_HELD;
              case parent::KEY_PERCENT_OVER_BALANCE:
              case parent::KEY_COORDINATING_GROUP_ID;
              case parent::KEY_EXPORT_FORMAT:

@@ -174,14 +174,8 @@ function OpenPartialOrders(nProductID)
                       
                       echo '>'; 
                       
-                      if (Product::AllowsPartialOrders(
-                              $recTable["UnitKeyID"], 
-                              $recTable["ProductQuantity"], 
-                              $recTable["fUnitInterval"]))
-                        echo '<span class="link" onclick="JavaScript:OpenPartialOrders(' , $recTable["ProductKeyID"]  ,
+                      echo '<span class="link" onclick="JavaScript:OpenPartialOrders(' , $recTable["ProductKeyID"]  ,
                               ');" >' , $recTable["fTotalCoopOrder"] , '</span>';
-                      else
-                        echo $recTable["fTotalCoopOrder"];
                       
                       echo '</td>';
 
