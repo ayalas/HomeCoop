@@ -43,8 +43,41 @@ class CoopOrderProducers extends CoopOrderSubBase {
     $sSQL .= " ORDER BY P_S.sString; ";
 
     $this->RunSQL( $sSQL );
-
+    
     return $this->fetch();
+ }
+ 
+ public function LoadCoordList()
+ {
+    global $g_oMemberSession;
+    if (!$this->LoadCoopOrderData())
+      return NULL;
+    
+    $bEdit = $this->AddPermissionBridge(self::PERMISSION_COOP_ORDER_PRODUCER_EDIT, Consts::PERMISSION_AREA_COOP_ORDER_PRODUCERS, 
+            Consts::PERMISSION_TYPE_MODIFY, Consts::PERMISSION_SCOPE_BOTH, 0, TRUE);
+    
+    $bView = $this->AddPermissionBridge(self::PERMISSION_COOP_ORDER_PRODUCER_VIEW, Consts::PERMISSION_AREA_COOP_ORDER_PRODUCERS, 
+            Consts::PERMISSION_TYPE_VIEW, Consts::PERMISSION_SCOPE_BOTH, 0, TRUE);
+    
+    if (!$bEdit && !$bView)
+    {
+      $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
+      return NULL;
+    }
+    
+    $sSQL =   " SELECT COP.ProducerKeyID, " .
+                 $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
+          " FROM T_CoopOrderProducer COP INNER JOIN T_Producer P ON COP.ProducerKeyID = P.ProducerKeyID " . 
+          $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCERS) .
+          " WHERE COP.CoopOrderKeyID = " . $this->m_aData[parent::PROPERTY_COOP_ORDER_ID];
+    if ($this->GetPermissionScope(self::PERMISSION_COOP_ORDER_PRODUCER_EDIT) != Consts::PERMISSION_SCOPE_COOP_CODE &&
+        $this->GetPermissionScope(self::PERMISSION_COOP_ORDER_PRODUCER_VIEW) != Consts::PERMISSION_SCOPE_COOP_CODE)
+            $sSQL .=  " AND P.CoordinatingGroupID IN ( " . implode(",", $g_oMemberSession->Groups) . ") ";
+    $sSQL .= " ORDER BY P_S.sString; ";
+
+    $this->RunSQL( $sSQL );
+    
+    return $this->fetchAllKeyPair();
  }
  
  //unlike equivalent pickup location function, this one is used only in the home page orders boxes

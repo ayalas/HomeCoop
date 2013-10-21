@@ -434,9 +434,18 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
     $this->m_aData[self::PROPERTY_PRODUCT_ID] = $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID];
     $this->m_aData[Producer::PROPERTY_PRODUCER_NAME] = $this->m_aOriginalData[Producer::PROPERTY_PRODUCER_NAME];
     $this->m_aData[Product::PROPERTY_PRODUCT_NAME] = $this->m_aOriginalData[Product::PROPERTY_PRODUCT_NAME];    
+    $this->m_aData[Product::PROPERTY_ITEMS_IN_PACKAGE] = $this->m_aOriginalData[Product::PROPERTY_ITEMS_IN_PACKAGE];    
+    $this->m_aData[Product::PROPERTY_ITEM_QUANTITY] = $this->m_aOriginalData[Product::PROPERTY_ITEM_QUANTITY];    
+    $this->m_aData[Product::PROPERTY_UNIT_INTERVAL] = $this->m_aOriginalData[Product::PROPERTY_UNIT_INTERVAL];    
+    $this->m_aData[Product::PROPERTY_PACKAGE_SIZE] = $this->m_aOriginalData[Product::PROPERTY_PACKAGE_SIZE];    
+    $this->m_aData[Product::PROPERTY_QUANTITY] = $this->m_aOriginalData[Product::PROPERTY_QUANTITY];    
+    
+    $this->m_aData[self::PROPERTY_ITEM_UNIT_ABBREV] = $this->m_aOriginalData[self::PROPERTY_ITEM_UNIT_ABBREV];
+    $this->m_aData[self::PROPERTY_UNIT_ABBREV] = $this->m_aOriginalData[self::PROPERTY_UNIT_ABBREV];
+               
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
     $this->m_aData[self::PROPERTY_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL];
-    
+    $this->m_aData[self::PROPERTY_MAX_COOP_ORDER] = $this->m_aOriginalData[self::PROPERTY_MAX_COOP_ORDER];
     $this->m_aData[self::PROPERTY_TOTAL_COOP_ORDER] = $this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER];
     $this->m_aData[self::PROPERTY_JOINED_STATUS] = $this->m_aOriginalData[self::PROPERTY_JOINED_STATUS];
  
@@ -450,7 +459,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['PickupLocationKeyID'] = $Sections['Data']['PickupLocationKeyID'];
       $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['ProductKeyID'] = $Sections['Data']['ProductKeyID'];
       $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$PLID]['Data']['StorageAreaKeyID'] = $Sections['Data']['StorageAreaKeyID'];
-    }
+    }    
   }
   
   public function Delete()

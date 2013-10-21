@@ -15,14 +15,14 @@ a.tooltiplink span {display:none; padding:2px 3px; margin-left:8px; width:150px;
 a.tooltiplink:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
 body
 {
-  font-family: Loma, Arial, Serif;
+  font-family: Loma, Arial, "Open Sans", sans-serif;
   font-size: 12px;
 }
 body.centered
 {
   top: 0px;
   right: 0px;
-  bottom: 0px;
+  bottom: 0px; 
   left: 0px;
   width: <!$TOTAL_PAGE_WIDTH$!>px;
   margin: auto;
@@ -92,7 +92,7 @@ label
 }
 p.brochure
 {
-  font-family: Loma, Arial, Serif;
+  font-family: Loma, Arial, "Open Sans", sans-serif;
   font-size: 16px;
 }
 select

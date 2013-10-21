@@ -116,12 +116,12 @@ UserSessionBase::Close();
                       }
                       echo "</td>";
                       
-                      echo "<td>";
+                      echo "<td><a href='pickuploc.php?id=" ,  $recTable["PickupLocationKeyID"] , "' >";
                       if ($recTable["bDisabled"])
                           echo "לא פעיל";
                       else
                           echo "פעיל";
-                      echo  "</td>";
+                      echo  "</a></td>";
                       
                       echo "<td>";
                       if ($bCanSetCoord)

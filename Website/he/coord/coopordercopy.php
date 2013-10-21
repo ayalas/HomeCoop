@@ -29,6 +29,10 @@ try
     $oRecord->End = ComplexPostData::GetDateTime('End',array(23,59,0));
     $oRecord->Delivery = ComplexPostData::GetDate('Delivery');
     
+    $sCtl = HtmlSelectArray::PREFIX . 'Status';
+    if ( isset( $_POST[$sCtl] ))
+      $oRecord->Status = intval($_POST[$sCtl]);
+    
     if (isset($_POST['selPricesSource']))
       $oRecord->PricesFromProducts = (intval($_POST['selPricesSource']) == 1);
     
@@ -186,7 +190,19 @@ function Save()
                 ?>
                 <td></td>
                 </tr>
-                
+                <tr>
+                  <?php 
+                    $aArr = CoopOrder::GetStatusesToChangeTo(CoopOrder::STATUS_DRAFT);
+                    $selStatus = new HtmlSelectArray('Status', 'מצב', $aArr, CoopOrder::STATUS_DRAFT);
+                    $selStatus->EncodeHtml = FALSE; //already encoded in python script
+                    $selStatus->EmptyText = NULL; //means no empty entry
+                    $selStatus->Required = TRUE;
+                    $selStatus->EchoHtml();
+                    unset($selStatus);
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                  ?>
+                <td></td>
+                </tr>
                 <tr>
                   <?php 
                     $selPricesSource = new HtmlSelectBoolean('selPricesSource', 'מקור המחירים', FALSE, 'טבלת מוצרים', 
@@ -197,6 +213,7 @@ function Save()
                   ?>
                 <td></td>
                 </tr>
+                
                 
                 
                 </table>

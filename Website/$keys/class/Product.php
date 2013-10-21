@@ -43,7 +43,7 @@ class Product extends SQLBase {
   const DEFAULT_QUANTITY = 1;
   
   protected $m_arrImageMimeTypes = NULL;
-  
+    
   public function __construct()
   {
     $this->m_aDefaultData = array( self::PROPERTY_PRODUCT_ID => 0,
@@ -72,7 +72,9 @@ class Product extends SQLBase {
                             self::PROPERTY_IMAGE1_FILE_NAME => NULL,
                             self::PROPERTY_IMAGE2_FILE_NAME => NULL,
                             self::PROPERTY_IMAGE1_REMOVE => FALSE,
-                            self::PROPERTY_IMAGE2_REMOVE => FALSE
+                            self::PROPERTY_IMAGE2_REMOVE => FALSE,
+                            CoopOrderProduct::PROPERTY_ITEM_UNIT_ABBREV => NULL,
+                            CoopOrderProduct::PROPERTY_UNIT_ABBREV => NULL,
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData; 
@@ -749,11 +751,19 @@ class Product extends SQLBase {
      
     $this->m_aData[self::PROPERTY_PRODUCT_ID] = $nID;
     
-    $sSQL =   " SELECT PRD.fMaxUserOrder, PRD.mProducerPrice, PRD.mCoopPrice, PRD.fBurden, P.CoordinatingGroupID" .
+    $sSQL =   " SELECT PRD.fMaxUserOrder, PRD.mProducerPrice, PRD.mCoopPrice, PRD.fBurden, P.CoordinatingGroupID, PRD.fQuantity, " .
+              " PRD.fPackageSize, PRD.nItems, PRD.fUnitInterval, PRD.fItemQuantity, " .
+              $this->ConcatStringsSelect(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, 'sUnitAbbrev') .
+              "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, 'sItemUnitAbbrev') .
               " FROM T_Product PRD INNER JOIN T_Producer P ON P.ProducerKeyID = PRD.ProducerKeyID " . 
+              " INNER JOIN T_Unit UT ON UT.UnitKeyID = PRD.UnitKeyID " .
+              " LEFT JOIN T_Unit IUT ON IUT.UnitKeyID = PRD.ItemUnitKeyID " .
+          $this->ConcatForeignStringsJoin(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, Consts::PERMISSION_AREA_UNITS) .
+          $this->ConcatForeignStringsJoin(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, Consts::PERMISSION_AREA_ITEM_UNITS) .
               " WHERE PRD.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . ';';
 
     $this->RunSQL( $sSQL );
+       
 
     $rec = $this->fetch();
     
@@ -778,6 +788,14 @@ class Product extends SQLBase {
     $this->m_aData[self::PROPERTY_PRODUCER_PRICE] = $rec["mProducerPrice"];
     $this->m_aData[self::PROPERTY_COOP_PRICE] = $rec["mCoopPrice"];
     $this->m_aData[self::PROPERTY_BURDEN] = $rec["fBurden"];
+    
+    $this->m_aData[self::PROPERTY_QUANTITY]= $rec["fQuantity"];
+    $this->m_aData[self::PROPERTY_PACKAGE_SIZE]= $rec["fPackageSize"];
+    $this->m_aData[self::PROPERTY_ITEMS_IN_PACKAGE]= $rec["nItems"];
+    $this->m_aData[self::PROPERTY_UNIT_INTERVAL] = $rec["fUnitInterval"];  
+    $this->m_aData[self::PROPERTY_ITEM_QUANTITY]= $rec["fItemQuantity"];
+    $this->m_aData[CoopOrderProduct::PROPERTY_UNIT_ABBREV] = $rec["sUnitAbbrev"];
+    $this->m_aData[CoopOrderProduct::PROPERTY_ITEM_UNIT_ABBREV] = $rec["sItemUnitAbbrev"];
         
     return TRUE;
   }

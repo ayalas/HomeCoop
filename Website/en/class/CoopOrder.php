@@ -302,7 +302,7 @@ class CoopOrder extends SQLBase {
           if ( $this->GetPermissionScope(self::PERMISSION_EDIT) == Consts::PERMISSION_SCOPE_GROUP_CODE || $bUseSourceGroup )
               $sSQL .= ", CoordinatingGroupID ";
 
-          $sSQL .= ") VALUES ( " . $nKeyID .   ", ?, ?, ?, " . $g_oMemberSession->MemberID . ", " . self::STATUS_DRAFT . 
+          $sSQL .= ") VALUES ( " . $nKeyID .   ", ?, ?, ?, " . $g_oMemberSession->MemberID . ", " . $this->m_aData[self::PROPERTY_STATUS] . 
                   $this->ConcatValIfNotNull(self::PROPERTY_COOP_FEE) . 
                   $this->ConcatValIfNotNull(self::PROPERTY_SMALL_ORDER) . 
                   $this->ConcatValIfNotNull(self::PROPERTY_SMALL_ORDER_COOP_FEE) . 
@@ -769,7 +769,7 @@ class CoopOrder extends SQLBase {
     
     //override data
     $this->m_aData[self::PROPERTY_ID] = 0;
-    $this->m_aData[self::PROPERTY_STATUS] = self::STATUS_DRAFT;
+    $this->m_aData[self::PROPERTY_STATUS] = $aNewData[self::PROPERTY_STATUS];
     $this->m_aData[self::PROPERTY_START] = $aNewData[self::PROPERTY_START];
     $this->m_aData[self::PROPERTY_END] = $aNewData[self::PROPERTY_END];
     $this->m_aData[self::PROPERTY_DELIVERY] = $aNewData[self::PROPERTY_DELIVERY];

@@ -13,7 +13,7 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
   //display balance if different than zero or payment method is not at pickup
   if ($g_oMemberSession->Balance != 0 || $g_oMemberSession->PaymentMethod != Consts::PAYMENT_METHOD_AT_PICKUP)
   {
-    $HelloMessage .= '. ' . 'Your Balance: ' . $g_oMemberSession->Balance;
+    $HelloMessage .= '. ' . 'Your balance: ' . $g_oMemberSession->Balance;
     
     if ($g_oMemberSession->Balance != $g_oMemberSession->BalanceHeld)
       $HelloMessage .= ' ' . sprintf('‎(in cachier: %s)‎', $g_oMemberSession->BalanceHeld);

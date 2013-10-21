@@ -9,7 +9,7 @@ $oTabInfo = new CoopOrderTabInfo;
 $oTabInfo->Page = CoopOrderTabInfo::PAGE_PRODUCTS;
 $oTabInfo->IsSubPage = TRUE;
 $arrProducts = NULL;
-$recProducers = NULL;
+$arrProducers = NULL;
 $oProducers = NULL;
 $sPageTitle = '<!$TAB_ORDER_PRODUCTS$!>';
 $bReadOnly = FALSE;
@@ -51,14 +51,14 @@ try
     
     if (!$oRecord->IsExistingRecord) //get producer only on new record. It cannot be changed
     {
-      $sCtl = HtmlSelectPDO::PREFIX . 'ProducerKeyID';
+      $sCtl = HtmlSelectArray::PREFIX . 'ProducerKeyID';
       if ( isset( $_POST[$sCtl] ))
         $oRecord->ProducerID = intval($_POST[$sCtl]);
     }
     
     if (!$oRecord->IsExistingRecord) //get product only on new record. It cannot be changed for existing one
     {
-      $sCtl = HtmlSelectPDO::PREFIX . 'ProductKeyID';
+      $sCtl = HtmlSelectArray::PREFIX . 'ProductKeyID';
       if ( isset( $_POST[$sCtl] ))
         $oRecord->ProductID = intval($_POST[$sCtl]);
     }
@@ -88,6 +88,13 @@ try
                $oRecord->CoopPrice = $oProduct->CoopPrice;
                $oRecord->Burden = $oProduct->Burden;
                $oRecord->MaxUserOrder = $oProduct->MaxUserOrder;
+               $oRecord->Quantity = $oProduct->Quantity;
+               $oRecord->Items = $oProduct->Items;
+               $oRecord->ItemQuantity = $oProduct->ItemQuantity;
+               $oRecord->UnitInterval = $oProduct->UnitInterval;
+               $oRecord->PackageSize = $oProduct->PackageSize;
+               $oRecord->UnitAbbrev = $oProduct->UnitAbbrev;
+               $oRecord->ItemUnitAbbrev = $oProduct->ItemUnitAbbrev;
             }
             unset($oProduct);
           }
@@ -167,15 +174,18 @@ try
   {
     $oProducers = new CoopOrderProducers;
     $oProducers->CoopOrderID = $oRecord->CoopOrderID;
-    $recProducers = $oProducers->LoadData();
+    $arrProducers = $oProducers->LoadCoordList();
     
-    if ( !$recProducers )
+    if ( !is_array($arrProducers) )
     {
       $g_oError->AddError('<!$COOP_ORDER_PRODUCT_PRODUCER_LIST_IS_EMPTY$!>', 'warning');
       $bReadOnly = TRUE;
     }
     else
     {
+      if ($oRecord->ProducerID == 0 && count($arrProducers) > 0)
+        $oRecord->ProducerID = key($arrProducers);
+      
       $oProducts = new Products;
       $arrProducts = $oProducts->GetListForCoopOrder($oRecord->ProducerID, 
               0, $oRecord->CoopOrderID );
@@ -289,6 +299,9 @@ function Save()
                 </tr>
                 <tr>
                   <td>
+                    <?php if ($oRecord->IsExistingRecord && !$bReadOnly)
+                      echo '<a href="coproduct.php?coid=' , $oRecord->CoopOrderID , '" ><img border="0" title="<!$TABLE_ADD$!>" src="../img/edit-add-2.png" /></a>&nbsp;';
+                    ?>
                     <button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" 
                   <?php if ($g_oError->HadError || $bReadOnly ) echo ' disabled="disabled" '; ?>><!$BTN_SAVE$!></button>&nbsp;<button type="button" onclick="JavaScript:Delete();" id="btnDelete" name="btnDelete" <?php 
                       if ($g_oError->HadError || !$oRecord->IsExistingRecord || $bReadOnly ) 
@@ -316,8 +329,7 @@ function Save()
                     }
                     else //new record - allow select
                     {
-                      $selProducer = new HtmlSelectPDO('<!$FIELD_PRODUCER$!>', $recProducers, $oProducers,
-                            $oRecord->ProducerID, 'sProducer', 'ProducerKeyID');
+                      $selProducer = new HtmlSelectArray('ProducerKeyID', '<!$FIELD_PRODUCER$!>', $arrProducers, $oRecord->ProducerID);
                       $selProducer->Required = TRUE;
                       $selProducer->OnChange = "JavaScript:SelectProducer();";
                       $selProducer->EchoHtml();

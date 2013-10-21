@@ -129,18 +129,14 @@ UserSessionBase::Close();
                       //burden
                       echo "<td>" , $recProducts["fBurden"] , "</td>";
                       
-                      echo "<td>";
-                      $sDisabled = NULL;
+                      echo "<td><a href='product.php?id=" ,  $recProducts["ProductKeyID"] , "' >";
+                      
                       if ($recProducts["bDisabled"])
-                          $sDisabled = "<!$FIELD_VALUE_DISABLED$!>";
+                          echo '<!$FIELD_VALUE_DISABLED$!>';
                       else
-                          $sDisabled = "<!$FIELD_VALUE_ENABLED$!>";
-                      
-                      $cellDisabled = new HtmlGridCellText($sDisabled, HtmlGridCellText::CELL_TYPE_TINY);
-                      $cellDisabled->EchoHtml();
-                      unset($cellDisabled);
-                      
-                      echo  "</td>";
+                          echo '<!$FIELD_VALUE_ENABLED$!>';
+
+                      echo  "</a></td>";
                       
                       echo '</tr>';
    

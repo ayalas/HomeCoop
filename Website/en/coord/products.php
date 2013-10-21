@@ -129,18 +129,14 @@ UserSessionBase::Close();
                       //burden
                       echo "<td>" , $recProducts["fBurden"] , "</td>";
                       
-                      echo "<td>";
-                      $sDisabled = NULL;
+                      echo "<td><a href='product.php?id=" ,  $recProducts["ProductKeyID"] , "' >";
+                      
                       if ($recProducts["bDisabled"])
-                          $sDisabled = "Inactive";
+                          echo 'Inactive';
                       else
-                          $sDisabled = "Active";
-                      
-                      $cellDisabled = new HtmlGridCellText($sDisabled, HtmlGridCellText::CELL_TYPE_TINY);
-                      $cellDisabled->EchoHtml();
-                      unset($cellDisabled);
-                      
-                      echo  "</td>";
+                          echo 'Active';
+
+                      echo  "</a></td>";
                       
                       echo '</tr>';
    
