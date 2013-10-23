@@ -203,284 +203,276 @@ function Save()
     </tr>    
     <tr>
         <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="780" >
-                <table cellspacing="0" cellpadding="0" width="100%">
-                <tr>
-                  <td><?php include_once '../control/coopordertab.php'; ?></td>
-                </tr>
-                <tr>
-                  <td><?php include_once '../control/error/ctlError.php'; ?></td>
-                </tr>
-                <tr><td>
-               <?php
+              <table cellspacing="0" cellpadding="0" width="100%">
+              <tr>
+                <td><?php include_once '../control/coopordertab.php'; ?></td>
+              </tr>
+              <tr>
+                <td><?php include_once '../control/error/ctlError.php'; ?></td>
+              </tr>
+              <tr><td>
+             <?php
+                if (!$bReadOnly)
+                {
+                  echo '<button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ';
+                  if ($g_oError->HadError) 
+                    echo ' disabled="disabled" ';
+                  echo '>שמירה</button>&nbsp;';
+
+                  if ($oRecord->HasDeletePermission()) 
+                  {
+                      echo '<button type="button" onclick="JavaScript:Delete();" id="btnDelete" name="btnDelete" ';
+                      if ($g_oError->HadError || $oRecord->ID == 0 || $oRecord->Status == CoopOrder::STATUS_ACTIVE ) 
+                        echo ' disabled="disabled" '; 
+                      echo '>מחיקה</button>';
+                  } 
+                 }
+                ?>
+                </td>
+              </tr>
+              <tr>
+              <td>
+              <table cellspacing="0" cellpadding="2" width="100%">
+              <tr>
+              <td></td>
+              <?php
+                HtmlTextEditMultiLang::EchoColumnHeaders();
+              ?>
+              <td width="100%">&nbsp;</td>
+              </tr>
+              <tr>
+              <?php
+
+              $txtName = new HtmlTextEditMultiLang('כותרת הזמנה', 'txtName', HtmlTextEdit::TEXTBOX, $oRecord->Names);
+              $txtName->Required = TRUE;
+              $txtName->ReadOnly = $bStatusOnly || $bReadOnly;
+              $txtName->EchoHtml();
+              unset($txtName);
+
+              ?>
+              <td></td>
+              </tr>
+              <tr>
+                <?php 
+                  $aArr = CoopOrder::GetStatusesToChangeTo($oRecord->Status);
+                  $selStatus = new HtmlSelectArray('Status', 'מצב', $aArr, $oRecord->Status);
+                  $selStatus->EncodeHtml = FALSE; //already encoded in python script
+                  $selStatus->EmptyText = NULL; //means no empty entry
+                  $selStatus->Required = TRUE;
+                  $selStatus->ReadOnly = ($oRecord->ID == 0) || $bReadOnly;
+                  $selStatus->EchoHtml();
+                  unset($selStatus);
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                ?>
+              <td></td>
+              </tr>
+              <tr>
+              <?php
+               $dpStart = new HtmlDatePicker('פתיחה', 'Start', $oRecord->Start);
+               $dpStart->Required = TRUE;
+               $dpStart->TimeSetting = HtmlDatePicker::TIME_DISPLAYED;
+               $dpStart->ReadOnly = $bStatusOnly || $bReadOnly;
+               $dpStart->EchoHtml();
+               unset($dpStart);
+
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::OtherLangsEmptyCells();
+              ?>
+              </tr>
+              <tr>
+              <?php                 
+               $dpEnd = new HtmlDatePicker('סגירה', 'End', $oRecord->End);
+               $dpEnd->Required = TRUE;
+               $dpEnd->TimeSetting = HtmlDatePicker::TIME_DISPLAYED;
+               $dpEnd->ReadOnly = $bStatusOnly || $bReadOnly;
+               $dpEnd->EchoHtml();
+               unset($dpEnd);
+
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::OtherLangsEmptyCells();
+              ?>
+              </tr>
+              <tr>
+              <?php                 
+               $dpDelivery = new HtmlDatePicker('משלוח', 'Delivery', $oRecord->Delivery);
+               $dpDelivery->Required = TRUE;
+               $dpDelivery->TimeSetting = HtmlDatePicker::TIME_NOT_DISPLAYED;
+               $dpDelivery->ReadOnly = $bStatusOnly || $bReadOnly;
+               $dpDelivery->EchoHtml();
+               unset($dpDelivery);
+
+               HtmlTextEditMultiLang::OtherLangsEmptyCells();
+              ?>
+              <td></td>
+              </tr> 
+              <?php
+              if ($bShowSums)
+              {
+              ?>
+              <tr>
+                <?php 
+                  $txtMaxBurden = new HtmlTextEditNumeric('קבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
+                  $txtMaxBurden->ReadOnly = $bStatusOnly || $bReadOnly;
+                  $txtMaxBurden->EchoHtml();
+                  unset($txtMaxBurden);
+
+                  HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל ההזמנה לפי הקבולת הכוללת שלה, ע&quot;י השוואת סיכום של המעמסות של כל מוצר כפול כמות ההזמנה ממנו. ניתן לקבוע הגבלה כזו גם פר מקום איסוף. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                ?>
+              </tr>
+              <tr>
+                <?php                     
+                  $txtMaxCoopTotal = new HtmlTextEditNumeric('מכסת סכום לקואופ', 'txtMaxCoopTotal', $oRecord->MaxCoopTotal);
+                  $txtMaxCoopTotal->ReadOnly = $bStatusOnly || $bReadOnly;
+                  $txtMaxCoopTotal->EchoHtml();
+                  unset($txtMaxCoopTotal);
+
+                  HtmlTextEditMultiLang::EchoHelpText('מגבילה את הסכום הכולל של הזמנת הקואופרטיב. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();                
+                ?>
+              </tr>
+              <tr>
+                <?php                     
+                  $txtCoopFee = new HtmlTextEditNumeric('עמלת קואופרטיב', 'txtCoopFee', $oRecord->CoopFee);
+                  $txtCoopFee->ReadOnly = $bStatusOnly || $bReadOnly;
+                  $txtCoopFee->EchoHtml();
+                  unset($txtCoopFee);
+
+                  HtmlTextEditMultiLang::EchoHelpText('סכום קבוע שמשולם ע&quot;י כל חבר/ה פר הזמנה בנוסף לסכום המוצרים, לכיסוי הוצאות הרכישה המרוכזת');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                ?>
+              </tr>
+              <tr>
+                <?php                     
+                  $txtSmallOrder = new HtmlTextEditNumeric('מכסת הזמנה קטנה', 'txtSmallOrder', $oRecord->SmallOrder);
+                  $txtSmallOrder->ReadOnly = $bStatusOnly || $bReadOnly;
+                  $txtSmallOrder->EchoHtml();
+                  unset($txtSmallOrder);
+
+                  HtmlTextEditMultiLang::EchoHelpText('ערך המגדיר רף הזמנה קטנה, עבורה עמלת הקואופרטיב מופחתת');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                ?>
+              </tr>
+              <tr>
+                <?php                     
+                  $txtSmallOrderCoopFee = new HtmlTextEditNumeric('עמלה להזמנה קטנה', 'txtSmallOrderCoopFee', 
+                          $oRecord->SmallOrderCoopFee);
+                  $txtSmallOrderCoopFee->ReadOnly = $bStatusOnly || $bReadOnly;
+                  $txtSmallOrderCoopFee->EchoHtml();
+                  unset($txtSmallOrderCoopFee);
+
+                  HtmlTextEditMultiLang::EchoHelpText('עמלת קואופרטיב מופחתת עבור הזמנה קטנה');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                ?>
+              </tr>
+              <tr>
+                <?php                     
+                  $txtCoopFeePercent = new HtmlTextEditNumeric('עמלה %', 'txtCoopFeePercent', 
+                          $oRecord->CoopFeePercent);
+                  $txtCoopFeePercent->ReadOnly = $bStatusOnly || $bReadOnly;
+                  $txtCoopFeePercent->EchoHtml();
+                  unset($txtCoopFeePercent);
+
+                  HtmlTextEditMultiLang::EchoHelpText('Defines a cooperative fee by percents from the total amount paid for ordered products');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                ?>
+              </tr>                
+               <tr>
+                <?php 
+                  $sCoopTotal = $oRecord->CoopTotal;
+                  if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Total->CanCompute)
+                    $sCoopTotal .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
+
+                  $lblCoopTotal = new HtmlTextLabel('סכום לקואופ', 'txtCoopTotal', $sCoopTotal);
+                  $lblCoopTotal->EchoHtml();
+                  unset($lblCoopTotal);
+
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                ?>
+                 <td></td>
+              </tr>
+              <tr>
+                <?php                                       
+                  $lblProducerTotal = new HtmlTextLabel('סכום ליצרנים', 'txtProducerTotal', $oRecord->ProducerTotal);
+                  $lblProducerTotal->EchoHtml();
+                  unset($lblProducerTotal);
+
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                ?>
+                <td></td>
+              </tr>
+
+              <tr>
+                <?php                                       
+                  $lblTotalDelivery = new HtmlTextLabel('סה&quot;כ משלוח', 'txtTotalDelivery', $oRecord->TotalDelivery);
+                  $lblTotalDelivery->EchoHtml();
+                  unset($lblTotalDelivery);
+
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                ?>
+                 <td></td>
+              </tr>
+
+              <tr>
+                <?php    
+                  $sTotalBurden = $oRecord->TotalBurden;
+                  if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Burden->CanCompute)
+                    $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
+
+                  $lblTotalBurden = new HtmlTextLabel('סה&quot;כ מעמסה', 'txtTotalBurden', $sTotalBurden);
+
+                  $lblTotalBurden->EchoHtml();
+                  unset($lblTotalBurden);
+
+                  HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב כפול מספר הפעמים שהוזמן');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                ?>
+              </tr>
+
+              <tr>
+                <?php
+                  $lblMaxStorageBurden = new HtmlTextLabel('סה&quot;כ קיבולת אחסון', 'lblMaxStorageBurden', 
+                      $oRecord->MaxStorageBurden);
+                  $lblMaxStorageBurden->EchoHtml();
+                  unset($lblMaxStorageBurden);
+
+                  HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                ?>
+              </tr>
+
+              <tr>
+                <?php
+                  $sTotalBurden = $oRecord->StorageBurden;
+                  if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->StorageBurden->CanCompute)
+                    $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->StorageBurden->PercentRounded . '%)');
+
+                  $lblStorageBurden = new HtmlTextLabel('סה&quot;כ תפוסת אחסון', 'lblStorageBurden', 
+                      $sTotalBurden);
+                  $lblStorageBurden->EchoHtml();
+                  unset($lblStorageBurden);
+
+                  HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ תפוסת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
+                  HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                ?>
+              </tr>
+
+                <?php    
+                } //end of ShowSums
                   if (!$bReadOnly)
                   {
-                    echo '<button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ';
-                    if ($g_oError->HadError) 
-                      echo ' disabled="disabled" ';
-                    echo '>שמירה</button>&nbsp;';
+                    echo '<tr>';
+                    $lblModifiedByMemberName = new HtmlTextLabel('עודכן לאחרונה ע&quot;י', 'txtModifiedByMemberName', $oRecord->ModifiedByMemberName);
+                    $lblModifiedByMemberName->EchoHtml();
+                    unset($lblModifiedByMemberName);
 
-                    if ($oRecord->HasDeletePermission()) 
-                    {
-                        echo '<button type="button" onclick="JavaScript:Delete();" id="btnDelete" name="btnDelete" ';
-                        if ($g_oError->HadError || $oRecord->ID == 0 || $oRecord->Status == CoopOrder::STATUS_ACTIVE ) 
-                          echo ' disabled="disabled" '; 
-                        echo '>מחיקה</button>';
-                    } 
-                   }
-                  ?>
-                  </td>
-                </tr>
-                <tr><td>
-                <table cellspacing="0" cellpadding="2" width="100%">
-                <tr>
-                <td></td>
-                <?php
-                  HtmlTextEditMultiLang::EchoColumnHeaders();
-                ?>
-                <td width="100%">&nbsp;</td>
-                </tr>
-                <tr>
-                <?php
-                
-                $txtName = new HtmlTextEditMultiLang('כותרת הזמנה', 'txtName', HtmlTextEdit::TEXTBOX, $oRecord->Names);
-                $txtName->Required = TRUE;
-                $txtName->ReadOnly = $bStatusOnly || $bReadOnly;
-                $txtName->EchoHtml();
-                unset($txtName);
-                
-                ?>
-                <td></td>
-                </tr>
-                <tr>
-                  <?php 
-                    $aArr = CoopOrder::GetStatusesToChangeTo($oRecord->Status);
-                    $selStatus = new HtmlSelectArray('Status', 'מצב', $aArr, $oRecord->Status);
-                    $selStatus->EncodeHtml = FALSE; //already encoded in python script
-                    $selStatus->EmptyText = NULL; //means no empty entry
-                    $selStatus->Required = TRUE;
-                    $selStatus->ReadOnly = ($oRecord->ID == 0) || $bReadOnly;
-                    $selStatus->EchoHtml();
-                    unset($selStatus);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                  ?>
-                <td></td>
-                </tr>
-                <tr>
-                <?php
-                 $dpStart = new HtmlDatePicker('פתיחה', 'Start', $oRecord->Start);
-                 $dpStart->Required = TRUE;
-                 $dpStart->TimeSetting = HtmlDatePicker::TIME_DISPLAYED;
-                 $dpStart->ReadOnly = $bStatusOnly || $bReadOnly;
-                 $dpStart->EchoHtml();
-                 unset($dpStart);
-                 
-                 HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
-                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                ?>
-                </tr>
-                <tr>
-                <?php                 
-                 $dpEnd = new HtmlDatePicker('סגירה', 'End', $oRecord->End);
-                 $dpEnd->Required = TRUE;
-                 $dpEnd->TimeSetting = HtmlDatePicker::TIME_DISPLAYED;
-                 $dpEnd->ReadOnly = $bStatusOnly || $bReadOnly;
-                 $dpEnd->EchoHtml();
-                 unset($dpEnd);
-                 
-                 HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
-                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                ?>
-                </tr>
-                <tr>
-                <?php                 
-                 $dpDelivery = new HtmlDatePicker('משלוח', 'Delivery', $oRecord->Delivery);
-                 $dpDelivery->Required = TRUE;
-                 $dpDelivery->TimeSetting = HtmlDatePicker::TIME_NOT_DISPLAYED;
-                 $dpDelivery->ReadOnly = $bStatusOnly || $bReadOnly;
-                 $dpDelivery->EchoHtml();
-                 unset($dpDelivery);
-                 
-                 HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                ?>
-                <td></td>
-                </tr> 
-                <?php
-                if ($bShowSums)
-                {
-                ?>
-                <tr>
-                  <?php 
-                    $txtMaxBurden = new HtmlTextEditNumeric('קבולת משלוח', 'txtMaxBurden', $oRecord->MaxBurden);
-                    $txtMaxBurden->ReadOnly = $bStatusOnly || $bReadOnly;
-                    $txtMaxBurden->EchoHtml();
-                    unset($txtMaxBurden);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל ההזמנה לפי הקבולת הכוללת שלה, ע&quot;י השוואת סיכום של המעמסות של כל מוצר כפול כמות ההזמנה ממנו. ניתן לקבוע הגבלה כזו גם פר מקום איסוף. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                  ?>
-                </tr>
-                <tr>
-                  <?php                     
-                    $txtMaxCoopTotal = new HtmlTextEditNumeric('מכסת סכום לקואופ', 'txtMaxCoopTotal', $oRecord->MaxCoopTotal);
-                    $txtMaxCoopTotal->ReadOnly = $bStatusOnly || $bReadOnly;
-                    $txtMaxCoopTotal->EchoHtml();
-                    unset($txtMaxCoopTotal);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('מגבילה את הסכום הכולל של הזמנת הקואופרטיב. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();                
-                  ?>
-                </tr>
-                <tr>
-                  <?php                     
-                    $txtCoopFee = new HtmlTextEditNumeric('עמלת קואופרטיב', 'txtCoopFee', $oRecord->CoopFee);
-                    $txtCoopFee->ReadOnly = $bStatusOnly || $bReadOnly;
-                    $txtCoopFee->EchoHtml();
-                    unset($txtCoopFee);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('סכום קבוע שמשולם ע&quot;י כל חבר/ה פר הזמנה בנוסף לסכום המוצרים, לכיסוי הוצאות הרכישה המרוכזת');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                  ?>
-                </tr>
-                <tr>
-                  <?php                     
-                    $txtSmallOrder = new HtmlTextEditNumeric('מכסת הזמנה קטנה', 'txtSmallOrder', $oRecord->SmallOrder);
-                    $txtSmallOrder->ReadOnly = $bStatusOnly || $bReadOnly;
-                    $txtSmallOrder->EchoHtml();
-                    unset($txtSmallOrder);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('ערך המגדיר רף הזמנה קטנה, עבורה עמלת הקואופרטיב מופחתת');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                  ?>
-                </tr>
-                <tr>
-                  <?php                     
-                    $txtSmallOrderCoopFee = new HtmlTextEditNumeric('עמלה להזמנה קטנה', 'txtSmallOrderCoopFee', 
-                            $oRecord->SmallOrderCoopFee);
-                    $txtSmallOrderCoopFee->ReadOnly = $bStatusOnly || $bReadOnly;
-                    $txtSmallOrderCoopFee->EchoHtml();
-                    unset($txtSmallOrderCoopFee);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('עמלת קואופרטיב מופחתת עבור הזמנה קטנה');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                  ?>
-                </tr>
-                <tr>
-                  <?php                     
-                    $txtCoopFeePercent = new HtmlTextEditNumeric('עמלה %', 'txtCoopFeePercent', 
-                            $oRecord->CoopFeePercent);
-                    $txtCoopFeePercent->ReadOnly = $bStatusOnly || $bReadOnly;
-                    $txtCoopFeePercent->EchoHtml();
-                    unset($txtCoopFeePercent);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('Defines a cooperative fee by percents from the total amount paid for ordered products');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                  ?>
-                </tr>                
-                 <tr>
-                  <?php 
-                    $sCoopTotal = $oRecord->CoopTotal;
-                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Total->CanCompute)
-                      $sCoopTotal .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Total->PercentRounded . '%)');
-                  
-                    $lblCoopTotal = new HtmlTextLabel('סכום לקואופ', 'txtCoopTotal', $sCoopTotal);
-                    $lblCoopTotal->EchoHtml();
-                    unset($lblCoopTotal);
-                    
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                  ?>
-                   <td></td>
-                </tr>
-                <tr>
-                  <?php                                       
-                    $lblProducerTotal = new HtmlTextLabel('סכום ליצרנים', 'txtProducerTotal', $oRecord->ProducerTotal);
-                    $lblProducerTotal->EchoHtml();
-                    unset($lblProducerTotal);
-                    
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                  ?>
-                  <td></td>
-                </tr>
-                
-                <tr>
-                  <?php                                       
-                    $lblTotalDelivery = new HtmlTextLabel('סה&quot;כ משלוח', 'txtTotalDelivery', $oRecord->TotalDelivery);
-                    $lblTotalDelivery->EchoHtml();
-                    unset($lblTotalDelivery);
-                    
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                  ?>
-                   <td></td>
-                </tr>
-                
-                <tr>
-                  <?php    
-                    $sTotalBurden = $oRecord->TotalBurden;
-                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->Burden->CanCompute)
-                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->Burden->PercentRounded . '%)');
-                  
-                    $lblTotalBurden = new HtmlTextLabel('סה&quot;כ מעמסה', 'txtTotalBurden', $sTotalBurden);
-                    
-                    $lblTotalBurden->EchoHtml();
-                    unset($lblTotalBurden);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב כפול מספר הפעמים שהוזמן');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-                  ?>
-                </tr>
-                
-                <tr>
-                  <?php
-                    $lblMaxStorageBurden = new HtmlTextLabel('סה&quot;כ קיבולת אחסון', 'lblMaxStorageBurden', 
-                        $oRecord->MaxStorageBurden);
-                    $lblMaxStorageBurden->EchoHtml();
-                    unset($lblMaxStorageBurden);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                  ?>
-                </tr>
-                
-                <tr>
-                  <?php
-                    $sTotalBurden = $oRecord->StorageBurden;
-                    if ($oCoopOrderCapacity != NULL && $oCoopOrderCapacity->StorageBurden->CanCompute)
-                      $sTotalBurden .= LanguageSupport::AppendInFixedOrder(' ', '(' . $oCoopOrderCapacity->StorageBurden->PercentRounded . '%)');
-                    
-                    $lblStorageBurden = new HtmlTextLabel('סה&quot;כ תפוסת אחסון', 'lblStorageBurden', 
-                        $sTotalBurden);
-                    $lblStorageBurden->EchoHtml();
-                    unset($lblStorageBurden);
-                    
-                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ תפוסת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
-                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
-                  ?>
-                </tr>
-                
-                  <?php    
-                  } //end of ShowSums
-                    if (!$bReadOnly)
-                    {
-                      echo '<tr>';
-                      $lblModifiedByMemberName = new HtmlTextLabel('עודכן לאחרונה ע&quot;י', 'txtModifiedByMemberName', $oRecord->ModifiedByMemberName);
-                      $lblModifiedByMemberName->EchoHtml();
-                      unset($lblModifiedByMemberName);
 
-                      HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
-
-                      echo ' <td></td></tr>';
-                    }
-                ?>
-                </table>
-                </td></tr></table>
-                </td>
-                <td width="128" >
-                <?php 
-                    include_once '../control/coordpanel.php'; 
-                ?>
-                </td>
+                    echo ' <td></td></tr>';
+                  }
+              ?>
+              </table>
+            </td>
             </tr>
             </table>
         </td>

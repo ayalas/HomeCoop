@@ -117,9 +117,6 @@ function Sort(nField)
     </tr>
     <tr>
         <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-            <td width="<!$COORD_PAGE_WIDTH$!>" height="100%" >
             <table cellspacing="0" cellpadding="2" width="100%">
             <tr>
               <td colspan="6"><?php include_once '../control/coopordertab.php'; ?></td>
@@ -225,14 +222,6 @@ function Sort(nField)
     ?>
                 </table>
                 </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" >
-                <?php 
-                    include_once '../control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
-        </td>
     </tr>
     <tr>
       <td>

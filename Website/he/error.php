@@ -37,25 +37,10 @@ include_once 'authenticate.php';
      </td>
     </tr>
     <tr>
-        <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="108" ><?php include_once 'control/userpanel.php'; ?></td>
-                <td width="672" ><table cellspacing="0" cellpadding="0" width="100%">
-                <tr>
-                  <td><?php 
+        <td>
+            <?php 
                   include_once 'control/error/ctlError.php';
-                ?></td>
-                </tr>
-                </table>
-                </td>
-                <td width="128" >
-                <?php 
-                    include_once 'control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
+            ?>
         </td>
     </tr>
     <tr>

@@ -208,10 +208,7 @@ function Save()
         <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
-        <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="<!$COORD_PAGE_WIDTH$!>" >
+        <td>
                 <table cellspacing="0" cellpadding="0" width="100%">
                 <tr>
                   <td><?php include_once '../control/coopordertab.php'; ?></td>
@@ -384,14 +381,6 @@ function Save()
                 </table>
                 </td></tr></table>
                 </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" >
-                <?php 
-                    include_once '../control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
-        </td>
     </tr>
     <tr>
       <td>

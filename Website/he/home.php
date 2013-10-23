@@ -17,21 +17,11 @@ include_once 'authenticate.php';
 <body class="centered">
 <form id="frmHome" name="frmHome" method="post">
 <?php include_once 'control/header.php'; ?>
-<table cellspacing="0" cellpadding="0">
-    <tr>
-        <td width="908"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">דף הבית</span></td>
-    </tr>
-   <tr>
-     <td>
-       &nbsp;
-     </td>
-    </tr>
+<table cellspacing="0" cellpadding="0" width="100%">
     <tr>
         <td >
             <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="108" ><?php include_once 'control/userpanel.php'; ?></td>
-                <td width="672" ><table cellspacing="0" cellpadding="0" width="100%"><?php
+            <?php
                   try
                   {
                     $oNotifications = new Notifications;
@@ -43,28 +33,20 @@ include_once 'authenticate.php';
                     $g_oError->HandleException($e);
                   }
                 ?>
-                <tr>
-                  <td><?php 
-                  include_once 'control/activeorders.php';
-                  
-                  //close session opened in 'authenticate.php' when not required anymore
-                  //must be after any call to HandleException, because it writes to the session
-                  UserSessionBase::Close();
-                ?>
-                </td>
-                </tr>
-                <tr>
-                  <td><?php 
-                  include_once 'control/error/ctlError.php';
-                ?></td>
-                </tr>
-                </table>
-                </td>
-                <td width="128" >
-                <?php 
-                    include_once 'control/coordpanel.php'; 
-                ?>
-                </td>
+            <tr>
+              <td><?php 
+              include_once 'control/activeorders.php';
+
+              //close session opened in 'authenticate.php' when not required anymore
+              //must be after any call to HandleException, because it writes to the session
+              UserSessionBase::Close();
+            ?>
+            </td>
+            </tr>
+            <tr>
+              <td><?php 
+              include_once 'control/error/ctlError.php';
+            ?></td>
             </tr>
             </table>
         </td>

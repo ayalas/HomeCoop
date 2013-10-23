@@ -9,75 +9,65 @@ if ($oOrderTabInfo == NULL)
 function WriteOrderTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
 {
   global $oOrderTabInfo;
-  $sCssClass = 'tabtitle';
+      
+  echo '<li';
+  if ($bIsOnPage)
+    echo ' class="selected" ';
+  elseif ($oOrderTabInfo->ID > 0)
+    echo ' onclick="javascript:location.href = \'', $sLink, '\';"'; 
   
-  echo '<td nowrap class="' , $sCssClass , '">';
-  if ($oOrderTabInfo->ID > 0 && !$bIsOnPage)
-    echo '<a href="' , $sLink , '" >' , $sText , '</a>';
-  else
-    echo '<span>' , $sText , '</span>';
-
-  echo '<span>&nbsp;' , $sTabSeparator , '&nbsp;</span>',
-  
-   '</td>';
+  echo ' >', $sText, '</li>';
 } 
 ?>
-<table cellpadding="0" cellspacing="0" border="0" width="100%">
-<tr>
-
-<?php
-
-$nColSpan = 2;
-$nCoopTotal = $oOrderTabInfo->CoopTotal;
-
-WriteOrderTabElement($oOrderTabInfo->MainTabName,'&gt;&gt;', $g_sRootRelativePath . 'order.php?id=' . $oOrderTabInfo->ID , 
+<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+  <td><ul id="tabOrder" class="tabrow subtabrow"><?php
+      WriteOrderTabElement($oOrderTabInfo->MainTabName,'&gt;&gt;', $g_sRootRelativePath . 'order.php?id=' . $oOrderTabInfo->ID , 
         $oOrderTabInfo->Page == OrderTabInfo::PAGE_ENTRY );
 
-if ($oOrderTabInfo->ID > 0)
-{
-  WriteOrderTabElement('פריטים מוזמנים','', 
-          $g_sRootRelativePath . 'orderitems.php?id=' . $oOrderTabInfo->ID , $oOrderTabInfo->Page == OrderTabInfo::PAGE_ITEMS);
-  
-  $nColSpan++;
-}
+    if ($oOrderTabInfo->ID > 0)
+    {
+      WriteOrderTabElement('פריטים מוזמנים','', 
+              $g_sRootRelativePath . 'orderitems.php?id=' . $oOrderTabInfo->ID , $oOrderTabInfo->Page == OrderTabInfo::PAGE_ITEMS);
+    }
 
-//||
-?>
-<td width="100%" ></td>
-</tr>
-<tr><td width="100%" align="center" colspan="<?php echo $nColSpan; ?>"><?php
+?></ul>
+  </td>
+</tr> 
+</table>
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr><td width="100%" align="center"><?php
 
-echo '<table cellpadding="2" cellspacing="0" border="0"><tr>';
+$nCoopTotal = $oOrderTabInfo->CoopTotal;
+$sOrderSumClass = '';
+if ($oOrderTabInfo->StatusObj->Status == ActiveCoopOrderStatus::Open)
+  $sOrderSumClass = " opensum";
+else
+  $sOrderSumClass = " closedsum";
+
+echo '<table cellpadding="5" cellspacing="0" class="ordersummary', $sOrderSumClass, '"><tr>';
 if ($oOrderTabInfo->OrderCoopFee != NULL && $oOrderTabInfo->OrderCoopFee != 0)
 {
   $nCoopTotal += $oOrderTabInfo->OrderCoopFee;
 
-  echo '<td class="headlabel" >סה&quot;כ מוצרים‏:‏</td>',
-   '<td class="headdata" >', $oOrderTabInfo->CoopTotal , '</td>',
-  
-   '<td>&nbsp;&nbsp;</td>',
-
-   '<td class="headlabel" >תוספת לקואופ‏:‏</td>',
-   '<td class="headdata" >', $oOrderTabInfo->OrderCoopFee , '</td>',
- 
-   '<td>&nbsp;&nbsp;</td>';
+  echo '<td class="headlabel" >סה&quot;כ מוצרים‏:‏‏&nbsp;',
+      $oOrderTabInfo->CoopTotal, '</td>',
+   '<td class="headlabel" >תוספת לקואופ‏:‏‏&nbsp;',
+      $oOrderTabInfo->OrderCoopFee, '</td>';
 }
   
-echo '<td class="headmainlabel" >סה&quot;כ ההזמנה‏:‏</td>',
- '<td class="headmaindata" >', $nCoopTotal , '</td>',
-
- '<td>&nbsp;&nbsp;</td>';
+echo '<td class="headlabel" >סה&quot;כ ההזמנה‏:‏‏&nbsp;',
+    $nCoopTotal , '</td>';
 
 if ($oOrderTabInfo->StatusObj->StatusName != NULL)
 {
-  echo '<td nowrap class="headmaindata">' ,  $oOrderTabInfo->StatusObj->StatusName , '</td>',
-   '<td>&nbsp;&nbsp;</td>';
+  echo '<td nowrap class="headlabel">' ,  $oOrderTabInfo->StatusObj->StatusName , '</td>';
 }
 
 if ($oOrderTabInfo->Capacity != NULL)
- echo '<td class="headmaindata">' , $oOrderTabInfo->Capacity , '&nbsp;תפוסה</td>';
+ echo '<td class="headlabel">' , $oOrderTabInfo->Capacity , '&nbsp;תפוסה</td>';
 
 echo '</tr></table>';
 
 ?></td></tr>
 </table>
+

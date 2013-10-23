@@ -14,3 +14,15 @@ function OpenProductOverview(sPathToRoot, CoopOrderID, ProductID)
   window.open(sUrl, '_blank', sParams );
 }
 
+function ToggleTabDisplay(sTabNameToShow) {
+  var sTabToHide = document.getElementById('hidCurrentMainTab').value;
+  
+  document.getElementById(sTabToHide).style.display = "none";
+  document.getElementById(sTabNameToShow).style.display = "block";
+  
+  document.getElementById(sTabToHide + "Item").style.backgroundColor = "#D8D8D8";
+  document.getElementById(sTabNameToShow + "Item").style.backgroundColor = "#FFF";
+  
+  document.getElementById('hidCurrentMainTab').value = sTabNameToShow;
+}
+

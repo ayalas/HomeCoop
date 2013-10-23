@@ -23,18 +23,6 @@ UserSessionBase::Close();
     <tr>
         <td width="908"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">הגישה נחסמה</span></td>
     </tr>
-    <tr>
-        <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="108" ><?php include_once 'control/userpanel.php'; ?></td>
-                <td width="672" >&nbsp;</table>
-                </td>
-                <td width="128" ><?php include_once 'control/coordpanel.php'; ?></td>
-            </tr>
-            </table>
-        </td>
-    </tr>
 </table>
 </form>
  </body>

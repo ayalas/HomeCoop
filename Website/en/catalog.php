@@ -66,23 +66,10 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
   <?php include_once 'control/header.php'; ?>
   <table cellspacing="0" cellpadding="0" >
       <tr>
-          <td colspan="2" width="908"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Products Catalog</span></td>
+          <td width="908"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Products Catalog</span></td>
       </tr>
       <tr>
-          <?php 
-                echo '<td ';
-                if (isset($g_oMemberSession))
-                {
-                  echo ' width="108" >';
-                  include_once 'control/userpanel.php'; 
-                }
-                else
-                  echo '>';
-
-               echo '</td>'
-            ?>
-
-          <td width="692" height="100%" >
+          <td height="100%" >
               <table cellspacing="0" cellpadding="4" width="100%">
               <tr>
                 <td colspan="3"><?php include_once 'control/error/ctlError.php'; ?></td>
@@ -195,7 +182,7 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
           </td>
       </tr>
       <tr>
-        <td colspan="2" >
+        <td>
           <?php 
           include_once 'control/footer.php';
           ?>

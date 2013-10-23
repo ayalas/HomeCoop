@@ -1156,7 +1156,7 @@
 </str>
 <str>
     <key>HOME_LABEL_PRODUCERS</key>
-    <value>Producers</value>
+    <value>Producer</value>
 </str>
 <str>
     <key>ORDER_CAPACITY_PERCENT_FULL</key>
@@ -2274,5 +2274,13 @@
 <str>
     <key>LBL_HEADER_BALANCE_HELD</key>
     <value>&#8206;(in cachier: %s)&#8206;</value>
+</str>
+<str>
+    <key>TAB_ORDER_HEADER</key>
+    <value>Header</value>
+</str>
+<str>
+    <key>TITLE_COOP_ORDER</key>
+    <value>Cooperative Order</value>
 </str>
 </strings>

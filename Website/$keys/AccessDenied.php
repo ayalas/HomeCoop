@@ -23,18 +23,6 @@ UserSessionBase::Close();
     <tr>
         <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$ACCESS_DENIED$!></span></td>
     </tr>
-    <tr>
-        <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="<!$USER_PANEL_WIDTH$!>" ><?php include_once 'control/userpanel.php'; ?></td>
-                <td width="<!$HOME_CONTENT_WIDTH$!>" >&nbsp;</table>
-                </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" ><?php include_once 'control/coordpanel.php'; ?></td>
-            </tr>
-            </table>
-        </td>
-    </tr>
 </table>
 </form>
  </body>

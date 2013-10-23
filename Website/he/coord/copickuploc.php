@@ -228,9 +228,6 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
     </tr>    
     <tr>
         <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="780" >
                 <table cellspacing="0" cellpadding="0"  width="100%">
                 <tr>
                   <td><?php include_once '../control/coopordertab.php'; ?></td>
@@ -432,14 +429,6 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                 ?>
                 </table>
                 </td></tr></table>
-                </td>
-                <td width="128" >
-                <?php 
-                    include_once '../control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
         </td>
     </tr>
     <tr>

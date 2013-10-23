@@ -184,10 +184,7 @@ function SelectAll(bCheck)
         <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle; ?></span></td>
     </tr>    
     <tr>
-        <td >
-            <table cellspacing="0" cellpadding="8" width="100%">
-            <tr>
-            <td width="<!$COORD_PAGE_WIDTH$!>" height="100%" >
+        <td>
               <table cellspacing="0" cellpadding="2" width="100%">
               <tr>
                 <td colspan="4"><?php include_once '../control/coopordertab.php'; ?></td>
@@ -278,15 +275,8 @@ function SelectAll(bCheck)
                   }
                       
                   ?>
-                    </table>
-                  </td>
-                  <td width="<!$COORD_PANEL_WIDTH$!>" >
-                  <?php include_once '../control/coordpanel.php'; 
-            ?>
-            </td>
-            </tr>
             </table>
-        </td>
+          </td>
     </tr>
     <tr>
       <td>

@@ -9,7 +9,6 @@ $arrItems = NULL;
 $oTabInfo = new CoopOrderTabInfo;
 $oOrderTabInfo = NULL;
 $oPLTabInfo = NULL;
-$bUserPanel = TRUE;
 
 try
 {
@@ -189,30 +188,12 @@ function SetDirty()
 <input type="hidden" id="hidPostValue" name="hidPostValue" value="<?php echo $oRecord->ID; ?>" />
 <input type="hidden" id="hidDirty" name="hidDirty" value="0" />
 <?php include_once 'control/header.php'; ?>
-<table cellspacing="0" cellpadding="0">
+<table cellspacing="0" cellpadding="0" width="100%">
     <tr>
-        <td width="<!$TOTAL_PAGE_WIDTH$!>" ><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr >
-        <td >
-            <table cellspacing="0" cellpadding="2" width="100%" >
-            <tr>
-                <?php 
-                if ( $oTabInfo->CheckAccess() )
-                {
-                  echo '<td width="<!$COORD_PAGE_WIDTH$!>" >';
-                  $bUserPanel = FALSE;
-                }
-                else
-                {
-                  $bUserPanel = TRUE;
-                  echo '<td width="<!$USER_PANEL_WIDTH$!>" >';
-                  include_once 'control/userpanel.php';
-                  echo '</td>',
-                   '<td width="<!$USER_PAGE_WIDTH$!>" >';
-                  $sColspan = "2";
-                }
-                ?>
+                <td>
                 <table cellspacing="0" cellpadding="0" width="100%">
                 <tr>
                   <td colspan="2"><?php include_once 'control/coopordertab.php'; ?></td>
@@ -230,10 +211,8 @@ function SetDirty()
                 if (!$g_oError->HadError && $oRecord->CanModify)
                 {
                 ?><tr>
-                  <td class="nowrapping">
-                    <button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button>&nbsp;
-                  </td>
-                  <td width="100%">
+                  <td class="nowrapping"><button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button></td>
+                  <td width="100%" class="oppositealign">
                     <select id="selProductsView" name="selProductsView" onchange="JavaScript:SwitchViewMode();" >
                     <?php
                       echo '<option value="' , OrderItems::PRODUCTS_VIEW_MODE_SHOW_ALL , '"'; 
@@ -255,8 +234,8 @@ function SetDirty()
                 </td>
             </tr>
             <tr>
-              <td <?php if ($bUserPanel) echo 'colspan="2"'; ?>>
-                <table cellspacing="0" cellpadding="2" width="100%" class="scrollTable" >
+              <td>
+                <table cellspacing="0" cellpadding="0" width="100%" class="scrollTable" >
                 <thead class="fixedHeader">
                 <tr>
                   <th class="columntitlelong"><!$FIELD_PRODUCT$!></th>
@@ -400,7 +379,7 @@ function SetDirty()
                       $txtOrderItemComments->Rows = 1;
                       $txtOrderItemComments->OnChange = "JavaScript:SetDirty();";
                       $txtOrderItemComments->EncloseInHtmlCell = FALSE;
-                      echo '<td class="columndata">';
+                      echo '<td>';
                       $txtOrderItemComments->EchoEditPartHtml();
                       echo '</td>';
                       
@@ -411,15 +390,7 @@ function SetDirty()
                 ?>
                 </tbody>
                 </table>
-                </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" >
-                <?php 
-                    include_once 'control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
-        </td>
+           </td>
     </tr>
     <tr>
       <td>

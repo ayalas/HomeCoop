@@ -29,16 +29,16 @@ function AddLanguageOption($sFolder, $sText)
         if ($sFolder == $g_sLangDir)
             return;
 
-        $g_sLangControl .= '<span class="link" onclick="JavaScript: ChangeLanguage(\'' . 
+        $g_sLangControl .= '<span class="usermenulink usermenulabel" onclick="JavaScript: ChangeLanguage(\'' . 
                                         $sFolder . '\', \'' . $g_sRedirectAfterLangChange . '\',\'../' . 
-                                        $g_sRootRelativePath . 'index.php\');" >' . $sText . '</span>&nbsp;';
+                                        $g_sRootRelativePath . 'index.php\');" >' . $sText . '</span>';
      }
 }
 
 if (LANGUAGE_SWITCHER == LANGUAGE_SWITCHER_VALUE_DROPDOWN)
 {
 ?>
-<select onchange="JavaScript: ChangeLanguage(this.value, '<?php echo $g_sRedirectAfterLangChange; ?>','<?php echo '../' , $g_sRootRelativePath; ?>index.php');">
+<select class="usermenucell usermenulabel" onchange="JavaScript: ChangeLanguage(this.value, '<?php echo $g_sRedirectAfterLangChange; ?>','<?php echo '../' , $g_sRootRelativePath; ?>index.php');">
 <?php
 }
 

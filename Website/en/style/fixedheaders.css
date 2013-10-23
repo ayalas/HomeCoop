@@ -71,6 +71,5 @@ html>body tbody.scrollContent {
 /* Add 16px to last TH for scrollbar padding. All other non-IE browsers. */
 .columntitlescroll
 {
-  width: 136px;
+  width: 321px;
 }
-

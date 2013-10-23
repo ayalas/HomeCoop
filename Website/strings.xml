@@ -22,7 +22,7 @@
 </str>
 <str>
     <key>NORMAL_COLUMN_WIDTH_WSCROLL</key>
-    <value>136</value>
+    <value>236</value>
     <notes>Add 16px to last TH for scrollbar padding</notes>
 </str>
 <str>
@@ -58,26 +58,6 @@
     <value>908</value>
 </str>
 <str>
-    <key>COORD_PAGE_WIDTH</key>
-    <value>780</value>
-</str>
-<str>
-    <key>USER_PAGE_WIDTH</key>
-    <value>692</value>
-</str>
-<str>
-    <key>USER_PANEL_WIDTH</key>
-    <value>108</value>
-</str>
-<str>
-    <key>HOME_CONTENT_WIDTH</key>
-    <value>672</value>
-</str>
-<str>
-    <key>COORD_PANEL_WIDTH</key>
-    <value>128</value>
-</str>
-<str>
     <key>PRODUCT_PIC_VIEWER_WIDTH</key>
     <value>800</value>
 </str>
@@ -94,11 +74,6 @@
     <key>HOME_ORDER_STATUS_WIDTH</key>
     <value>120px</value>
      <comment>Width of the status field area in each order box in the home screen</comment>
-</str>
-<str>
-    <key>HOME_ORDER_PICKUP_WIDTH</key>
-    <value>180px</value>
-     <comment>Width of the Pickup Locations area in each order box in the home screen</comment>
 </str>
 <str>
     <key>ORDER_ITEMS_SCROLL_HEIGHT</key>

@@ -47,11 +47,8 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
     <tr>
         <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_COOP_ORDERS$!></span></td>
     </tr>
-    <tr >
-        <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="<!$COORD_PAGE_WIDTH$!>" height="100%" >
+    <tr>
+        <td>
                 <table cellspacing="0" cellpadding="2" width="100%">
                   <tr>
                     <td colspan="8"><?php 
@@ -188,14 +185,6 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
                 }
 ?>
                 </table>
-                </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" >
-                <?php 
-                    include_once '../control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
         </td>
     </tr>
     <tr>

@@ -86,10 +86,7 @@ UserSessionBase::Close();
         <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
-        <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-            <td width="<!$COORD_PAGE_WIDTH$!>" height="100%" >
+        <td>
             <table cellspacing="0" cellpadding="2" width="100%">
             <tr>
               <td colspan="6"><?php include_once '../control/coopordertab.php'; ?></td>
@@ -152,14 +149,6 @@ UserSessionBase::Close();
     ?>
                 </table>
                 </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" >
-                <?php 
-                    include_once '../control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
-        </td>
     </tr>
     <tr>
       <td>

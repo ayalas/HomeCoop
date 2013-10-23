@@ -1080,7 +1080,7 @@
 </str>
 <str>
     <key>HOME_LABEL_PRODUCERS</key>
-    <value>יצרנים</value>
+    <value>יצרן</value>
 </str>
 <str>
     <key>HOME_LINK_COOP_ORDER_PRODUCTS</key>
@@ -2172,5 +2172,13 @@
 <str>
     <key>LBL_HEADER_BALANCE_HELD</key>
     <value>&#8207;(בקופה: %s)&#8207;</value>
+</str>
+<str>
+    <key>TAB_ORDER_HEADER</key>
+    <value>כותר ההזמנה</value>
+</str>
+<str>
+    <key>TITLE_COOP_ORDER</key>
+    <value>הזמנת הקואופרטיב</value>
 </str>
 </strings>

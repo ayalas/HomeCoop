@@ -135,10 +135,6 @@ function VerifyPassword()
     </tr>
     <tr>
         <td>
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="<!$USER_PANEL_WIDTH$!>" ><?php include_once 'control/userpanel.php'; ?></td>
-                <td width="<!$USER_PAGE_WIDTH$!>" >
                 <table cellspacing="0" cellpadding="0" width="100%">
                 <tr>
                 <td><?php 
@@ -331,9 +327,6 @@ function VerifyPassword()
                 ?>
                 </table>
                 </td></tr></table>
-                </td>
-            </tr>
-            </table>
         </td>
     </tr>
     <tr>

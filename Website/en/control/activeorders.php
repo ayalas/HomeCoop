@@ -40,7 +40,7 @@ try
   //this must be set here in order to pass parameter by reference and create it once before the while loop
   $arrCoordPermissions = array(ActiveOrders::PERMISSION_EDIT,  ActiveOrders::PERMISSION_VIEW);
   
-  echo '<table cellpadding="10" cellspacing="0" width="100%" >';
+  echo '<table class="centerregion" cellpadding="10" cellspacing="0" >';
   
   //go through the active cooperative orders to output a "box" (html table with border) for each one
   while ( $recTable )
@@ -90,18 +90,18 @@ try
         }
       }
       
-      echo '<tr><td><table cellpadding="4" border="3" ', $sOrderCssClass,
+      echo '<tr><td><table cellpadding="5" border="3" ', $sOrderCssClass,
               ' cellspacing="0" width="100%" ><tr><td><table cellpadding="0" cellspacing="0" width="100%">',
            
          '<tr>', //start
       
       //order summary
        "<td width='100%'>",
-      '<table cellpadding="0" border="0" cellspacing="0" width="100%" >',
+      '<table cellpadding="4" border="0" cellspacing="0" width="100%" >',
       
       //order first row
        '<tr>',
-       '<td colspan="4" ' , $sOrderCssClass , '>';
+       '<td colspan="5" ' , $sOrderCssClass , '>';
       
       if ($bCanCoord)
       {
@@ -129,9 +129,9 @@ try
       '<tr>',
       
       //pickup locations
-       "<td width='180px'>",
+       "<td>",
        '<table cellpadding="0" border="0" cellspacing="0" width="100%" >',
-       '<tr><td class="listareatitle" width="100%" >Pickup‏:‏</td></tr>';
+       '<tr><td class="listareatitle" width="100%" >Pickup</td></tr>';
       //loop through pickup locations
       $nCountPickups = 0;
       
@@ -170,19 +170,53 @@ try
       }
       
       echo '</table>',
-       "</td>", //end of pickup locations
+       "</td>"; //end of pickup locations
+       
+     //producers
+     echo  
+        "<td>",
+        '<table cellpadding="0" border="0" cellspacing="0" width="100%" >',
+         '<tr><td class="listareatitle" width="100%" >Producer</td></tr>';
+      
+      $oProducers = new CoopOrderProducers;
+      $recProducer = $oProducers->LoadList($recTable["CoopOrderKeyID"]);
+
+      while ( $recProducer )
+      {        
+        echo '<tr><td><span class="normalcolor" >';
+        if ($bCanCoord && $oTable->CheckProducerCoordPermissions($recPickupLoc["CoordinatingGroupID"]))
+          echo '<a href="coord/coproducer.php?coid=' , $recTable["CoopOrderKeyID"] , 
+                   '&pid=', $recProducer["ProducerKeyID"],
+                   '" >' , htmlspecialchars($recProducer["sProducer"]) , '</a>';
+        else
+          echo htmlspecialchars($recProducer["sProducer"]);
+        
+        $oCoopOrderProducerCapacity = new CoopOrderCapacity(
+                              $recProducer["fMaxBurden"], $recProducer["fBurden"], 
+                              $recProducer["mMaxProducerOrder"], $recProducer["mProducerTotal"] );
+        
+        //% full
+        if ($oCoopOrderProducerCapacity->SelectedType != CoopOrderCapacity::TypeNone)
+          LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderProducerCapacity->PercentRounded . '%)');
+                
+        $recProducer = $oProducers->fetch();
+        
+        echo '</span></td></tr>';
+      }
+      
+      echo '</table>',
+       "</td>"; //end of producers
       
       //order details
       
-       "<td>",
-       '<table cellpadding="0" border="0" cellspacing="0" >',
-      
-       '<tr><td class="oppositealign" ><span class="normalcolor" >Closing‏:‏</span></td><td><span ',
+     echo  "<td>",
+       '<table cellpadding="0" width="100%" cellspacing="0" >',
+       '<tr>',
+         '<td><span class="normalcolor" >Closing‏:‏‎&nbsp;</span><span ',
                 $sOrderCssClass , ' >&nbsp;' , $dEnd->format('n.j.Y') , '</span><span ' , $sOrderCssClass , ' >&nbsp;' ,
-             'at&nbsp;' , $dEnd->format('g:i A') , '</span></td></tr>',
-      
-       "<tr><td class='oppositealign' ><span class='normalcolor' >Delivery‏:‏",
-              "</span></td><td class='regularalign'><span class='normalcolor' >&nbsp;" ,
+             'at&nbsp;' , $dEnd->format('g:i A') , '</span>',
+         '</td></tr>',
+         "<tr><td><span class='normalcolor' >Delivery‏:‏‎&nbsp;" ,
               $dDelivery->format('n.j.Y') , "</span></td></tr>";
       
       if (ORDER_DETAILS_ROWS < $nCountPickups) //if smaller than order details rows, fill with empty rows
@@ -224,45 +258,12 @@ try
       
       echo '</td>', //end of capacity
 
-       '</tr>',
+       '</tr>';
       //end of order details and pickup locations
       
-      //producers
-       '<tr>',
-       '<td class="listareatitle" >Producers‏:‏</td>',
-       '<td colspan="3" class="regularalign" ><span class="normalcolor" >';
       
-      $oProducers = new CoopOrderProducers;
-      $recProducer = $oProducers->LoadList($recTable["CoopOrderKeyID"]);
-      $sProducerSeparator = ''; //for first element, avoid comma
-      while ( $recProducer )
-      {
-        echo $sProducerSeparator; 
-        
-        if ($bCanCoord && $oTable->CheckProducerCoordPermissions($recPickupLoc["CoordinatingGroupID"]))
-          echo '<a href="coord/coproducer.php?coid=' , $recTable["CoopOrderKeyID"] , 
-                   '&pid=', $recProducer["ProducerKeyID"],
-                   '" >' , htmlspecialchars($recProducer["sProducer"]) , '</a>';
-        else
-          echo htmlspecialchars($recProducer["sProducer"]);
-        
-        $oCoopOrderProducerCapacity = new CoopOrderCapacity(
-                              $recProducer["fMaxBurden"], $recProducer["fBurden"], 
-                              $recProducer["mMaxProducerOrder"], $recProducer["mProducerTotal"] );
-        
-        //% full
-        if ($oCoopOrderProducerCapacity->SelectedType != CoopOrderCapacity::TypeNone)
-          LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderProducerCapacity->PercentRounded . '%)');
-        
-        $sProducerSeparator = ', ';
-        
-        $recProducer = $oProducers->fetch();
-      }
       
-      echo '</span></td>',
-       '</tr>', //end
-      
-       '</table>',
+      echo '</table>',
        '</td>', //end of order summary
        '</tr>', //end
 

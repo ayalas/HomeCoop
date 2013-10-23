@@ -13,30 +13,28 @@ if (!$oPLTabInfo->CheckAccess())
   return;
 
 function WritePLTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
-{
+{    
   global $oPLTabInfo;
+  echo '<li';
+  if ($bIsOnPage)
+    echo ' class="selected" ';
   
-  if ($bIsOnPage && $oPLTabInfo->IsSubPage)
-    $sCssClass = 'tabtitleroot';
-  else
-    $sCssClass = 'tabtitle';
-  
-  echo '<td nowrap class="' , $sCssClass , '">';
-  if ($oPLTabInfo->PickupLocationID > 0 && (!$bIsOnPage || $oPLTabInfo->IsSubPage))
-    echo '<a href="' , $sLink , '" >' , $sText , '</a>';
-  else
-    echo '<span>' , $sText , '</span>';
-
-  echo '<span>&nbsp;' , $sTabSeparator , '&nbsp;</span>',
-  
-   '</td>';
+  if (!$bIsOnPage || $oPLTabInfo->IsSubPage)
+    echo ' onclick="javascript:location.href = \'', $sLink, '\';"'; 
+  echo '>', $sText, '</li>';
 } 
 
 ?>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
+  <td>
 <?php
-
+  echo '<ul id="tabPickupLocation" class="tabrow subtabrow" ';
+  if ($bHasOrder)
+    echo ' style="display: none;" ';
+  
+  echo '>';
+  
   WritePLTabElement($oPLTabInfo->MainTabName,'<!$TAB_SEPARATOR$!>', $g_sRootRelativePath . 'coord/copickuploc.php?coid=' . 
         $oPLTabInfo->CoopOrderID . '&plid=' .  $oPLTabInfo->PickupLocationID , 
         $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_PICKUP_LOCATION );
@@ -56,7 +54,8 @@ function WritePLTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
           $g_sRootRelativePath . 'coord/copickuplocorders.php?coid=' . $oPLTabInfo->CoopOrderID . '&plid=' .  
           $oPLTabInfo->PickupLocationID , $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_ORDERS);
   
+  echo '</ul>';
 ?>
-<td width="100%" ></td>    
+</td>    
 </tr>
 </table>

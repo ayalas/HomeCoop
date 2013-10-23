@@ -234,18 +234,7 @@ function Save()
     <tr>
         <td >
             <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-              <?php 
-              if ($bHasCoordPermission || $oTabInfo->CheckAccess())
-                echo '<td width="<!$COORD_PAGE_WIDTH$!>" >';
-              else
-              {
-                echo '<td width="<!$USER_PANEL_WIDTH$!>" >';
-                include_once 'control/userpanel.php';
-                echo '</td>',
-                 '<td width="<!$USER_PAGE_WIDTH$!>" >';
-              }
-              ?>
+            <tr><td>
               <table cellspacing="0" cellpadding="0" width="100%">
               <tr>
                 <td><?php include_once 'control/coopordertab.php'; ?></td>
@@ -491,11 +480,6 @@ function Save()
                 <?php } ?>
                 </table>
                 </td></tr></table>
-                </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" >
-                <?php 
-                    include_once 'control/coordpanel.php'; 
-                ?>
                 </td>
             </tr>
             </table>

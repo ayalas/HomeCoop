@@ -8,9 +8,10 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 if ($g_oMemberSession->IsOnlyMember)
   return;
 
+echo '<div class="coordmenu">';
+
 define('prmidCoopOrdersModify', 10);
 define('prmidCoopOrdersView', 11);
-define('prmidCoopOrdersCopy', 20);
 define('prmidProducersModify', 30);
 define('prmidProducersView', 31);
 define('prmidProductsModify', 40);
@@ -30,21 +31,14 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidCoopOrdersModify, Consts:
         )
 {
 ?>
-<span class="popularlink"><a href="<?php echo $g_sRootRelativePath; ?>coord/cooporders.php">הזמנות קואופרטיב</a></span><br/>
+<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/cooporders.php">הזמנות קואופרטיב</a></span>
 <?php
 }        
-if ($oPermissionBridgeSet->DefinePermissionBridge(prmidCoopOrdersCopy, Consts::PERMISSION_AREA_COOP_ORDERS, Consts::PERMISSION_TYPE_COPY, 
-     Consts::PERMISSION_SCOPE_BOTH, 0, TRUE) && $oPermissionBridgeSet->HasPermission(prmidCoopOrdersModify))
-{
-?>
-<span class="popularlink"><a href="<?php echo $g_sRootRelativePath; ?>coord/coopordersforcopy.php">העתקת הזמנה</a></span><br/>
-<?php
-}
 
 if ($oPermissionBridgeSet->HasPermission(prmidCoopOrdersModify))
 {
 ?>
-<span class="popularlink"><a href="<?php echo $g_sRootRelativePath; ?>orders.php">הזמנות חבר/ה</a></span><br/>
+<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>orders.php">הזמנות חבר/ה</a></span>
 <?php
 }
         
@@ -54,7 +48,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidProducersModify, Consts::
      Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
 {
 ?>
-<span><a href="<?php echo $g_sRootRelativePath; ?>coord/producers.php">יצרנים</a></span><br/>
+<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/producers.php">יצרנים</a></span>
 <?php
 }
 
@@ -64,7 +58,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidProductsModify, Consts::P
      Consts::PERMISSION_SCOPE_BOTH, 0, TRUE) )
 {
 ?>
-<span><a href="<?php echo $g_sRootRelativePath; ?>coord/products.php">מוצרים</a></span><br/>
+<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/products.php">מוצרים</a></span>
 <?php
 }
 
@@ -72,7 +66,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidPickupLocationsModify, Co
      Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
 {
 ?>
-<span><a href="<?php echo $g_sRootRelativePath; ?>coord/pickuplocs.php">מקומות איסוף</a></span><br/>
+<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/pickuplocs.php">מקומות איסוף</a></span>
 <?php
 }
 
@@ -80,7 +74,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidCachierTotals, Consts::PE
            Consts::PERMISSION_TYPE_VIEW, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
 {
 ?>
-<span><a href="<?php echo $g_sRootRelativePath; ?>coord/cachier.php">מצב הקופה</a></span><br/>
+<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/cachier.php">מצב הקופה</a></span>
 <?php
 }
 
@@ -88,8 +82,10 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidMembersModify, Consts::PE
      Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
 {
 ?>
-<span><a href="<?php echo $g_sRootRelativePath; ?>coord/members.php">חברות/ים</a></span><br/>
+<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/members.php">חברות/ים</a></span>
 <?php
 }
+
+echo '</div>';
 
 ?>

@@ -9,29 +9,26 @@ if ($oTabInfo == NULL)
 if (!$oTabInfo->CheckAccess())
   return;
 
+$bHasOrder = FALSE;
+$bHasPickupLocation = FALSE;
+
 function WriteTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
 {
   global $oTabInfo;
-  
   if ($sText == '')
       return;
   
-  if ($bIsOnPage && $oTabInfo->IsSubPage)
-    $sCssClass = 'tabtitleroot';
-  else
-    $sCssClass = 'tabtitle';
-  
-  echo '<td nowrap class="' , $sCssClass , '">';
-  if ($oTabInfo->ID > 0 && (!$bIsOnPage || $oTabInfo->IsSubPage))
-    echo '<a href="' , $sLink , '" >' , $sText , '</a>';
-  else
-    echo '<span>' , $sText , '</span>';
-
-  echo '<span>&nbsp;' , $sTabSeparator , '&nbsp;</span>',
-  
-   '</td>';
-} 
+  echo '<li';
+  if ($bIsOnPage)
+    echo ' class="selected" ';
+ 
+  if (!$bIsOnPage || $oTabInfo->IsSubPage)
+    echo ' onclick="javascript:location.href = \'', $sLink, '\';"';
+  echo '>', $sText, '</li>';
+}
 ?>
+
+
 <table cellpadding="0" cellspacing="0" border="0" width="100%" >
 <?php 
   if ($oTabInfo->ID > 0)
@@ -56,14 +53,62 @@ function WriteTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
      '</td></tr>';
   }
 ?>
+  <tr>
+    <td>
+          <?php             
+            //Main TAB
+            $sCoopOrderTabSelected = '';
+            $sPickupLocationTabSelected = '';
+            $sOrderTabSelected = '';
+            $sCurrentMainTab = '';
+            $sCurrentMainTabItem = '';
+            
+            $bHasOrder = (isset($oOrderTabInfo) && $oOrderTabInfo != NULL);
+            $bHasPickupLocation = (isset($oPLTabInfo) && $oPLTabInfo != NULL &&  $oPLTabInfo->PickupLocationID > 0 
+                && $oPLTabInfo->IsExistingRecord);
+            
+            if ($bHasOrder) {
+              $sOrderTabSelected = 'class="selected"';
+              $sCurrentMainTab = 'tabOrder';
+            }
+            elseif ($bHasPickupLocation) {
+              $sPickupLocationTabSelected = 'class="selected"';
+              $sCurrentMainTab = 'tabPickupLocation';
+            }
+            else {
+              $sCoopOrderTabSelected = 'class="selected"';
+              $sCurrentMainTab = 'tabCoopOrder';
+            }
+            
+            echo '<input type="hidden" id="hidCurrentMainTab" name="hidCurrentMainTab" value="', $sCurrentMainTab,  '" />';
+            
+            echo '<ul class="tabrow">';
+            
+            echo '<li id="tabCoopOrderItem" onclick="javascript:ToggleTabDisplay(\'tabCoopOrder\');" ', $sCoopOrderTabSelected , ' title="<!$TITLE_COOP_ORDER$!>">', 
+                $oTabInfo->CoopOrderTitle, '</li>';
+            if ($bHasPickupLocation) {
+              echo '<li id="tabPickupLocationItem" onclick="javascript:ToggleTabDisplay(\'tabPickupLocation\');"  ', $sPickupLocationTabSelected , ' title="<!$FIELD_PICKUP_LOCATION_NAME$!>">' ,$oPLTabInfo->MainTabName, '</li>';
+            }
+
+            if ($bHasOrder) {
+              echo '<li id="tabOrderItem" onclick="javascript:ToggleTabDisplay(\'tabOrder\');"  ', $sOrderTabSelected , '>',$oOrderTabInfo->MainTabName, '</li>';
+            }
+            
+            echo '</ul>';
+          ?>
+    </td>
+  </tr>
   <tr><td>
-      <table cellpadding="0" cellspacing="0" border="0" width="100%" >
-        <tr>
-
+<table cellpadding="0" cellspacing="0" border="0" width="100%" >
+<tr>
+<td>
 <?php
+  echo '<ul id="tabCoopOrder" class="tabrow subtabrow"' ;
+  if ($bHasOrder || $bHasPickupLocation)
+    echo ' style="display: none;" ';
+  echo '>';
 
-
-WriteTabElement($oTabInfo->CoopOrderTitle,'<!$TAB_SEPARATOR$!>', $g_sRootRelativePath . 'coord/cooporder.php?id=' . $oTabInfo->ID, 
+ WriteTabElement('<!$TAB_ORDER_HEADER$!>','<!$TAB_SEPARATOR$!>', $g_sRootRelativePath . 'coord/cooporder.php?id=' . $oTabInfo->ID, 
         $oTabInfo->Page == CoopOrderTabInfo::PAGE_ENTRY );
 
 if ($oTabInfo->ID > 0)
@@ -103,10 +148,11 @@ if ($oTabInfo->ID > 0)
     WriteTabElement('<!$RECORD_COORD$!>','', $sUrl , FALSE);
   }
 }
-?>
-<td width="100%" ></td>
-</tr>
 
+  echo '</ul>';
+?>
+</td>
+</tr>
 </table></td>
 </tr>
 

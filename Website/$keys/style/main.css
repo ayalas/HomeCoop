@@ -1,5 +1,5 @@
 a:hover {background:#ffffff; text-decoration:none;} /*BG color is a must for IE6*/
-a.tooltip span {display:none; padding:2px 3px; margin-left:8px; width:150px;}
+a.tooltip span {display:none; white-space: normal; padding:2px 3px; margin-left:8px; width:150px;}
 a.tooltip:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
 a.tooltip:link    { color:#000000; text-decoration:none; }
 a.tooltip:visited { color:#000000; text-decoration:none; }
@@ -9,10 +9,11 @@ a.tooltiphelp:link    { color:#003366; font-weight: bold; text-decoration:none; 
 a.tooltiphelp:visited { color:#003366; font-weight: bold; text-decoration:none; }
 a.tooltiphelp:hover   { color:#003366; font-weight: bold; text-decoration:none; }
 a.tooltiphelp:active  { color:#003366; font-weight: bold; text-decoration:none; }
-a.tooltiphelp span {display:none; padding:2px 3px; margin-left:8px; width:150px;}
+a.tooltiphelp span {display:none; white-space: normal; padding:2px 3px; margin-left:8px; }
 a.tooltiphelp:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
-a.tooltiplink span {display:none; padding:2px 3px; margin-left:8px; width:150px;}
+a.tooltiplink span {display:none; white-space: normal; padding:2px 3px; margin-left:8px; width:150px;}
 a.tooltiplink:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
+
 body
 {
   font-family: Loma, Arial, "Open Sans", sans-serif;
@@ -136,6 +137,10 @@ span.pagename
 td
 {
   vertical-align: top;
+}
+textarea
+{
+  resize: vertical;
 }
 th
 {
@@ -294,8 +299,6 @@ ul
 }
 .link
 {
-  text-decoration: underline;
-  font-weight: bold;
   cursor:pointer;
 }
 .listareatitle
@@ -337,7 +340,7 @@ ul
 .orderitemcentry
 {
   font-size: 12px;
-  width: 130px;
+  width: 306px;
   background-color:#FFFFFF;
 }
 .orderiteminvalidrow
@@ -403,6 +406,15 @@ ul
 {
   font-weight: bold;
 }
+.tabtitle
+{
+  white-space: nowrap;
+}
+.tabtitlelast
+{
+  white-space: nowrap;
+  width: 100%;
+}
 .timeentry
 {
   font-size: 12px;
@@ -415,7 +427,10 @@ div.message
   background-position: <!$MESSAGE_BG_POSITION$!>;
   background-repeat: no-repeat;
   border: 1px solid;
-  margin: 6px;
+  margin-top: 6px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-bottom: 6px;
   padding: <!$MESSAGE_PADDING$!>;
   box-sizing: border-box;
 }
@@ -456,9 +471,198 @@ div.sepline {
   background-color: #668696;
 }
 
+.coordmenu
+{
+  white-space: nowrap;
+  color: #000000;
+  background-color: #D7DBDC;
+  font-size: 16px;
+  width: 100%;
+  vertical-align: top;
+  background-size: auto;
+}
+
+.coordmenu a
+{
+  text-decoration: none;
+}
+
+span.coordmenulabel
+{
+  font-size: 16px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.coordmenu a:visited
+{
+  color: #000000;
+  background-color: #D7DBDC;
+}
+
+.coordmenu a:active
+{
+  color: #000000;
+  background-color: #D7DBDC;
+}
+
+.coordmenu a:link
+{
+  color: #000000;
+  background-color: #D7DBDC;
+}
+
+.coordmenu a:hover
+{
+  background-color: #000000;
+  color: #D7DBDC;
+}
+
+.usermenu
+{
+  color: rgb(102, 102, 102);
+  font-size: 16px;
+  width: 100%;
+}
+
+.usermenucell
+{
+  color: rgb(250, 250, 250);
+  background-color: #336633;
+  white-space: nowrap;
+  vertical-align: top;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-origin: padding-box;
+  background-size: auto;
+}
+
+.usermenulabel
+{
+  font-size: 16px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.usermenucell a
+{
+  text-decoration: none;
+}
+
+.usermenucell a:visited
+{
+  color: rgb(250, 250, 250);
+  background-color: #336633;
+}
+
+.usermenucell a:active
+{
+  color: rgb(250, 250, 250);
+  background-color: #336633;
+}
+
+.usermenucell a:link
+{
+  color: rgb(250, 250, 250);
+  background-color: #336633;
+}
+
+.usermenucell a:hover, .usermenulink:hover
+{
+  background-color: rgb(250, 250, 250);
+  color: #336633;
+}
+
+.usermenulink
+{
+  cursor:pointer;
+}
+
 .titleline
 {
   padding: 10px 50px;
   width: 100%;
   font-weight: bold;
+}
+
+.logo
+{
+ padding-top: 12px;
+}
+
+.centerregion
+{
+  margin-left: auto;
+  margin-right: auto;
+}
+.ordersummary
+{
+  border: 1px solid #000;
+  padding-top: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 4px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.opensum
+{
+  background-color: #D1F6CC;
+}
+
+.closedsum
+{
+  background-color: #CCCCCC;
+}
+
+.ordersummary tr
+{
+  border: 0px;
+}
+
+.ordersummary td
+{
+  border: 0px;
+}
+
+.tabrow {
+    list-style: none;
+    padding: 0;
+    line-height: 24px;
+    position: relative;
+    margin: 0;
+}
+.subtabrow
+{
+  margin-top: 1px;
+}
+.subtabrow:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid #AAA;
+    z-index: 1;
+}
+.tabrow li {
+    position: relative;
+    z-index: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-<!$ALIGN_OPPOSITE$!>: 2px;
+    margin-<!$ALIGN$!>: 0px;
+    padding: 0 5px;
+    border: 1px solid #AAA;
+    background-color: #D8D8D8;
+    display: inline-block;
+    cursor: pointer;
+}
+.tabrow li.selected {
+    background-color: #FFF;
+    color: #000;
+    z-index: 2;
+}
+.subtabrow li.selected {
+    border-bottom-color: #FFF;
 }

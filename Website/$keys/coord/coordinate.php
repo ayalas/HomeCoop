@@ -376,10 +376,7 @@ function SetMemberAsCoordinator(nMemberID)
           <?php echo $sPageName; ?></span></td>
     </tr>
     <tr>
-        <td >
-            <table cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td width="<!$COORD_PAGE_WIDTH$!>" height="100%" >
+        <td>
                 <table cellspacing="0" cellpadding="2" width="100%">
                 <tr>
                     <td colspan="5"><?php 
@@ -505,14 +502,6 @@ function SetMemberAsCoordinator(nMemberID)
 ?>
                 </table>
                 </td>
-                <td width="<!$COORD_PANEL_WIDTH$!>" >
-                <?php 
-                    include_once '../control/coordpanel.php'; 
-                ?>
-                </td>
-            </tr>
-            </table>
-        </td>
     </tr>
     <tr>
       <td>
