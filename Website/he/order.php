@@ -341,7 +341,7 @@ function Save()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   
-                    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>';
+                    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>';
                     echo '</tr>';
 
                   }

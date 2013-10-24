@@ -246,7 +246,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>
+                  <td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span style="width: 200px;"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -322,7 +322,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span><!$HELP_EXPORT_FORMAT$!></span></a></td></tr>';
+                  echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span style="width: 200px;"><!$HELP_EXPORT_FORMAT$!></span></a></td></tr>';
                 }
                 ?>
                 </table>

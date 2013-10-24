@@ -240,7 +240,7 @@ function SelectAll(bCheck)
                       
                       if ($recTable["sComments"] != NULL)
                       {
-                        echo '<a href="#" class="tooltiphelp" >...<span>',
+                        echo '<a href="#" class="tooltiphelp" >...<span style="width: 200px;">',
                              htmlspecialchars($recTable["sComments"]),
                              '</span></a>'; 
                       }

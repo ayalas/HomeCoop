@@ -341,7 +341,7 @@ function Save()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   
-                    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>';
+                    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>';
                     echo '</tr>';
 
                   }

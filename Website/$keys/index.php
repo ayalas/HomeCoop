@@ -72,20 +72,16 @@ catch(Exception $e)
  <body class="centered">
 <form id="frmLogin" name="frmLogin" method="post">
 <header>
-<br/><br/>
-<table>
+<table border="0" cellpadding="0" cellspacing="0" >
   <tr>
-    <td><a href="home.php" ><img border="0" src="logo.gif"/></a></td>
+    <td class="logo"><a href="home.php" ><img border="0" src="logo.gif"/></a></td>
   </tr>
    <tr>
-    <td>
-<?php
+    <td><?php
     include_once 'control/language.php';
-?>
-    </td>
+?></td>
     </tr>
 </table>
-<br/><br/>
 </header>
 <table width="800" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><span class="cooptitle"><!$COOPERATIVE_NAME$!></span></td></tr>
@@ -102,7 +98,7 @@ catch(Exception $e)
     <?php
      if (PRODUCT_CATALOG_IS_PUBLIC)
      {
-        echo '<span><a href="catalog.php"><!$PAGE_TITLE_PRODUCT_CATALOG$!></a>&nbsp;</span>';
+        echo '<span><a class="LinkButton" href="catalog.php"><!$PAGE_TITLE_PRODUCT_CATALOG$!></a>&nbsp;</span>';
      }
      if (JOIN_PAGE != '')
      {
@@ -116,11 +112,11 @@ catch(Exception $e)
     </tr>
    <tr>
         <td nowrap><label for="txt_login"><!$FIELD_LOGIN_NAME$!></label></td>
-        <td width="100%"><input type="text" dir="ltr" maxlength="<!$MAX_LENGTH_LOGIN_NAME$!>" id="txt_login" name="txt_login" required="required" value="<?php echo htmlspecialchars( $sLoginName ); ?>" /></td>
+        <td width="100%"><input style="width:120px;" type="text" dir="ltr" maxlength="<!$MAX_LENGTH_LOGIN_NAME$!>" id="txt_login" name="txt_login" required="required" value="<?php echo htmlspecialchars( $sLoginName ); ?>" /></td>
     </tr>
    <tr>
         <td nowrap><label for="txt_pwd"><!$FIELD_PASSWORD$!></label></td>
-        <td width="100%"><input type="password" dir="ltr" maxlength="<!$MAX_LENGTH_PASSWORD$!>" id="txt_pwd" name="txt_pwd" required="required"/></td>
+        <td width="100%"><input style="width:120px;" type="password" dir="ltr" maxlength="<!$MAX_LENGTH_PASSWORD$!>" id="txt_pwd" name="txt_pwd" required="required"/></td>
     </tr>
    <tr>
         <td colspan="2"><button type="submit" value="" id="btn_login" name="btn_login" ><!$BTN_LOGIN$!></button></td>

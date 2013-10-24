@@ -246,7 +246,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span>The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
+                  <td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -322,7 +322,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>The preferred file format for data exports.</span></a></td></tr>';
+                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">The preferred file format for data exports.</span></a></td></tr>';
                 }
                 ?>
                 </table>

@@ -55,5 +55,4 @@ if (LANGUAGE_SWITCHER == LANGUAGE_SWITCHER_VALUE_DROPDOWN)
 </select>
 <?php
 }
-
 ?>

@@ -270,12 +270,12 @@ function Sort(nField)
                       if ($recTable["bHasItemComments"])
                       {
                         echo '&nbsp;<a href="../orderitems.php?id=' , $recTable["OrderID"] , 
-                                '" class="tooltiphelp" >More...<span>';
+                                '" class="tooltiphelp" >More...<span style="width: 200px;">';
                         $oOrderItems = new OrderItems;
                         $rec = $oOrderItems->GetComments($recTable["OrderID"]);
                         while($rec)
                         {
-                          echo $rec["sProduct"] , ':&nbsp;' , htmlspecialchars($rec["sMemberComments"]) , '<br/>';
+                          echo '<div>', $rec["sProduct"] , ':&nbsp;' , htmlspecialchars($rec["sMemberComments"]) , '</div>';
                           $rec = $oOrderItems->fetch();
                         }
                         echo '</span></a>'; 

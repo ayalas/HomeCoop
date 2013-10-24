@@ -246,7 +246,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span>בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
+                  <td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -322,7 +322,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>תבנית הקובץ המועדפת ליצוא נתונים.</span></a></td></tr>';
+                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">תבנית הקובץ המועדפת ליצוא נתונים.</span></a></td></tr>';
                 }
                 ?>
                 </table>

@@ -17,6 +17,8 @@ function OpenProductOverview(sPathToRoot, CoopOrderID, ProductID)
 function ToggleTabDisplay(sTabNameToShow) {
   var sTabToHide = document.getElementById('hidCurrentMainTab').value;
   
+  if (sTabNameToShow == sTabToHide) return;
+  
   document.getElementById(sTabToHide).style.display = "none";
   document.getElementById(sTabNameToShow).style.display = "block";
   

@@ -15,6 +15,7 @@ class ProductPackage {
   const PROPERTY_AVAILABLE_ITEMS = "AvailableItems";
   const PROPERTY_SOLD_OUT = "SoldOut";
   const PROPERTY_HAS_TOOLTIP = "HasTooltip";
+  const PROPERTY_TOOLTIP_CSS_CLASS = "TooltipCssClass";
   
   const MODE_NONE = 0;
   const MODE_QUANTITY = 1;
@@ -29,7 +30,8 @@ class ProductPackage {
   protected $m_sToolTipQuantityIntervalLine = '';
   protected $m_sToolTipAvailableItems = '';
   
-  public function __construct($nItems, $fItemQuantity, $sItemUnitAbbrev, $fUnitInterval, $sUnitAbbrev, $fPackageSize, $fQuantity, $fMaxCoopTotal, $fCoopTotal) {
+  public function __construct($nItems, $fItemQuantity, $sItemUnitAbbrev, $fUnitInterval, $sUnitAbbrev, $fPackageSize, $fQuantity, $fMaxCoopTotal, $fCoopTotal,
+      $sTooltipCssClass = 'tooltiphelp') {
     
     $this->m_aData = array(
        self::PROPERTY_QUANTITY => NULL,  
@@ -37,7 +39,9 @@ class ProductPackage {
        self::PROPERTY_SUPPRESS_TOOLTIP => FALSE,
        self::PROPERTY_AVAILABLE_ITEMS => NULL,
        self::PROPERTY_SOLD_OUT => FALSE,
-       self::PROPERTY_HAS_TOOLTIP => FALSE);
+       self::PROPERTY_HAS_TOOLTIP => FALSE,
+       self::PROPERTY_TOOLTIP_CSS_CLASS => $sTooltipCssClass,
+    );
         
     //"Left: X items" tooltip
     if ($fMaxCoopTotal > 0)
@@ -45,11 +49,11 @@ class ProductPackage {
       $this->m_aData[self::PROPERTY_HAS_TOOLTIP] = TRUE;
       $this->m_aData[self::PROPERTY_AVAILABLE_ITEMS] = $fMaxCoopTotal - $fCoopTotal;
       if ($this->m_aData[self::PROPERTY_AVAILABLE_ITEMS] > 0)
-        $this->m_sToolTipAvailableItems = sprintf('%s: %s items<br/>', 'Left', $this->m_aData[self::PROPERTY_AVAILABLE_ITEMS]);
+        $this->m_sToolTipAvailableItems = sprintf('<div>%s: %s items</div>', 'Left', $this->m_aData[self::PROPERTY_AVAILABLE_ITEMS]);
       else
       {
         $this->m_aData[self::PROPERTY_SOLD_OUT] = TRUE;
-        $this->m_sToolTipAvailableItems = 'SOLD OUT<br/>';
+        $this->m_sToolTipAvailableItems = '<div>SOLD OUT</div>';
       }
     }
 
@@ -64,8 +68,8 @@ class ProductPackage {
     {
       if ($fUnitInterval != NULL && $fUnitInterval != 1)
       {
-        $this->m_sToolTipQuantityIntervalLine = '<div>Unit Interval‏:‏&nbsp;</div>' . 
-                $fUnitInterval . '&nbsp;' . $sUnitAbbrev . '<br/>';
+        $this->m_sToolTipQuantityIntervalLine = '<div>Unit Interval‏:‏&nbsp;‎' . 
+                $fUnitInterval . '&nbsp;' . $sUnitAbbrev . '</div>';
 
         $this->m_nMode = self::MODE_PACKAGE_SIZE;
         $this->m_aData[self::PROPERTY_HAS_TOOLTIP] = TRUE;
@@ -73,8 +77,8 @@ class ProductPackage {
       if ($fPackageSize != NULL && $fPackageSize != $fQuantity)
       {                          
         $this->m_aData[self::PROPERTY_PACKAGE_SIZE] = $fPackageSize . ' ' . $sUnitAbbrev;
-        $this->m_sToolTipPackageSizeLine = '<div>Package Size‏:‏&nbsp;</div>' . 
-                $this->m_aData[self::PROPERTY_PACKAGE_SIZE] . '<br/>';
+        $this->m_sToolTipPackageSizeLine = '<div>Package Size‏:‏&nbsp;‎' . 
+                $this->m_aData[self::PROPERTY_PACKAGE_SIZE] . '</div>';
 
         $this->m_nMode = self::MODE_PACKAGE_SIZE;
         $this->m_aData[self::PROPERTY_HAS_TOOLTIP] = TRUE;
@@ -104,7 +108,7 @@ class ProductPackage {
     {
       if (($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP]) || !($this->m_aData[self::PROPERTY_HAS_TOOLTIP]))
         return $this->m_sResult;
-      return '<a class="tooltiphelp" href="#" >' . htmlspecialchars($this->m_sResult) . '<span>' .
+      return '<a class="' . $this->m_aData[self::PROPERTY_TOOLTIP_CSS_CLASS] . '" href="#" >' . htmlspecialchars($this->m_sResult) . '<span>' .
             $this->m_sToolTipPackageSizeLine . $this->m_sToolTipQuantityIntervalLine . $this->m_sToolTipAvailableItems  . '</span></a>';
     }
     else if ($name == self::PROPERTY_TOOLTIP)
@@ -140,7 +144,7 @@ class ProductPackage {
     if (($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP]) || !($this->m_aData[self::PROPERTY_HAS_TOOLTIP]))
       echo htmlspecialchars( $this->m_sResult );
     else
-      echo '<a class="tooltiphelp" href="#" >' , htmlspecialchars( $this->m_sResult ) , '<span>' ,
+      echo '<a class="', $this->m_aData[self::PROPERTY_TOOLTIP_CSS_CLASS]  , '" href="#" >' , htmlspecialchars( $this->m_sResult ) , '<span>' ,
               $this->m_sToolTipPackageSizeLine , $this->m_sToolTipQuantityIntervalLine, $this->m_sToolTipAvailableItems  , '</span></a>';
   }
   

@@ -35,7 +35,7 @@ define('DB_USERNAME',  'coopwebuser');
 define('DB_PASSWORD',  'rubby');
 
 //timezones. for other timezones see http://php.net/manual/en/timezones.php
-define('COOP_TIMEZONE',  'America/New_York');
+define('COOP_TIMEZONE',  'Europe/Athens');
 
 //leave empty for no join page link
 define('JOIN_PAGE', '');

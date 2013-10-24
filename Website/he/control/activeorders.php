@@ -19,6 +19,8 @@ $dDelivery = NULL;
 $oActiveOrderStatus = NULL;
 $sActiveOrderStatus = NULL;
 $sOrderCssClass = NULL;
+$sOrderBoxCssClass = NULL;
+$sHistoryButtonCssClass = '';
 $oCoopOrderCapacity = NULL;
 $oCoopOrderProducerCapacity = NULL;
 $oCoopOrderPickupCapacity = NULL;
@@ -60,37 +62,51 @@ try
       $oActiveOrderStatus = new ActiveCoopOrderStatus($dEnd, $dDelivery, $recTable["nStatus"] );
       $sActiveOrderStatus = $oActiveOrderStatus->StatusName;
       
+      $sHistoryButtonCssClass = '';
+      
       $oCoopOrderCapacity = new CoopOrderCapacity($recTable["fMaxBurden"], $recTable["fBurden"], 
               $recTable["mMaxCoopTotal"], $recTable["mCoopTotal"],
               $recTable["fMaxStorageBurden"], $recTable["fStorageBurden"]);
       
       if ($recTable["nStatus"] == CoopOrder::STATUS_LOCKED)
+      {
         $sOrderCssClass = ' class="closedorder" ';
+        $sOrderBoxCssClass = ' class="orderbox closedorder" ';
+      }
       else
       {
         switch($oActiveOrderStatus->Status)
         {
           case ActiveCoopOrderStatus::Open:
             $sOrderCssClass = ' class="openorder" ';
+            $sOrderBoxCssClass = ' class="orderbox openorder" ';
             if ($oCoopOrderCapacity->Percent >= 100) //show order as open only if capacity is less then 100%
               $sActiveOrderStatus = '';
             break;
           case ActiveCoopOrderStatus::Closed:
             $sOrderCssClass = ' class="closedorder" ';
+            $sOrderBoxCssClass = ' class="orderbox closedorder" ';
+            $sHistoryButtonCssClass = ' HistoryButton';
             break;
           case ActiveCoopOrderStatus::Arrived:
             $sOrderCssClass = ' class="arrivedorder" ';
+            $sOrderBoxCssClass = ' class="orderbox arrivedorder" ';
+            $sHistoryButtonCssClass = ' HistoryButton';
            break;
           case ActiveCoopOrderStatus::ArrivingToday:
             $sOrderCssClass = ' class="arrivedorder" ';
+            $sOrderBoxCssClass = ' class="orderbox arrivedorder" ';
+            $sHistoryButtonCssClass = ' HistoryButton';
             break;
           default:
             $sOrderCssClass = '';
+            $sOrderBoxCssClass = ' class="orderbox" ';
+            $sHistoryButtonCssClass = ' HistoryButton';
             break;
         }
       }
       
-      echo '<tr><td><table cellpadding="5" border="3" ', $sOrderCssClass,
+      echo '<tr><td><table cellpadding="5" ', $sOrderBoxCssClass,
               ' cellspacing="0" width="100%" ><tr><td><table cellpadding="0" cellspacing="0" width="100%">',
            
          '<tr>', //start
@@ -106,15 +122,15 @@ try
       if ($bCanCoord)
       {
         if ($bHasOrdersPermission)
-          echo '<a href="coord/orders.php?coid=' , $recTable["CoopOrderKeyID"] , '" >' , htmlspecialchars($recTable["sCoopOrder"]) , '</a>&nbsp;';
+          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/orders.php?coid=' , $recTable["CoopOrderKeyID"] , '" >' , htmlspecialchars($recTable["sCoopOrder"]) , '</a>&nbsp;';
         else
-          echo '<a href="coord/cooporder.php?id=' , $recTable["CoopOrderKeyID"] , '" >' , htmlspecialchars($recTable["sCoopOrder"]) , '</a>&nbsp;';
+          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/cooporder.php?id=' , $recTable["CoopOrderKeyID"] , '" >' , htmlspecialchars($recTable["sCoopOrder"]) , '</a>&nbsp;';
         
         if ($bHasProductsPermission)
-          echo '<a class="headdata" href="coord/coproducts.php?id=' , $recTable["CoopOrderKeyID"] , '" >מוצרים</a>&nbsp;';
+          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/coproducts.php?id=' , $recTable["CoopOrderKeyID"] , '" >מוצרים</a>&nbsp;';
         
         if ($bHasExportPermission)
-          echo '<a class="headdata" href="coord/cooporderexport.php?coid=' , $recTable["CoopOrderKeyID"] , '" >יצוא</a>';
+          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/cooporderexport.php?coid=' , $recTable["CoopOrderKeyID"] , '" >יצוא</a>';
       }
       else
         echo htmlspecialchars($recTable["sCoopOrder"]);
@@ -144,7 +160,7 @@ try
          
          if ($bCanCoord && $oTable->CheckPickupLocationCoordPermissions($recPickupLoc["CoordinatingGroupID"]))
          {
-           echo '<a href="coord/copickuplocorders.php?coid=' , $recTable["CoopOrderKeyID"] , 
+           echo '<a class="LinkButton', $sHistoryButtonCssClass, '" href="coord/copickuplocorders.php?coid=' , $recTable["CoopOrderKeyID"] , 
                    '&plid=', $recPickupLoc["PickupLocationKeyID"],
                    '" >' , htmlspecialchars($recPickupLoc["sPickupLocation"]) , '</a>';
          }
@@ -185,7 +201,7 @@ try
       {        
         echo '<tr><td><span class="normalcolor" >';
         if ($bCanCoord && $oTable->CheckProducerCoordPermissions($recPickupLoc["CoordinatingGroupID"]))
-          echo '<a href="coord/coproducer.php?coid=' , $recTable["CoopOrderKeyID"] , 
+          echo '<a class="LinkButton', $sHistoryButtonCssClass, '" href="coord/coproducer.php?coid=' , $recTable["CoopOrderKeyID"] , 
                    '&pid=', $recProducer["ProducerKeyID"],
                    '" >' , htmlspecialchars($recProducer["sProducer"]) , '</a>';
         else

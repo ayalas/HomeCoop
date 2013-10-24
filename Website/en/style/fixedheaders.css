@@ -65,7 +65,8 @@ html>body tbody.scrollContent {
 	display: block;
 	height: 527px;
 	overflow: auto;
-	width: 100%
+	width: 100%;
+        position: relative;
 }
 
 /* Add 16px to last TH for scrollbar padding. All other non-IE browsers. */

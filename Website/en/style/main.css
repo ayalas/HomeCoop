@@ -1,4 +1,13 @@
-a:hover {background:#ffffff; text-decoration:none;} /*BG color is a must for IE6*/
+a:hover {background:#ffffff; text-decoration:none; } /*BG color is a must for IE6*/
+
+.orderbox
+{
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 15px;
+  box-sizing: border-box; 
+}
+
 a.tooltip span {display:none; white-space: normal; padding:2px 3px; margin-left:8px; width:150px;}
 a.tooltip:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
 a.tooltip:link    { color:#000000; text-decoration:none; }
@@ -10,7 +19,13 @@ a.tooltiphelp:visited { color:#003366; font-weight: bold; text-decoration:none; 
 a.tooltiphelp:hover   { color:#003366; font-weight: bold; text-decoration:none; }
 a.tooltiphelp:active  { color:#003366; font-weight: bold; text-decoration:none; }
 a.tooltiphelp span {display:none; white-space: normal; padding:2px 3px; margin-left:8px; }
-a.tooltiphelp:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
+a.tooltiphelp:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal; z-index: 100;}
+a.tooltiphelprel:link    { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelprel:visited { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelprel:hover   { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelprel:active  { color:#003366; font-weight: bold; text-decoration:none; }
+a.tooltiphelprel span {display:none; white-space: normal; padding:2px 3px; margin-left:8px; width:150px;}
+a.tooltiphelprel:hover span{display:inline; position:relative; background:#ffffff; border:0; color:#000000; font-weight: normal;}
 a.tooltiplink span {display:none; white-space: normal; padding:2px 3px; margin-left:8px; width:150px;}
 a.tooltiplink:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#000000; font-weight: normal;}
 
@@ -665,4 +680,66 @@ span.coordmenulabel
 }
 .subtabrow li.selected {
     border-bottom-color: #FFF;
+}
+
+select#selProductsView
+{
+  margin-top: 6px;
+  margin-bottom: 2px;
+  vertical-align: middle;
+}
+
+a.LinkButton {
+  text-decoration:none;
+  padding: 4px;
+  background-color: #C6E3C2;
+  border: 1px solid #65F651;
+  color: #000;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  box-sizing: border-box;
+}
+
+@-moz-document url-prefix() {
+  a.LinkButton {
+    border-radius: 15px;
+  }
+}
+
+a.HistoryButton {
+  background-color: #D2D4D2;
+  border-color: #818181;
+}
+
+a.LinkButton:visited
+{
+  color: #000;
+}
+
+a.LinkButton:link
+{
+  color: #000;
+}
+
+a.LinkButton:active
+{
+  color: #000;
+}
+
+a.LinkButton:hover
+{
+  color: #000;
+  background-color: #9ECE98;
+  border: 1px solid #72B469;
+}
+
+a.HistoryButton:hover {
+  background-color: #A6A6A5;
+  border-color: #414141;
+}
+
+td a.LinkButton {
+  padding-bottom: 1px;
+  padding-top: 1px;
+  line-height: 28px;
 }

@@ -2181,4 +2181,8 @@
     <key>TITLE_COOP_ORDER</key>
     <value>הזמנת הקואופרטיב</value>
 </str>
+<str>
+    <key>TOOLTIP_COOP_ORDER_COOP_FEE_PERCENT</key>
+    <value>הגדרת עמלת קואופרטיב לפי אחוזים מהסכום הכולל עבור המוצרים המוזמנים</value>
+</str>
 </strings>

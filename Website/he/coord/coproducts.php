@@ -134,14 +134,23 @@ function OpenPartialOrders(nProductID)
                       $bTooltip = FALSE;
                       if ($recTable["fMaxUserOrder"] != NULL)
                       {
-                        $sTooltipLines .= sprintf("%s: %s פריטים<br/>", "מכסת הזמנה לחבר/ה", $recTable["fMaxUserOrder"]);
+                        $sTooltipLines .= sprintf("<div>%s: %s פריטים</div>", "מכסת הזמנה לחבר/ה", $recTable["fMaxUserOrder"]);
                         $bTooltip = TRUE;
                       }
                       if ($recTable["fMaxCoopOrder"] != NULL)
                       {
-                        $sTooltipLines .= sprintf("%s: %s פריטים<br/>", "מכסת הזמנה לקואופ", $recTable["fMaxCoopOrder"]);
+                        $sTooltipLines .= sprintf("<div>%s: %s פריטים</div>", "מכסת הזמנה לקואופ", $recTable["fMaxCoopOrder"]);
                         $bTooltip = TRUE;
                       }
+                      
+                      $oProductPackage = new ProductPackage(
+                              $recTable["ProductItems"], $recTable["fItemQuantity"], $recTable["sItemUnitAbbrev"], 
+                              $recTable["fUnitInterval"], $recTable["sUnitAbbrev"], $recTable["fPackageSize"], $recTable["ProductQuantity"],
+                              $recTable["fMaxCoopOrder"], $recTable["fTotalCoopOrder"]
+                      );
+                      
+                      if ($oProductPackage->HasTooltip)
+                        $bTooltip = TRUE;
                       
                       echo "<tr>";
 
@@ -154,7 +163,12 @@ function OpenPartialOrders(nProductID)
                               , $oData->CoopOrderID , "' >" , htmlspecialchars($recTable["sProduct"] );                      
                       
                       if ($bTooltip)
-                        echo "<span>" , $sTooltipLines , "</span>";
+                      {
+                        echo "<span>" , $sTooltipLines;
+                        if ($oProductPackage->HasTooltip)
+                          $oProductPackage->EchoTooltip();
+                        echo "</span>";
+                      }
                       echo "</a></td>";
                       
                       //producer
@@ -202,13 +216,10 @@ function OpenPartialOrders(nProductID)
                       echo '<td>' , $recTable["mCoopPrice"] , '</td>';
                       
                       //PackageSize
-                      $oProductPackage = new ProductPackage(
-                              $recTable["ProductItems"], $recTable["fItemQuantity"], $recTable["sItemUnitAbbrev"], 
-                              $recTable["fUnitInterval"], $recTable["sUnitAbbrev"], $recTable["fPackageSize"], $recTable["ProductQuantity"],
-                              $recTable["fMaxCoopOrder"], $recTable["fTotalCoopOrder"]
-                              );
+                      
                       
                       echo '<td>'; 
+                      $oProductPackage->SuppressTooltip = TRUE;
                       $oProductPackage->EchoHtml();
                       echo '</td>';
                       

@@ -373,7 +373,7 @@ function Save()
                   $txtCoopFeePercent->EchoHtml();
                   unset($txtCoopFeePercent);
 
-                  HtmlTextEditMultiLang::EchoHelpText('Defines a cooperative fee by percents from the total amount paid for ordered products');
+                  HtmlTextEditMultiLang::EchoHelpText('הגדרת עמלת קואופרטיב לפי אחוזים מהסכום הכולל עבור המוצרים המוזמנים');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>                

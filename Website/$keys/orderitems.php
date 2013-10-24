@@ -194,7 +194,7 @@ function SetDirty()
     </tr>
     <tr >
                 <td>
-                <table cellspacing="0" cellpadding="0" width="100%">
+                <table cellspacing="0" border="0" cellpadding="0" width="100%">
                 <tr>
                   <td colspan="2"><?php include_once 'control/coopordertab.php'; ?></td>
                 </tr>
@@ -211,8 +211,8 @@ function SetDirty()
                 if (!$g_oError->HadError && $oRecord->CanModify)
                 {
                 ?><tr>
-                  <td class="nowrapping"><button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button></td>
-                  <td width="100%" class="oppositealign">
+                  <td width="180px" class="nowrapping"><button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button></td>
+                  <td>
                     <select id="selProductsView" name="selProductsView" onchange="JavaScript:SwitchViewMode();" >
                     <?php
                       echo '<option value="' , OrderItems::PRODUCTS_VIEW_MODE_SHOW_ALL , '"'; 
@@ -284,7 +284,7 @@ function SetDirty()
                       
                       if ($oProductPackage->HasTooltip)
                       {
-                        echo '<a class="tooltiphelp" href="#" onclick="JavaScript:OpenProductOverview(\'' , $g_sRootRelativePath, '\', ',
+                        echo '<a class="tooltiphelprel" href="#" onclick="JavaScript:OpenProductOverview(\'' , $g_sRootRelativePath, '\', ',
                               $oRecord->CoopOrderID, ',', $oItem->ProductID, ');" >', htmlspecialchars($oItem->ProductName), 
                               '<span>';
                         $oProductPackage->EchoTooltip();
@@ -361,7 +361,7 @@ function SetDirty()
                         $fOriginalAmount = ($oItem->Quantity/$oItem->ProductQuantity) * $oItem->ProductCoopPrice;
                         $fAmountSaved = $fOriginalAmount - $oItem->CoopTotal;
                         
-                        echo '<a class="tooltiphelp" href="#" >',$oItem->CoopTotal,'<span>', 
+                        echo '<a class="tooltiphelprel" href="#" >',$oItem->CoopTotal,'<span>', 
                               sprintf('<!$TOOLTIP_ORDER_ITEM_WAS_JOINED$!>',$oItem->JoinedItems,
                                    $oItem->JoinToProductName, $fAmountSaved),'</span></a>';
                       }
@@ -388,6 +388,8 @@ function SetDirty()
                 }
 
                 ?>
+                <tr><td colspan='8'>&nbsp;</td></tr>
+                <tr><td colspan='8'>&nbsp;</td></tr>
                 </tbody>
                 </table>
            </td>

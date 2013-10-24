@@ -364,7 +364,7 @@ function VerifyPassword()
                       $selPickupLoc->EchoHtml();
                       unset($selPickupLoc);
                     
-                      echo '<td><a class="tooltiphelp" href="#" >‏?‏<span>הקופה שבה נעשה שינוי היתרה</span></a></td>';
+                      echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 150px;" >הקופה שבה נעשה שינוי היתרה</span></a></td>';
                       echo '</tr>';
                     }
                   ?>                
@@ -389,7 +389,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span>בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
+                  <td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 150px;">בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
                 </tr>
 
                 <tr>

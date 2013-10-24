@@ -341,7 +341,7 @@ function Save()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   
-                    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>';
+                    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span style="width: 200px;"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>';
                     echo '</tr>';
 
                   }
