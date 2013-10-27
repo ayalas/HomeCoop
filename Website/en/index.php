@@ -102,7 +102,7 @@ catch(Exception $e)
      }
      if (JOIN_PAGE != '')
      {
-       echo '<span><a href="',JOIN_PAGE,'">Join</a>&nbsp;</span>';
+       echo '<span><a class="LinkButton" href="',JOIN_PAGE,'">Join</a>&nbsp;</span>';
      }
     ?>
       </td>
