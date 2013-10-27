@@ -692,12 +692,12 @@ select#selProductsView
 a.LinkButton {
   text-decoration:none;
   padding: 4px;
-  background-color: #C6E3C2;
-  border: 1px solid #65F651;
-  color: #000;
   -moz-border-radius: 15px;
   -webkit-border-radius: 15px;
   box-sizing: border-box;
+  background-color: #FFF;
+  border: 1px solid #FFF;
+  color: #359A27;
 }
 
 @-moz-document url-prefix() {
@@ -706,24 +706,19 @@ a.LinkButton {
   }
 }
 
-a.HistoryButton {
-  background-color: #D2D4D2;
-  border-color: #818181;
-}
-
 a.LinkButton:visited
 {
-  color: #000;
+  color: #359A27;
 }
 
 a.LinkButton:link
 {
-  color: #000;
+  color: #359A27;
 }
 
 a.LinkButton:active
 {
-  color: #000;
+  color: #359A27;
 }
 
 a.LinkButton:hover
@@ -733,9 +728,30 @@ a.LinkButton:hover
   border: 1px solid #72B469;
 }
 
+a.HistoryButton
+{
+  color: #475744;
+}
+
+a.HistoryButton:visited
+{
+  color: #475744;
+}
+
+a.HistoryButton:link
+{
+  color: #475744;
+}
+
+a.HistoryButton:active
+{
+  color: #475744;
+}
+
 a.HistoryButton:hover {
   background-color: #A6A6A5;
   border-color: #414141;
+  color: #000;
 }
 
 td a.LinkButton {
