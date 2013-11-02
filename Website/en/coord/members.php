@@ -113,7 +113,7 @@ function SelectAll(bCheck)
 <input type="hidden" id="hidOriginalData" name="hidOriginalData" value="<?php echo $oTable->GetSerializedData(); ?>" />
 <input type="hidden" id="hidPostAction" name="hidPostAction" value="" />
 <?php include_once '../control/header.php'; ?>
-<table cellspacing="0" cellpadding="2" width="908" >
+<table cellspacing="0" cellpadding="2" width="948" >
     <tr>
       <td colspan="4" ><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Members</span></td>
     </tr>

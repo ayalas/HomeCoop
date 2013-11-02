@@ -6,7 +6,7 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 if ($oOrderTabInfo == NULL)
   return;
 
-function WriteOrderTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
+function WriteOrderTabElement($sText, $sLink, $bIsOnPage)
 {
   global $oOrderTabInfo;
       
@@ -21,12 +21,12 @@ function WriteOrderTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
 ?>
 <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
   <td><ul id="tabOrder" class="tabrow subtabrow"><?php
-      WriteOrderTabElement($oOrderTabInfo->MainTabName,'&gt;&gt;', $g_sRootRelativePath . 'order.php?id=' . $oOrderTabInfo->ID , 
+      WriteOrderTabElement($oOrderTabInfo->MainTabName, $g_sRootRelativePath . 'order.php?id=' . $oOrderTabInfo->ID , 
         $oOrderTabInfo->Page == OrderTabInfo::PAGE_ENTRY );
 
     if ($oOrderTabInfo->ID > 0)
     {
-      WriteOrderTabElement('פריטים מוזמנים','', 
+      WriteOrderTabElement('פריטים מוזמנים',
               $g_sRootRelativePath . 'orderitems.php?id=' . $oOrderTabInfo->ID , $oOrderTabInfo->Page == OrderTabInfo::PAGE_ITEMS);
     }
 

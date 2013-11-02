@@ -5,17 +5,21 @@ include_once '../authenticate.php';
 
 $sPageTitle = '<!$NEW_MEMBER$!>';
 $oRecord = new Member;
+$oMemberTabInfo = NULL;
 $arrPaymentMethods = NULL;
 $arrPickupLocations = NULL;
+
 $bHasAccessToRoles = $oRecord->HasAccessToRoles();
 try
 {
   //must be coordinator to enter this page
-  if (!$oRecord->CheckAccess() || !$oRecord->IsCoordinator)
+  if (!$oRecord->CheckAccess() || (!$oRecord->IsCoordinator && !$oRecord->HasPermission(Member::PERMISSION_VIEW)))
   {
       RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
       exit;
   }
+  
+  $oRecord->RevokeModifyPermission();
   
   if ( $_SERVER[ 'REQUEST_METHOD'] == 'POST' )
   {
@@ -148,8 +152,13 @@ try
       exit;
   }
   
+  $oMemberTabInfo = new MemberTabInfo($oRecord->ID, MemberTabInfo::PAGE_ENTRY);
+  
   if ($oRecord->Name != NULL)
+  {
     $sPageTitle = $oRecord->Name;
+    $oMemberTabInfo->MainTabName = $sPageTitle;
+  }
   
   $arrPaymentMethods = $oRecord->GetPaymentMethods();
   
@@ -224,10 +233,7 @@ function VerifyPassword()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
-    </tr>
-    <tr>
-        <td >
+        <td width="<!$TOTAL_PAGE_WIDTH$!>">
                 <table cellspacing="0" cellpadding="0" width="100%">
                 <tr>
                 <td><?php 
@@ -235,35 +241,37 @@ function VerifyPassword()
                 ?></td>
                 </tr>
                 <tr>
-                  <td>
-                    <a href="member.php" ><img border="0" title="<!$TABLE_ADD$!>" src="../img/edit-add-2.png" /></a>&nbsp;
-                    <button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" 
-                  <?php if ($g_oError->HadError || !$oRecord->CanModify) echo ' disabled="disabled" '; ?>><!$BTN_SAVE$!></button>&nbsp;<?php 
-                  if ($oRecord->ID > 0 && $oRecord->CanModify && $oRecord->HasPermission(SQLBase::PERMISSION_DELETE)) 
-                  {
-                      echo '<button type="button" onclick="JavaScript:Delete();" id="btnDelete" name="btnDelete" ';
-                      if ($g_oError->HadError) 
-                        echo ' disabled="disabled" '; 
-                      echo '><!$BTN_DELETE$!></button>&nbsp;';
-                  } 
-                  if ($oRecord->IsRegularMember && $oRecord->CanModify && !$g_oError->HadError)
-                  {
-                    echo '<button type="button" onclick="JavaScript:Deactivate();" id="btnDeactivate" name="btnDeactivate">',
-                          '<!$BTN_REMOVE_PERMISSIONS$!></button>&nbsp;';
-                            
-                  }
-                  else if ($oRecord->HasNoPermissions && $oRecord->CanModify && !$g_oError->HadError)
-                  {
-                    echo '<button type="button" onclick="JavaScript:Activate();" id="btnActivate" name="btnActivate">',
-                          '<!$BTN_RESTORE_PERMISSIONS$!></button>&nbsp;';
-                            
-                  }
-                  if (!$g_oError->HadError && $oRecord->ID > 0 && $bHasAccessToRoles)
-                  {
-                    echo '<a href="memberroles.php?id=', $oRecord->ID, '"><!$LINK_MEMBER_ROLES$!></a>';
-                  } 
+                <td><?php 
+                  include_once '../control/membertab.php';
                 ?></td>
                 </tr>
+                <?php if ($oRecord->CanModify) { ?>
+                  <tr>
+                    <td>
+                      <a href="member.php" ><img border="0" title="<!$TABLE_ADD$!>" src="../img/edit-add-2.png" /></a>&nbsp;
+                      <button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" 
+                    <?php if ($g_oError->HadError || !$oRecord->CanModify) echo ' disabled="disabled" '; ?>><!$BTN_SAVE$!></button>&nbsp;<?php 
+                    if ($oRecord->ID > 0 && $oRecord->HasPermission(SQLBase::PERMISSION_DELETE)) 
+                    {
+                        echo '<button type="button" onclick="JavaScript:Delete();" id="btnDelete" name="btnDelete" ';
+                        if ($g_oError->HadError) 
+                          echo ' disabled="disabled" '; 
+                        echo '><!$BTN_DELETE$!></button>&nbsp;';
+                    } 
+                    if (!$g_oError->HadError)
+                    {
+                      echo '<button type="button" onclick="JavaScript:Deactivate();" id="btnDeactivate" name="btnDeactivate">',
+                            '<!$BTN_REMOVE_PERMISSIONS$!></button>&nbsp;';
+
+                    }
+                    else if ($oRecord->HasNoPermissions && !$g_oError->HadError)
+                    {
+                      echo '<button type="button" onclick="JavaScript:Activate();" id="btnActivate" name="btnActivate">',
+                            '<!$BTN_RESTORE_PERMISSIONS$!></button>';
+                    }
+                  ?></td>
+                  </tr>
+                <?php } ?>
                 <tr><td>
                 <table cellspacing="0" cellpadding="2" width="100%">
                 <tr>

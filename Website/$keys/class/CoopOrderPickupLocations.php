@@ -55,26 +55,13 @@ class CoopOrderPickupLocations extends CoopOrderSubBase {
     return $this->fetch();
  }
  
- //called from both order screen and home page active orders control
  public function LoadList($nCoopOrderID, $MemberID)
  {
     global $g_oMemberSession;
    
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
     
-    $bOwnOrder = FALSE;
-   
-    if ($g_oMemberSession->MemberID == $MemberID)
-    {
-      if (!$this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
-           Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
-      {
-        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
-        return NULL;
-      }
-      $bOwnOrder = TRUE;
-    }
-    else if (!$this->AddPermissionBridge(self::PERMISSION_COOP_ORDER_PICKUP_LOCATION_EDIT, Consts::PERMISSION_AREA_COOP_ORDER_PICKUP_LOCATIONS, 
+    if (!$this->AddPermissionBridge(self::PERMISSION_COOP_ORDER_PICKUP_LOCATION_EDIT, Consts::PERMISSION_AREA_COOP_ORDER_PICKUP_LOCATIONS, 
             Consts::PERMISSION_TYPE_MODIFY, Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
     {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
@@ -87,7 +74,7 @@ class CoopOrderPickupLocations extends CoopOrderSubBase {
           " FROM T_CoopOrderPickupLocation COPL INNER JOIN T_PickupLocation PL ON COPL.PickupLocationKeyID = PL.PickupLocationKeyID " . 
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PICKUP_LOCATIONS) .
           " WHERE COPL.CoopOrderKeyID = " . $nCoopOrderID;
-    if (!$bOwnOrder && $this->GetPermissionScope(self::PERMISSION_COOP_ORDER_PICKUP_LOCATION_EDIT) != Consts::PERMISSION_SCOPE_COOP_CODE)
+    if ($this->GetPermissionScope(self::PERMISSION_COOP_ORDER_PICKUP_LOCATION_EDIT) != Consts::PERMISSION_SCOPE_COOP_CODE)
     {
       $sSQL .= " AND PL.CoordinatingGroupID IN (0, " . implode(",", $g_oMemberSession->Groups) . ") "; 
     }
@@ -98,6 +85,39 @@ class CoopOrderPickupLocations extends CoopOrderSubBase {
 
     return $this->fetch();
  }
+ 
+  public function LoadFacet($nCoopOrderID, $MemberID)
+  {
+    global $g_oMemberSession, $g_aMemberPickupLocationIDs;
+   
+    $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
+       
+    if ($g_oMemberSession->MemberID == $MemberID)
+    {
+      if (!$this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
+           Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
+      {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
+        return NULL;
+      }
+    }
+    
+    if (count($g_aMemberPickupLocationIDs) == 0)
+      return NULL;
+    
+    $sSQL =   " SELECT COPL.PickupLocationKeyID, COPL.fMaxBurden, COPL.fBurden, COPL.mMaxCoopTotal, COPL.fMaxStorageBurden, COPL.fStorageBurden, " . 
+            " PL.sExportFileName, COPL.mCoopTotal, PL.CoordinatingGroupID," .
+                 $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PICKUP_LOCATIONS, 'sPickupLocation') .
+          " FROM T_CoopOrderPickupLocation COPL INNER JOIN T_PickupLocation PL ON COPL.PickupLocationKeyID = PL.PickupLocationKeyID " . 
+          $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PICKUP_LOCATIONS) .
+          " WHERE COPL.CoopOrderKeyID = " . $nCoopOrderID;  
+    $sSQL .= " AND COPL.PickupLocationKeyID IN (" . implode(",", $g_aMemberPickupLocationIDs) . ") " .
+             " ORDER BY PL_S.sString; ";
+
+    $this->RunSQL( $sSQL );
+
+    return $this->fetch();
+  }
  
 }
 

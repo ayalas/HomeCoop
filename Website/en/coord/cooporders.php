@@ -45,7 +45,7 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td width="908"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Cooperative Orders</span></td>
+        <td width="948"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Cooperative Orders</span></td>
     </tr>
     <tr>
         <td>

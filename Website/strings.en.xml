@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <strings>
-  
-  
 <str>
     <key>COOPERATIVE_NAME</key>
     <value>Enter Your Cooperative Name</value>
@@ -2282,5 +2280,25 @@
 <str>
     <key>TITLE_COOP_ORDER</key>
     <value>Cooperative Order</value>
+</str>
+<str>
+    <key>TAB_PICKUP_LOCATIONS</key>
+    <value>Pickup Locations</value>
+</str>
+<str>
+    <key>PAGE_TITLE_MEMBER_PICKUP_LOCATIONS</key>
+    <value>%s - Pickup Locations</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_BLOCKED</key>
+    <value>Blocked</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_REMOVED</key>
+    <value>Removed</value>
+</str>
+<str>
+    <key>BTN_FACET_APPLY_FILTER</key>
+    <value>Apply filter</value>
 </str>
 </strings>

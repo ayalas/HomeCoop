@@ -4,6 +4,7 @@ include_once '../settings.php';
 include_once '../authenticate.php';
 
 $oTable = new MemberRoles;
+$oMemberTabInfo = NULL;
 $recTable = NULL;
 $arrTableToAdd = NULL;
 $nRoleID = 0;
@@ -56,8 +57,12 @@ try
       RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
       exit;
   }
+  
+  $oMemberTabInfo = new MemberTabInfo($oTable->ID, MemberTabInfo::PAGE_ROLES);
 
   $sPageTitle = sprintf('תפקידים של %s', htmlspecialchars($oTable->Name));
+  
+  $oMemberTabInfo->MainTabName = $oTable->Name;
 
   if ($oTable->HasPermission(SQLBase::PERMISSION_COORD))
   {
@@ -115,23 +120,19 @@ function DisableAll()
 <input type="hidden" id="hidPostAction" name="hidPostAction" value="" />
 <input type="hidden" id="hidRole" name="hidRole" value="" />
 <?php include_once '../control/header.php'; ?>
-<table cellspacing="0" cellpadding="0" width="908" >
+<table cellspacing="0" cellpadding="0">
     <tr>
-      <td><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle; ?></span></td>
-    </tr>
-    <tr>
-        <td>
+        <td width="948">
                 <table cellspacing="0" cellpadding="2" width="100%">
                 <tr>
-                  <td colspan="7"><?php 
+                  <td colspan="2"><?php 
                 include_once '../control/error/ctlError.php';
                   ?></td>
                 </tr>
                 <tr>
-                  <?php
-                   echo '<td colspan="2"><a href="member.php?id=', $oTable->ID, '" >', 
-                        sprintf('חזרה ל-%s', htmlspecialchars($oTable->Name)), '</a></td>';
-                  ?>
+                <td colspan="2"><?php 
+                  include_once '../control/membertab.php';
+                ?></td>
                 </tr>
                 <tr>
                   <td class="columntitlelong">תפקיד</td>

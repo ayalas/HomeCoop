@@ -12,7 +12,7 @@ if (!$oTabInfo->CheckAccess())
 if (!$oPLTabInfo->CheckAccess())
   return;
 
-function WritePLTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
+function WritePLTabElement($sText, $sLink, $bIsOnPage)
 {    
   global $oPLTabInfo;
   echo '<li';
@@ -35,22 +35,22 @@ function WritePLTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
   
   echo '>';
   
-  WritePLTabElement($oPLTabInfo->MainTabName,'<!$TAB_SEPARATOR$!>', $g_sRootRelativePath . 'coord/copickuploc.php?coid=' . 
+  WritePLTabElement($oPLTabInfo->MainTabName, $g_sRootRelativePath . 'coord/copickuploc.php?coid=' . 
         $oPLTabInfo->CoopOrderID . '&plid=' .  $oPLTabInfo->PickupLocationID , 
         $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_PICKUP_LOCATION );
 
   if ($oPLTabInfo->CheckProducersPermission())
-    WritePLTabElement('<!$TAB_COOP_ORDER_PICKUP_LOCATION_PRODUCERS$!>','<!$TAB_SEPARATOR$!>', 
+    WritePLTabElement('<!$TAB_COOP_ORDER_PICKUP_LOCATION_PRODUCERS$!>',
           $g_sRootRelativePath . 'coord/copickuplocproducers.php?coid=' . $oPLTabInfo->CoopOrderID . '&plid=' .  
           $oPLTabInfo->PickupLocationID , $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_PRODUCERS);
 
   if ($oPLTabInfo->CheckProductsPermission())
-    WritePLTabElement('<!$TAB_COOP_ORDER_PICKUP_LOCATION_PRODUCTS$!>','<!$TAB_SEPARATOR$!>', 
+    WritePLTabElement('<!$TAB_COOP_ORDER_PICKUP_LOCATION_PRODUCTS$!>',
           $g_sRootRelativePath . 'coord/copickuplocproducts.php?coid=' . $oPLTabInfo->CoopOrderID . '&plid=' .  
           $oPLTabInfo->PickupLocationID , $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_PRODUCTS);
 
   if ($oPLTabInfo->CheckOrdersPermission())
-    WritePLTabElement('<!$TAB_COOP_ORDER_PICKUP_LOCATION_ORDERS$!>','', 
+    WritePLTabElement('<!$TAB_COOP_ORDER_PICKUP_LOCATION_ORDERS$!>',
           $g_sRootRelativePath . 'coord/copickuplocorders.php?coid=' . $oPLTabInfo->CoopOrderID . '&plid=' .  
           $oPLTabInfo->PickupLocationID , $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_ORDERS);
   

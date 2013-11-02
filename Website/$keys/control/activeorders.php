@@ -42,11 +42,19 @@ try
   //this must be set here in order to pass parameter by reference and create it once before the while loop
   $arrCoordPermissions = array(ActiveOrders::PERMISSION_EDIT,  ActiveOrders::PERMISSION_VIEW);
   
-  echo '<table class="centerregion" cellpadding="10" cellspacing="0" >';
+  echo '<table class="centerregion" cellspacing="0" >';
   
   //go through the active cooperative orders to output a "box" (html table with border) for each one
   while ( $recTable )
   {
+      $oPickUpLocs = new CoopOrderPickupLocations;
+      $recPickupLoc = $oPickUpLocs->LoadFacet($recTable["CoopOrderKeyID"], $g_oMemberSession->MemberID);
+      if (!$recPickupLoc) //if this order is filtered out/pickup locations blocked
+      {
+        $recTable = $oTable->fetch();
+        continue;
+      }
+    
       if (!$g_oMemberSession->IsOnlyMember)
       {
         $oPermissions = $oTable->GetCoordPermissions($recTable["CoordinatingGroupID"]);
@@ -106,7 +114,7 @@ try
         }
       }
       
-      echo '<tr><td><table cellpadding="5" ', $sOrderBoxCssClass,
+      echo '<tr><td><table cellpadding="0" ', $sOrderBoxCssClass,
               ' cellspacing="0" width="100%" ><tr><td><table cellpadding="0" cellspacing="0" width="100%">',
            
          '<tr>', //start
@@ -151,8 +159,7 @@ try
       //loop through pickup locations
       $nCountPickups = 0;
       
-      $oPickUpLocs = new CoopOrderPickupLocations;
-      $recPickupLoc = $oPickUpLocs->LoadList($recTable["CoopOrderKeyID"], $g_oMemberSession->MemberID);
+      
       while($recPickupLoc)
       {
         $nCountPickups++;
@@ -172,7 +179,7 @@ try
                               $recPickupLoc["fMaxStorageBurden"], $recPickupLoc["fStorageBurden"]);
          
          //% full
-        if ($oCoopOrderPickupCapacity->SelectedType != CoopOrderCapacity::TypeNone)
+        if (HOME_PAGE_SHOW_PICKUP_LOCATION_CAPACITIES && $oCoopOrderPickupCapacity->SelectedType != CoopOrderCapacity::TypeNone)
           LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderPickupCapacity->PercentRounded . '%)');
          
          echo '</span></td></tr>';
@@ -212,7 +219,7 @@ try
                               $recProducer["mMaxProducerOrder"], $recProducer["mProducerTotal"] );
         
         //% full
-        if ($oCoopOrderProducerCapacity->SelectedType != CoopOrderCapacity::TypeNone)
+        if (HOME_PAGE_SHOW_PRODUCER_CAPACITIES && $oCoopOrderProducerCapacity->SelectedType != CoopOrderCapacity::TypeNone)
           LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderProducerCapacity->PercentRounded . '%)');
                 
         $recProducer = $oProducers->fetch();

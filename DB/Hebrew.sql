@@ -374,3 +374,8 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'UNIT_GALLON_ABBRV');
 
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'גל''' );
+
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_MEMBER_PICKUP_LOCATIONS');
+
+INSERT INTO Tlng_String (KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'מקומות איסוף של חבר/ה' );

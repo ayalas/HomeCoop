@@ -689,4 +689,23 @@ CREATE  TABLE `T_CoopOrderProductStorage` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+CREATE  TABLE `HomeCoop`.`T_MemberPickupLocation` (
+  `MemberID` BIGINT UNSIGNED NOT NULL ,
+  `PickupLocationKeyID` BIGINT UNSIGNED NOT NULL ,
+  `bBlocked` TINYINT(1) NULL DEFAULT 0 ,
+  `bRemoved` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`MemberID`, `PickupLocationKeyID`) ,
+  INDEX `fkMPL_PLID` (`PickupLocationKeyID` ASC) ,
+  CONSTRAINT `fkMPL_MemberID`
+    FOREIGN KEY (`MemberID` )
+    REFERENCES `HomeCoop`.`T_Member` (`MemberID` )
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fkMPL_PLID`
+    FOREIGN KEY (`PickupLocationKeyID` )
+    REFERENCES `HomeCoop`.`T_PickupLocation` (`PickupLocationKeyID` )
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT);
+
+
 -- Dump completed on 2012-09-14 17:57:29

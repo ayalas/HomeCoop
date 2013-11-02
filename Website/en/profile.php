@@ -131,7 +131,7 @@ function VerifyPassword()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="908"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">My Profile</span></td>
+        <td width="948"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">My Profile</span></td>
     </tr>
     <tr>
         <td>

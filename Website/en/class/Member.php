@@ -99,6 +99,8 @@ class Member extends SQLBase  {
   public function CheckAccess()
   {
       global $g_oMemberSession;
+      
+     $bView = FALSE;
     
      //has coordinator access to member's page?
      if ($this->HasPermission(self::PERMISSION_COORD) || $this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_MODIFY, 
@@ -110,14 +112,25 @@ class Member extends SQLBase  {
        $this->AddPermissionBridge(self::PERMISSION_DELETE, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_DELETE, 
             Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
      
+     //save view permission
+     $bView = $this->HasPermission(self::PERMISSION_VIEW) || $this->AddPermissionBridge(self::PERMISSION_VIEW, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_VIEW, 
+           Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
+     
      //members can access their own page
      if ($g_oMemberSession->MemberID == $this->m_aData[self::PROPERTY_ID])
        return TRUE;
      
      //must be coordinator to access other members pages
-     return $this->m_aData[self::PROPERTY_IS_COORDINATOR];
+     return $this->m_aData[self::PROPERTY_IS_COORDINATOR] || $bView;
   }
   
+  //revoke modify permission if not a coordinator. 
+  //called from member page
+  public function RevokeModifyPermission()
+  {
+    if (!$this->m_aData[self::PROPERTY_IS_COORDINATOR])
+      $this->m_aData[self::PROPERTY_CAN_MODIFY] = FALSE;
+  }
   
   public function LoadRecord($nID)
   {   
@@ -162,12 +175,12 @@ class Member extends SQLBase  {
     }
     
     //if editing system admin record while not being a system admin
-    if ($this->CheckMemberPermissions() && !$g_oMemberSession->IsSysAdmin)
+    if ($this->m_aData[self::PROPERTY_CAN_MODIFY] && $this->CheckMemberPermissions() && !$g_oMemberSession->IsSysAdmin)
     {
       $this->m_aData[self::PROPERTY_CAN_MODIFY] = FALSE;
       $g_oError->AddError('Cannot modify a system admin record when you are not one');
     }
-    
+       
     $this->m_aData[self::PROPERTY_COORDINATING_GROUP_ID] = $rec["CoordinatingGroupID"];
     $this->m_aData[self::PROPERTY_MEMBER_NAME] = $rec["sName"];
     $this->m_aData[self::PROPERTY_LOGIN_NAME] = $rec["sLoginName"];    

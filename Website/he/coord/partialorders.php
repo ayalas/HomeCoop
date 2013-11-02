@@ -79,7 +79,7 @@ UserSessionBase::Close();
 <input type="hidden" id="hidPostValue" name="hidPostValue" value="<?php echo $oData->CoopOrderID; ?>" />
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="908"><span class="coopname"><?php echo htmlspecialchars($oData->ProductName);?>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td width="948"><span class="coopname"><?php echo htmlspecialchars($oData->ProductName);?>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>   
     <tr>
         <td >

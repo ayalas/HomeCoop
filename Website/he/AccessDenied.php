@@ -21,7 +21,7 @@ UserSessionBase::Close();
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="908"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">הגישה נחסמה</span></td>
+        <td width="948"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">הגישה נחסמה</span></td>
     </tr>
 </table>
 </form>

@@ -5,6 +5,8 @@ a:hover {background:#ffffff; text-decoration:none; } /*BG color is a must for IE
   border-width: 3px;
   border-style: solid;
   border-radius: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   box-sizing: border-box; 
 }
 
@@ -40,7 +42,7 @@ body.centered
   right: 0px;
   bottom: 0px; 
   left: 0px;
-  width: 908px;
+  width: 948px;
   margin: auto;
 }
 body.product
@@ -646,6 +648,7 @@ span.coordmenulabel
     line-height: 24px;
     position: relative;
     margin: 0;
+    white-space: nowrap;
 }
 .subtabrow
 {

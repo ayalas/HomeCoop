@@ -12,7 +12,7 @@ if (!$oTabInfo->CheckAccess())
 $bHasOrder = FALSE;
 $bHasPickupLocation = FALSE;
 
-function WriteTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
+function WriteTabElement($sText, $sLink, $bIsOnPage)
 {
   global $oTabInfo;
   if ($sText == '')
@@ -108,33 +108,33 @@ function WriteTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
     echo ' style="display: none;" ';
   echo '>';
 
- WriteTabElement('Header','&gt;&gt;', $g_sRootRelativePath . 'coord/cooporder.php?id=' . $oTabInfo->ID, 
+ WriteTabElement('Header', $g_sRootRelativePath . 'coord/cooporder.php?id=' . $oTabInfo->ID, 
         $oTabInfo->Page == CoopOrderTabInfo::PAGE_ENTRY );
 
 if ($oTabInfo->ID > 0)
 {
-  WriteTabElement('Pickup Locations','&gt;&gt;', 
+  WriteTabElement('Pickup Locations',
           $g_sRootRelativePath . 'coord/copickuplocs.php?id=' . $oTabInfo->ID , $oTabInfo->Page == CoopOrderTabInfo::PAGE_PICKUP);
   
   if ($oTabInfo->CheckCoopOrderProducersPermission())
-    WriteTabElement('Producers','&gt;&gt;', 
+    WriteTabElement('Producers',
           $g_sRootRelativePath . 'coord/coproducers.php?id=' . $oTabInfo->ID, $oTabInfo->Page == CoopOrderTabInfo::PAGE_PRODUCERS);
   
   if ($oTabInfo->CheckCoopOrderProductsPermission())
-    WriteTabElement('Products','&gt;&gt;', 
+    WriteTabElement('Products', 
           $g_sRootRelativePath . 'coord/coproducts.php?id=' . $oTabInfo->ID, $oTabInfo->Page == CoopOrderTabInfo::PAGE_PRODUCTS);
   
   if ($oTabInfo->CheckCoopOrderOrdersPermission())
-    WriteTabElement('Member Orders','&gt;&gt;', 
+    WriteTabElement('Member Orders', 
           $g_sRootRelativePath . 'coord/orders.php?coid=' . $oTabInfo->ID, $oTabInfo->Page == CoopOrderTabInfo::PAGE_ORDERS);
   
-  WriteTabElement('Export Data','', 
+  WriteTabElement('Export Data',
           $g_sRootRelativePath . 'coord/cooporderexport.php?coid=' . $oTabInfo->ID, $oTabInfo->Page == CoopOrderTabInfo::PAGE_EXPORT_DATA);
   
   if ($oTabInfo->HasPermission(CoopOrderTabInfo::PROPERTY_PERMISSION_COOP_ORDER_COORD))
   {
     if ($oTabInfo->CheckCoopOrderCopyPermission())
-      WriteTabElement('Copy','', $g_sRootRelativePath . 'coord/coopordercopy.php?id=' . $oTabInfo->ID , FALSE);
+      WriteTabElement('Copy', $g_sRootRelativePath . 'coord/coopordercopy.php?id=' . $oTabInfo->ID , FALSE);
   } 
     
   if ($oTabInfo->CheckCoopOrderSetCoordPermission())
@@ -145,7 +145,7 @@ if ($oTabInfo->ID > 0)
     if ($oTabInfo->CoordinatingGroupID > 0)
         $sUrl .= '&id=' . $oTabInfo->CoordinatingGroupID;
 
-    WriteTabElement('Coordination','', $sUrl , FALSE);
+    WriteTabElement('Coordination', $sUrl , FALSE);
   }
 }
 

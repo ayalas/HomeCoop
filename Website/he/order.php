@@ -2,6 +2,7 @@
 
 include_once 'settings.php';
 include_once 'authenticate.php';
+include_once 'facet.php';
 
 $oRecord = new Order;
 $oPickupLocs = NULL;
@@ -126,7 +127,16 @@ try
   if ( $oRecord->CanModify )
   {
     $oPickupLocs = new CoopOrderPickupLocations;
-    $recPickupLocs = $oPickupLocs->LoadList($oRecord->CoopOrderID, $oRecord->MemberID);
+    if ($bHasCoordPermission)
+      $recPickupLocs = $oPickupLocs->LoadList($oRecord->CoopOrderID, $oRecord->MemberID);
+    else
+    {
+      //fix facet to include current pickup location
+      if ($oRecord->ID > 0 && $oRecord->PickupLocationID > 0 && !isset($g_aMemberPickupLocationIDs[$oRecord->PickupLocationID]))
+        $g_aMemberPickupLocationIDs[$oRecord->PickupLocationID] = $oRecord->PickupLocationID;
+      
+      $recPickupLocs = $oPickupLocs->LoadFacet($oRecord->CoopOrderID, $g_oMemberSession->MemberID);
+    }
     
     if ( $bHasCoordPermission )
     {
@@ -229,7 +239,7 @@ function Save()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="908"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td width="948"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >

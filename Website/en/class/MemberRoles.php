@@ -50,16 +50,19 @@ class MemberRoles extends SQLBase {
       return NULL;
     }
     //get member name
-    $sSQL = "SELECT sName FROM T_Member WHERE MemberID = " . $this->m_aData[self::PROPERTY_ID];
-    $this->RunSQL( $sSQL );
-
-    $recMember = $this->fetch();
-    if (!$recMember)
+    if ($this->m_aData[self::PROPERTY_MEMBER_NAME] == NULL)
     {
-      $this->m_nLastOperationStatus = parent::OPERATION_STATUS_LOAD_RECORD_FAILED;
-      return NULL;
+      $sSQL = "SELECT sName FROM T_Member WHERE MemberID = " . $this->m_aData[self::PROPERTY_ID];
+      $this->RunSQL( $sSQL );
+
+      $recMember = $this->fetch();
+      if (!$recMember)
+      {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_LOAD_RECORD_FAILED;
+        return NULL;
+      }
+      $this->m_aData[self::PROPERTY_MEMBER_NAME] = $recMember["sName"];
     }
-    $this->m_aData[self::PROPERTY_MEMBER_NAME] = $recMember["sName"];
     
     $sSQL = " SELECT MR.RoleKeyID, " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_ROLES, 'sRole') .
             " FROM T_MemberRole MR " .

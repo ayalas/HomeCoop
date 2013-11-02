@@ -53,6 +53,10 @@ define ('DEFAULT_PERCENT_OVER_BALANCE_FOR_NEW_MEMBERS', 10);
 
 define ('ENFORCE_UNIQUE_MAIN_EMAIL', TRUE);
 
+define ('HOME_PAGE_SHOW_PRODUCER_CAPACITIES', FALSE);
+
+define ('HOME_PAGE_SHOW_PICKUP_LOCATION_CAPACITIES', FALSE);
+
 //allowed file types for product upload
 define ('PRODUCT_IMAGE_MIME_TYPES', 'image/gif;image/jpeg;image/png');
 

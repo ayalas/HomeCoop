@@ -12,7 +12,7 @@ if (!$oTabInfo->CheckAccess())
 if (!$oPLTabInfo->CheckAccess())
   return;
 
-function WritePLTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
+function WritePLTabElement($sText, $sLink, $bIsOnPage)
 {    
   global $oPLTabInfo;
   echo '<li';
@@ -35,22 +35,22 @@ function WritePLTabElement($sText, $sTabSeparator, $sLink, $bIsOnPage)
   
   echo '>';
   
-  WritePLTabElement($oPLTabInfo->MainTabName,'&gt;&gt;', $g_sRootRelativePath . 'coord/copickuploc.php?coid=' . 
+  WritePLTabElement($oPLTabInfo->MainTabName, $g_sRootRelativePath . 'coord/copickuploc.php?coid=' . 
         $oPLTabInfo->CoopOrderID . '&plid=' .  $oPLTabInfo->PickupLocationID , 
         $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_PICKUP_LOCATION );
 
   if ($oPLTabInfo->CheckProducersPermission())
-    WritePLTabElement('יצרנים','&gt;&gt;', 
+    WritePLTabElement('יצרנים',
           $g_sRootRelativePath . 'coord/copickuplocproducers.php?coid=' . $oPLTabInfo->CoopOrderID . '&plid=' .  
           $oPLTabInfo->PickupLocationID , $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_PRODUCERS);
 
   if ($oPLTabInfo->CheckProductsPermission())
-    WritePLTabElement('מוצרים','&gt;&gt;', 
+    WritePLTabElement('מוצרים',
           $g_sRootRelativePath . 'coord/copickuplocproducts.php?coid=' . $oPLTabInfo->CoopOrderID . '&plid=' .  
           $oPLTabInfo->PickupLocationID , $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_PRODUCTS);
 
   if ($oPLTabInfo->CheckOrdersPermission())
-    WritePLTabElement('הזמנות חברות/ים','', 
+    WritePLTabElement('הזמנות חברות/ים',
           $g_sRootRelativePath . 'coord/copickuplocorders.php?coid=' . $oPLTabInfo->CoopOrderID . '&plid=' .  
           $oPLTabInfo->PickupLocationID , $oPLTabInfo->Page == CoopOrderPickupLocationTabInfo::PAGE_ORDERS);
   

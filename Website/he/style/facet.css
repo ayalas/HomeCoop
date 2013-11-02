@@ -1,0 +1,115 @@
+button.facetapply
+{
+  padding: 3px 12px;
+  font-weight: bold;
+  color: #000;
+  background-color: #FFF;
+  border-color: #000;
+}
+
+button.facetapply:hover
+{
+  background-color: #FFF;
+}
+
+button.facetapply:disabled
+{
+  color:#9E9E9F;
+  border-color: #9E9E9F;
+  cursor: default;
+}
+
+#divFacetFilter
+{
+  padding-top: 10px;
+  text-align: center;
+}
+
+ul.facetgrp
+{
+ margin: 0;
+ -webkit-margin-before: 0;
+ -webkit-margin-after: 0;
+ -webkit-margin-start: 0;
+ -webkit-margin-end: 0;
+ -webkit-padding-start: 0;
+ 
+ overflow-y: auto;
+ max-height: 430px;
+}
+
+li.facetitm 
+{
+ padding: 10px 12px;
+ text-align: center;
+ background-color: #1D6218;
+ color: #FFF;
+ font-weight: bold;
+ border-top-style: none;
+ border-bottom-style: groove;
+ border-left-style: none;
+ border-right-style: none;
+ border-width: 4px;
+ border-color: #50924E;
+}
+
+li.lastfacet 
+{
+ border-bottom-style: none;
+}
+
+li.unselectedfacet
+{
+ display: none;
+ border-color: #989899;
+ background-color: #7E7F7F;
+ color: #DADBDC;
+}
+
+li.facetitm:hover
+{
+  cursor: pointer;
+  border-color: #989899;
+  background-color: #7E7F7F;
+  color: #DADBDC;
+}
+
+li.unselectedfacet:hover
+{
+ display: none;
+ border-color: #4A608E;
+ background-color: #193264;
+ color: #FFF;
+}
+
+.facettitle
+{
+  padding: 0x;
+  font-weight: bold;
+}
+
+.facetexpander
+{
+  text-align: center;
+  vertical-align: top;
+  border: 1px solid #4A4B4A;
+  height: 10px;
+  background-color: #7E7F7F;
+}
+
+.facetexpander img
+{
+  vertical-align: top;
+  height: 8px;
+}
+
+.facetexpander
+{
+ cursor: pointer;
+}
+
+td#tdFacet
+{
+   width: 180px;
+   
+}

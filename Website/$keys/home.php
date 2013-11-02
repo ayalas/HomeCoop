@@ -2,6 +2,7 @@
 
 include_once 'settings.php';
 include_once 'authenticate.php';
+include_once 'facet.php';
 
 ?>
 <!DOCTYPE HTML>
@@ -9,13 +10,17 @@ include_once 'authenticate.php';
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="style/main.css" />
+<link rel="stylesheet" type="text/css" href="style/facet.css" />
 <title><!$COOPERATIVE_NAME$!>: <!$HOME_PAGE_TITLE$!></title>
 <script type="text/javascript" src="script/public.js" ></script>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" src="script/activeorders.js" ></script>
+<script type="text/javascript" src="script/facet.js" ></script>
 </head>
 <body class="centered">
 <form id="frmHome" name="frmHome" method="post">
+<input type="hidden" id="hidplfacetgrpexpandstate" name="hidplfacetgrpexpandstate" value="0" />
+<input type="hidden" id="hidSelectedPLs" name="hidSelectedPLs" value="" />
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" width="100%">
     <tr>
@@ -34,6 +39,9 @@ include_once 'authenticate.php';
                   }
                 ?>
             <tr>
+              <td id="tdFacet">
+                <?php  include_once 'control/facetpanel.php'; ?>
+              </td>
               <td><?php 
               include_once 'control/activeorders.php';
 
@@ -44,7 +52,7 @@ include_once 'authenticate.php';
             </td>
             </tr>
             <tr>
-              <td><?php 
+              <td colspan="2"><?php 
               include_once 'control/error/ctlError.php';
             ?></td>
             </tr>

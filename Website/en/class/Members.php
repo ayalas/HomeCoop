@@ -23,14 +23,27 @@ class Members extends SQLBase {
   {
     $this->m_aData = array( self::PROPERTY_SEARCH_PHRASE => NULL, self::PROPERTY_MEMBER_IDS_FOR_MAIL_EXPORT => NULL);
   }
+  
+ public function CheckAccess()
+ {
+    if ($this->HasPermissions(array(self::PERMISSION_COORD, self::PERMISSION_VIEW)))
+      return TRUE;
+   
+    $bEdit = $this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_MODIFY, 
+         Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
+      
+    $bView = $this->AddPermissionBridge(self::PERMISSION_VIEW, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_VIEW, 
+       Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
+
+    return ($bEdit || $bView);   
+ }
 
  public function GetTable()
   {
       global $g_oMemberSession;
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
             
-      if (!$this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_MODIFY, 
-         Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
+      if (!$this->CheckAccess())
       {
         $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
         return NULL;
@@ -87,7 +100,6 @@ class Members extends SQLBase {
     }
     
 
-
     $sSQL = "SELECT M.MemberID, M.sName FROM T_Member M " . 
             " LEFT JOIN T_Order O ON O.CoopOrderKeyID = " . $CoopOrderID .
             " AND O.MemberID = M.MemberID ";
@@ -105,8 +117,7 @@ class Members extends SQLBase {
  //used in orders screen, to display past orders of a selected member (so should include also disabled ones)
  public function GetMembersListForOrders()
  {    
-    if (!$this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_COOP_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
-         Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
+    if (!$this->CheckAccess())
       return NULL;
 
     $sSQL = "SELECT M.MemberID, M.sName FROM T_Member M ORDER BY M.sName asc;";
@@ -123,8 +134,7 @@ class Members extends SQLBase {
     global $g_oMemberSession;
     global $g_dNow;
     
-    if (!$this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_MODIFY, 
-         Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
+    if (!$this->CheckAccess())
       return;
         
     //file name starts with delivery date
@@ -288,8 +298,7 @@ class Members extends SQLBase {
   
   public function GetMailingList()
   { 
-    if (!$this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_MEMBERS, Consts::PERMISSION_TYPE_MODIFY, 
-         Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
+    if (!$this->CheckAccess())
     {
       $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
       return NULL;

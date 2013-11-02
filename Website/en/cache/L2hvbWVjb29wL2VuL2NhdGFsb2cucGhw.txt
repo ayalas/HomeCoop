@@ -1,0 +1,69 @@
+  <!DOCTYPE HTML>
+  <html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="style/main.css" />
+  <title>Enter Your Cooperative Name: Products Catalog</title>
+  <script type="text/javascript" src="script/public.js" ></script>
+  <script type="text/javascript" src="script/authenticated.js" ></script>
+  <script type="text/javascript">
+
+  function OpenPicViewer(sPicName)
+  {
+   var nLeft = (screen.availWidth - 800)/2;
+   if (nLeft < 0) nLeft = 0;
+
+    var sParams = 'status=0,toolbar=0,menubar=0,top=100, left=' + nLeft + ', width=800,height=' + (screen.availHeight-200) ;
+    window.open('../uploadimg/' + sPicName, '_blank', sParams );
+  }
+
+  </script>
+  </head>
+  <body class="centered">
+  <form id="frmMain" name="frmMain" method="post">
+  <header>
+<input type="hidden" id="hidLogout" name="hidLogout" />
+<br/><br/>
+<table cellspacing="0" cellpadding="0" width="672">
+  <tr>
+    <td colspan="2"><a href="home.php" ><img border="0" src="logo.gif"/></a></td>
+    </tr>
+   <tr>
+    <td width="100%">
+          </td>
+    <td nowrap><span class="link" onclick="JavaScript: ChangeLanguage('he', 'catalog.php','../index.php');" >עברית</span>&nbsp;    </td>
+    </tr>
+</table>
+<br/><br/>
+</header>
+  <table cellspacing="0" cellpadding="0" >
+      <tr>
+          <td colspan="2" width="908"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Products Catalog</span></td>
+      </tr>
+      <tr>
+          <td ></td>
+          <td width="692" height="100%" >
+              <table cellspacing="0" cellpadding="4" width="100%">
+              <tr>
+                <td colspan="3"><div id="ctlError" name="ctlError" >
+    <ul></ul>
+</div></td>
+              </tr>
+              <tr>
+                <td colspan="3">Note: catalog prices may differ from specific orders&#x27; prices</td>
+              </tr>
+              <tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">dfgfdg</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>producer2</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>23.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 23.00. Coop Costs: 0 ]</span></td></tr></table></td><td width="33%"><div class="link" onclick="JavaScript:OpenPicViewer('prod142Pic1.jpg');"><img border="0" width="100%" src="../uploadimg/prod142Pic1.jpg" /></div></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">fghfgh</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>producer2</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>45.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 45.00. Coop Costs: 0 ]</span></td></tr></table></td><td width="33%"></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">Invest NOW</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>Investment</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>1.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 0.00. Coop Costs: 1 ]</span></td></tr></table></td><td width="33%"></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">product2</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>producer2</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>44.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 40.00. Coop Costs: 4 ]</span></td></tr></table></td><td width="33%"><div class="link" onclick="JavaScript:OpenPicViewer('prod126Pic1.jpg');"><img border="0" width="100%" src="../uploadimg/prod126Pic1.jpg" /></div></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">product3</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>producer2</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>5.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 5.00. Coop Costs: 0 ]</span></td></tr></table></td><td width="33%"></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">rtyty</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>producer2</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>45.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 45.00. Coop Costs: 0 ]</span></td></tr></table></td><td width="33%"></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">sdf</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>producer2</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>23.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 23.00. Coop Costs: 0 ]</span></td></tr></table></td><td width="33%"></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">sdf</span></td></tr><tr><td colspan="2"><span>1 kg</span></td></tr><tr><td colspan="2"><span>Comes in minimal package size of 2 kg</span></td></tr><tr><td><span>Unit Interval‏:‏&nbsp;</span></td><td><span>0.5&nbsp;kg</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>sdf</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>4.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 3.00. Coop Costs: 1 ]</span></td></tr></table></td><td width="33%"></td><td width="33%"></td></tr><tr><td><table cellspacing="0" cellpadding="0"><tr><td colspan="2"><span class="pagename">sdf</span></td></tr><tr><td><span>Producer‏:‏&nbsp;</span></td><td><span>producer2</span></td></tr><tr><td>&nbsp;</td></tr><tr><td><span>Coop. Price‏:‏&nbsp;</span></td><td><span>33.00</span></td></tr><tr><td colspan="2"><span>[ Producer Price: 33.00. Coop Costs: 0 ]</span></td></tr></table></td><td width="33%"></td><td width="33%"></td></tr>              </table>
+          </td>
+      </tr>
+      <tr>
+        <td colspan="2" >
+          <br/>
+<br/>
+<a href="about.php" ><img border="0" src="img/system.png" title="About the software" /></a><br/>
+<br/>
+        </td>
+      </tr>
+  </table>
+  </form>
+   </body>
+  </html>

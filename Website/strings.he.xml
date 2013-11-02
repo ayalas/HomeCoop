@@ -2185,4 +2185,24 @@
     <key>TOOLTIP_COOP_ORDER_COOP_FEE_PERCENT</key>
     <value>הגדרת עמלת קואופרטיב לפי אחוזים מהסכום הכולל עבור המוצרים המוזמנים</value>
 </str>
+<str>
+    <key>TAB_PICKUP_LOCATIONS</key>
+    <value>מקומות איסוף</value>
+</str>
+<str>
+    <key>PAGE_TITLE_MEMBER_PICKUP_LOCATIONS</key>
+    <value>%s - מקומות איסוף</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_BLOCKED</key>
+    <value>חסום</value>
+</str>
+<str>
+    <key>FIELD_PICKUP_LOCATION_REMOVED</key>
+    <value>מבוטל</value>
+</str>
+<str>
+    <key>BTN_FACET_APPLY_FILTER</key>
+    <value>החלת סינון</value>
+</str>
 </strings>
