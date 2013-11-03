@@ -31,7 +31,7 @@ function AddLanguageOption($sFolder, $sText)
 
         $g_sLangControl .= '<span class="usermenulink usermenulabel" onclick="JavaScript: ChangeLanguage(\'' . 
                                         $sFolder . '\', \'' . $g_sRedirectAfterLangChange . '\',\'../' . 
-                                        $g_sRootRelativePath . 'index.php\');" >' . $sText . '</span>';
+                                        $g_sRootRelativePath . 'index.php\');" >‎' . $sText . '‎</span>';
      }
 }
 

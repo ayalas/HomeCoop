@@ -538,7 +538,7 @@ span.coordmenulabel
 .usermenu
 {
   color: rgb(102, 102, 102);
-  font-size: 16px;
+  font-size: 18px;
   width: 100%;
 }
 
@@ -548,15 +548,11 @@ span.coordmenulabel
   background-color: #336633;
   white-space: nowrap;
   vertical-align: top;
-  background-attachment: scroll;
-  background-clip: border-box;
-  background-origin: padding-box;
-  background-size: auto;
 }
 
 .usermenulabel
 {
-  font-size: 16px;
+  font-size: 18px;
   padding-left: 10px;
   padding-right: 10px;
 }

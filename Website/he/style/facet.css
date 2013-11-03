@@ -33,13 +33,14 @@ ul.facetgrp
  -webkit-margin-start: 0;
  -webkit-margin-end: 0;
  -webkit-padding-start: 0;
- 
+ padding:0px; 
  overflow-y: auto;
  max-height: 430px;
 }
 
 li.facetitm 
 {
+ margin:0px;
  padding: 10px 12px;
  text-align: center;
  background-color: #1D6218;
@@ -110,6 +111,5 @@ li.unselectedfacet:hover
 
 td#tdFacet
 {
-   width: 180px;
-   
+   width: 180px;  
 }
