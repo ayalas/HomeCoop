@@ -110,10 +110,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title>Enter Your Cooperative Name: <?php echo $sPageTitle;  ?></title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 <script type="text/javascript" >
 function JoinProducts()
@@ -152,7 +150,7 @@ function Sort(nField)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="948"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -270,7 +268,7 @@ function Sort(nField)
                       if ($recTable["bHasItemComments"])
                       {
                         echo '&nbsp;<a href="../orderitems.php?id=' , $recTable["OrderID"] , 
-                                '" class="tooltiphelp" >More...<span style="width: 200px;">';
+                                '" class="tooltiphelp" >More...<span class="helpspan">';
                         $oOrderItems = new OrderItems;
                         $rec = $oOrderItems->GetComments($recTable["OrderID"]);
                         while($rec)

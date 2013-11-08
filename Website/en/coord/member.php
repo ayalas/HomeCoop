@@ -177,10 +177,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title>Enter Your Cooperative Name: <?php echo $sPageTitle;  ?></title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 <script type="text/javascript" >
 function Delete()
@@ -233,7 +231,7 @@ function VerifyPassword()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="948">
+        <td class="fullwidth">
                 <table cellspacing="0" cellpadding="0" width="100%">
                 <tr>
                 <td><?php 
@@ -372,7 +370,7 @@ function VerifyPassword()
                       $selPickupLoc->EchoHtml();
                       unset($selPickupLoc);
                     
-                      echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 150px;" >Cashier of balance change</span></a></td>';
+                      echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspansmall" >Cashier of balance change</span></a></td>';
                       echo '</tr>';
                     }
                   ?>                
@@ -397,7 +395,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 150px;">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
+                  <td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspansmall">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
                 </tr>
 
                 <tr>

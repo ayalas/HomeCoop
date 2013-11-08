@@ -80,7 +80,7 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
       </td>
     </tr>
     <tr>
-      <td class="logo"><a href="<?php echo $g_sRootRelativePath ?>home.php" ><img border="0" src="<?php echo $g_sRootRelativePath ?>logo.gif"/></a></td>
+      <td class="logo"><a href="<?php echo $g_sRootRelativePath ?>home.php" ><img class="logoimg" src="<?php echo $g_sRootRelativePath ?>logo.gif"/></a></td>
     </tr>
 </table>
 </header>

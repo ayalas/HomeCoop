@@ -292,10 +292,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title>Enter Your Cooperative Name: <?php echo $sPageName; ?></title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 <script type="text/javascript" >
 function OnAddRemoveCoordinator(bInclude, sIsContactCheckBox)
@@ -372,7 +370,7 @@ function SetMemberAsCoordinator(nMemberID)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td width="948"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">
+        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">
           <?php echo $sPageName; ?></span></td>
     </tr>
     <tr>

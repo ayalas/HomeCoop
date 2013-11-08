@@ -6,6 +6,10 @@
     <pages>coopbrief</pages>
 </str>
 <str>
+    <key>COOP_SUB_TITLE</key>
+    <value></value>
+</str>
+<str>
     <key>COOP_INFO_TITLE</key>
     <value>Our Cooperative is:</value>
     <pages>coopbrief</pages>

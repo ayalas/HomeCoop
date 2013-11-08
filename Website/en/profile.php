@@ -94,10 +94,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style/main.css" />
+<?php include_once 'control/headtags.php'; ?>
 <title>Enter Your Cooperative Name: My Profile</title>
-<script type="text/javascript" src="script/public.js" ></script>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" >
 function Save()
@@ -131,7 +129,7 @@ function VerifyPassword()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="948"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">My Profile</span></td>
+        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">My Profile</span></td>
     </tr>
     <tr>
         <td>
@@ -246,7 +244,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
+                  <td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -322,7 +320,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">The preferred file format for data exports.</span></a></td></tr>';
+                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">The preferred file format for data exports.</span></a></td></tr>';
                 }
                 ?>
                 </table>

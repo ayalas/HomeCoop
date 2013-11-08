@@ -8,17 +8,16 @@ include_once 'facet.php';
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style/main.css" />
+<?php include_once 'control/headtags.php'; ?>
 <link rel="stylesheet" type="text/css" href="style/facet.css" />
 <title><!$COOPERATIVE_NAME$!>: <!$HOME_PAGE_TITLE$!></title>
-<script type="text/javascript" src="script/public.js" ></script>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" src="script/activeorders.js" ></script>
 <script type="text/javascript" src="script/facet.js" ></script>
 </head>
 <body class="centered">
 <form id="frmHome" name="frmHome" method="post">
+<input type="hidden" id="hidfacetmblexpandstate" name="hidfacetmblexpandstate" value="0" />
 <input type="hidden" id="hidplfacetgrpexpandstate" name="hidplfacetgrpexpandstate" value="0" />
 <input type="hidden" id="hidSelectedPLs" name="hidSelectedPLs" value="" />
 <?php include_once 'control/header.php'; ?>
@@ -42,7 +41,7 @@ include_once 'facet.php';
               <td id="tdFacet">
                 <?php  include_once 'control/facetpanel.php'; ?>
               </td>
-              <td><?php 
+              <td id="tdMain"><?php 
               include_once 'control/activeorders.php';
 
               //close session opened in 'authenticate.php' when not required anymore

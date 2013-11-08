@@ -43,10 +43,8 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
   <!DOCTYPE HTML>
   <html>
   <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="stylesheet" type="text/css" href="style/main.css" />
+ <?php include_once 'control/headtags.php'; ?>
   <title>Enter Your Cooperative Name: Products Catalog</title>
-  <script type="text/javascript" src="script/public.js" ></script>
   <script type="text/javascript" src="script/authenticated.js" ></script>
   <script type="text/javascript">
 
@@ -66,7 +64,7 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
   <?php include_once 'control/header.php'; ?>
   <table cellspacing="0" cellpadding="0" >
       <tr>
-          <td width="948"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Products Catalog</span></td>
+          <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Products Catalog</span></td>
       </tr>
       <tr>
           <td height="100%" >

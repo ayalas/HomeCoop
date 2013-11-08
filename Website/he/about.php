@@ -6,11 +6,8 @@ include_once 'settings.php';
 <!DOCTYPE HTML>
 <html dir='rtl' >
  <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="style/main.css" /> 
-<title>אודות התוכנה</title>
-
-<script type="text/javascript" src="script/public.js" ></script>
+ <?php include_once 'control/headtags.php'; ?>
+ <title>אודות התוכנה</title>
  </head>
  <body class="centered">
    <form id="frmMain" name="frmMain" method="post" >
@@ -30,7 +27,7 @@ include_once 'settings.php';
     </table>
     <br/><br/>
     </header>
-     <table width="800" cellpadding="0" cellspacing="0">
+     <table class="fullwidth" cellpadding="0" cellspacing="0">
       <tr><td ><span class="cooptitle">אודות התוכנה</span></td></tr>
       <tr>
         <td><span>HomeCoop היא מערכת הזמנות אינטרנטית לקואופרטיבים צרכניים זעירים.</span></td>
@@ -51,7 +48,7 @@ include_once 'settings.php';
       </tr>
       <tr>
         <td>
-          <textarea readonly="true" dir="ltr" rows="20" cols="100">
+          <textarea readonly="true" dir="ltr" rows="20" class="fullwidth" >
             <?php
               include_once 'license.txt';
             ?>

@@ -271,7 +271,7 @@ try
       echo "</td>", //end of order status and button
       
       //capacity
-       "<td width='80px' >";
+       "<td class='capacitypercentcnt' >";
       
       if ($oCoopOrderCapacity->SelectedType != CoopOrderCapacity::TypeNone)
       {      

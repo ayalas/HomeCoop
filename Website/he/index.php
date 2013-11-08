@@ -63,18 +63,15 @@ catch(Exception $e)
 <!DOCTYPE HTML>
 <html dir='rtl' >
  <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="style/main.css" /> 
-<title>הזינו את שם הקואופרטיב שלכם: כניסה למערכת ההזמנות</title>
-
-<script type="text/javascript" src="script/public.js" ></script>
+ <?php include_once 'control/headtags.php'; ?>
+  <title>הזינו את שם הקואופרטיב שלכם: כניסה למערכת ההזמנות</title>
  </head>
  <body class="centered">
 <form id="frmLogin" name="frmLogin" method="post">
 <header>
-<table border="0" cellpadding="0" cellspacing="0" >
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
   <tr>
-    <td class="logo"><a href="home.php" ><img border="0" src="logo.gif"/></a></td>
+    <td class="logo"><a href="home.php" ><img class="logoimg" src="logo.gif"/></a></td>
   </tr>
    <tr>
     <td><?php
@@ -83,11 +80,11 @@ catch(Exception $e)
     </tr>
 </table>
 </header>
-<table width="800" cellpadding="0" cellspacing="0">
-<tr><td colspan="2"><span class="cooptitle">הזינו את שם הקואופרטיב שלכם</span></td></tr>
+<table class="fullwidth" cellspacing="0">
+  <tr><td colspan="2"><span class="coopsubtitle"></span></td></tr>
 <tr>
 <td valign="top">
-<table width="400">
+<table class="halfwidth entrytable">
     <tr>
         <td colspan="2"><?php 
                   include_once 'control/error/ctlError.php';
@@ -111,12 +108,12 @@ catch(Exception $e)
         <td colspan="2"><span class="pagename">כניסה למערכת ההזמנות</span></td>
     </tr>
    <tr>
-        <td nowrap><label for="txt_login">שם כניסה</label></td>
-        <td width="100%"><input style="width:120px;" type="text" dir="ltr" maxlength="128" id="txt_login" name="txt_login" required="required" value="<?php echo htmlspecialchars( $sLoginName ); ?>" /></td>
+        <td class="paddable nowrapping"><label for="txt_login">שם כניסה</label></td>
+        <td class="paddable" width="100%"><input class="dataentrysmall" type="text" dir="ltr" maxlength="128" id="txt_login" name="txt_login" required="required" value="<?php echo htmlspecialchars( $sLoginName ); ?>" /></td>
     </tr>
-   <tr>
-        <td nowrap><label for="txt_pwd">סיסמא:</label></td>
-        <td width="100%"><input style="width:120px;" type="password" dir="ltr" maxlength="30" id="txt_pwd" name="txt_pwd" required="required"/></td>
+   <tr class="inputrow">
+        <td class="paddable"><label for="txt_pwd">סיסמא</label></td>
+        <td class="paddable" width="100%"><input class="dataentrysmall" type="password" dir="ltr" maxlength="30" id="txt_pwd" name="txt_pwd" required="required"/></td>
     </tr>
    <tr>
         <td colspan="2"><button type="submit" value="" id="btn_login" name="btn_login" >כניסה</button></td>

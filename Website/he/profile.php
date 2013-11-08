@@ -94,10 +94,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html dir='rtl' >
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style/main.css" />
+<?php include_once 'control/headtags.php'; ?>
 <title>הזינו את שם הקואופרטיב שלכם: הפרופיל שלי</title>
-<script type="text/javascript" src="script/public.js" ></script>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" >
 function Save()
@@ -131,7 +129,7 @@ function VerifyPassword()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="948"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">הפרופיל שלי</span></td>
+        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">הפרופיל שלי</span></td>
     </tr>
     <tr>
         <td>
@@ -246,7 +244,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
+                  <td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -322,7 +320,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">תבנית הקובץ המועדפת ליצוא נתונים.</span></a></td></tr>';
+                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">תבנית הקובץ המועדפת ליצוא נתונים.</span></a></td></tr>';
                 }
                 ?>
                 </table>

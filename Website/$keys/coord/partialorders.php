@@ -55,10 +55,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title><?php echo $oData->ProductName , ':' , $sPageTitle;  ?></title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 <script type="text/javascript" src="../control/error/scError.js" ></script>
 <script type="text/javascript">
@@ -79,7 +77,7 @@ UserSessionBase::Close();
 <input type="hidden" id="hidPostValue" name="hidPostValue" value="<?php echo $oData->CoopOrderID; ?>" />
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><?php echo htmlspecialchars($oData->ProductName);?>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="coopname"><?php echo htmlspecialchars($oData->ProductName);?>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>   
     <tr>
         <td >

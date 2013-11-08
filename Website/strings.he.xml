@@ -5,6 +5,10 @@
     <value>הזינו את שם הקואופרטיב שלכם</value>
 </str>
 <str>
+    <key>COOP_SUB_TITLE</key>
+    <value></value>
+</str>
+<str>
     <key>COOP_INFO_TITLE</key>
     <value>על הקואופרטיב שלנו:</value>
 </str>
@@ -249,7 +253,7 @@
 </str>
 <str>
     <key>FIELD_PASSWORD</key>
-    <value>סיסמא:</value>
+    <value>סיסמא</value>
 </str>
 <str>
     <key>BTN_LOGIN</key>

@@ -101,10 +101,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title><!$COOPERATIVE_NAME$!>: <?php echo $sPageTitle; ?></title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 <script type="text/javascript" >
 function SetBlock(nPickupLocationID, nValue, nExistingRec)
@@ -147,7 +145,7 @@ function PreventMultiplePostBack()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="<!$TOTAL_PAGE_WIDTH$!>">
+        <td class="fullwidth">
                 <table cellspacing="0" cellpadding="2" width="100%">
                 <tr>
                   <td colspan="3"><?php 

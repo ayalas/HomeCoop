@@ -31,6 +31,29 @@ function TogglePLExpand()
   ctlExpandState.value = nExpandStatus;
 }
 
+function ToggleMobileExpand()
+{
+  var ctlExpandState = document.getElementById('hidfacetmblexpandstate');
+  var nExpandStatus = ctlExpandState.value;
+  if (nExpandStatus == 0)
+  {
+         document.getElementById('divPLFacet').style.display = 'block';
+         document.getElementById('tdMain').style.display = 'none';
+         
+         nExpandStatus = 1;
+         document.getElementById('imgFacetMobileExpandArrow').src = 'img/arrow_up.gif';
+  }
+  else
+  {
+         document.getElementById('divPLFacet').style.display = 'none';
+         document.getElementById('tdMain').style.display = 'block';
+         nExpandStatus = 0;
+         document.getElementById('imgFacetMobileExpandArrow').src = 'img/arrow_down.gif';
+  }
+  
+  ctlExpandState.value = nExpandStatus;
+}
+
 function ToggleItemSelect(sCtlID)
 {
   var nExpandStatus = document.getElementById('hidplfacetgrpexpandstate').value;

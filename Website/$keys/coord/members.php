@@ -69,10 +69,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title><!$COOPERATIVE_NAME$!>: <!$PAGE_TITLE_MEMBERS$!></title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 <script type="text/javascript" >
 function ListSelect()
@@ -113,7 +111,7 @@ function SelectAll(bCheck)
 <input type="hidden" id="hidOriginalData" name="hidOriginalData" value="<?php echo $oTable->GetSerializedData(); ?>" />
 <input type="hidden" id="hidPostAction" name="hidPostAction" value="" />
 <?php include_once '../control/header.php'; ?>
-<table cellspacing="0" cellpadding="2" width="<!$TOTAL_PAGE_WIDTH$!>" >
+<table cellspacing="0" cellpadding="2" class="fullwidth" >
     <tr>
       <td colspan="4" ><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_MEMBERS$!></span></td>
     </tr>
@@ -240,7 +238,7 @@ function SelectAll(bCheck)
                       
                       if ($recTable["sComments"] != NULL)
                       {
-                        echo '<a href="#" class="tooltiphelp" >...<span style="width: 200px;">',
+                        echo '<a href="#" class="tooltiphelp" >...<span class="helpspan">',
                              htmlspecialchars($recTable["sComments"]),
                              '</span></a>'; 
                       }

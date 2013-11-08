@@ -17,13 +17,11 @@ if ( $_SERVER[ 'REQUEST_METHOD'] == 'POST' )
 }
     
 ?>
-
+<div class="facetmobileexpander" onclick="JavaScript:ToggleMobileExpand();"><img alt="<!$PAGE_TITLE_PICKUP_LOCATIONS$!>" id="imgFacetMobileExpandArrow" src="img/arrow_down.gif"/></div>
 <div id="divPLFacet" class="facet">
   <span class="facettitle"><!$PAGE_TITLE_PICKUP_LOCATIONS$!></span>
 <ul id="plfacetgrp" class="facetgrp">
 <?php
-  
-
   $nIndex = 0;
   $nRemoved = 0;
   $nLenSelected = count($g_aMemberPickupLocationIDs);

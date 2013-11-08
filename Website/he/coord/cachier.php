@@ -26,10 +26,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html dir='rtl' >
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title>הזינו את שם הקואופרטיב שלכם: מצב הקופה</title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 </head>
 <body class="centered">
@@ -37,7 +35,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="948"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">מצב הקופה</span></td>
+        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">מצב הקופה</span></td>
     </tr>
     <tr>
         <td >

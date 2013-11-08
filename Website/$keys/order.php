@@ -197,10 +197,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style/main.css" />
+<?php include_once 'control/headtags.php'; ?>
 <title><!$COOPERATIVE_NAME$!>: <?php echo $oRecord->PageTitle;  ?></title>
-<script type="text/javascript" src="script/public.js" ></script>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" >
 function Delete()
@@ -239,7 +237,7 @@ function Save()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -351,7 +349,7 @@ function Save()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   
-                    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span style="width: 200px;"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>';
+                    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span class="helpspan"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>';
                     echo '</tr>';
 
                   }

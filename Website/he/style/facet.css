@@ -94,14 +94,56 @@ li.unselectedfacet:hover
   text-align: center;
   vertical-align: top;
   border: 1px solid #4A4B4A;
-  height: 10px;
   background-color: #7E7F7F;
 }
 
-.facetexpander img
-{
-  vertical-align: top;
-  height: 8px;
+
+
+@media screen and (min-width: 600px) {
+  .facetexpander
+  {
+      height: 10px;
+  }
+  .facetexpander img
+  {
+    vertical-align: top;
+    height: 8px;
+  }
+  .facetmobileexpander
+  {
+    display: none;
+  }
+  td#tdFacet
+  {
+     width: 180px;  
+  }
+}
+@media screen and (max-width: 599px) {
+  .facetexpander
+  {
+      height: 20px;
+  }
+  .facetexpander img
+  {
+    vertical-align: top;
+    height: 18px;
+  }
+  .facetmobileexpander
+  {
+     margin-top: 20px;
+     height: 20px;
+     width: 40px;
+  }
+  .facetmobileexpander img
+  {
+    vertical-align: top;
+    height: 18px;
+  }
+  .facet
+  {
+    width: 220px;
+    display: none;  
+  }
 }
 
 .facetexpander
@@ -109,7 +151,4 @@ li.unselectedfacet:hover
  cursor: pointer;
 }
 
-td#tdFacet
-{
-   width: 180px;  
-}
+

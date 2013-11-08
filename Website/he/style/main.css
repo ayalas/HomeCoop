@@ -42,19 +42,8 @@ body.centered
   right: 0px;
   bottom: 0px; 
   left: 0px;
-  width: 948px;
-  margin: auto;
 }
-body.product
-{
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  width: 800px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
+
 button{
   background-color:#F2DFC1;
   border: 1px solid #e4e4e4;
@@ -100,14 +89,101 @@ button.order:disabled
 {
   background-color:#F4B551;
 }
-input
-{
-  font-size: 12px;
+
+@media screen and (min-width: 948px) {
+  body.centered
+  {
+    width: 948px;
+    margin: auto;
+  }
+  .fullwidth
+  {
+    width: 948px;
+  }
+  .halfwidth
+  {
+    width: 474px;
+  }
 }
-label
-{
-  font-size: 12px;
+@media screen and (min-width: 600px) {
+  span.cooptitle
+  {
+    font-size: 24px;
+  }
+  label
+  {
+    font-size: 12px;
+  }
+  input
+  {
+    font-size: 12px;
+  }
+  table.entrytable td
+  {
+    padding: 0;
+  }
 }
+@media screen and (max-width: 947px) {
+  body.centered
+  {
+    margin: 0 2%;
+  }
+  .halfwidth
+  {
+    width: 400px;
+  }
+}
+@media screen and (max-width: 599px) {
+  span.cooptitle
+  {
+    font-size: 14px;
+  }
+  .halfwidth
+  {
+    width: 100%;
+  }
+  .coopbrief
+  {
+    display: none;
+  }
+  button
+  {
+    font-size: 18px;
+  }
+  label
+  {
+    font-size: 16px;
+  }
+  input
+  {
+    font-size: 16px;
+  }
+  table.entrytable td.paddable
+  {
+    padding: 12px 0px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .logoimg
+  {
+    width: 50%;
+  }
+}
+
+
+body.product
+{
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 800px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+
 p.brochure
 {
   font-family: Loma, Arial, "Open Sans", sans-serif;
@@ -143,9 +219,9 @@ span.coopname
 span.cooptitle
 {
     color: #FF3300;
-    font-size: 24px;
     font-weight: bold;
 }
+
 span.pagename
 {
     font-size: 16px;
@@ -205,6 +281,10 @@ ul
    font-size: 30px;
    font-family: Ubuntu Condensed, Liberation Serif,  Serif;
 }
+.capacitypercentcnt
+{
+  width: 80px;
+}
 .changedrow
 {
   background-color:#9999FF;
@@ -228,6 +308,7 @@ ul
 {
   font-weight: bold;
 }
+
 .columntitleshort
 {
   font-weight: bold;
@@ -285,6 +366,12 @@ ul
   width: 110px;
   background-color:#FFFFFF;
 }
+.dataentrysmall
+{
+  font-size: 12px;
+  width: 120px;
+  background-color:#FFFFFF;
+}
 .headbig
 {
   font-size: 24px;
@@ -313,6 +400,14 @@ ul
   font-size: 14px;
   font-weight: bold;
   white-space: nowrap;
+}
+.helpspan
+{
+  width: 200px;
+}
+.helpspansmall
+{
+  width: 150px;
 }
 .link
 {
@@ -353,6 +448,10 @@ ul
 .oppositealign
 {
   text-align: left;
+}
+.ordercnt
+{
+  width: 180px;
 }
 .orderitemcentry
 {
@@ -603,6 +702,12 @@ span.coordmenulabel
  padding-top: 12px;
 }
 
+.logoimg
+{
+  border-width: 0;
+
+}
+
 .centerregion
 {
   margin-left: auto;
@@ -671,6 +776,8 @@ span.coordmenulabel
     background-color: #D8D8D8;
     display: inline-block;
     cursor: pointer;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 .tabrow li.selected {
     background-color: #FFF;

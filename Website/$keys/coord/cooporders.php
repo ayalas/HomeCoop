@@ -34,10 +34,8 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="../style/main.css" />
+<?php include_once '../control/headtags.php'; ?>
 <title><!$COOPERATIVE_NAME$!>: <!$PAGE_TITLE_COOP_ORDERS$!></title>
-<script type="text/javascript" src="../script/public.js" ></script>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 </head>
 <body class="centered">
@@ -45,7 +43,7 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td width="<!$TOTAL_PAGE_WIDTH$!>"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_COOP_ORDERS$!></span></td>
+        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_COOP_ORDERS$!></span></td>
     </tr>
     <tr>
         <td>

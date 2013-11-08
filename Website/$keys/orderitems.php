@@ -144,11 +144,9 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style/main.css" />
+<?php include_once 'control/headtags.php'; ?>
 <link rel="stylesheet" type="text/css" href="style/fixedheaders.css" />
 <title><!$COOPERATIVE_NAME$!>: <?php echo $oRecord->PageTitle;  ?></title>
-<script type="text/javascript" src="script/public.js" ></script>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" >
 function Save()
@@ -211,7 +209,7 @@ function SetDirty()
                 if (!$g_oError->HadError && $oRecord->CanModify)
                 {
                 ?><tr>
-                  <td width="180px" class="nowrapping"><button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button></td>
+                  <td class="ordercnt" class="nowrapping"><button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button></td>
                   <td>
                     <select id="selProductsView" name="selProductsView" onchange="JavaScript:SwitchViewMode();" >
                     <?php

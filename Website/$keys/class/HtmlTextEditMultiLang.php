@@ -181,7 +181,7 @@ class HtmlTextEditMultiLang {
   
   public static function EchoHelpText($sHelpText)
   {        
-    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span style="width: 200px;">' , $sHelpText,
+    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span class="helpspan">' , $sHelpText,
       '</span></a></td>';
   }
   

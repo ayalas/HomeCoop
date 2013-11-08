@@ -197,10 +197,8 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style/main.css" />
+<?php include_once 'control/headtags.php'; ?>
 <title>Enter Your Cooperative Name: <?php echo $oRecord->PageTitle;  ?></title>
-<script type="text/javascript" src="script/public.js" ></script>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" >
 function Delete()
@@ -239,7 +237,7 @@ function Save()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td width="948"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -351,7 +349,7 @@ function Save()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   
-                    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span style="width: 200px;">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>';
+                    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>';
                     echo '</tr>';
 
                   }

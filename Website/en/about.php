@@ -6,11 +6,8 @@ include_once 'settings.php';
 <!DOCTYPE HTML>
 <html>
  <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="style/main.css" /> 
-<title>About the software</title>
-
-<script type="text/javascript" src="script/public.js" ></script>
+ <?php include_once 'control/headtags.php'; ?>
+ <title>About the software</title>
  </head>
  <body class="centered">
    <form id="frmMain" name="frmMain" method="post" >
@@ -30,7 +27,7 @@ include_once 'settings.php';
     </table>
     <br/><br/>
     </header>
-     <table width="800" cellpadding="0" cellspacing="0">
+     <table class="fullwidth" cellpadding="0" cellspacing="0">
       <tr><td ><span class="cooptitle">About the software</span></td></tr>
       <tr>
         <td><span>HomeCoop is a tiny local consumer cooperatives web ordering system.</span></td>
@@ -51,7 +48,7 @@ include_once 'settings.php';
       </tr>
       <tr>
         <td>
-          <textarea readonly="true" dir="ltr" rows="20" cols="100">
+          <textarea readonly="true" dir="ltr" rows="20" class="fullwidth" >
             <?php
               include_once 'license.txt';
             ?>
