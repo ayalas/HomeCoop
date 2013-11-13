@@ -2122,7 +2122,7 @@
 </str>
 <str>
     <key>ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
-    <value>לא ניתן לשמור את ההזמנה המבוקשת ממוצר זה כי אין מספיק מקום אחסון פנוי</value>
+    <value>לא ניתן לשמור את ההזמנה המבוקשת כי אין מספיק מקום אחסון פנוי</value>
 </str>
 <str>
     <key>PRODUCT_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>

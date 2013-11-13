@@ -29,11 +29,14 @@ function AddLanguageOption($sFolder, $sText)
         if ($sFolder == $g_sLangDir)
             return;
 
-        $g_sLangControl .= '<span class="usermenulink usermenulabel" onclick="JavaScript: ChangeLanguage(\'' . 
+        $g_sLangControl .= '<a href="#" class="subtlelink" onclick="JavaScript: ChangeLanguage(\'' . 
                                         $sFolder . '\', \'' . $g_sRedirectAfterLangChange . '\',\'../' . 
-                                        $g_sRootRelativePath . 'index.php\');" >‎' . $sText . '‎</span>';
+                                        $g_sRootRelativePath . 'index.php\');" ><span class="usermenulabel">‎' . $sText . '‎</span></a>';
      }
 }
+
+if (isset($g_oMemberSession))
+  echo '<li>';
 
 if (LANGUAGE_SWITCHER == LANGUAGE_SWITCHER_VALUE_DROPDOWN)
 {
@@ -55,4 +58,7 @@ if (LANGUAGE_SWITCHER == LANGUAGE_SWITCHER_VALUE_DROPDOWN)
 </select>
 <?php
 }
+
+if (isset($g_oMemberSession))
+  echo '</li>';
 ?>

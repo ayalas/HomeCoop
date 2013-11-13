@@ -5,6 +5,7 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 $HelloMessage = '';
 $sBalance = '';
+$sBalanceLink = '';
 
 if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
 {
@@ -23,37 +24,57 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
       $HelloMessage .= '<br/>' . '<!$HEADER_YOUR_MAX_ORDER$!>: ' . $mMaxOrder;
       
   }
+  
+    if ($sBalance != '')
+    {
+        $sBalanceLink = '<a class="tooltiphelp mobilemenu" href="#"><img border="0" src="' . $g_sRootRelativePath .
+        'img/emblem-money.png" /><!$LANGUAGE_DIRECTION_MARK$!>' . $sBalance;
+    }
+
+    $sBalanceLink .= '<span>' . $HelloMessage . '</span>';
+    if ($sBalance != '')
+      $sBalanceLink .=  '</a>';
 }
 
 ?>
 <header>
 <input type="hidden" id="hidLogout" name="hidLogout" />
-<table cellspacing="0" cellpadding="0" width="100%">
-    
+<table cellspacing="0" cellpadding="0">
+  <tr class="mobiledisplay"><td><a id="tglUser" class="nav-toggle"></a></td><?php 
+        if ( isset($g_oMemberSession)) { 
+          
+          echo '<td>', $sBalanceLink, '</td>';
+          
+          echo '<td>';
+          if (!$g_oMemberSession->IsOnlyMember ) 
+            echo '<a id="tglCoord" class="nav-toggle"></a>';
+          echo '</td>';
+         
+          echo '<td>';
+          if (isset($sHeaderAdditionToLogo)) {
+            echo $sHeaderAdditionToLogo;
+          }
+          echo '</td>';
+       }
+     ?></tr>  
     <?php if ( isset($g_oMemberSession) && !$g_oMemberSession->IsOnlyMember )
     {
-      echo '<tr><td>';
+      echo '<tr class="coordmenu"><td colspan="4" class="coordmenucell">';
       include_once $g_sRootRelativePath . 'control/coordpanel.php'; 
       echo '</td></tr>';
     }
     ?>
-    <tr class="usermenu"><td class="usermenucell">
+  <tr class="usermenu"><td <?php if (isset($g_oMemberSession)) { echo ' colspan="4" '; } ?> class="usermenucell"><nav id="navUser" class="nav-collapse"><ul>
       <?php
       //members menu
       if (isset($g_oMemberSession))
       {
-        echo '<span class="usermenulabel" title="<!$PAGE_TITLE_MY_PROFILE$!>"><a href="', $g_sRootRelativePath, 
+        echo '<li><span class="usermenulabel" title="<!$PAGE_TITLE_MY_PROFILE$!>"><a href="', $g_sRootRelativePath, 
             'profile.php"><!$HEADER_HELLO$!>, ', $g_oMemberSession->Name,
-            '</a></span>';
+            '</a></span></li>';
         
-        if ($sBalance != '')
-        {
-            echo '<a class="tooltiphelp" href="#"><img border="0" src="', $g_sRootRelativePath ,
-            'img/emblem-money.png" /><!$LANGUAGE_DIRECTION_MARK$!>', $sBalance;
-        }
-        
-        echo '<span>', $HelloMessage, '</span></a>';
-        
+        echo '<li class="mobilehide">', $sBalanceLink, '</li>';
+                
         if ( $g_oMemberSession->CanOrder) 
         {
           define('prmidMyOrder', 10);
@@ -62,11 +83,11 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
 
           if ($oPermissionBridgeSet->DefinePermissionBridge(prmidMyOrder, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
                    Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
-            echo '<span class="usermenulabel"><a href="',$g_sRootRelativePath,
-                  'orders.php"><!$PAGE_TITLE_MY_ORDERS$!></a></span>';
+            echo '<li><span class="usermenulabel"><a href="',$g_sRootRelativePath,
+                  'orders.php"><!$PAGE_TITLE_MY_ORDERS$!></a></span></li>';
         }
         
-        echo '<span class="usermenulabel"><a href="', $g_sRootRelativePath, 'catalog.php"><!$PAGE_TITLE_PRODUCT_CATALOG$!></a></span>';
+        echo '<li><span class="usermenulabel"><a href="', $g_sRootRelativePath, 'catalog.php"><!$PAGE_TITLE_PRODUCT_CATALOG$!></a></span></li>';
       }
       //in one language deployment exit, remove this line for better performances
       include_once APP_DIR . '/control/language.php';
@@ -74,13 +95,17 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
       if ( isset($g_oMemberSession) )
       {
 
-            echo '<span class="usermenulink usermenulabel" onclick="JavaScript:Logout()" ><!$HEADER_LOGOUT$!></span>';
+            echo '<li><a href="#" onclick="JavaScript:Logout()" ><span class="usermenulabel"><!$HEADER_LOGOUT$!></span></a></li>';
       }  
       ?>
+      </ul>
+      </nav>
       </td>
     </tr>
     <tr>
-      <td class="logo"><a href="<?php echo $g_sRootRelativePath ?>home.php" ><img class="logoimg" src="<?php echo $g_sRootRelativePath ?>logo.gif"/></a></td>
+      <td class="logo" <?php if (isset($g_oMemberSession)) { echo ' colspan="4" '; } ?> >
+        <div ><a href="<?php echo $g_sRootRelativePath ?>home.php" ><img class="logoimg" src="<?php echo $g_sRootRelativePath ?>logo.gif"/></a></div>
+      </td>
     </tr>
 </table>
 </header>

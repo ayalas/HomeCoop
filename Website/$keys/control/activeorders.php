@@ -42,7 +42,7 @@ try
   //this must be set here in order to pass parameter by reference and create it once before the while loop
   $arrCoordPermissions = array(ActiveOrders::PERMISSION_EDIT,  ActiveOrders::PERMISSION_VIEW);
   
-  echo '<table class="centerregion" cellspacing="0" >';
+  echo '<table class="centerregion" cellspacing="0" ><tr><td><div id="activeOrdersCnt">';
   
   //go through the active cooperative orders to output a "box" (html table with border) for each one
   while ( $recTable )
@@ -114,18 +114,10 @@ try
         }
       }
       
-      echo '<tr><td><table cellpadding="0" ', $sOrderBoxCssClass,
-              ' cellspacing="0" width="100%" ><tr><td><table cellpadding="0" cellspacing="0" width="100%">',
-           
-         '<tr>', //start
-      
-      //order summary
-       "<td width='100%'>",
-      '<table cellpadding="4" border="0" cellspacing="0" width="100%" >',
-      
-      //order first row
-       '<tr>',
-       '<td colspan="5" ' , $sOrderCssClass , '>';
+      echo '<div ', $sOrderBoxCssClass, ' ><table cellpadding="0" cellspacing="0" width="100%">',     
+          
+      //row: order title
+      "<tr><td width='100%'>";
       
       if ($bCanCoord)
       {
@@ -133,37 +125,69 @@ try
           echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/orders.php?coid=' , $recTable["CoopOrderKeyID"] , '" >' , htmlspecialchars($recTable["sCoopOrder"]) , '</a>&nbsp;';
         else
           echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/cooporder.php?id=' , $recTable["CoopOrderKeyID"] , '" >' , htmlspecialchars($recTable["sCoopOrder"]) , '</a>&nbsp;';
-        
-        if ($bHasProductsPermission)
-          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/coproducts.php?id=' , $recTable["CoopOrderKeyID"] , '" ><!$HOME_LINK_COOP_ORDER_PRODUCTS$!></a>&nbsp;';
-        
-        if ($bHasExportPermission)
-          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/cooporderexport.php?coid=' , $recTable["CoopOrderKeyID"] , '" ><!$HOME_LINK_COOP_ORDER_EXPORT$!></a>';
       }
       else
         echo htmlspecialchars($recTable["sCoopOrder"]);
       
-      echo '</td>',
+      echo '</td></tr>';
       
-      '</tr>',
+      //row: closing date
+      echo '<tr><td>',
+        '<div class="normalcolor" ><!$FIELD_COOP_ORDER_END$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;</span><span ',
+               $sOrderCssClass , ' >&nbsp;' , $dEnd->format('<!$DATE_PICKER_DATE_FORMAT$!>') , '</div><div ' , $sOrderCssClass , ' >&nbsp;' ,
+            '<!$HOME_ORDER_AT_HOUR$!>&nbsp;' , $dEnd->format('<!$DATE_PICKER_TIME_FORMAT$!>') , '</div>',
+        '</td></tr>';
       
-      //end of order first row
+      //row: delivery date
+      echo "<tr><td><span class='normalcolor' ><!$FIELD_COOP_ORDER_DELIVERY$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;" ,
+         $dDelivery->format('<!$DATE_PICKER_DATE_FORMAT$!>') , "</span></td></tr>";
       
-      //order details and pickup locations
-      '<tr>',
       
-      //pickup locations
-       "<td>",
-       '<table cellpadding="0" border="0" cellspacing="0" width="100%" >',
-       '<tr><td class="listareatitle" width="100%" ><!$HOME_LABEL_PICKUP_LOCATIONS$!></td></tr>';
-      //loop through pickup locations
-      $nCountPickups = 0;
+      //row: order status, button + capacity
       
+      //order status and button
+       echo '<tr><td ' , $sOrderCssClass , ' height="100%" ><div><div><div>',
+       $sActiveOrderStatus , '</div>';
+      
+      //existing order button
+      if ($recTable["OrderID"] != NULL)
+      {
+        echo '<button type="button" id="btnOrder" class="order" name="btnOrder" onclick="JavaScript:OpenOrder(\'',
+               $g_sRootRelativePath , '\',' ,  $recTable["OrderID"] , ');" ><!$BTN_HOME_MY_ORDER$!></button>';
+      }
+      //new order button
+      else if ($oActiveOrderStatus->Status == ActiveCoopOrderStatus::Open && $oCoopOrderCapacity->Percent < 100)
+      {
+        echo '<button type="button" id="btnOrder" class="order" name="btnOrder" onclick="JavaScript:NewOrder(\'',
+               $g_sRootRelativePath , '\',' ,  $recTable["CoopOrderKeyID"] , ');" ><!$BTN_HOME_NEW_ORDER$!></button>';
+      }
+      
+      echo "</div>";
+      
+      //capacity
+      echo '<div class="capacitypercentcnt">';
+      
+      if ($oCoopOrderCapacity->SelectedType != CoopOrderCapacity::TypeNone)
+      {      
+       echo '<span class="capacitypercent">' , $oCoopOrderCapacity->PercentRounded , 
+               '%</span><br/><span class="listareatitle"><!$ORDER_CAPACITY_PERCENT_FULL$!></span>';
+      }
+      
+      echo "</div>";
+      
+      echo '</div></td></tr>';
+
+      //row: pickup locations
+      echo '<tr><td><span class="listareatitle"><!$HOME_LABEL_PICKUP_LOCATIONS$!>:<!$LANGUAGE_DIRECTION_MARK$!></span><span class="normalcolor" >';
+      
+      $nCountRecs = 0;
       
       while($recPickupLoc)
       {
-        $nCountPickups++;
-         echo '<tr><td><span class="normalcolor" >'; 
+        if ($nCountRecs > 0)
+          echo ',<!$LANGUAGE_DIRECTION_MARK$!>&nbsp';
+        
+        $nCountRecs++;
          
          if ($bCanCoord && $oTable->CheckPickupLocationCoordPermissions($recPickupLoc["CoordinatingGroupID"]))
          {
@@ -179,34 +203,30 @@ try
                               $recPickupLoc["fMaxStorageBurden"], $recPickupLoc["fStorageBurden"]);
          
          //% full
-        if (HOME_PAGE_SHOW_PICKUP_LOCATION_CAPACITIES && $oCoopOrderPickupCapacity->SelectedType != CoopOrderCapacity::TypeNone)
-          LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderPickupCapacity->PercentRounded . '%)');
-         
-         echo '</span></td></tr>';
-         
+         if (HOME_PAGE_SHOW_PICKUP_LOCATION_CAPACITIES && $oCoopOrderPickupCapacity->SelectedType != CoopOrderCapacity::TypeNone)
+            LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderPickupCapacity->PercentRounded . '%)');
+                  
          $recPickupLoc = $oPickUpLocs->fetch();
       }
       
-      if ($nCountPickups < ORDER_DETAILS_ROWS) //if smaller than order details rows, fill with empty rows
-      {
-        echo '<tr><td rowspan="' , (ORDER_DETAILS_ROWS - $nCountPickups) , '" ></td></tr>';
-      }
       
-      echo '</table>',
-       "</td>"; //end of pickup locations
-       
-     //producers
-     echo  
-        "<td>",
-        '<table cellpadding="0" border="0" cellspacing="0" width="100%" >',
-         '<tr><td class="listareatitle" width="100%" ><!$HOME_LABEL_PRODUCERS$!></td></tr>';
+      echo '</span></td></tr>';
+      
+      $nCountRecs = 0;
+      
+      //row: producers
+      echo '<tr><td><span class="listareatitle"><!$HOME_LABEL_PRODUCERS$!>:<!$LANGUAGE_DIRECTION_MARK$!></span><span class="normalcolor" >';
       
       $oProducers = new CoopOrderProducers;
       $recProducer = $oProducers->LoadList($recTable["CoopOrderKeyID"]);
 
       while ( $recProducer )
       {        
-        echo '<tr><td><span class="normalcolor" >';
+        if ($nCountRecs > 0)
+          echo ',<!$LANGUAGE_DIRECTION_MARK$!>&nbsp';
+        
+        $nCountRecs++;
+        
         if ($bCanCoord && $oTable->CheckProducerCoordPermissions($recPickupLoc["CoordinatingGroupID"]))
           echo '<a class="LinkButton', $sHistoryButtonCssClass, '" href="coord/coproducer.php?coid=' , $recTable["CoopOrderKeyID"] , 
                    '&pid=', $recProducer["ProducerKeyID"],
@@ -223,79 +243,29 @@ try
           LanguageSupport::EchoInFixedOrder('&nbsp;', '(' . $oCoopOrderProducerCapacity->PercentRounded . '%)');
                 
         $recProducer = $oProducers->fetch();
+      }
+      
+      echo '</span></td></tr>';
         
-        echo '</span></td></tr>';
-      }
       
-      echo '</table>',
-       "</td>"; //end of producers
-      
-      //order details
-      
-     echo  "<td>",
-       '<table cellpadding="0" width="100%" cellspacing="0" >',
-       '<tr>',
-         '<td><span class="normalcolor" ><!$FIELD_COOP_ORDER_END$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;</span><span ',
-                $sOrderCssClass , ' >&nbsp;' , $dEnd->format('<!$DATE_PICKER_DATE_FORMAT$!>') , '</span><span ' , $sOrderCssClass , ' >&nbsp;' ,
-             '<!$HOME_ORDER_AT_HOUR$!>&nbsp;' , $dEnd->format('<!$DATE_PICKER_TIME_FORMAT$!>') , '</span>',
-         '</td></tr>',
-         "<tr><td><span class='normalcolor' ><!$FIELD_COOP_ORDER_DELIVERY$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;" ,
-              $dDelivery->format('<!$DATE_PICKER_DATE_FORMAT$!>') , "</span></td></tr>";
-      
-      if (ORDER_DETAILS_ROWS < $nCountPickups) //if smaller than order details rows, fill with empty rows
+      //row: Coordinator extra links
+      if ($bCanCoord)
       {
-        echo '<tr><td rowspan="' , ($nCountPickups - ORDER_DETAILS_ROWS) , '" ></td></tr>';
-      }
-      
-      echo '</table>',
-       "</td>", //end of order details
-            
-       //order status and button
-       '<td ' , $sOrderCssClass , ' width="<!$HOME_ORDER_STATUS_WIDTH$!>" height="100%" >',
-       $sActiveOrderStatus , '<br/>';
-     
-      
-      //existing order button
-      if ($recTable["OrderID"] != NULL)
-      {
-        echo '<button type="button" id="btnOrder" class="order" name="btnOrder" onclick="JavaScript:OpenOrder(\'',
-               $g_sRootRelativePath , '\',' ,  $recTable["OrderID"] , ');" ><!$BTN_HOME_MY_ORDER$!></button>';
-      }
-      //new order button
-      else if ($oActiveOrderStatus->Status == ActiveCoopOrderStatus::Open && $oCoopOrderCapacity->Percent < 100)
-      {
-        echo '<button type="button" id="btnOrder" class="order" name="btnOrder" onclick="JavaScript:NewOrder(\'',
-               $g_sRootRelativePath , '\',' ,  $recTable["CoopOrderKeyID"] , ');" ><!$BTN_HOME_NEW_ORDER$!></button>';
-      }
-      
-      echo "</td>", //end of order status and button
-      
-      //capacity
-       "<td class='capacitypercentcnt' >";
-      
-      if ($oCoopOrderCapacity->SelectedType != CoopOrderCapacity::TypeNone)
-      {      
-       echo '<span class="capacitypercent">' , $oCoopOrderCapacity->PercentRounded , 
-               '%</span><br/><span class="listareatitle"><!$ORDER_CAPACITY_PERCENT_FULL$!></span>';
-      }
-      
-      echo '</td>', //end of capacity
+        echo '<tr><td>';
+        if ($bHasProductsPermission)
+          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/coproducts.php?id=' , $recTable["CoopOrderKeyID"] , '" ><!$HOME_LINK_COOP_ORDER_PRODUCTS$!></a>&nbsp;';
 
-       '</tr>';
-      //end of order details and pickup locations
-      
-      
-      
-      echo '</table>',
-       '</td>', //end of order summary
-       '</tr>', //end
+        if ($bHasExportPermission)
+          echo '<a class="LinkButton headdata', $sHistoryButtonCssClass, '" href="coord/cooporderexport.php?coid=' , $recTable["CoopOrderKeyID"] , '" ><!$HOME_LINK_COOP_ORDER_EXPORT$!></a>';
+        echo '</td></tr>';
+      }
 
-       '</table></td></tr></table></td></tr>';
+      echo '</table></div>';
       
       $recTable = $oTable->fetch();
   }
   
-  echo '</table>';
+  echo '</div></td></tr></table>';
   
 }
 catch(Exception $eao)

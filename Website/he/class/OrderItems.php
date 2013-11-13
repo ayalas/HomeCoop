@@ -28,6 +28,7 @@ class OrderItems extends SQLBase {
   protected $m_aProducerTotals = NULL;
   protected $m_aProductsChanged = NULL;
   protected $m_bFirstSave = TRUE;
+  protected $m_aStorageAreasBurden = array();
 
   public function __construct()
   {
@@ -97,7 +98,7 @@ class OrderItems extends SQLBase {
             " COPRD.fMaxUserOrder, PRD.JoinToProductKeyID, NullIf(JPRD.nItems,0) JoinedProductItems, P.CoordinatingGroupID,  " .
             " IfNull(JCOPRD.mCoopPrice,0) JoinedCoopPrice,  IfNUll(JCOPRD.mProducerPrice,0) JoinedProducerPrice, OI.nJoinedItems, " .
             " NUllIf(PRD.fQuantity,0) ProductQuantity, PRD.nItems ProductItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
-            " COSA.fBurden StorageAreaBurden, COSA.fMaxBurden StorageAreaMaxBurden, " .
+            " COSA.fBurden StorageAreaBurden, COSA.fMaxBurden StorageAreaMaxBurden, COSA.StorageAreaKeyID, " .
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_JOINED_PRODUCTS, 'sJoinedProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
@@ -176,6 +177,7 @@ class OrderItems extends SQLBase {
       $oItem->ProductMaxCoopOrder = $recItem["fMaxCoopOrder"];
       $oItem->ProductBurden = $recItem["fBurden"];
       $oItem->ProductTotalCoopOrderQuantity = $recItem["fTotalCoopOrder"];
+      $oItem->StorageAreaID  = $recItem["StorageAreaKeyID"];
       $oItem->StorageAreaBurden  = $recItem["StorageAreaBurden"];
       $oItem->StorageAreaMaxBurden = $recItem["StorageAreaMaxBurden"];
       
@@ -503,6 +505,17 @@ class OrderItems extends SQLBase {
      $g_oError->AddError('הזמנת המוצרים שהוזנה אינה תקינה. הודעה מפורטת מופיעה מעל כל שורה הצבועה באדום');
    }
    
+   //validate storage areas (must be after products data have been collected)
+   foreach($this->m_aStorageAreasBurden as $aStorage)
+   {
+     if ($aStorage['StorageAreaBurden'] > $aStorage['StorageAreaMaxBurden'])
+     {
+       $bValid = FALSE;
+       $g_oError->AddError('לא ניתן לשמור את ההזמנה המבוקשת כי אין מספיק מקום אחסון פנוי');
+       break;
+     }
+   }
+   
    if (!$bValid)
      $g_oError->PushError('הנתונים לא נשמרו.');
    
@@ -685,6 +698,7 @@ class OrderItems extends SQLBase {
     $oItem->ChangedByCoordinator  = $oOriginalItem->ChangedByCoordinator;
     $oItem->ProductTotalCoopOrderQuantity = $oOriginalItem->ProductTotalCoopOrderQuantity;
     
+    $oItem->StorageAreaID  = $oOriginalItem->StorageAreaID;
     $oItem->StorageAreaBurden  = $oOriginalItem->StorageAreaBurden;
     $oItem->StorageAreaMaxBurden = $oOriginalItem->StorageAreaMaxBurden;
         
@@ -859,16 +873,26 @@ class OrderItems extends SQLBase {
      }
    }
    
-   //validate storage area burden, if there's been an increase
-   if ($oOrderItem->StorageAreaMaxBurden > 0 && $oOrderItem->Burden > $oOriginalItem->Burden)
+   //validate storage area burden, if this storage has limit
+   if ($oOrderItem->StorageAreaMaxBurden > 0)
+     $this->AddToStorageAreaBurden($oOrderItem, $oOriginalItem);
+ }
+ 
+ protected function AddToStorageAreaBurden(&$oOrderItem, &$oOriginalItem)
+ {
+   $fAddedBurden = $oOrderItem->Burden - $oOriginalItem->Burden;
+   
+   if (!isset($this->m_aStorageAreasBurden[$oOrderItem->StorageAreaID]))
    {
      $fAddedBurden = $oOrderItem->Burden - $oOriginalItem->Burden;
-     if ($oOrderItem->StorageAreaBurden + $fAddedBurden > $oOrderItem->StorageAreaMaxBurden)
-     {
-       $oOrderItem->InvalidEntry = TRUE;
-       $oOrderItem->ValidationMessage .= 'לא ניתן לשמור את ההזמנה המבוקשת ממוצר זה כי אין מספיק מקום אחסון פנוי<br/>';
-     }
+     
+     $this->m_aStorageAreasBurden[$oOrderItem->StorageAreaID] = array(
+       'StorageAreaBurden' => $oOrderItem->StorageAreaBurden + $fAddedBurden,
+       'StorageAreaMaxBurden' => $oOrderItem->StorageAreaMaxBurden,
+      );
    }
+   else
+     $this->m_aStorageAreasBurden[$oOrderItem->StorageAreaID]['StorageAreaBurden'] += $fAddedBurden;
  }
  
  //helper function to raise flag that an item's quantity was modified by a ccordinator

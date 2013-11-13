@@ -8,7 +8,7 @@ if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 if ($g_oMemberSession->IsOnlyMember)
   return;
 
-echo '<div class="coordmenu">';
+echo '<nav id="navCoord" class="nav-collapse"><ul>';
 
 define('prmidCoopOrdersModify', 10);
 define('prmidCoopOrdersView', 11);
@@ -32,14 +32,14 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidCoopOrdersView, Consts::P
      Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
 {
 ?>
-<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/cooporders.php"><!$PAGE_TITLE_COOP_ORDERS$!></a></span>
+<li><span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/cooporders.php"><!$PAGE_TITLE_COOP_ORDERS$!></a></span></li>
 <?php
-}        
+}    
 
 if ($oPermissionBridgeSet->HasPermission(prmidCoopOrdersModify))
 {
 ?>
-<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>orders.php"><!$LINK_MEMBER_ORDERS$!></a></span>
+<li><span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>orders.php"><!$LINK_MEMBER_ORDERS$!></a></span></li>
 <?php
 }
         
@@ -49,7 +49,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidProducersView, Consts::PE
      Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
 {
 ?>
-<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/producers.php"><!$PAGE_TITLE_PRODUCERS$!></a></span>
+<li><span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/producers.php"><!$PAGE_TITLE_PRODUCERS$!></a></span></li>
 <?php
 }
 
@@ -59,7 +59,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidProductsView, Consts::PER
      Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
 {
 ?>
-<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/products.php"><!$PAGE_TITLE_PRODUCTS$!></a></span>
+<li><span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/products.php"><!$PAGE_TITLE_PRODUCTS$!></a></span></li>
 <?php
 }
 
@@ -67,7 +67,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidPickupLocationsModify, Co
      Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
 {
 ?>
-<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/pickuplocs.php"><!$PAGE_TITLE_PICKUP_LOCATIONS$!></a></span>
+<li><span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/pickuplocs.php"><!$PAGE_TITLE_PICKUP_LOCATIONS$!></a></span></li>
 <?php
 }
 
@@ -75,7 +75,7 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidCachierTotals, Consts::PE
            Consts::PERMISSION_TYPE_VIEW, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
 {
 ?>
-<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/cachier.php"><!$PAGE_TITLE_CACHIER$!></a></span>
+<li><span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/cachier.php"><!$PAGE_TITLE_CACHIER$!></a></span></li>
 <?php
 }
 
@@ -85,10 +85,10 @@ if ($oPermissionBridgeSet->DefinePermissionBridge(prmidMembersView, Consts::PERM
      Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE))
 {
 ?>
-<span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/members.php"><!$PAGE_TITLE_MEMBERS$!></a></span>
+<li><span class="coordmenulabel"><a href="<?php echo $g_sRootRelativePath; ?>coord/members.php"><!$PAGE_TITLE_MEMBERS$!></a></span></li>
 <?php
 }
 
-echo '</div>';
+echo '</ul></nav>';
 
 ?>

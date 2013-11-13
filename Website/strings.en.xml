@@ -2222,7 +2222,7 @@
 </str>
 <str>
     <key>ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
-    <value>Cannot save the requested quantity for this item since there is not enough free storage area.</value>
+    <value>Cannot save the requested order since there is not enough free storage area.</value>
 </str>
 
 <str>

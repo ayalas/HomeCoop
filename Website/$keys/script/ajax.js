@@ -31,7 +31,6 @@ function viewcalendar(relPath, ctlToUpdate) {
     }
   }
   //kalendarik
-  kalendarik = window.open(sUrl, "_blank" , "location=0, menubar=0, scrollbars=0, status=0, titlebar=0, toolbar=0, directories=0, resizable=1, width=200, height=240, top=<!$DATE_PICKER_Y_POSITION$!>, left=<!$DATE_PICKER_X_POSITION$!>");
-  kalendarik.resizeTo(200, 240);
-  kalendarik.moveTo(<!$DATE_PICKER_X_POSITION$!>, <!$DATE_PICKER_Y_POSITION$!>);
+  kalendarik = window.open(sUrl, "_blank" , "location=0, menubar=0, scrollbars=0, status=0, titlebar=0, toolbar=0, directories=0, resizable=1, width=220, height=220, top=<!$DATE_PICKER_Y_POSITION$!>, left=<!$DATE_PICKER_X_POSITION$!>");
+  
 }

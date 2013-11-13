@@ -37,18 +37,19 @@ function ToggleMobileExpand()
   var nExpandStatus = ctlExpandState.value;
   if (nExpandStatus == 0)
   {
-         document.getElementById('divPLFacet').style.display = 'block';
-         document.getElementById('tdMain').style.display = 'none';
+         mobileShow(document.getElementById('divPLFacet'));
+         mobileHide(document.getElementById('tdMain'));
          
          nExpandStatus = 1;
-         document.getElementById('imgFacetMobileExpandArrow').src = 'img/arrow_up.gif';
+         document.getElementById('imgFacetMobileExpandArrow').src = 'img/document-close-3.png';
   }
   else
   {
-         document.getElementById('divPLFacet').style.display = 'none';
-         document.getElementById('tdMain').style.display = 'block';
+         mobileShow(document.getElementById('tdMain'));
+         mobileHide(document.getElementById('divPLFacet'));
+         
          nExpandStatus = 0;
-         document.getElementById('imgFacetMobileExpandArrow').src = 'img/arrow_down.gif';
+         document.getElementById('imgFacetMobileExpandArrow').src = 'img/filter.png';
   }
   
   ctlExpandState.value = nExpandStatus;
@@ -62,21 +63,24 @@ function ToggleItemSelect(sCtlID)
 
   if (ctlItem.className.indexOf('unselectedfacet') >= 0)
   {
-	ctlItem.className = ctlItem.className.replace(' unselectedfacet' , '');
+	removeCssClass(ctlItem, 'unselectedfacet');
    	//if the current state DOES display unselected, show the element
   	ctlItem.style.display = 'block';
   }
   else
   {
-	ctlItem.className += ' unselectedfacet';
+        addCssClass(ctlItem, 'unselectedfacet', true);
    	//if the current state does NOT display unselected, hide the element
 	if (nExpandStatus == 0)
   	   ctlItem.style.display = 'none';
  	else
-    	   ctlItem.style.display = 'block';
+        {
+         ctlItem.style.display = 'block';
+        }
   }
 
   document.getElementById('btnFilter').removeAttribute('disabled');
+  
 }
 
 function ApplyFacetFilter()

@@ -62,16 +62,6 @@
     <value>800</value>
 </str>
 <str>
-    <key>HOME_ORDER_CAPACITY_PERCENT_WIDTH</key>
-    <value>80px</value>
-     <comment>Width of the X% full section in each order box in the home screen</comment>
-</str>
-<str>
-    <key>HOME_ORDER_STATUS_WIDTH</key>
-    <value>120px</value>
-     <comment>Width of the status field area in each order box in the home screen</comment>
-</str>
-<str>
     <key>ORDER_ITEMS_SCROLL_HEIGHT</key>
     <value>550px</value>
      <comment>Height of the order items screen's scorllable area</comment>

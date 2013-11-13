@@ -14,13 +14,29 @@ include_once 'facet.php';
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" src="script/activeorders.js" ></script>
 <script type="text/javascript" src="script/facet.js" ></script>
+<script>
+  function CloseNavs()
+  {
+    if (typeof nav !== 'undefined') {
+      nav.close();
+    }
+    if (typeof nav2 !== 'undefined') {
+      nav2.close();
+    }
+  }
+</script>
 </head>
-<body class="centered">
+<body class="centered" onclick="JavaScript:CloseNavs();">
 <form id="frmHome" name="frmHome" method="post">
 <input type="hidden" id="hidfacetmblexpandstate" name="hidfacetmblexpandstate" value="0" />
 <input type="hidden" id="hidplfacetgrpexpandstate" name="hidplfacetgrpexpandstate" value="0" />
 <input type="hidden" id="hidSelectedPLs" name="hidSelectedPLs" value="" />
-<?php include_once 'control/header.php'; ?>
+<?php 
+  $sHeaderAdditionToLogo = '<a href="#" class="facetmobileexpander mobiledisplay" onclick="JavaScript:ToggleMobileExpand();">
+    <img alt="Pickup Locations" id="imgFacetMobileExpandArrow" src="img/filter.png"/></a>';
+
+  include_once 'control/header.php'; 
+?>
 <table cellspacing="0" cellpadding="0" width="100%">
     <tr>
         <td >
@@ -61,7 +77,6 @@ include_once 'facet.php';
     <tr>
     <td>
       <?php 
-      
 
       include_once 'control/footer.php';
       ?>

@@ -35,6 +35,7 @@ class OrderItem extends SQLBase {
   const PROPERTY_PRODUCT_TOTAL_COOP_ORDER_QUANTITY = "ProductTotalCoopOrderQuantity";
   const PROPERTY_ITEM_BURDEN = "Burden";
   
+  const PROPERTY_STORAGE_AREA_ID = "StorageAreaID";
   const PROPERTY_STORAGE_AREA_BURDEN = "StorageAreaBurden";
   const PROPERTY_STORAGE_AREA_MAX_BURDEN = "StorageAreaMaxBurden";
  
@@ -93,6 +94,7 @@ class OrderItem extends SQLBase {
         self::PROPERTY_ORDERS_CHANGED => NULL,
         self::PROPERTY_COORDINATING_GROUP_ID => 0,
         self::PROPERTY_VISIBLE => TRUE,
+        self::PROPERTY_STORAGE_AREA_ID => NULL,
         self::PROPERTY_STORAGE_AREA_BURDEN => NULL,
         self::PROPERTY_STORAGE_AREA_MAX_BURDEN => NULL,
        );

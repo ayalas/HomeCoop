@@ -33,3 +33,26 @@ function decodeXml(string) {
             return escaped_one_to_xml_special_map[item];
     });
 }
+
+function removeCssClass(ctl, classname)
+{
+  ctl.className = ctl.className.replace(new RegExp('(\\s|^)' + classname + '(\\s|$)', 'ig'), ' ');
+}
+
+function addCssClass(ctl, classname, skiptest)
+{
+  if (skiptest || ctl.className.indexOf(classname) === -1)
+    ctl.className += ' ' +  classname;
+}
+
+function mobileShow(ctl)
+{
+  removeCssClass(ctl, 'mobilehide');
+  addCssClass(ctl, 'displayalways', false);
+}
+
+function mobileHide(ctl)
+{
+  removeCssClass(ctl, 'displayalways');
+  addCssClass(ctl, 'mobilehide', false);
+}

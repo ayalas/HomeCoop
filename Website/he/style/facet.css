@@ -70,17 +70,6 @@ li.unselectedfacet
 li.facetitm:hover
 {
   cursor: pointer;
-  border-color: #989899;
-  background-color: #7E7F7F;
-  color: #DADBDC;
-}
-
-li.unselectedfacet:hover
-{
- display: none;
- border-color: #4A608E;
- background-color: #193264;
- color: #FFF;
 }
 
 .facettitle
@@ -97,9 +86,7 @@ li.unselectedfacet:hover
   background-color: #7E7F7F;
 }
 
-
-
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 640px) {
   .facetexpander
   {
       height: 10px;
@@ -109,16 +96,12 @@ li.unselectedfacet:hover
     vertical-align: top;
     height: 8px;
   }
-  .facetmobileexpander
-  {
-    display: none;
-  }
   td#tdFacet
   {
      width: 180px;  
   }
 }
-@media screen and (max-width: 599px) {
+@media screen and (max-width: 639px) {
   .facetexpander
   {
       height: 20px;
@@ -130,19 +113,22 @@ li.unselectedfacet:hover
   }
   .facetmobileexpander
   {
-     margin-top: 20px;
-     height: 20px;
-     width: 40px;
+    float: right;
+    padding: 22px 10px;
+    border-width: 0;
+    border-style: none;
+    outline:none;
   }
   .facetmobileexpander img
   {
-    vertical-align: top;
-    height: 18px;
+    border-width: 0;
+    border-style: none;
+    outline:none;
   }
+  
   .facet
   {
     width: 220px;
-    display: none;  
   }
 }
 
