@@ -144,6 +144,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html dir='rtl' >
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <link rel="stylesheet" type="text/css" href="style/fixedheaders.css" />
 <title>הזינו את שם הקואופרטיב שלכם: <?php echo $oRecord->PageTitle;  ?></title>
@@ -188,7 +189,7 @@ function SetDirty()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" width="100%">
     <tr>
-        <td><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr >
                 <td>
@@ -241,7 +242,7 @@ function SetDirty()
                   <th class="columntitletiny">כמות</th>
                   <th class="columntitletiny">מחיר</th>
                   <th class="columntitletiny">הזמנה</th>
-                  <th class="columntitletiny"><a class="tooltiphelp" href="#" >הוספה<span>הכמות המקסימלית שמתאמי הזמנת הקואופרטיב יורשו *להוסיף* להזמנה שלך כדי להשלים הזמנות חלקיות לגודל החבילה. למשל, אם גודל החבילה הוא 2ק&quot;ג, והכמות שהזמנת היא 0.5ק&quot;ג, ע&quot;י השמת הערך 0.5ק&quot;ג בשדה זה, תוכל/י להגדיר שאפשר לעלות עד ל- 1ק&quot;ג כדי להשלים הזמנה חלקית</span></a></th>
+                  <th class="columntitletiny"><a id="additionhlp" name="additionhlp" class="tooltiphelp" href="#additionhlp" >הוספה<span>הכמות המקסימלית שמתאמי הזמנת הקואופרטיב יורשו *להוסיף* להזמנה שלך כדי להשלים הזמנות חלקיות לגודל החבילה. למשל, אם גודל החבילה הוא 2ק&quot;ג, והכמות שהזמנת היא 0.5ק&quot;ג, ע&quot;י השמת הערך 0.5ק&quot;ג בשדה זה, תוכל/י להגדיר שאפשר לעלות עד ל- 1ק&quot;ג כדי להשלים הזמנה חלקית</span></a></th>
                   <th class="columntitletiny">סה&quot;כ</th>
                   <th class="columntitlescroll">הערות</th>
                 </tr>
@@ -257,6 +258,7 @@ function SetDirty()
                 }
                 else
                 {
+                  $sJoinedItemsTooltipID = '';
                   foreach($arrItems as $oItem)
                   {
                       if (!$oItem->Visible)
@@ -275,7 +277,8 @@ function SetDirty()
                       
                       $oProductPackage = new ProductPackage($oItem->ProductItems, $oItem->ProductItemQuantity, 
                                 $oItem->ItemUnitAbbrev, $oItem->UnitInterval, $oItem->UnitAbbrev, $oItem->PackageSize, 
-                                $oItem->ProductQuantity, $oItem->ProductMaxCoopOrder, $oItem->ProductTotalCoopOrderQuantity);
+                                $oItem->ProductQuantity, $oItem->ProductMaxCoopOrder, $oItem->ProductTotalCoopOrderQuantity,
+                           'tooltiphelp', 'ProductPackage' . $oItem->ProductID);
                       
                       //1. ProductName + link to product screen + hidden order item id to identify existing records
                       echo '<td class="columndatalong">';
@@ -359,7 +362,10 @@ function SetDirty()
                         $fOriginalAmount = ($oItem->Quantity/$oItem->ProductQuantity) * $oItem->ProductCoopPrice;
                         $fAmountSaved = $fOriginalAmount - $oItem->CoopTotal;
                         
-                        echo '<a class="tooltiphelprel" href="#" >',$oItem->CoopTotal,'<span>', 
+                        $sJoinedItemsTooltipID = 'joinitemhlp_' . $oItem->OrderItemID;
+                        
+                        echo '<a id="', $sJoinedItemsTooltipID, '" name="', $sJoinedItemsTooltipID, '" class="tooltiphelprel" href="#', 
+                            $sJoinedItemsTooltipID, '" >',$oItem->CoopTotal,'<span>', 
                               sprintf('%1$d מפריטי המוצר צורפו למוצר %2$s. כתוצאה מכך נחסך סכום של %3$s',$oItem->JoinedItems,
                                    $oItem->JoinToProductName, $fAmountSaved),'</span></a>';
                       }

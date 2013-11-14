@@ -150,7 +150,7 @@ function Sort(nField)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -202,6 +202,7 @@ function Sort(nField)
                 }
                 else
                 {
+                  $sTooltipBalanceID = '';
                   while ( $recTable )
                   {
                     if ($bOrdersChanged && array_key_exists($recTable["OrderID"], $arrOrdersUpdated))
@@ -244,8 +245,11 @@ function Sort(nField)
                                             
                       //balance
                       if ($mMaxOrder != NULL && $recTable["mBalance"] != NULL && $mMaxOrder != $recTable["mBalance"])
-                        echo '<td><a href="#" class="tooltip">' , $recTable["mBalance"] , '<span>', 
+                      {
+                        $sTooltipBalanceID = 'balancehlp_' . $recTable["OrderID"];
+                        echo '<td><a id="', $sTooltipBalanceID, '" name="', $sTooltipBalanceID, '" href="#', $sTooltipBalanceID, '" class="tooltip">' , $recTable["mBalance"] , '<span>', 
                               sprintf('<!$TOOLTIP_MAX_ORDER$!>',$mMaxOrder), '</span></a></td>';
+                      }
                       else
                         echo '<td>' , $recTable["mBalance"] , '</td>';
                       

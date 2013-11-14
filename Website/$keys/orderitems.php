@@ -144,6 +144,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <link rel="stylesheet" type="text/css" href="style/fixedheaders.css" />
 <title><!$COOPERATIVE_NAME$!>: <?php echo $oRecord->PageTitle;  ?></title>
@@ -188,7 +189,7 @@ function SetDirty()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" width="100%">
     <tr>
-        <td><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr >
                 <td>
@@ -241,7 +242,7 @@ function SetDirty()
                   <th class="columntitletiny"><!$FIELD_QUANTITY$!></th>
                   <th class="columntitletiny"><!$ORDER_ITEMS_PRICE$!></th>
                   <th class="columntitletiny"><!$FIELD_MEMBER_ORDER_ITEM_QUANTITY$!></th>
-                  <th class="columntitletiny"><a class="tooltiphelp" href="#" ><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!><span><!$TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></span></a></th>
+                  <th class="columntitletiny"><a id="additionhlp" name="additionhlp" class="tooltiphelp" href="#additionhlp" ><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!><span><!$TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></span></a></th>
                   <th class="columntitletiny"><!$FIELD_MEMBER_ORDER_ITEM_TOTAL$!></th>
                   <th class="columntitlescroll"><!$FIELD_MEMBER_ORDER_ITEM_COMMENTS$!></th>
                 </tr>
@@ -257,6 +258,7 @@ function SetDirty()
                 }
                 else
                 {
+                  $sJoinedItemsTooltipID = '';
                   foreach($arrItems as $oItem)
                   {
                       if (!$oItem->Visible)
@@ -275,7 +277,8 @@ function SetDirty()
                       
                       $oProductPackage = new ProductPackage($oItem->ProductItems, $oItem->ProductItemQuantity, 
                                 $oItem->ItemUnitAbbrev, $oItem->UnitInterval, $oItem->UnitAbbrev, $oItem->PackageSize, 
-                                $oItem->ProductQuantity, $oItem->ProductMaxCoopOrder, $oItem->ProductTotalCoopOrderQuantity);
+                                $oItem->ProductQuantity, $oItem->ProductMaxCoopOrder, $oItem->ProductTotalCoopOrderQuantity,
+                           'tooltiphelp', 'ProductPackage' . $oItem->ProductID);
                       
                       //1. ProductName + link to product screen + hidden order item id to identify existing records
                       echo '<td class="columndatalong">';
@@ -359,7 +362,10 @@ function SetDirty()
                         $fOriginalAmount = ($oItem->Quantity/$oItem->ProductQuantity) * $oItem->ProductCoopPrice;
                         $fAmountSaved = $fOriginalAmount - $oItem->CoopTotal;
                         
-                        echo '<a class="tooltiphelprel" href="#" >',$oItem->CoopTotal,'<span>', 
+                        $sJoinedItemsTooltipID = 'joinitemhlp_' . $oItem->OrderItemID;
+                        
+                        echo '<a id="', $sJoinedItemsTooltipID, '" name="', $sJoinedItemsTooltipID, '" class="tooltiphelprel" href="#', 
+                            $sJoinedItemsTooltipID, '" >',$oItem->CoopTotal,'<span>', 
                               sprintf('<!$TOOLTIP_ORDER_ITEM_WAS_JOINED$!>',$oItem->JoinedItems,
                                    $oItem->JoinToProductName, $fAmountSaved),'</span></a>';
                       }

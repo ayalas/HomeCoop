@@ -370,7 +370,7 @@ function VerifyPassword()
                       $selPickupLoc->EchoHtml();
                       unset($selPickupLoc);
                     
-                      echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspansmall" >Cashier of balance change</span></a></td>';
+                      echo '<td><a id="updatecachierhlp" name="updatecachierhlp" class="tooltiphelp" href="#updatecachierhlp" >‏?‏<span class="helpspansmall" >Cashier of balance change</span></a></td>';
                       echo '</tr>';
                     }
                   ?>                
@@ -395,7 +395,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspansmall">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
+                  <td><a id="percentoverhlp" name="percentoverhlp" class="tooltiphelp" href="#percentoverhlp" >‏?‏<span class="helpspansmall">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
                 </tr>
 
                 <tr>

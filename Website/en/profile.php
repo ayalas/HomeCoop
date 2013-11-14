@@ -94,6 +94,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <title>Enter Your Cooperative Name: My Profile</title>
 <script type="text/javascript" src="script/authenticated.js" ></script>
@@ -129,7 +130,7 @@ function VerifyPassword()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">My Profile</span></td>
+        <td class="fullwidth"><span class="pagename">My Profile</span></td>
     </tr>
     <tr>
         <td>
@@ -244,7 +245,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
+                  <td><a id="percentoverbalancehlp" name="percentoverbalancehlp" class="tooltiphelp" href="#percentoverbalancehlp" >‏?‏<span class="helpspan">The percentage in which a member&#x27;s order can exceed hir balance. This rule is being applied only when the member&#x27;s payment method allows a percentage over balance.</span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -320,7 +321,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">The preferred file format for data exports.</span></a></td></tr>';
+                  echo '<td><a id="exportformathlp" name="exportformathlp" class="tooltiphelp" href="#exportformathlp" >‏?‏<span class="helpspan">The preferred file format for data exports.</span></a></td></tr>';
                 }
                 ?>
                 </table>

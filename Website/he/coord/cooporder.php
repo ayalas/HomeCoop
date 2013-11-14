@@ -197,7 +197,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>    
     <tr>
         <td >
@@ -273,7 +273,7 @@ function Save()
                $dpStart->EchoHtml();
                unset($dpStart);
 
-               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat, 'costart' );
                HtmlTextEditMultiLang::OtherLangsEmptyCells();
               ?>
               </tr>
@@ -286,7 +286,7 @@ function Save()
                $dpEnd->EchoHtml();
                unset($dpEnd);
 
-               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat, 'coend' );
                HtmlTextEditMultiLang::OtherLangsEmptyCells();
               ?>
               </tr>
@@ -314,7 +314,7 @@ function Save()
                   $txtMaxBurden->EchoHtml();
                   unset($txtMaxBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל ההזמנה לפי הקבולת הכוללת שלה, ע&quot;י השוואת סיכום של המעמסות של כל מוצר כפול כמות ההזמנה ממנו. ניתן לקבוע הגבלה כזו גם פר מקום איסוף. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                  HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל ההזמנה לפי הקבולת הכוללת שלה, ע&quot;י השוואת סיכום של המעמסות של כל מוצר כפול כמות ההזמנה ממנו. ניתן לקבוע הגבלה כזו גם פר מקום איסוף. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.', 'comaxburden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -325,7 +325,7 @@ function Save()
                   $txtMaxCoopTotal->EchoHtml();
                   unset($txtMaxCoopTotal);
 
-                  HtmlTextEditMultiLang::EchoHelpText('מגבילה את הסכום הכולל של הזמנת הקואופרטיב. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן');
+                  HtmlTextEditMultiLang::EchoHelpText('מגבילה את הסכום הכולל של הזמנת הקואופרטיב. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן', 'comaxcooptotal');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();                
                 ?>
               </tr>
@@ -336,7 +336,7 @@ function Save()
                   $txtCoopFee->EchoHtml();
                   unset($txtCoopFee);
 
-                  HtmlTextEditMultiLang::EchoHelpText('סכום קבוע שמשולם ע&quot;י כל חבר/ה פר הזמנה בנוסף לסכום המוצרים, לכיסוי הוצאות הרכישה המרוכזת');
+                  HtmlTextEditMultiLang::EchoHelpText('סכום קבוע שמשולם ע&quot;י כל חבר/ה פר הזמנה בנוסף לסכום המוצרים, לכיסוי הוצאות הרכישה המרוכזת', 'cofee');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -347,7 +347,7 @@ function Save()
                   $txtSmallOrder->EchoHtml();
                   unset($txtSmallOrder);
 
-                  HtmlTextEditMultiLang::EchoHelpText('ערך המגדיר רף הזמנה קטנה, עבורה עמלת הקואופרטיב מופחתת');
+                  HtmlTextEditMultiLang::EchoHelpText('ערך המגדיר רף הזמנה קטנה, עבורה עמלת הקואופרטיב מופחתת', 'cosmallorder');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -359,7 +359,7 @@ function Save()
                   $txtSmallOrderCoopFee->EchoHtml();
                   unset($txtSmallOrderCoopFee);
 
-                  HtmlTextEditMultiLang::EchoHelpText('עמלת קואופרטיב מופחתת עבור הזמנה קטנה');
+                  HtmlTextEditMultiLang::EchoHelpText('עמלת קואופרטיב מופחתת עבור הזמנה קטנה', 'cosmallcoopfee');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -371,7 +371,7 @@ function Save()
                   $txtCoopFeePercent->EchoHtml();
                   unset($txtCoopFeePercent);
 
-                  HtmlTextEditMultiLang::EchoHelpText('הגדרת עמלת קואופרטיב לפי אחוזים מהסכום הכולל עבור המוצרים המוזמנים');
+                  HtmlTextEditMultiLang::EchoHelpText('הגדרת עמלת קואופרטיב לפי אחוזים מהסכום הכולל עבור המוצרים המוזמנים', 'cocoopfeepercent');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>                
@@ -422,7 +422,7 @@ function Save()
                   $lblTotalBurden->EchoHtml();
                   unset($lblTotalBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב כפול מספר הפעמים שהוזמן');
+                  HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב כפול מספר הפעמים שהוזמן', 'cototalburden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                 ?>
               </tr>
@@ -434,7 +434,7 @@ function Save()
                   $lblMaxStorageBurden->EchoHtml();
                   unset($lblMaxStorageBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
+                  HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב', 'coMaxStorageBurden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -450,7 +450,7 @@ function Save()
                   $lblStorageBurden->EchoHtml();
                   unset($lblStorageBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ תפוסת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב');
+                  HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ תפוסת אחסון של כל מקומות האחסון בהזמנת הקואופרטיב', 'coStorageBurden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>

@@ -80,7 +80,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -98,8 +98,8 @@ UserSessionBase::Close();
               <td class="columntitlelong">יצרן</td>
               <td class="columntitleshort">סכום ליצרן</td>
               <td class="columntitleshort">סכום לקואופ</td>
-              <td class="columntitlenowidth" ><a class="tooltip" 
-               href="#" >סה&quot;כ משלוח<span>סכום זה מתייחס לסך עלויות המשלוח לכל מקומות האיסוף בהזמנת הקואופרטיב עבור היצרן</span></a></td>
+              <td class="columntitlenowidth" ><a id="totaldelhlp" name="totaldelhlp" class="tooltip" 
+               href="#totaldelhlp" >סה&quot;כ משלוח<span>סכום זה מתייחס לסך עלויות המשלוח לכל מקומות האיסוף בהזמנת הקואופרטיב עבור היצרן</span></a></td>
             </tr>
             <?php
                 if (!$recTable)

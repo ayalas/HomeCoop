@@ -84,7 +84,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -103,8 +103,8 @@ UserSessionBase::Close();
             <tr>
               <td class="columntitlelong"><!$FIELD_PICKUP_LOCATION_NAME$!></td>
               <td class="columntitlelong"><!$FIELD_PICKUP_LOCATION_ADDRESS$!></td>
-              <td class="columntitle"><a class="tooltip" href="#" ><!$FIELD_COOP_ORDER_TOTAL_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_BURDEN$!></span></a></td>
-              <td class="columntitle"><a class="tooltip" href="#" ><!$FIELD_TOTAL_STORAGE_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_STORAGE_BURDEN$!></span></a></td>
+              <td class="columntitle"><a id="totalburdenhlp" name="totalburdenhlp" class="tooltip" href="#totalburdenhlp" ><!$FIELD_COOP_ORDER_TOTAL_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_BURDEN$!></span></a></td>
+              <td class="columntitle"><a id="storageburdenhlp" name="storageburdenhlp" class="tooltip" href="#storageburdenhlp" ><!$FIELD_TOTAL_STORAGE_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_STORAGE_BURDEN$!></span></a></td>
               <td class="columntitlenowidth"><?php if ($bShowSums) echo '<!$FIELD_COOP_ORDER_COOP_TOTAL$!>'; ?></td>
             </tr>
             <?php

@@ -29,9 +29,9 @@ function AddLanguageOption($sFolder, $sText)
         if ($sFolder == $g_sLangDir)
             return;
 
-        $g_sLangControl .= '<a href="#" class="subtlelink" onclick="JavaScript: ChangeLanguage(\'' . 
+        $g_sLangControl .= '<span class="usermenulabel"><a href="#" class="subtlelink" onclick="JavaScript: ChangeLanguage(\'' . 
                                         $sFolder . '\', \'' . $g_sRedirectAfterLangChange . '\',\'../' . 
-                                        $g_sRootRelativePath . 'index.php\');" ><span class="usermenulabel"><!$LANGUAGE_DIRECTION_MARK$!>' . $sText . '<!$LANGUAGE_DIRECTION_MARK$!></span></a>';
+                                        $g_sRootRelativePath . 'index.php\');" ><!$LANGUAGE_DIRECTION_MARK$!>' . $sText . '<!$LANGUAGE_DIRECTION_MARK$!></a></span>';
      }
 }
 

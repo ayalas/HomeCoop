@@ -281,7 +281,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -365,7 +365,8 @@ function Save()
                   <?php
                       $oProductPackage = new ProductPackage($oRecord->Items, $oRecord->ItemQuantity, 
                                 $oRecord->ItemUnitAbbrev, $oRecord->UnitInterval, $oRecord->UnitAbbrev, $oRecord->PackageSize, 
-                                $oRecord->Quantity, $oRecord->MaxCoopOrder, $oRecord->TotalCoopOrder);
+                                $oRecord->Quantity, $oRecord->MaxCoopOrder, $oRecord->TotalCoopOrder,
+                           'tooltiphelp', 'ProductPackage' . $oRecord->ProductID);
                       
                       $lblQuantity = new HtmlTextLabel('<!$FIELD_QUANTITY$!>', 'lblQuantity', $oProductPackage->Html);
                       $lblQuantity->UseHtmlEscape = FALSE; //already escaped in ProductPackage
@@ -415,7 +416,7 @@ function Save()
                      $txtMaxUserOrder->EchoHtml();
                      unset($txtMaxUserOrder);
                      
-                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_USER_MAX_ORDER$!>');
+                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_USER_MAX_ORDER$!>', 'MaxUserOrder');
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -426,7 +427,7 @@ function Save()
                      $txtMaxCoopOrder->EchoHtml();
                      unset($txtMaxCoopOrder);
                      
-                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_MAX_PRODUCT_ORDER$!>');
+                     HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_MAX_PRODUCT_ORDER$!>', 'MaxCoopOrder');
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -495,7 +496,7 @@ function Save()
                     $selStorageArea->EmptyText = '<!$FIELD_VALUE_DISABLED$!>';
                     $selStorageArea->EchoHtml();
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_PRODUCT_PICKUP_LOCATION_STORAGE_AREA$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_PRODUCT_PICKUP_LOCATION_STORAGE_AREA$!>', 'StorageArea_' . $PickupLocationID);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                     
                     echo '</tr>';

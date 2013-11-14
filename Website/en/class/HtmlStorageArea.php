@@ -114,7 +114,7 @@ class HtmlStorageArea {
         $txtMaxBurden->EchoHtml();
       }
       
-      HtmlTextEditMultiLang::EchoHelpText('The maximum capacity of the storage area in terms of the product field &quot;Burden&quot;. The sum for all products of &quot;Burden&quot; times product quantity will be compared to this value for all the orders of products designated to this storage area. This is only a default value and can be overwritten in the cooperative order&#x27;s storage area settings.');
+      HtmlTextEditMultiLang::EchoHelpText('The maximum capacity of the storage area in terms of the product field &quot;Burden&quot;. The sum for all products of &quot;Burden&quot; times product quantity will be compared to this value for all the orders of products designated to this storage area. This is only a default value and can be overwritten in the cooperative order&#x27;s storage area settings.', $said);
       HtmlTextEditMultiLang::OtherLangsEmptyCells();
 
       echo '</tr><tr>';

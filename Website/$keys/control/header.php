@@ -39,12 +39,9 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
 ?>
 <header>
 <input type="hidden" id="hidLogout" name="hidLogout" />
-<table cellspacing="0" cellpadding="0">
+<table cellspacing="0" cellpadding="0" class="fullwidth">
   <tr class="mobiledisplay"><td><a id="tglUser" class="nav-toggle"></a></td><?php 
         if ( isset($g_oMemberSession)) { 
-          
-          echo '<td>', $sBalanceLink, '</td>';
-          
           echo '<td>';
           if (!$g_oMemberSession->IsOnlyMember ) 
             echo '<a id="tglCoord" class="nav-toggle"></a>';
@@ -55,6 +52,8 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
             echo $sHeaderAdditionToLogo;
           }
           echo '</td>';
+          
+          echo '<td>', $sBalanceLink, '</td>';
        }
      ?></tr>  
     <?php if ( isset($g_oMemberSession) && !$g_oMemberSession->IsOnlyMember )
@@ -95,7 +94,7 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
       if ( isset($g_oMemberSession) )
       {
 
-            echo '<li><a href="#" onclick="JavaScript:Logout()" ><span class="usermenulabel"><!$HEADER_LOGOUT$!></span></a></li>';
+            echo '<li><span class="usermenulabel"><a href="#" onclick="JavaScript:Logout()" ><!$HEADER_LOGOUT$!></a></span></li>';
       }  
       ?>
       </ul>

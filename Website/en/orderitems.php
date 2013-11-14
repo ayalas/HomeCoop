@@ -144,6 +144,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <link rel="stylesheet" type="text/css" href="style/fixedheaders.css" />
 <title>Enter Your Cooperative Name: <?php echo $oRecord->PageTitle;  ?></title>
@@ -188,7 +189,7 @@ function SetDirty()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" width="100%">
     <tr>
-        <td><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr >
                 <td>
@@ -241,7 +242,7 @@ function SetDirty()
                   <th class="columntitletiny">Quantity</th>
                   <th class="columntitletiny">Price</th>
                   <th class="columntitletiny">Order</th>
-                  <th class="columntitletiny"><a class="tooltiphelp" href="#" >Add<span>The maximum quantity the cooperative order coordinator will be allowed to *add* to your order for completing partial orders to the package size. For instance, if a package size is 2lb, and you wish to order only 0.5lb, by entering 0.5lb in this field you may specify that you are ready to go up to 1lb.</span></a></th>
+                  <th class="columntitletiny"><a id="additionhlp" name="additionhlp" class="tooltiphelp" href="#additionhlp" >Add<span>The maximum quantity the cooperative order coordinator will be allowed to *add* to your order for completing partial orders to the package size. For instance, if a package size is 2lb, and you wish to order only 0.5lb, by entering 0.5lb in this field you may specify that you are ready to go up to 1lb.</span></a></th>
                   <th class="columntitletiny">Total</th>
                   <th class="columntitlescroll">Comments</th>
                 </tr>
@@ -257,6 +258,7 @@ function SetDirty()
                 }
                 else
                 {
+                  $sJoinedItemsTooltipID = '';
                   foreach($arrItems as $oItem)
                   {
                       if (!$oItem->Visible)
@@ -275,7 +277,8 @@ function SetDirty()
                       
                       $oProductPackage = new ProductPackage($oItem->ProductItems, $oItem->ProductItemQuantity, 
                                 $oItem->ItemUnitAbbrev, $oItem->UnitInterval, $oItem->UnitAbbrev, $oItem->PackageSize, 
-                                $oItem->ProductQuantity, $oItem->ProductMaxCoopOrder, $oItem->ProductTotalCoopOrderQuantity);
+                                $oItem->ProductQuantity, $oItem->ProductMaxCoopOrder, $oItem->ProductTotalCoopOrderQuantity,
+                           'tooltiphelp', 'ProductPackage' . $oItem->ProductID);
                       
                       //1. ProductName + link to product screen + hidden order item id to identify existing records
                       echo '<td class="columndatalong">';
@@ -359,7 +362,10 @@ function SetDirty()
                         $fOriginalAmount = ($oItem->Quantity/$oItem->ProductQuantity) * $oItem->ProductCoopPrice;
                         $fAmountSaved = $fOriginalAmount - $oItem->CoopTotal;
                         
-                        echo '<a class="tooltiphelprel" href="#" >',$oItem->CoopTotal,'<span>', 
+                        $sJoinedItemsTooltipID = 'joinitemhlp_' . $oItem->OrderItemID;
+                        
+                        echo '<a id="', $sJoinedItemsTooltipID, '" name="', $sJoinedItemsTooltipID, '" class="tooltiphelprel" href="#', 
+                            $sJoinedItemsTooltipID, '" >',$oItem->CoopTotal,'<span>', 
                               sprintf('%1$d items were joined to the product %2$s. As a result a sum of %3$s was saved.',$oItem->JoinedItems,
                                    $oItem->JoinToProductName, $fAmountSaved),'</span></a>';
                       }

@@ -222,7 +222,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>    
     <tr>
         <td >
@@ -273,7 +273,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
 
-                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח למקום איסוף זה לפי הקבולת הכוללת של המוצרים שיגיעו אליו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח למקום איסוף זה לפי הקבולת הכוללת של המוצרים שיגיעו אליו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.', 'MaxBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -287,7 +287,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $lblTotalBurden->EchoHtml();
                     unset($lblTotalBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור מקום האיסוף כפול מספר הפעמים שהוזמן');
+                    HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור מקום האיסוף כפול מספר הפעמים שהוזמן', 'TotalBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -335,7 +335,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $lblMaxStorageBurden->EchoHtml();
                     unset($lblMaxStorageBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון במקום האיסוף');
+                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ קיבולת אחסון של כל מקומות האחסון במקום האיסוף', 'MaxStorageBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -351,7 +351,8 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $lblStorageBurden->EchoHtml();
                     unset($lblStorageBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ תפוסת אחסון של כל מקומות האחסון במקום האיסוף');
+                    HtmlTextEditMultiLang::EchoHelpText('סה&quot;כ תפוסת אחסון של כל מקומות האחסון במקום האיסוף'
+                        , 'StorageBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -393,7 +394,8 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                   $txtMaxBurden->EchoHtml();
                   unset($txtMaxBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח למקום איסוף זה לפי הקבולת הכוללת של המוצרים שיגיעו אליו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                  HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח למקום איסוף זה לפי הקבולת הכוללת של המוצרים שיגיעו אליו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.'
+                      , 'MaxBurden_' . $aStorageArea['StorageAreaKeyID']);
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
 
                   echo '</tr>';
@@ -418,7 +420,8 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                   $lblTotalBurden->EchoHtml();
                   unset($lblTotalBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור מקום האחסון כפול מספר הפעמים שהוזמן');
+                  HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור מקום האחסון כפול מספר הפעמים שהוזמן', 'TotalBurden_' .
+                      $aStorageArea['StorageAreaKeyID']);
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
 
                   echo '</tr>';

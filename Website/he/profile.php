@@ -94,6 +94,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html dir='rtl' >
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <title>הזינו את שם הקואופרטיב שלכם: הפרופיל שלי</title>
 <script type="text/javascript" src="script/authenticated.js" ></script>
@@ -129,7 +130,7 @@ function VerifyPassword()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">הפרופיל שלי</span></td>
+        <td class="fullwidth"><span class="pagename">הפרופיל שלי</span></td>
     </tr>
     <tr>
         <td>
@@ -244,7 +245,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
+                  <td><a id="percentoverbalancehlp" name="percentoverbalancehlp" class="tooltiphelp" href="#percentoverbalancehlp" >‏?‏<span class="helpspan">בכמה אחוזים מהיתרה ניתן לחרוג בכל הזמנה. כלל זה מוחל רק כאשר שיטת התשלום מאפשרת אחוז חריגה</span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -320,7 +321,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">תבנית הקובץ המועדפת ליצוא נתונים.</span></a></td></tr>';
+                  echo '<td><a id="exportformathlp" name="exportformathlp" class="tooltiphelp" href="#exportformathlp" >‏?‏<span class="helpspan">תבנית הקובץ המועדפת ליצוא נתונים.</span></a></td></tr>';
                 }
                 ?>
                 </table>

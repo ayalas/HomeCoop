@@ -281,7 +281,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -365,7 +365,8 @@ function Save()
                   <?php
                       $oProductPackage = new ProductPackage($oRecord->Items, $oRecord->ItemQuantity, 
                                 $oRecord->ItemUnitAbbrev, $oRecord->UnitInterval, $oRecord->UnitAbbrev, $oRecord->PackageSize, 
-                                $oRecord->Quantity, $oRecord->MaxCoopOrder, $oRecord->TotalCoopOrder);
+                                $oRecord->Quantity, $oRecord->MaxCoopOrder, $oRecord->TotalCoopOrder,
+                           'tooltiphelp', 'ProductPackage' . $oRecord->ProductID);
                       
                       $lblQuantity = new HtmlTextLabel('Quantity', 'lblQuantity', $oProductPackage->Html);
                       $lblQuantity->UseHtmlEscape = FALSE; //already escaped in ProductPackage
@@ -415,7 +416,7 @@ function Save()
                      $txtMaxUserOrder->EchoHtml();
                      unset($txtMaxUserOrder);
                      
-                     HtmlTextEditMultiLang::EchoHelpText('Max. product quantity per member');
+                     HtmlTextEditMultiLang::EchoHelpText('Max. product quantity per member', 'MaxUserOrder');
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -426,7 +427,7 @@ function Save()
                      $txtMaxCoopOrder->EchoHtml();
                      unset($txtMaxCoopOrder);
                      
-                     HtmlTextEditMultiLang::EchoHelpText('Max. product quantity for the entire coop order');
+                     HtmlTextEditMultiLang::EchoHelpText('Max. product quantity for the entire coop order', 'MaxCoopOrder');
                      HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -495,7 +496,7 @@ function Save()
                     $selStorageArea->EmptyText = 'Inactive';
                     $selStorageArea->EchoHtml();
                     
-                    HtmlTextEditMultiLang::EchoHelpText('The storage area within each pickup location that this product is designated to.');
+                    HtmlTextEditMultiLang::EchoHelpText('The storage area within each pickup location that this product is designated to.', 'StorageArea_' . $PickupLocationID);
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                     
                     echo '</tr>';

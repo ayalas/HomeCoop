@@ -243,7 +243,7 @@ function OnChangeUnit()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -350,7 +350,7 @@ function OnChangeUnit()
                     $txtUnitInterval->EchoHtml();
                     unset($txtUnitInterval);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_UNIT_INTERVAL$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_UNIT_INTERVAL$!>', 'UnitInterval');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -362,7 +362,7 @@ function OnChangeUnit()
                     $txtProducerPrice->EchoHtml();
                     unset($txtProducerPrice);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$HELP_PRODUCT_PRICE$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$HELP_PRODUCT_PRICE$!>', 'ProducerPrice');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -374,7 +374,7 @@ function OnChangeUnit()
                     $txtCoopPrice->EchoHtml();
                     unset($txtCoopPrice);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$HELP_PRODUCT_PRICE$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$HELP_PRODUCT_PRICE$!>', 'CoopPrice');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -385,7 +385,7 @@ function OnChangeUnit()
                     $txtSortOrder->EchoHtml();
                     unset($txtSortOrder);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_SORT_ORDER$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_SORT_ORDER$!>', 'SortOrder');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -396,7 +396,7 @@ function OnChangeUnit()
                     $txtPackageSize->EchoHtml();
                     unset($txtPackageSize);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_PACKAGE_SIZE$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_PACKAGE_SIZE$!>', 'PackageSize');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -408,7 +408,7 @@ function OnChangeUnit()
                     $txtBurden->EchoHtml();
                     unset($txtBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_BURDEN$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_BURDEN$!>', 'Burden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -451,7 +451,7 @@ function OnChangeUnit()
                     $selItemUnit->ReadOnly =  $bReadOnly;
                     $selItemUnit->EchoHtml();
                     unset($selItemUnit);
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_JOIN_TO_PRODUCT$!>'); 
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_JOIN_TO_PRODUCT$!>', 'JoinToProductID'); 
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -462,7 +462,7 @@ function OnChangeUnit()
                     $txtMaxUserOrder->EchoHtml();
                     unset($txtMaxUserOrder);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_USER_MAX_ORDER$!>'); 
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_USER_MAX_ORDER$!>', 'MaxUserOrder'); 
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -487,7 +487,8 @@ function OnChangeUnit()
                       $oPic1Upload->EchoHtml();
                       unset($oPic1Upload);
 
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_HELP$!>', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_HELP$!>', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))
+                          , 'PicUpload1'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
 
                       echo '</tr>';
@@ -499,7 +500,8 @@ function OnChangeUnit()
                       $oPic1FileName->EchoHtml();
                       unset($oPic1FileName);
 
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_FILE_NAME_HELP$!>', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_FILE_NAME_HELP$!>', 
+                          realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  ), 'Pic1FileName'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
@@ -523,7 +525,8 @@ function OnChangeUnit()
                       $oPic2Upload->EchoHtml();
                       unset($oPic2Upload);
 
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_HELP$!>', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_HELP$!>', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024)), 
+                          'PicUpload2'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
@@ -534,7 +537,9 @@ function OnChangeUnit()
                       $oPic2FileName->EchoHtml();
                       unset($oPic2FileName);
                       
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_FILE_NAME_HELP$!>', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('<!$TOOLTIP_PICTURE_FILE_NAME_HELP$!>', 
+                          realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  ), 
+                          'Pic2FileName'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       

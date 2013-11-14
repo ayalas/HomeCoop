@@ -117,6 +117,18 @@ button.order:disabled
   background-color:#F4B551;
 }
 
+select
+{
+  font-size: 12px;
+  background-color:#FFFFFF;
+  border:1px solid #A8A8A8;
+  color:#000000;
+}
+span
+{
+  font-size: 12px;
+}
+
 ul
 {
   list-style: none;
@@ -149,12 +161,13 @@ ul
   text-decoration: none;
 }
 
-div#activeOrdersCnt {
-  
-}
-
 .nav-collapse ul {
   margin: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  -webkit-padding-start: 0;
   padding: 0;
   list-style: none;
 }
@@ -215,6 +228,11 @@ div#activeOrdersCnt {
 }
 
 .coordmenucell {
+  color: #000;
+  background-color: #D7DBDC;
+}
+
+.coordmenucell a {
   color: #000;
   background-color: #D7DBDC;
 }
@@ -280,15 +298,69 @@ div#activeOrdersCnt {
     display: block;
   }
   
+  .dataentry
+  {
+    font-size: 12px;
+    width: 200px;
+    background-color:#FFFFFF;
+  }
+  .dateentry
+  {
+    font-size: 12px;
+    width: 110px;
+    background-color:#FFFFFF;
+  }
+  .dataentrysmall
+  {
+    font-size: 12px;
+    width: 120px;
+    background-color:#FFFFFF;
+  }
+  .requireddata
+  {
+    font-size: 12px;
+    width: 200px;
+    border:1px solid #990033;
+    background-color:#FFFFFF;
+  }
+  .requireddate
+  {
+    font-size: 12px;
+    width: 110px;
+    border:1px solid #990033;
+    background-color:#FFFFFF;
+  }
+  .requiredselect
+  {
+    font-size: 12px;
+    width: 206px;
+    background-color:#FFFFFF;
+    border:1px solid #990033;
+    color:#000000;
+  }
+  .requiredtime
+  {
+    font-size: 12px;
+    width: 65px;
+    border:1px solid #990033;
+    background-color:#FFFFFF;
+  }
+  .selectentry
+  {
+    font-size: 12px;
+    width: 206px;
+    background-color:#FFFFFF;
+    border:1px solid #A8A8A8;
+    color:#000000;
+  }
+  
   .usermenucell
   {
     white-space: nowrap;
-    vertical-align: top;
   }
   
   .coordmenucell {
     white-space: nowrap;
-    vertical-align: top;
   }
   
   .js .nav-collapse {
@@ -340,6 +412,62 @@ div#activeOrdersCnt {
     padding: 12px 0px;
   }
   
+  .dataentry
+  {
+    font-size: 12px;
+    width: 100px;
+    background-color:#FFFFFF;
+  }
+  .dateentry
+  {
+    font-size: 12px;
+    width: 80px;
+    background-color:#FFFFFF;
+  }
+  .dataentrysmall
+  {
+    font-size: 12px;
+    width: 60px;
+    background-color:#FFFFFF;
+  }
+  .requireddata
+  {
+    font-size: 12px;
+    width: 100px;
+    border:1px solid #990033;
+    background-color:#FFFFFF;
+  }
+  .requireddate
+  {
+    font-size: 12px;
+    width: 80px;
+    border:1px solid #990033;
+    background-color:#FFFFFF;
+  }
+  .requiredselect
+  {
+    font-size: 12px;
+    width: 103px;
+    background-color:#FFFFFF;
+    border:1px solid #990033;
+    color:#000000;
+  }
+  .requiredtime
+  {
+    font-size: 12px;
+    width: 45px;
+    border:1px solid #990033;
+    background-color:#FFFFFF;
+  }
+  .selectentry
+  {
+    font-size: 12px;
+    width: 103px;
+    background-color:#FFFFFF;
+    border:1px solid #A8A8A8;
+    color:#000000;
+  }
+  
   .nav-collapse ul
   {
     display: block;
@@ -350,6 +478,17 @@ div#activeOrdersCnt {
     float: <!$ALIGN$!>;
     display: block;
   }
+  
+  .nav-collapse li span{
+    margin: 0;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+    padding:0px; 
+  }
+  
   .nav-collapse {
     float: <!$ALIGN$!>;
   }
@@ -358,13 +497,14 @@ div#activeOrdersCnt {
     text-decoration: none;
     width: 100%;
     border-bottom: 1px solid white;
-    padding: 0.7em 1em;
+    padding-top: 15px;
+    padding-bottom: 15px;
     text-align: center;
     float: <!$ALIGN$!>;
   }
   
   .mobilemenu {
-    float: right;
+    float: <!$ALIGN$!>;
     padding: 26px 10px;
     border: 0;
     outline:none;
@@ -394,7 +534,6 @@ body.product
   right: 0px;
   bottom: 0px;
   left: 0px;
-  width: <!$PRODUCT_PAGE_WIDTH$!>px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -404,17 +543,7 @@ p.brochure
   font-family: Loma, Arial, "Open Sans", sans-serif;
   font-size: 16px;
 }
-select
-{
-  font-size: 12px;
-  background-color:#FFFFFF;
-  border:1px solid #A8A8A8;
-  color:#000000;
-}
-span
-{
-  font-size: 12px;
-}
+
 span.btnrange
 {
   font-size: 1px;
@@ -564,24 +693,6 @@ th
 {
     text-align: center;
 }
-.dataentry
-{
-  font-size: 12px;
-  width: 200px;
-  background-color:#FFFFFF;
-}
-.dateentry
-{
-  font-size: 12px;
-  width: 110px;
-  background-color:#FFFFFF;
-}
-.dataentrysmall
-{
-  font-size: 12px;
-  width: 120px;
-  background-color:#FFFFFF;
-}
 .headbig
 {
   font-size: 24px;
@@ -690,43 +801,7 @@ th
 {
   font-weight: bold;
 }
-.requireddata
-{
-  font-size: 12px;
-  width: 200px;
-  border:1px solid #990033;
-  background-color:#FFFFFF;
-}
-.requireddate
-{
-  font-size: 12px;
-  width: 110px;
-  border:1px solid #990033;
-  background-color:#FFFFFF;
-}
-.requiredselect
-{
-  font-size: 12px;
-  width: 206px;
-  background-color:#FFFFFF;
-  border:1px solid #990033;
-  color:#000000;
-}
-.requiredtime
-{
-  font-size: 12px;
-  width: 65px;
-  border:1px solid #990033;
-  background-color:#FFFFFF;
-}
-.selectentry
-{
-  font-size: 12px;
-  width: 206px;
-  background-color:#FFFFFF;
-  border:1px solid #A8A8A8;
-  color:#000000;
-}
+
 .tabtitleroot
 {
   font-weight: bold;

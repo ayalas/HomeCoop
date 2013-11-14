@@ -41,7 +41,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Pickup Locations</span></td>
+        <td class="fullwidth"><span class="pagename">Pickup Locations</span></td>
     </tr>
     <tr >
         <td >
@@ -65,7 +65,7 @@ UserSessionBase::Close();
                   <td class="columntitlelong">Location Name</td>
                   <td class="columntitletiny">Rotation</td>
                   <td class="columntitlelong">Address</td>
-                  <td class="columntitle"><a class="tooltip" href="#" >Delivery Capacity<span>The maximum capacity of the pickup location in terms of the product field &quot;Burden&quot;. the sum for all products of &quot;Burden&quot; times product quantity will be compared to this value for all the members&#x27; orders that have this pickup location selected. This is only a default value and can be overwritten in the cooperative order&#x27;s pickup location settings. If not overridden in the coop order, members will not be able to place an order that exceeds the limitation set here.</span></a></td>
+                  <td class="columntitle"><a id="maxburdenhlp" name="maxburdenhlp" class="tooltip" href="#maxburdenhlp" >Delivery Capacity<span>The maximum capacity of the pickup location in terms of the product field &quot;Burden&quot;. the sum for all products of &quot;Burden&quot; times product quantity will be compared to this value for all the members&#x27; orders that have this pickup location selected. This is only a default value and can be overwritten in the cooperative order&#x27;s pickup location settings. If not overridden in the coop order, members will not be able to place an order that exceeds the limitation set here.</span></a></td>
                   <td class="columntitleshort">Cashier</td>
                   <td class="columntitleshort">Cashier Update</td>
                   <td class="columntitleshort">Status</td>

@@ -197,7 +197,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>    
     <tr>
         <td >
@@ -273,7 +273,7 @@ function Save()
                $dpStart->EchoHtml();
                unset($dpStart);
 
-               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat, 'costart' );
                HtmlTextEditMultiLang::OtherLangsEmptyCells();
               ?>
               </tr>
@@ -286,7 +286,7 @@ function Save()
                $dpEnd->EchoHtml();
                unset($dpEnd);
 
-               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat, 'coend' );
                HtmlTextEditMultiLang::OtherLangsEmptyCells();
               ?>
               </tr>
@@ -314,7 +314,7 @@ function Save()
                   $txtMaxBurden->EchoHtml();
                   unset($txtMaxBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_MAX_BURDEN$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_MAX_BURDEN$!>', 'comaxburden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -325,7 +325,7 @@ function Save()
                   $txtMaxCoopTotal->EchoHtml();
                   unset($txtMaxCoopTotal);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_MAX_COOP_TOTAL$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_MAX_COOP_TOTAL$!>', 'comaxcooptotal');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();                
                 ?>
               </tr>
@@ -336,7 +336,7 @@ function Save()
                   $txtCoopFee->EchoHtml();
                   unset($txtCoopFee);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_COOP_FEE$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_COOP_FEE$!>', 'cofee');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -347,7 +347,7 @@ function Save()
                   $txtSmallOrder->EchoHtml();
                   unset($txtSmallOrder);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_SMALL_ORDER$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_SMALL_ORDER$!>', 'cosmallorder');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -359,7 +359,7 @@ function Save()
                   $txtSmallOrderCoopFee->EchoHtml();
                   unset($txtSmallOrderCoopFee);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_SMALL_ORDER_COOP_FEE$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_SMALL_ORDER_COOP_FEE$!>', 'cosmallcoopfee');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -371,7 +371,7 @@ function Save()
                   $txtCoopFeePercent->EchoHtml();
                   unset($txtCoopFeePercent);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_COOP_FEE_PERCENT$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_COOP_FEE_PERCENT$!>', 'cocoopfeepercent');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>                
@@ -422,7 +422,7 @@ function Save()
                   $lblTotalBurden->EchoHtml();
                   unset($lblTotalBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_TOTAL_BURDEN$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_TOTAL_BURDEN$!>', 'cototalburden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                 ?>
               </tr>
@@ -434,7 +434,7 @@ function Save()
                   $lblMaxStorageBurden->EchoHtml();
                   unset($lblMaxStorageBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_TOTAL_MAX_STORAGE_BURDEN$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_TOTAL_MAX_STORAGE_BURDEN$!>', 'coMaxStorageBurden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -450,7 +450,7 @@ function Save()
                   $lblStorageBurden->EchoHtml();
                   unset($lblStorageBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_TOTAL_STORAGE_BURDEN$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_TOTAL_STORAGE_BURDEN$!>', 'coStorageBurden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>

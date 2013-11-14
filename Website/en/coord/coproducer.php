@@ -203,7 +203,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td>
@@ -332,7 +332,7 @@ function Save()
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
 
-                    HtmlTextEditMultiLang::EchoHelpText('Limits the size of this cooperative order&#x27;s producer to the overall capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. Members will not be able to place an order that exceeds the limitation set here.');
+                    HtmlTextEditMultiLang::EchoHelpText('Limits the size of this cooperative order&#x27;s producer to the overall capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. Members will not be able to place an order that exceeds the limitation set here.', 'MaxBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -346,7 +346,7 @@ function Save()
                     $lblTotalBurden->EchoHtml();
                     unset($lblTotalBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered, per producer');
+                    HtmlTextEditMultiLang::EchoHelpText('The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered, per producer', 'TotalBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>

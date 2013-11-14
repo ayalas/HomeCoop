@@ -203,7 +203,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td>
@@ -332,7 +332,7 @@ function Save()
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
 
-                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח ליצרן זה לפי הקבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.');
+                    HtmlTextEditMultiLang::EchoHelpText('הגבלת גודל המשלוח ליצרן זה לפי הקבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.', 'MaxBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -346,7 +346,7 @@ function Save()
                     $lblTotalBurden->EchoHtml();
                     unset($lblTotalBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור היצרן כפול מספר הפעמים שהוזמן');
+                    HtmlTextEditMultiLang::EchoHelpText('הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור היצרן כפול מספר הפעמים שהוזמן', 'TotalBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>

@@ -179,9 +179,11 @@ class HtmlTextEditMultiLang {
       echo '<td colspan="' , ($g_nCountLanguages -1) , '" ></td>';
   }
   
-  public static function EchoHelpText($sHelpText)
+  public static function EchoHelpText($sHelpText, $sID = "")
   {        
-    echo '<td><a class="tooltiphelp" href="#" >‏?‏<span class="helpspan">' , $sHelpText,
+    $sID = 'hlpbmrk_' . $sID;
+    
+    echo '<td><a id="', $sID, '" name="', $sID, '" class="tooltiphelp" href="#', $sID, '" >‏?‏<span class="helpspan">' , $sHelpText,
       '</span></a></td>';
   }
   

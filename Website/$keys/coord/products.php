@@ -44,7 +44,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_PRODUCTS$!></span></td>
+        <td class="fullwidth"><span class="pagename"><!$PAGE_TITLE_PRODUCTS$!></span></td>
     </tr>
     <tr >
         <td >
@@ -70,7 +70,7 @@ UserSessionBase::Close();
                   ?></td>
                   <td class="columntitleshort"><!$FIELD_PRODUCER_PRICE_SHORT$!></td>
                   <td class="columntitleshort"><!$FIELD_COOP_PRICE_SHORT$!></td>
-                  <td class="columntitleshort" ><a class="tooltip" href="#" ><!$FIELD_BURDEN$!><span><!$TOOLTIP_BURDEN$!></span></a></td>
+                  <td class="columntitleshort" ><a id="burdenhlp" name="burdenhlp" class="tooltip" href="#burdenhlp" ><!$FIELD_BURDEN$!><span><!$TOOLTIP_BURDEN$!></span></a></td>
                   <td class="columntitlenowidth"><?php
                     $headDisabled = new HtmlGridCellText('<!$FIELD_IS_DISABLED$!>', HtmlGridCellText::CELL_TYPE_TINY);
                     $headDisabled->EchoHtml();
@@ -108,7 +108,8 @@ UserSessionBase::Close();
                       
                       $oProductPackage = new ProductPackage($recProducts["nItems"], $recProducts["fItemQuantity"], 
                                 $recProducts["sItemUnitAbbrev"], $recProducts["fUnitInterval"], $recProducts["sUnitAbbrev"], $recProducts["fPackageSize"], 
-                                $recProducts["fQuantity"],0, 0);
+                                $recProducts["fQuantity"],0, 0,
+                           'tooltiphelp', 'ProductPackage' . $recProducts["ProductKeyID"]);
                       
                       //package size and unit quantity 
                       echo '<td>';

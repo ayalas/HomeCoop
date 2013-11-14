@@ -92,7 +92,7 @@ function OpenPartialOrders(nProductID)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -116,7 +116,7 @@ function OpenPartialOrders(nProductID)
               <td class="columntitleshort">Prod. P.</td>
               <td class="columntitleshort">Coop P.</td>
               <td class="columntitleshort">Quantity</td>
-              <td class="columntitlenowidth" ><a class="tooltip" href="#" >Burden<span>An index that indicates how much this product &quot;burdens&quot; a delivery. Helps to uphold a cooperative order&#x27;s Delivery Capacity, if set</span></a></td>
+              <td class="columntitlenowidth" ><a id="burdenhlp" name="burdenhlp" class="tooltip" href="#burdenhlp" >Burden<span>An index that indicates how much this product &quot;burdens&quot; a delivery. Helps to uphold a cooperative order&#x27;s Delivery Capacity, if set</span></a></td>
             </tr>
             <?php
                 if (!$recTable)
@@ -144,7 +144,8 @@ function OpenPartialOrders(nProductID)
                       $oProductPackage = new ProductPackage(
                               $recTable["ProductItems"], $recTable["fItemQuantity"], $recTable["sItemUnitAbbrev"], 
                               $recTable["fUnitInterval"], $recTable["sUnitAbbrev"], $recTable["fPackageSize"], $recTable["ProductQuantity"],
-                              $recTable["fMaxCoopOrder"], $recTable["fTotalCoopOrder"]
+                              $recTable["fMaxCoopOrder"], $recTable["fTotalCoopOrder"],
+                           'tooltiphelp', 'ProductPackage' . $recTable["ProductKeyID"]
                       );
                       
                       if ($oProductPackage->HasTooltip)

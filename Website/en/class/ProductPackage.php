@@ -12,6 +12,7 @@ class ProductPackage {
   const PROPERTY_SUPPRESS_TOOLTIP = "SuppressTooltip";
   const PROPERTY_TOOLTIP = "Tooltip";
   const PROPERTY_MODE = "Mode";
+  const PROPERTY_ID = "ID";
   const PROPERTY_AVAILABLE_ITEMS = "AvailableItems";
   const PROPERTY_SOLD_OUT = "SoldOut";
   const PROPERTY_HAS_TOOLTIP = "HasTooltip";
@@ -31,7 +32,7 @@ class ProductPackage {
   protected $m_sToolTipAvailableItems = '';
   
   public function __construct($nItems, $fItemQuantity, $sItemUnitAbbrev, $fUnitInterval, $sUnitAbbrev, $fPackageSize, $fQuantity, $fMaxCoopTotal, $fCoopTotal,
-      $sTooltipCssClass = 'tooltiphelp') {
+      $sTooltipCssClass = 'tooltiphelp', $sID = "productpkg") {
     
     $this->m_aData = array(
        self::PROPERTY_QUANTITY => NULL,  
@@ -41,6 +42,7 @@ class ProductPackage {
        self::PROPERTY_SOLD_OUT => FALSE,
        self::PROPERTY_HAS_TOOLTIP => FALSE,
        self::PROPERTY_TOOLTIP_CSS_CLASS => $sTooltipCssClass,
+       self::PROPERTY_ID => $sID,
     );
         
     //"Left: X items" tooltip
@@ -108,7 +110,10 @@ class ProductPackage {
     {
       if (($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP]) || !($this->m_aData[self::PROPERTY_HAS_TOOLTIP]))
         return $this->m_sResult;
-      return '<a class="' . $this->m_aData[self::PROPERTY_TOOLTIP_CSS_CLASS] . '" href="#" >' . htmlspecialchars($this->m_sResult) . '<span>' .
+      
+      $sHelpID = "hlp" . $this->m_aData[self::PROPERTY_ID];
+      
+      return '<a id="'. $sHelpID . '" name="'. $sHelpID . '" class="' . $this->m_aData[self::PROPERTY_TOOLTIP_CSS_CLASS] . '" href="#'. $sHelpID . '" >' . htmlspecialchars($this->m_sResult) . '<span>' .
             $this->m_sToolTipPackageSizeLine . $this->m_sToolTipQuantityIntervalLine . $this->m_sToolTipAvailableItems  . '</span></a>';
     }
     else if ($name == self::PROPERTY_TOOLTIP)
@@ -144,8 +149,12 @@ class ProductPackage {
     if (($this->m_aData[self::PROPERTY_SUPPRESS_TOOLTIP]) || !($this->m_aData[self::PROPERTY_HAS_TOOLTIP]))
       echo htmlspecialchars( $this->m_sResult );
     else
-      echo '<a class="', $this->m_aData[self::PROPERTY_TOOLTIP_CSS_CLASS]  , '" href="#" >' , htmlspecialchars( $this->m_sResult ) , '<span>' ,
+    {
+      $sHelpID = "hlp" . $this->m_aData[self::PROPERTY_ID];
+      
+      echo '<a id="', $sHelpID , '" name="', $sHelpID , '" class="', $this->m_aData[self::PROPERTY_TOOLTIP_CSS_CLASS]  , '" href="#', $sHelpID , '" >' , htmlspecialchars( $this->m_sResult ) , '<span>' ,
               $this->m_sToolTipPackageSizeLine , $this->m_sToolTipQuantityIntervalLine, $this->m_sToolTipAvailableItems  , '</span></a>';
+    }
   }
   
   public function EchoTooltip()

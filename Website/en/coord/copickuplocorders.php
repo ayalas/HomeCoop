@@ -111,7 +111,7 @@ function Sort(nField)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -140,6 +140,7 @@ function Sort(nField)
                 }
                 else
                 {
+                  $sMaxOrderTooltipID = '';
                   while ( $recTable )
                   {
                       echo "<tr>";
@@ -174,8 +175,10 @@ function Sort(nField)
                       echo '>' , $recTable["OrderCoopTotal"] , '</td>';
                       
                       //balance
+                      $sMaxOrderTooltipID = "hlpmaxorder_" . $recTable["OrderID"];
+                      
                       if ($mMaxOrder != NULL && $recTable["mBalance"] != NULL && $mMaxOrder != $recTable["mBalance"])
-                        echo '<td><a href="#" class="tooltip">' , $recTable["mBalance"] , '<span>', 
+                        echo '<td><a id="', $sMaxOrderTooltipID, '" name="', $sMaxOrderTooltipID, '" href="#', $sMaxOrderTooltipID, '" class="tooltip">' , $recTable["mBalance"] , '<span>', 
                               sprintf('Max. Order: %s',$mMaxOrder), '</span></a></td>';
                       else
                         echo '<td>' , $recTable["mBalance"] , '</td>';

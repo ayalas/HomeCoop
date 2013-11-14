@@ -82,7 +82,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -100,7 +100,7 @@ UserSessionBase::Close();
             </tr>
             <tr>
               <td class="columntitlelong"><!$FIELD_PRODUCER$!></td>
-              <td class="columntitle"><a class="tooltip" href="#" ><!$FIELD_COOP_ORDER_MAX_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PRODUCER_MAX_BURDEN$!></span></a></td>              
+              <td class="columntitle"><a id="maxburdenhlp" name="maxburdenhlp" class="tooltip" href="#maxburdenhlp" ><!$FIELD_COOP_ORDER_MAX_BURDEN$!><span><!$TOOLTIP_COOP_ORDER_PRODUCER_MAX_BURDEN$!></span></a></td>              
               <td class="columntitle"><!$FIELD_PRODUCER_TOTAL$!></td>
               <td class="columntitle"><!$FIELD_COOP_ORDER_COOP_TOTAL$!></td>
               <td class="columntitlenowidth"><!$FIELD_COOP_ORDER_PRODUCER_TOTAL_DELIVERY$!></td>

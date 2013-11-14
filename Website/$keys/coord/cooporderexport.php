@@ -179,7 +179,7 @@ function SelectAll(bCheck)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle; ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle; ?></span></td>
     </tr>    
     <tr>
         <td>

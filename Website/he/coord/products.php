@@ -44,7 +44,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">מוצרים</span></td>
+        <td class="fullwidth"><span class="pagename">מוצרים</span></td>
     </tr>
     <tr >
         <td >
@@ -70,7 +70,7 @@ UserSessionBase::Close();
                   ?></td>
                   <td class="columntitleshort">מ. יצרן</td>
                   <td class="columntitleshort">מ. קואופ</td>
-                  <td class="columntitleshort" ><a class="tooltip" href="#" >מעמסה<span>מדד שמציין כמה מוצר זה &quot;מכביד&quot; על המשלוח. מאפשר לעמוד במכסת גודל משלוח, אותה אפשר להגדיר בהזמנת הקואופרטיב</span></a></td>
+                  <td class="columntitleshort" ><a id="burdenhlp" name="burdenhlp" class="tooltip" href="#burdenhlp" >מעמסה<span>מדד שמציין כמה מוצר זה &quot;מכביד&quot; על המשלוח. מאפשר לעמוד במכסת גודל משלוח, אותה אפשר להגדיר בהזמנת הקואופרטיב</span></a></td>
                   <td class="columntitlenowidth"><?php
                     $headDisabled = new HtmlGridCellText('מצב', HtmlGridCellText::CELL_TYPE_TINY);
                     $headDisabled->EchoHtml();
@@ -108,7 +108,8 @@ UserSessionBase::Close();
                       
                       $oProductPackage = new ProductPackage($recProducts["nItems"], $recProducts["fItemQuantity"], 
                                 $recProducts["sItemUnitAbbrev"], $recProducts["fUnitInterval"], $recProducts["sUnitAbbrev"], $recProducts["fPackageSize"], 
-                                $recProducts["fQuantity"],0, 0);
+                                $recProducts["fQuantity"],0, 0,
+                           'tooltiphelp', 'ProductPackage' . $recProducts["ProductKeyID"]);
                       
                       //package size and unit quantity 
                       echo '<td>';

@@ -84,7 +84,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -103,8 +103,8 @@ UserSessionBase::Close();
             <tr>
               <td class="columntitlelong">Location Name</td>
               <td class="columntitlelong">Address</td>
-              <td class="columntitle"><a class="tooltip" href="#" >Total Burden<span>The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered, per pickup location</span></a></td>
-              <td class="columntitle"><a class="tooltip" href="#" >Total storage full<span>Total storage areas used space.</span></a></td>
+              <td class="columntitle"><a id="totalburdenhlp" name="totalburdenhlp" class="tooltip" href="#totalburdenhlp" >Total Burden<span>The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered, per pickup location</span></a></td>
+              <td class="columntitle"><a id="storageburdenhlp" name="storageburdenhlp" class="tooltip" href="#storageburdenhlp" >Total storage full<span>Total storage areas used space.</span></a></td>
               <td class="columntitlenowidth"><?php if ($bShowSums) echo 'Total Coop'; ?></td>
             </tr>
             <?php

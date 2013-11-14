@@ -84,7 +84,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -103,8 +103,8 @@ UserSessionBase::Close();
             <tr>
               <td class="columntitlelong">מקום האיסוף</td>
               <td class="columntitlelong">כתובת</td>
-              <td class="columntitle"><a class="tooltip" href="#" >סה&quot;כ מעמסה<span>הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור מקום האיסוף כפול מספר הפעמים שהוזמן</span></a></td>
-              <td class="columntitle"><a class="tooltip" href="#" >סה&quot;כ תפוסת אחסון<span>סה&quot;כ תפוסת אחסון של כל מקומות האחסון במקום האיסוף</span></a></td>
+              <td class="columntitle"><a id="totalburdenhlp" name="totalburdenhlp" class="tooltip" href="#totalburdenhlp" >סה&quot;כ מעמסה<span>הסכום הכולל של ערך מעמסה של כל מוצר שהוזמן בהזמנת הקואופרטיב עבור מקום האיסוף כפול מספר הפעמים שהוזמן</span></a></td>
+              <td class="columntitle"><a id="storageburdenhlp" name="storageburdenhlp" class="tooltip" href="#storageburdenhlp" >סה&quot;כ תפוסת אחסון<span>סה&quot;כ תפוסת אחסון של כל מקומות האחסון במקום האיסוף</span></a></td>
               <td class="columntitlenowidth"><?php if ($bShowSums) echo 'סכום לקואופ'; ?></td>
             </tr>
             <?php

@@ -43,6 +43,7 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
   <!DOCTYPE HTML>
   <html>
   <head>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
  <?php include_once 'control/headtags.php'; ?>
   <title><!$COOPERATIVE_NAME$!>: <!$PAGE_TITLE_PRODUCT_CATALOG$!></title>
   <script type="text/javascript" src="script/authenticated.js" ></script>
@@ -50,10 +51,10 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
 
   function OpenPicViewer(sPicName)
   {
-   var nLeft = (screen.availWidth - <!$PRODUCT_PIC_VIEWER_WIDTH$!>)/2;
+   var nLeft = screen.availWidth/2;
    if (nLeft < 0) nLeft = 0;
 
-    var sParams = 'status=0,toolbar=0,menubar=0,top=100, left=' + nLeft + ', width=<!$PRODUCT_PIC_VIEWER_WIDTH$!>,height=' + (screen.availHeight-200) ;
+    var sParams = 'status=0,toolbar=0,menubar=0,top=100, left=' + nLeft;
     window.open('<?php echo $g_sRootRelativePath,URL_UPLOAD_DIR; ?>' + sPicName, '_blank', sParams );
   }
 
@@ -64,7 +65,7 @@ if ((!$oCache->CanCache) || $oCache->IsCaching || isset($g_oMemberSession))
   <?php include_once 'control/header.php'; ?>
   <table cellspacing="0" cellpadding="0" >
       <tr>
-          <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_PRODUCT_CATALOG$!></span></td>
+          <td class="fullwidth"><span class="pagename"><!$PAGE_TITLE_PRODUCT_CATALOG$!></span></td>
       </tr>
       <tr>
           <td height="100%" >

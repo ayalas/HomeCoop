@@ -44,7 +44,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Products</span></td>
+        <td class="fullwidth"><span class="pagename">Products</span></td>
     </tr>
     <tr >
         <td >
@@ -70,7 +70,7 @@ UserSessionBase::Close();
                   ?></td>
                   <td class="columntitleshort">Prod. P.</td>
                   <td class="columntitleshort">Coop P.</td>
-                  <td class="columntitleshort" ><a class="tooltip" href="#" >Burden<span>An index that indicates how much this product &quot;burdens&quot; a delivery. Helps to uphold a cooperative order&#x27;s Delivery Capacity, if set</span></a></td>
+                  <td class="columntitleshort" ><a id="burdenhlp" name="burdenhlp" class="tooltip" href="#burdenhlp" >Burden<span>An index that indicates how much this product &quot;burdens&quot; a delivery. Helps to uphold a cooperative order&#x27;s Delivery Capacity, if set</span></a></td>
                   <td class="columntitlenowidth"><?php
                     $headDisabled = new HtmlGridCellText('Status', HtmlGridCellText::CELL_TYPE_TINY);
                     $headDisabled->EchoHtml();
@@ -108,7 +108,8 @@ UserSessionBase::Close();
                       
                       $oProductPackage = new ProductPackage($recProducts["nItems"], $recProducts["fItemQuantity"], 
                                 $recProducts["sItemUnitAbbrev"], $recProducts["fUnitInterval"], $recProducts["sUnitAbbrev"], $recProducts["fPackageSize"], 
-                                $recProducts["fQuantity"],0, 0);
+                                $recProducts["fQuantity"],0, 0,
+                           'tooltiphelp', 'ProductPackage' . $recProducts["ProductKeyID"]);
                       
                       //package size and unit quantity 
                       echo '<td>';

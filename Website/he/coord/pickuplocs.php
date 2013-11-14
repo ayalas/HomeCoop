@@ -41,7 +41,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">מקומות איסוף</span></td>
+        <td class="fullwidth"><span class="pagename">מקומות איסוף</span></td>
     </tr>
     <tr >
         <td >
@@ -65,7 +65,7 @@ UserSessionBase::Close();
                   <td class="columntitlelong">מקום האיסוף</td>
                   <td class="columntitletiny">סבב</td>
                   <td class="columntitlelong">כתובת</td>
-                  <td class="columntitle"><a class="tooltip" href="#" >קבולת משלוח<span>הקיבולת המקסימאלית של מקום האיסוף במונחים של שדה המוצר &quot;מעמסה&quot;. הסכום של המעמסות של כל המוצרים כפול הכמות שהוזמנה מכל מוצר יושווה לערך זה עבור כל הזמנות החברות/ים שמקום איסוף זה נבחר בהם. זהו רק ערך ברירת מחדל, וניתן להחליפו בהגדרות מקום האיסוף של הזמנת הקואופרטיב. אם לא הוחלף הערך בהגדרות מקום האיסוף של הזמנת הקואופרטיב,  חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</span></a></td>
+                  <td class="columntitle"><a id="maxburdenhlp" name="maxburdenhlp" class="tooltip" href="#maxburdenhlp" >קבולת משלוח<span>הקיבולת המקסימאלית של מקום האיסוף במונחים של שדה המוצר &quot;מעמסה&quot;. הסכום של המעמסות של כל המוצרים כפול הכמות שהוזמנה מכל מוצר יושווה לערך זה עבור כל הזמנות החברות/ים שמקום איסוף זה נבחר בהם. זהו רק ערך ברירת מחדל, וניתן להחליפו בהגדרות מקום האיסוף של הזמנת הקואופרטיב. אם לא הוחלף הערך בהגדרות מקום האיסוף של הזמנת הקואופרטיב,  חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</span></a></td>
                   <td class="columntitleshort">קופה</td>
                   <td class="columntitleshort">עדכון קופה</td>
                   <td class="columntitleshort">מצב</td>

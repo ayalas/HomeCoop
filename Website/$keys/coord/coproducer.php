@@ -203,7 +203,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td>
@@ -332,7 +332,7 @@ function Save()
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
 
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PRODUCER_MAX_BURDEN$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PRODUCER_MAX_BURDEN$!>', 'MaxBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -346,7 +346,7 @@ function Save()
                     $lblTotalBurden->EchoHtml();
                     unset($lblTotalBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PRODUCER_TOTAL_BURDEN$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PRODUCER_TOTAL_BURDEN$!>', 'TotalBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>

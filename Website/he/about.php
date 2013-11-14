@@ -6,6 +6,7 @@ include_once 'settings.php';
 <!DOCTYPE HTML>
 <html dir='rtl' >
  <head>
+ <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
  <?php include_once 'control/headtags.php'; ?>
  <title>אודות התוכנה</title>
  </head>
@@ -48,12 +49,11 @@ include_once 'settings.php';
       </tr>
       <tr>
         <td>
-          <textarea readonly="true" dir="ltr" rows="20" class="fullwidth" >
+          <textarea readonly="true" dir="ltr" rows="20" cols="40" class="fullwidth" >
             <?php
               include_once 'license.txt';
             ?>
           </textarea>
-          
         </td>
       </tr>
       </table>

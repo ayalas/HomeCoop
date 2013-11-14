@@ -10,6 +10,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <title>Enter Your Cooperative Name: Access Denied</title>
 </head>
@@ -18,7 +19,7 @@ UserSessionBase::Close();
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Access Denied</span></td>
+        <td class="fullwidth"><span class="pagename">Access Denied</span></td>
     </tr>
 </table>
 </form>

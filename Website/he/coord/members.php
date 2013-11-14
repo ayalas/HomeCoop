@@ -113,7 +113,7 @@ function SelectAll(bCheck)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="2" class="fullwidth" >
     <tr>
-      <td colspan="4" ><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">חברות/ים</span></td>
+      <td colspan="4" ><span class="pagename">חברות/ים</span></td>
     </tr>
     <tr>
       <td nowrap>
@@ -173,6 +173,7 @@ function SelectAll(bCheck)
                 }
                 else
                 {
+                  $sCommentsTooltipID = '';
                   while ( $recTable )
                   {
                       echo "<tr>";
@@ -238,7 +239,8 @@ function SelectAll(bCheck)
                       
                       if ($recTable["sComments"] != NULL)
                       {
-                        echo '<a href="#" class="tooltiphelp" >...<span class="helpspan">',
+                        $sCommentsTooltipID = 'commentshlp' . $recTable["MemberID"];
+                        echo '<a id="', $sCommentsTooltipID, '" name="', $sCommentsTooltipID, '" href="#', $sCommentsTooltipID, '" class="tooltiphelp" >...<span class="helpspan">',
                              htmlspecialchars($recTable["sComments"]),
                              '</span></a>'; 
                       }

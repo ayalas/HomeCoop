@@ -82,7 +82,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -100,7 +100,7 @@ UserSessionBase::Close();
             </tr>
             <tr>
               <td class="columntitlelong">Producer</td>
-              <td class="columntitle"><a class="tooltip" href="#" >Delivery Capacity<span>Limits the size of this cooperative order&#x27;s producer to the overall capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. Members will not be able to place an order that exceeds the limitation set here.</span></a></td>              
+              <td class="columntitle"><a id="maxburdenhlp" name="maxburdenhlp" class="tooltip" href="#maxburdenhlp" >Delivery Capacity<span>Limits the size of this cooperative order&#x27;s producer to the overall capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. Members will not be able to place an order that exceeds the limitation set here.</span></a></td>              
               <td class="columntitle">Producer Total</td>
               <td class="columntitle">Total Coop</td>
               <td class="columntitlenowidth">Total Delivery</td>

@@ -243,7 +243,7 @@ function OnChangeUnit()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -350,7 +350,7 @@ function OnChangeUnit()
                     $txtUnitInterval->EchoHtml();
                     unset($txtUnitInterval);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('מרווח ביחידות משקל/נפח בין הזמנות אפשריות. למשל, 0.5 כשאפשר להזמין בחצאי ק&quot;ג בלבד. לא רלוונטי עבור מוצרים הנמכרים לפי מספר יחידות');
+                    HtmlTextEditMultiLang::EchoHelpText('מרווח ביחידות משקל/נפח בין הזמנות אפשריות. למשל, 0.5 כשאפשר להזמין בחצאי ק&quot;ג בלבד. לא רלוונטי עבור מוצרים הנמכרים לפי מספר יחידות', 'UnitInterval');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -362,7 +362,7 @@ function OnChangeUnit()
                     $txtProducerPrice->EchoHtml();
                     unset($txtProducerPrice);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('זהו מחיר ברירת המחדל של המוצר. מחיר המוצר בפועל יכול להיקבע לערך אחר בכל הזמנת קואופרטיב');
+                    HtmlTextEditMultiLang::EchoHelpText('זהו מחיר ברירת המחדל של המוצר. מחיר המוצר בפועל יכול להיקבע לערך אחר בכל הזמנת קואופרטיב', 'ProducerPrice');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -374,7 +374,7 @@ function OnChangeUnit()
                     $txtCoopPrice->EchoHtml();
                     unset($txtCoopPrice);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('זהו מחיר ברירת המחדל של המוצר. מחיר המוצר בפועל יכול להיקבע לערך אחר בכל הזמנת קואופרטיב');
+                    HtmlTextEditMultiLang::EchoHelpText('זהו מחיר ברירת המחדל של המוצר. מחיר המוצר בפועל יכול להיקבע לערך אחר בכל הזמנת קואופרטיב', 'CoopPrice');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -385,7 +385,7 @@ function OnChangeUnit()
                     $txtSortOrder->EchoHtml();
                     unset($txtSortOrder);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('מספר המציין את סדר המיון של המוצר עבור כל מקום שבו מוצגת רשימת מוצרים. מספר נמוך יותר מופיע גבוה יותר ברשימה.');
+                    HtmlTextEditMultiLang::EchoHelpText('מספר המציין את סדר המיון של המוצר עבור כל מקום שבו מוצגת רשימת מוצרים. מספר נמוך יותר מופיע גבוה יותר ברשימה.', 'SortOrder');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -396,7 +396,7 @@ function OnChangeUnit()
                     $txtPackageSize->EchoHtml();
                     unset($txtPackageSize);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('גודל חבילה עבור מוצר שמגיע בחבילה גדולה, והקואפרטיב מאפשר להזמין הזמנות חלקיות ממנו.');
+                    HtmlTextEditMultiLang::EchoHelpText('גודל חבילה עבור מוצר שמגיע בחבילה גדולה, והקואפרטיב מאפשר להזמין הזמנות חלקיות ממנו.', 'PackageSize');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -408,7 +408,7 @@ function OnChangeUnit()
                     $txtBurden->EchoHtml();
                     unset($txtBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('מדד שמציין כמה מוצר זה &quot;מכביד&quot; על המשלוח. מאפשר לעמוד במכסת גודל משלוח, אותה אפשר להגדיר בהזמנת הקואופרטיב');
+                    HtmlTextEditMultiLang::EchoHelpText('מדד שמציין כמה מוצר זה &quot;מכביד&quot; על המשלוח. מאפשר לעמוד במכסת גודל משלוח, אותה אפשר להגדיר בהזמנת הקואופרטיב', 'Burden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -451,7 +451,7 @@ function OnChangeUnit()
                     $selItemUnit->ReadOnly =  $bReadOnly;
                     $selItemUnit->EchoHtml();
                     unset($selItemUnit);
-                    HtmlTextEditMultiLang::EchoHelpText('צירוף יחידות למוצר חוסך-עלויות גדול יותר'); 
+                    HtmlTextEditMultiLang::EchoHelpText('צירוף יחידות למוצר חוסך-עלויות גדול יותר', 'JoinToProductID'); 
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -462,7 +462,7 @@ function OnChangeUnit()
                     $txtMaxUserOrder->EchoHtml();
                     unset($txtMaxUserOrder);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('מקסימום כמות מהמוצר לכל חבר/ה'); 
+                    HtmlTextEditMultiLang::EchoHelpText('מקסימום כמות מהמוצר לכל חבר/ה', 'MaxUserOrder'); 
                     HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                   ?>
                 </tr>
@@ -487,7 +487,8 @@ function OnChangeUnit()
                       $oPic1Upload->EchoHtml();
                       unset($oPic1Upload);
 
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('קבצים נתמכים: jpg, gif, png. גודל מקסימלי: %sKB', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('קבצים נתמכים: jpg, gif, png. גודל מקסימלי: %sKB', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))
+                          , 'PicUpload1'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
 
                       echo '</tr>';
@@ -499,7 +500,8 @@ function OnChangeUnit()
                       $oPic1FileName->EchoHtml();
                       unset($oPic1FileName);
 
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('בהעלאת קבצים שדה זה אינו חובה והמערכת יכולה לקבוע אותו באופן אוטומטי. השדה נכלל עבור מקרים שבהם אין לך הרשאה להעלות קבצים, וברצונך לקשר בין מוצרים לקבצי תמונות שכבר הועלו. קבצי תמונות חייבים להיות מועלים לתיקיית ההעלאה: %s', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('בהעלאת קבצים שדה זה אינו חובה והמערכת יכולה לקבוע אותו באופן אוטומטי. השדה נכלל עבור מקרים שבהם אין לך הרשאה להעלות קבצים, וברצונך לקשר בין מוצרים לקבצי תמונות שכבר הועלו. קבצי תמונות חייבים להיות מועלים לתיקיית ההעלאה: %s', 
+                          realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  ), 'Pic1FileName'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
@@ -523,7 +525,8 @@ function OnChangeUnit()
                       $oPic2Upload->EchoHtml();
                       unset($oPic2Upload);
 
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('קבצים נתמכים: jpg, gif, png. גודל מקסימלי: %sKB', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024))); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('קבצים נתמכים: jpg, gif, png. גודל מקסימלי: %sKB', (PRODUCT_IMAGE_MAX_FILE_SIZE/1024)), 
+                          'PicUpload2'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       
@@ -534,7 +537,9 @@ function OnChangeUnit()
                       $oPic2FileName->EchoHtml();
                       unset($oPic2FileName);
                       
-                      HtmlTextEditMultiLang::EchoHelpText(sprintf('בהעלאת קבצים שדה זה אינו חובה והמערכת יכולה לקבוע אותו באופן אוטומטי. השדה נכלל עבור מקרים שבהם אין לך הרשאה להעלות קבצים, וברצונך לקשר בין מוצרים לקבצי תמונות שכבר הועלו. קבצי תמונות חייבים להיות מועלים לתיקיית ההעלאה: %s', realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  )); 
+                      HtmlTextEditMultiLang::EchoHelpText(sprintf('בהעלאת קבצים שדה זה אינו חובה והמערכת יכולה לקבוע אותו באופן אוטומטי. השדה נכלל עבור מקרים שבהם אין לך הרשאה להעלות קבצים, וברצונך לקשר בין מוצרים לקבצי תמונות שכבר הועלו. קבצי תמונות חייבים להיות מועלים לתיקיית ההעלאה: %s', 
+                          realpath($g_sRootRelativePath . URL_UPLOAD_DIR)  ), 
+                          'Pic2FileName'); 
                       HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                       echo '</tr>';
                       

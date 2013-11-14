@@ -197,7 +197,7 @@ function Save()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>    
     <tr>
         <td >
@@ -273,7 +273,7 @@ function Save()
                $dpStart->EchoHtml();
                unset($dpStart);
 
-               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat, 'costart' );
                HtmlTextEditMultiLang::OtherLangsEmptyCells();
               ?>
               </tr>
@@ -286,7 +286,7 @@ function Save()
                $dpEnd->EchoHtml();
                unset($dpEnd);
 
-               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat );
+               HtmlTextEditMultiLang::EchoHelpText( $sHelpTimeFormat, 'coend' );
                HtmlTextEditMultiLang::OtherLangsEmptyCells();
               ?>
               </tr>
@@ -314,7 +314,7 @@ function Save()
                   $txtMaxBurden->EchoHtml();
                   unset($txtMaxBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('Limits the size of this cooperative order to the overall order&#x27;s capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. A limitation can also be set for a specific pickup location. Members will not be able to place an order that exceeds the limitation set here.');
+                  HtmlTextEditMultiLang::EchoHelpText('Limits the size of this cooperative order to the overall order&#x27;s capacity, comapring it to the sum of the &quot;burden&quot; field of each product multiplied by the quantity ordered. A limitation can also be set for a specific pickup location. Members will not be able to place an order that exceeds the limitation set here.', 'comaxburden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -325,7 +325,7 @@ function Save()
                   $txtMaxCoopTotal->EchoHtml();
                   unset($txtMaxCoopTotal);
 
-                  HtmlTextEditMultiLang::EchoHelpText('Limits the total amount of the cooperative order. Members will not be able to place an order that exceeds the limitation set here.');
+                  HtmlTextEditMultiLang::EchoHelpText('Limits the total amount of the cooperative order. Members will not be able to place an order that exceeds the limitation set here.', 'comaxcooptotal');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();                
                 ?>
               </tr>
@@ -336,7 +336,7 @@ function Save()
                   $txtCoopFee->EchoHtml();
                   unset($txtCoopFee);
 
-                  HtmlTextEditMultiLang::EchoHelpText('A fixed amount that is paid by each member per order, in addition to the sum cost of the products, to cover expenses');
+                  HtmlTextEditMultiLang::EchoHelpText('A fixed amount that is paid by each member per order, in addition to the sum cost of the products, to cover expenses', 'cofee');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -347,7 +347,7 @@ function Save()
                   $txtSmallOrder->EchoHtml();
                   unset($txtSmallOrder);
 
-                  HtmlTextEditMultiLang::EchoHelpText('Defines a small member&#x27;s order, that has a reduced cooperative fee attached to it');
+                  HtmlTextEditMultiLang::EchoHelpText('Defines a small member&#x27;s order, that has a reduced cooperative fee attached to it', 'cosmallorder');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -359,7 +359,7 @@ function Save()
                   $txtSmallOrderCoopFee->EchoHtml();
                   unset($txtSmallOrderCoopFee);
 
-                  HtmlTextEditMultiLang::EchoHelpText('A reduced cooperative fee, for a small order');
+                  HtmlTextEditMultiLang::EchoHelpText('A reduced cooperative fee, for a small order', 'cosmallcoopfee');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -371,7 +371,7 @@ function Save()
                   $txtCoopFeePercent->EchoHtml();
                   unset($txtCoopFeePercent);
 
-                  HtmlTextEditMultiLang::EchoHelpText('Defines a cooperative fee by percents from the total amount paid for ordered products');
+                  HtmlTextEditMultiLang::EchoHelpText('Defines a cooperative fee by percents from the total amount paid for ordered products', 'cocoopfeepercent');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>                
@@ -422,7 +422,7 @@ function Save()
                   $lblTotalBurden->EchoHtml();
                   unset($lblTotalBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered');
+                  HtmlTextEditMultiLang::EchoHelpText('The sum total of each ordered product &quot;Burden&quot; multiplied by the times it was ordered', 'cototalburden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
                 ?>
               </tr>
@@ -434,7 +434,7 @@ function Save()
                   $lblMaxStorageBurden->EchoHtml();
                   unset($lblMaxStorageBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('Total maximum storage areas capacity.');
+                  HtmlTextEditMultiLang::EchoHelpText('Total maximum storage areas capacity.', 'coMaxStorageBurden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>
@@ -450,7 +450,7 @@ function Save()
                   $lblStorageBurden->EchoHtml();
                   unset($lblStorageBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('Total storage areas used space.');
+                  HtmlTextEditMultiLang::EchoHelpText('Total storage areas used space.', 'coStorageBurden');
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
                 ?>
               </tr>

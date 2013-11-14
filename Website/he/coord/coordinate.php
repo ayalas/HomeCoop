@@ -370,7 +370,7 @@ function SetMemberAsCoordinator(nMemberID)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">
+        <td class="fullwidth"><span class="pagename">
           <?php echo $sPageName; ?></span></td>
     </tr>
     <tr>

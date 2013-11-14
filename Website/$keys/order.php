@@ -197,6 +197,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <title><!$COOPERATIVE_NAME$!>: <?php echo $oRecord->PageTitle;  ?></title>
 <script type="text/javascript" src="script/authenticated.js" ></script>
@@ -237,7 +238,7 @@ function Save()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $oRecord->PageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -349,7 +350,7 @@ function Save()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   
-                    echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span class="helpspan"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>';
+                    echo '<td><a id="percentoverhlp" name="percentoverhlp" class="tooltiphelp" href="#percentoverhlp" ><!$HELP_SIGN$!><span class="helpspan"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>';
                     echo '</tr>';
 
                   }

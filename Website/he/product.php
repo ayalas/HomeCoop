@@ -61,6 +61,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html dir='rtl' >
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <title>הזינו את שם הקואופרטיב שלכם: <?php echo $sPageTitle;  ?></title>
 <script type="text/javascript" src="script/authenticated.js" ></script>
@@ -68,10 +69,10 @@ UserSessionBase::Close();
 
 function OpenPicViewer(sPicName)
 {
- var nLeft = (screen.availWidth - 800)/2;
+ var nLeft = screen.availWidth/2;
  if (nLeft < 0) nLeft = 0;
 
-  var sParams = 'status=0,toolbar=0,menubar=0,top=100, left=' + nLeft + ', width=800,height=' + (screen.availHeight-200) ;
+  var sParams = 'status=0,toolbar=0,menubar=0,top=100, left=' + nLeft;
   window.open('<?php echo $g_sRootRelativePath, URL_UPLOAD_DIR; ?>' + sPicName, '_blank', sParams );
 }
 
@@ -79,7 +80,7 @@ function OpenPicViewer(sPicName)
 </head>
 <body class="product" >
 <form id="frmMain" name="frmMain" method="get" >
-<table cellspacing="0" cellpadding="8" width="98%">
+<table cellspacing="0" cellpadding="8">
     <tr>
       <td>
         <table cellspacing="0" cellpadding="0">
@@ -120,7 +121,9 @@ function OpenPicViewer(sPicName)
         
         </table>
       </td>
-      <td width="49%">
+    </tr>
+    <tr>
+      <td>
         <table cellspacing="0" cellpadding="0">
         <tr>
         <td>
@@ -128,7 +131,7 @@ function OpenPicViewer(sPicName)
         if ($recProduct["sImage1FileName"] != NULL)
         {
           echo '<div class="link" onclick="JavaScript:OpenPicViewer(\'', $recProduct["sImage1FileName"], 
-             '\');"><img border="0" width="100%" src="',
+             '\');"><img width=240px" border="0" src="',
                 $g_sRootRelativePath, URL_UPLOAD_DIR, $recProduct["sImage1FileName"], '" /></div>';
         }
         ?>
@@ -141,7 +144,7 @@ function OpenPicViewer(sPicName)
         if ($recProduct["sImage2FileName"] != NULL)
         {
           echo '<div class="link" onclick="JavaScript:OpenPicViewer(\'', $recProduct["sImage2FileName"], 
-             '\');"><img border="0" width="100%" src="',
+             '\');"><img width=240px" border="0" src="',
                 $g_sRootRelativePath, URL_UPLOAD_DIR, $recProduct["sImage2FileName"], '" /></div>';
         }
         ?>

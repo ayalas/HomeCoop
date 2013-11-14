@@ -80,7 +80,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -98,8 +98,8 @@ UserSessionBase::Close();
               <td class="columntitlelong"><!$FIELD_PRODUCER$!></td>
               <td class="columntitleshort"><!$FIELD_PRODUCER_TOTAL$!></td>
               <td class="columntitleshort"><!$FIELD_COOP_ORDER_COOP_TOTAL$!></td>
-              <td class="columntitlenowidth" ><a class="tooltip" 
-               href="#" ><!$FIELD_COOP_ORDER_PRODUCER_TOTAL_DELIVERY$!><span><!$TOOLTIP_PRODUCER_DELIVERY_IN_PICKUP_LOCATION$!></span></a></td>
+              <td class="columntitlenowidth" ><a id="totaldelhlp" name="totaldelhlp" class="tooltip" 
+               href="#totaldelhlp" ><!$FIELD_COOP_ORDER_PRODUCER_TOTAL_DELIVERY$!><span><!$TOOLTIP_PRODUCER_DELIVERY_IN_PICKUP_LOCATION$!></span></a></td>
             </tr>
             <?php
                 if (!$recTable)

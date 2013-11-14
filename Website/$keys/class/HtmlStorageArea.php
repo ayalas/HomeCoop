@@ -114,7 +114,7 @@ class HtmlStorageArea {
         $txtMaxBurden->EchoHtml();
       }
       
-      HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_STORAGE_AREA_MAX_BURDEN$!>');
+      HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_STORAGE_AREA_MAX_BURDEN$!>', $said);
       HtmlTextEditMultiLang::OtherLangsEmptyCells();
 
       echo '</tr><tr>';

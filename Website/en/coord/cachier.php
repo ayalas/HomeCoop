@@ -35,7 +35,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename">Cashier Totals</span></td>
+        <td class="fullwidth"><span class="pagename">Cashier Totals</span></td>
     </tr>
     <tr>
         <td >

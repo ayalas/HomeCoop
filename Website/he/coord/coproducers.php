@@ -82,7 +82,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -100,7 +100,7 @@ UserSessionBase::Close();
             </tr>
             <tr>
               <td class="columntitlelong">יצרן</td>
-              <td class="columntitle"><a class="tooltip" href="#" >קבולת משלוח<span>הגבלת גודל המשלוח ליצרן זה לפי הקבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</span></a></td>              
+              <td class="columntitle"><a id="maxburdenhlp" name="maxburdenhlp" class="tooltip" href="#maxburdenhlp" >קבולת משלוח<span>הגבלת גודל המשלוח ליצרן זה לפי הקבולת הכוללת של המוצרים שיגיעו ממנו. חברות/ים לא יוכלו להשלים הזמנה שחורגת מההגבלה שהוגדרה כאן.</span></a></td>              
               <td class="columntitle">סכום ליצרן</td>
               <td class="columntitle">סכום לקואופ</td>
               <td class="columntitlenowidth">סה&quot;כ משלוח</td>

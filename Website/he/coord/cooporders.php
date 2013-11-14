@@ -43,7 +43,7 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname">הזינו את שם הקואופרטיב שלכם:&nbsp;</span><span class="pagename">הזמנות קואופרטיב</span></td>
+        <td class="fullwidth"><span class="pagename">הזמנות קואופרטיב</span></td>
     </tr>
     <tr>
         <td>
@@ -101,7 +101,7 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
                 {
                   while ( $recTable )
                   {
-                      //name
+                      //name                          
                       echo "<tr><td><a class='tooltiplink' href='cooporder.php?id=" ,  $recTable["CoopOrderKeyID"] , "' >" , 
                         htmlspecialchars($recTable["sCoopOrder"]),
                       //name tooltip

@@ -7,10 +7,10 @@ function Logout()
 function OpenProductOverview(sPathToRoot, CoopOrderID, ProductID)
 {
   var sUrl = sPathToRoot + 'product.php?prd=' + ProductID + "&coid=" + CoopOrderID;
-  var nLeft = (screen.availWidth - 800)/2;
+  var nLeft = screen.availWidth/2 - screen.availWidth/4;
   if (nLeft < 0) nLeft = 0;
 
-  var sParams = 'status=0,toolbar=0,menubar=0,top=100, left=' + nLeft + ', width=800,height=' + (screen.availHeight-200) ;
+  var sParams = 'status=0,toolbar=0,menubar=0,height=' + (screen.availHeight*2/3) + ', width=' + (screen.availWidth/2) + ',top=100,left=' + nLeft;
   window.open(sUrl, '_blank', sParams );
 }
 

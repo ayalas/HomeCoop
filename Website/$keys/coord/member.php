@@ -370,7 +370,7 @@ function VerifyPassword()
                       $selPickupLoc->EchoHtml();
                       unset($selPickupLoc);
                     
-                      echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span class="helpspansmall" ><!$HELP_MEMBER_BALANCE_UPDATES_CASHIER$!></span></a></td>';
+                      echo '<td><a id="updatecachierhlp" name="updatecachierhlp" class="tooltiphelp" href="#updatecachierhlp" ><!$HELP_SIGN$!><span class="helpspansmall" ><!$HELP_MEMBER_BALANCE_UPDATES_CASHIER$!></span></a></td>';
                       echo '</tr>';
                     }
                   ?>                
@@ -395,7 +395,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span class="helpspansmall"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>
+                  <td><a id="percentoverhlp" name="percentoverhlp" class="tooltiphelp" href="#percentoverhlp" ><!$HELP_SIGN$!><span class="helpspansmall"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>
                 </tr>
 
                 <tr>

@@ -80,7 +80,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname">Enter Your Cooperative Name:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>
     <tr>
         <td >
@@ -98,8 +98,8 @@ UserSessionBase::Close();
               <td class="columntitlelong">Producer</td>
               <td class="columntitleshort">Producer Total</td>
               <td class="columntitleshort">Total Coop</td>
-              <td class="columntitlenowidth" ><a class="tooltip" 
-               href="#" >Total Delivery<span>This sum refers to the delivery costs to all pickup locations in the current cooperative order for each producer</span></a></td>
+              <td class="columntitlenowidth" ><a id="totaldelhlp" name="totaldelhlp" class="tooltip" 
+               href="#totaldelhlp" >Total Delivery<span>This sum refers to the delivery costs to all pickup locations in the current cooperative order for each producer</span></a></td>
             </tr>
             <?php
                 if (!$recTable)

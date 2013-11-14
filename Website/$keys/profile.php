@@ -94,6 +94,7 @@ UserSessionBase::Close();
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
 <title><!$COOPERATIVE_NAME$!>: <!$PAGE_TITLE_MY_PROFILE$!></title>
 <script type="text/javascript" src="script/authenticated.js" ></script>
@@ -129,7 +130,7 @@ function VerifyPassword()
 <?php include_once 'control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_MY_PROFILE$!></span></td>
+        <td class="fullwidth"><span class="pagename"><!$PAGE_TITLE_MY_PROFILE$!></span></td>
     </tr>
     <tr>
         <td>
@@ -244,7 +245,7 @@ function VerifyPassword()
                     $txtPOBalance->EchoHtml();
                     unset($txtPOBalance);
                   ?>
-                  <td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span class="helpspan"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>
+                  <td><a id="percentoverbalancehlp" name="percentoverbalancehlp" class="tooltiphelp" href="#percentoverbalancehlp" ><!$HELP_SIGN$!><span class="helpspan"><!$HELP_PERCENT_OVER_BALANCE$!></span></a></td>
                 </tr>
                 <tr>
                 <?php
@@ -320,7 +321,7 @@ function VerifyPassword()
                   $formatList->EncodeHtml = FALSE; //already encoded
                   $formatList->EchoHtml();
 
-                  echo '<td><a class="tooltiphelp" href="#" ><!$HELP_SIGN$!><span class="helpspan"><!$HELP_EXPORT_FORMAT$!></span></a></td></tr>';
+                  echo '<td><a id="exportformathlp" name="exportformathlp" class="tooltiphelp" href="#exportformathlp" ><!$HELP_SIGN$!><span class="helpspan"><!$HELP_EXPORT_FORMAT$!></span></a></td></tr>';
                 }
                 ?>
                 </table>

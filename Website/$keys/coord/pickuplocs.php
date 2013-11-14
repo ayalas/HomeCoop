@@ -41,7 +41,7 @@ UserSessionBase::Close();
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0" >
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><!$PAGE_TITLE_PICKUP_LOCATIONS$!></span></td>
+        <td class="fullwidth"><span class="pagename"><!$PAGE_TITLE_PICKUP_LOCATIONS$!></span></td>
     </tr>
     <tr >
         <td >
@@ -65,7 +65,7 @@ UserSessionBase::Close();
                   <td class="columntitlelong"><!$FIELD_PICKUP_LOCATION_NAME$!></td>
                   <td class="columntitletiny"><!$FIELD_PICKUP_ROTATION_ORDER_SHORT$!></td>
                   <td class="columntitlelong"><!$FIELD_PICKUP_LOCATION_ADDRESS$!></td>
-                  <td class="columntitle"><a class="tooltip" href="#" ><!$FIELD_PICKUP_LOCATION_MAX_BURDEN$!><span><!$TOOLTIP_PICKUP_LOCATION_MAX_BURDEN$!></span></a></td>
+                  <td class="columntitle"><a id="maxburdenhlp" name="maxburdenhlp" class="tooltip" href="#maxburdenhlp" ><!$FIELD_PICKUP_LOCATION_MAX_BURDEN$!><span><!$TOOLTIP_PICKUP_LOCATION_MAX_BURDEN$!></span></a></td>
                   <td class="columntitleshort"><!$FIELD_CACHIER$!></td>
                   <td class="columntitleshort"><!$FIELD_CACHIER_DATE$!></td>
                   <td class="columntitleshort"><!$FIELD_IS_DISABLED$!></td>

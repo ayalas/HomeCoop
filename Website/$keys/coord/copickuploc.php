@@ -222,7 +222,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="coopname"><!$COOPERATIVE_NAME$!>:&nbsp;</span><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
+        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
     </tr>    
     <tr>
         <td >
@@ -273,7 +273,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $txtMaxBurden->EchoHtml();
                     unset($txtMaxBurden);
 
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_MAX_BURDEN$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_MAX_BURDEN$!>', 'MaxBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -287,7 +287,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $lblTotalBurden->EchoHtml();
                     unset($lblTotalBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_BURDEN$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_BURDEN$!>', 'TotalBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -335,7 +335,7 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $lblMaxStorageBurden->EchoHtml();
                     unset($lblMaxStorageBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_MAX_STORAGE_BURDEN$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_MAX_STORAGE_BURDEN$!>', 'MaxStorageBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -351,7 +351,8 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                     $lblStorageBurden->EchoHtml();
                     unset($lblStorageBurden);
                     
-                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_STORAGE_BURDEN$!>');
+                    HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_TOTAL_STORAGE_BURDEN$!>'
+                        , 'StorageBurden');
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                 </tr>
@@ -393,7 +394,8 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                   $txtMaxBurden->EchoHtml();
                   unset($txtMaxBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_MAX_BURDEN$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_PICKUP_LOCATION_MAX_BURDEN$!>'
+                      , 'MaxBurden_' . $aStorageArea['StorageAreaKeyID']);
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
 
                   echo '</tr>';
@@ -418,7 +420,8 @@ function ActivateStorageArea(sTargetElement, sSourceElement)
                   $lblTotalBurden->EchoHtml();
                   unset($lblTotalBurden);
 
-                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_STORAGE_TOTAL_BURDEN$!>');
+                  HtmlTextEditMultiLang::EchoHelpText('<!$TOOLTIP_COOP_ORDER_STORAGE_TOTAL_BURDEN$!>', 'TotalBurden_' .
+                      $aStorageArea['StorageAreaKeyID']);
                   HtmlTextEditMultiLang::OtherLangsEmptyCells();
 
                   echo '</tr>';
