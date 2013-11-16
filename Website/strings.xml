@@ -54,15 +54,6 @@
     <value>Language</value>
 </str>
 <str>
-    <key>ORDER_ITEMS_SCROLL_HEIGHT</key>
-    <value>550px</value>
-     <comment>Height of the order items screen's scorllable area</comment>
-</str>
-<str>
-    <key>TAB_SEPARATOR_NO_PROGRESS</key>
-    <value>||</value>
-</str>
-<str>
     <key>ORDER_EXPORT_COOP_ORDER_SUMMARY_FILE_NAME_SUFFIX</key>
     <value>Coop</value>
 </str>
