@@ -74,6 +74,7 @@ catch(Exception $e)
   <tr>
     <td class="logo"><a href="home.php" ><img class="logoimg" src="logo.gif"/></a></td>
   </tr>
+   <tr><td><span class="coopsubtitle"></span></td></tr>
    <tr>
     <td><?php
     include_once 'control/language.php';
@@ -82,7 +83,6 @@ catch(Exception $e)
 </table>
 </header>
 <table cellspacing="0">
-  <tr><td><span class="coopsubtitle"></span></td></tr>
 <tr>
 <td valign="top">
 <table class="entrytable">
