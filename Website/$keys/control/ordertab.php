@@ -34,8 +34,7 @@ function WriteOrderTabElement($sText, $sLink, $bIsOnPage)
   </td>
 </tr> 
 </table>
-<table cellpadding="0" cellspacing="0" border="0" width="100%">
-<tr><td width="100%" align="center"><?php
+<?php
 
 $nCoopTotal = $oOrderTabInfo->CoopTotal;
 $sOrderSumClass = '';
@@ -44,30 +43,29 @@ if ($oOrderTabInfo->StatusObj->Status == ActiveCoopOrderStatus::Open)
 else
   $sOrderSumClass = " closedsum";
 
-echo '<table cellpadding="5" cellspacing="0" class="ordersummary', $sOrderSumClass, '"><tr>';
+echo '<div class="ordersummary', $sOrderSumClass, '">';
 if ($oOrderTabInfo->OrderCoopFee != NULL && $oOrderTabInfo->OrderCoopFee != 0)
 {
   $nCoopTotal += $oOrderTabInfo->OrderCoopFee;
 
-  echo '<td class="headlabel" ><!$FIELD_ORDER_COOP_TOTAL$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;',
-      $oOrderTabInfo->CoopTotal, '</td>',
-   '<td class="headlabel" ><!$FIELD_ORDER_COOP_FEE$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;',
-      $oOrderTabInfo->OrderCoopFee, '</td>';
+  echo '<div class="headlabel" ><!$FIELD_ORDER_COOP_TOTAL$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;',
+      $oOrderTabInfo->CoopTotal, '</div>',
+   '<div class="headlabel" ><!$FIELD_ORDER_COOP_FEE$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;',
+      $oOrderTabInfo->OrderCoopFee, '</div>';
 }
   
-echo '<td class="headlabel" ><!$FIELD_ORDER_COOP_TOTAL_INCLUDE_FEE$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;',
-    $nCoopTotal , '</td>';
+echo '<div class="headlabel" ><!$FIELD_ORDER_COOP_TOTAL_INCLUDE_FEE$!><!$FIELD_DISPLAY_NAME_SUFFIX$!><!$LANGUAGE_DIRECTION_MARK$!>&nbsp;',
+    $nCoopTotal , '</div>';
 
 if ($oOrderTabInfo->StatusObj->StatusName != NULL)
 {
-  echo '<td nowrap class="headlabel">' ,  $oOrderTabInfo->StatusObj->StatusName , '</td>';
+  echo '<div class="headlabel">' ,  $oOrderTabInfo->StatusObj->StatusName , '</div>';
 }
 
 if ($oOrderTabInfo->Capacity != NULL)
- echo '<td class="headlabel">' , $oOrderTabInfo->Capacity , '&nbsp;<!$ORDER_CAPACITY_PERCENT_FULL$!></td>';
+ echo '<div class="headlabel">' , $oOrderTabInfo->Capacity , '&nbsp;<!$ORDER_CAPACITY_PERCENT_FULL$!></div>';
 
-echo '</tr></table>';
+echo '</div>';
 
-?></td></tr>
-</table>
+?>
 

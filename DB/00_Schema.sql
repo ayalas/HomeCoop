@@ -705,7 +705,36 @@ CREATE  TABLE `HomeCoop`.`T_MemberPickupLocation` (
     FOREIGN KEY (`PickupLocationKeyID` )
     REFERENCES `HomeCoop`.`T_PickupLocation` (`PickupLocationKeyID` )
     ON DELETE CASCADE
-    ON UPDATE RESTRICT);
+    ON UPDATE RESTRICT)
+DEFAULT CHARACTER SET = utf8;
 
 
--- Dump completed on 2012-09-14 17:57:29
+CREATE  TABLE `HomeCoop`.`T_Transaction` (
+  `TransactionID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `PickupLocationKeyID` BIGINT UNSIGNED NULL ,
+  `MemberID` BIGINT UNSIGNED NULL ,
+  `ModifiedByMemberID` BIGINT UNSIGNED NULL ,
+  `mAmount` DECIMAL(10,2) NULL ,
+  `dDate` DATETIME NOT NULL ,
+  PRIMARY KEY (`TransactionID`) ,
+  INDEX `trsMemberID` (`MemberID` ASC) ,
+  INDEX `trsModifiedBy` (`ModifiedByMemberID` ASC) ,
+  INDEX `trsPickupLocationID` (`PickupLocationKeyID` ASC) ,
+  CONSTRAINT `trsMemberID`
+    FOREIGN KEY (`MemberID` )
+    REFERENCES `HomeCoop`.`T_Member` (`MemberID` )
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `trsModifiedBy`
+    FOREIGN KEY (`ModifiedByMemberID` )
+    REFERENCES `HomeCoop`.`T_Member` (`MemberID` )
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT,
+  CONSTRAINT `trsPickupLocationID`
+    FOREIGN KEY (`PickupLocationKeyID` )
+    REFERENCES `HomeCoop`.`T_PickupLocation` (`PickupLocationKeyID` )
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+

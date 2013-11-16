@@ -213,7 +213,7 @@ class Member extends SQLBase  {
   
   public function Add()
   {
-    global $g_dNow;
+    global $g_dNow, $g_oMemberSession;
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
 
     //must be coordinator to add members
@@ -280,13 +280,26 @@ class Member extends SQLBase  {
               $this->m_aData[self::PROPERTY_ID] . "," . Consts::ROLE_MEMBER . ");";
       $this->RunSQL($sSQL); 
       
-      //check if need to update cachier
-      if ($this->m_aData[self::PROPERTY_BALANCE_HELD] != 0 &&
-          $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
+      //check if need to update cachier / create transaction
+      if ($this->m_aData[self::PROPERTY_BALANCE_HELD] != 0)
       {
-        $sSQL = " UPDATE T_PickupLocation SET mCachier = IFNULL(mCachier,0) + " . $this->m_aData[self::PROPERTY_BALANCE_HELD] .
-                " WHERE PickupLocationKeyID = ". $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
-        $this->RunSQL($sSQL); 
+        if ($this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
+        {
+          $sSQL = " UPDATE T_PickupLocation SET mCachier = IFNULL(mCachier,0) + " . $this->m_aData[self::PROPERTY_BALANCE_HELD] .
+                  " WHERE PickupLocationKeyID = ". $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
+          $this->RunSQL($sSQL); 
+        }
+        
+        $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, MemberID, ModifiedByMemberID, mAmount, dDate) " .
+                 " VALUES(NullIf(:pickuplocid,0), :memberid, :modifier, :amount, :date);";
+        
+        $this->RunSQLWithParams($sSQL, array(
+                  'pickuplocid' => $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID],
+                  'memberid' => $this->m_aData[self::PROPERTY_ID],
+                  'modifier' => $g_oMemberSession->MemberID,
+                  'amount' => $this->m_aData[self::PROPERTY_BALANCE_HELD],
+                  'date' => $g_dNow->format(DATABASE_DATE_FORMAT),
+                ));
       }
       
       $this->CommitTransaction();
@@ -319,6 +332,7 @@ class Member extends SQLBase  {
   {
     global $g_oError;
     global $g_oMemberSession;
+    global $g_dNow;
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
 
     //must be coordinator to add members
@@ -397,13 +411,27 @@ class Member extends SQLBase  {
       $this->RunSQLWithParams( $sSQL, $arrParams );
       
       //check if need to update cachier
-      if ($this->m_aData[self::PROPERTY_BALANCE_HELD] != $this->m_aOriginalData[self::PROPERTY_BALANCE_HELD] &&
-          $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
+      if ($this->m_aData[self::PROPERTY_BALANCE_HELD] != $this->m_aOriginalData[self::PROPERTY_BALANCE_HELD])
       {
-        $sSQL = " UPDATE T_PickupLocation SET mCachier = IFNULL(mCachier,0) + (" . 
-                ($this->m_aData[self::PROPERTY_BALANCE_HELD] - $this->m_aOriginalData[self::PROPERTY_BALANCE_HELD]) .
-                ") WHERE PickupLocationKeyID = ". $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
+        $mAmount = $this->m_aData[self::PROPERTY_BALANCE_HELD] - $this->m_aOriginalData[self::PROPERTY_BALANCE_HELD];
+        
+        if ($this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID]  != 0)
+        {
+        $sSQL = " UPDATE T_PickupLocation SET mCachier = IFNULL(mCachier,0) + (" . $mAmount . ") WHERE PickupLocationKeyID = ". 
+            $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID] . ";";
         $this->RunSQL($sSQL); 
+        }
+        
+        $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, MemberID, ModifiedByMemberID, mAmount, dDate) " .
+                " VALUES(NullIf(:pickuplocid,0), :memberid, :modifier, :amount, :date);";
+        
+        $this->RunSQLWithParams($sSQL, array(
+                  'pickuplocid' => $this->m_aData[self::PROPERTY_CACHIER_PICKUP_LOCATION_ID],
+                  'memberid' => $this->m_aData[self::PROPERTY_ID],
+                  'modifier' => $g_oMemberSession->MemberID,
+                'amount' => $mAmount,
+                'date' => $g_dNow->format(DATABASE_DATE_FORMAT),
+              ));
       }
     
       $this->CommitTransaction();

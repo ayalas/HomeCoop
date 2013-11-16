@@ -383,6 +383,14 @@ ul
   {
     display: inline-block;
   }
+  .resgridrow
+  {
+    white-space: nowrap;
+  }
+  .ordersummary
+  {
+    white-space: nowrap;
+  }
 }
 @media screen and (max-width: 947px) {
   body.centered
@@ -526,6 +534,16 @@ ul
   .orderbox {
     width: 80%;
   }
+  
+  .resgridrow
+  {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 10px;
+  }
 }
 
 body.product
@@ -547,6 +565,8 @@ p.brochure
 span.btnrange
 {
   font-size: 1px;
+  padding-<!$ALIGN$!>: 5px;
+  padding-<!$ALIGN_OPPOSITE$!>: 10px;
 }
 span.bulletintitle
 {
@@ -709,6 +729,9 @@ th
   font-size: 14px;
   font-weight: bold;
   white-space: nowrap;
+  display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .headmaindata
 {
@@ -776,7 +799,7 @@ th
 .orderitemcentry
 {
   font-size: 12px;
-  width: 306px;
+  width: 170px;
   background-color:#FFFFFF;
 }
 .orderiteminvalidrow
@@ -910,6 +933,7 @@ div.sepline {
   padding-bottom: 4px;
   margin-top: 10px;
   margin-bottom: 5px;
+  display: inline-block;
 }
 .opensum
 {
@@ -919,16 +943,6 @@ div.sepline {
 .closedsum
 {
   background-color: #CCCCCC;
-}
-
-.ordersummary tr
-{
-  border: 0px;
-}
-
-.ordersummary td
-{
-  border: 0px;
 }
 
 .tabrow {
@@ -1110,4 +1124,46 @@ td a.LinkButton {
   font-size: 16px;
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.resgridtitle
+{
+  font-weight: bold;
+}
+
+.resgridcell
+{
+  display: inline-block;
+  vertical-align: top;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.resgriddatatiny
+{
+  width: 35px;
+  white-space: normal;
+}
+.resgriddatashort
+{
+  width: 50px;
+  white-space: normal;
+}
+.resgriddata
+{
+  width: 80px;
+  white-space: normal;
+}
+.resgriddatahlong
+{
+  width: 110px;
+  white-space: normal;
+}
+.resgriddatalong
+{
+  width: 180px;
+  white-space: normal;
+}
+.inlineblock
+{
+  display: inline-block;
 }

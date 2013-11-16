@@ -281,6 +281,19 @@ class PickupLocation extends SQLBase {
           
           $this->SaveStorageAreas();
           
+          if ( $this->m_aData[self::PROPERTY_CACHIER] != NULL)
+          {
+            $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, ModifiedByMemberID, mAmount, dDate) " .
+                  " VALUES(:pickuplocid, :modifier, :amount, :date);";
+
+            $this->RunSQLWithParams($sSQL, array(
+                      'pickuplocid' => $this->m_aData[self::PROPERTY_ID],
+                      'modifier' => $g_oMemberSession->MemberID,
+                    'amount' => $this->m_aData[self::PROPERTY_CACHIER],
+                    'date' => $g_dNow->format(DATABASE_DATE_FORMAT),
+                  ));
+          }
+          
           $this->CommitTransaction();
           
           $this->ApplySaveStorageAreas();
@@ -373,6 +386,20 @@ class PickupLocation extends SQLBase {
       $this->UpdateStrings(self::PROPERTY_ADMIN_STRINGS, $this->m_aOriginalData[self::PROPERTY_ADMIN_STR_ID]);
       
       $this->SaveStorageAreas();
+      
+      if ($this->m_aData[self::PROPERTY_CACHIER] != $this->m_aOriginalData[self::PROPERTY_CACHIER])
+      {
+        $mAmount = $this->m_aData[self::PROPERTY_CACHIER] - $this->m_aOriginalData[self::PROPERTY_CACHIER];
+        $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, ModifiedByMemberID, mAmount, dDate) " .
+              " VALUES(:pickuplocid, :modifier, :amount, :date);";
+
+        $this->RunSQLWithParams($sSQL, array(
+                  'pickuplocid' => $this->m_aData[self::PROPERTY_ID],
+                  'modifier' => $g_oMemberSession->MemberID,
+                'amount' => $mAmount,
+                'date' => $g_dNow->format(DATABASE_DATE_FORMAT),
+              ));
+      }
       
       $this->CommitTransaction();
       

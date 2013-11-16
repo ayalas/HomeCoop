@@ -146,7 +146,6 @@ UserSessionBase::Close();
 <head>
 <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=0" />
 <?php include_once 'control/headtags.php'; ?>
-<link rel="stylesheet" type="text/css" href="style/fixedheaders.css" />
 <title><!$COOPERATIVE_NAME$!>: <?php echo $oRecord->PageTitle;  ?></title>
 <script type="text/javascript" src="script/authenticated.js" ></script>
 <script type="text/javascript" >
@@ -195,24 +194,23 @@ function SetDirty()
                 <td>
                 <table cellspacing="0" border="0" cellpadding="0" width="100%">
                 <tr>
-                  <td colspan="2"><?php include_once 'control/coopordertab.php'; ?></td>
+                  <td><?php include_once 'control/coopordertab.php'; ?></td>
                 </tr>
                 <tr>
-                  <td colspan="2"><?php include_once 'control/copickuploctab.php'; ?></td>
+                  <td><?php include_once 'control/copickuploctab.php'; ?></td>
                 </tr>
                 <tr>
-                  <td colspan="2"><?php include_once 'control/ordertab.php'; ?></td>
+                  <td><?php include_once 'control/ordertab.php'; ?></td>
                 </tr>
                 <tr>
-                  <td colspan="2"><?php include_once 'control/error/ctlError.php'; ?></td>
+                  <td><?php include_once 'control/error/ctlError.php'; ?></td>
                 </tr>  
                 <?php
                 if (!$g_oError->HadError && $oRecord->CanModify)
                 {
                 ?><tr>
-                  <td class="ordercnt" class="nowrapping"><button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button></td>
-                  <td>
-                    <select id="selProductsView" name="selProductsView" onchange="JavaScript:SwitchViewMode();" >
+                  <td class="ordercnt" class="nowrapping"><div class="inlineblock"><button type="submit" class="order" onclick="JavaScript:Save();" id="btn_save" name="btn_save" ><!$BTN_SAVE_ORDER_ITEMS$!></button></div>
+                    <div class="inlineblock"><select id="selProductsView" name="selProductsView" onchange="JavaScript:SwitchViewMode();" >
                     <?php
                       echo '<option value="' , OrderItems::PRODUCTS_VIEW_MODE_SHOW_ALL , '"'; 
                       if ($oTable->ProductsViewMode == OrderItems::PRODUCTS_VIEW_MODE_SHOW_ALL)
@@ -223,7 +221,7 @@ function SetDirty()
                         echo ' selected ';
                       echo '><!$ORDER_ITEMS_VIEW_MODE_ORDERED_PRODUCTS$!></option>';
                     ?>
-                    </select>
+                    </select></div>
                   </td>
                 </tr>
                <?php
@@ -233,31 +231,17 @@ function SetDirty()
                 </td>
             </tr>
             <tr>
-              <td>
-                <table cellspacing="0" cellpadding="0" width="100%" class="scrollTable" >
-                <thead class="fixedHeader">
-                <tr>
-                  <th class="columntitlelong"><!$FIELD_PRODUCT$!></th>
-                  <th class="columntitle"><!$FIELD_PRODUCER$!></th>
-                  <th class="columntitletiny"><!$FIELD_QUANTITY$!></th>
-                  <th class="columntitletiny"><!$ORDER_ITEMS_PRICE$!></th>
-                  <th class="columntitletiny"><!$FIELD_MEMBER_ORDER_ITEM_QUANTITY$!></th>
-                  <th class="columntitletiny"><a id="additionhlp" name="additionhlp" class="tooltiphelp" href="#additionhlp" ><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!><span><!$TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></span></a></th>
-                  <th class="columntitletiny"><!$FIELD_MEMBER_ORDER_ITEM_TOTAL$!></th>
-                  <th class="columntitlescroll"><!$FIELD_MEMBER_ORDER_ITEM_COMMENTS$!></th>
-                </tr>
-                </thead>
-                <tbody class="scrollContent">
+              <td class="resgridparent">
 <?php
                 if (!is_array($arrItems) || count($arrItems) == 0)
                 {
                   ?>
-                  <tr><td colspan='8'>&nbsp;</td></tr>
-                  <tr><td colspan='8' align='center'><!$NO_RECORD_FOUND$!></td></tr>
+                  <div class="norecords"><!$NO_RECORD_FOUND$!></div>
                   <?php
                 }
                 else
                 {
+                  $bPrintedHeaders = false;
                   $sJoinedItemsTooltipID = '';
                   foreach($arrItems as $oItem)
                   {
@@ -267,13 +251,13 @@ function SetDirty()
                       if ($oItem->InvalidEntry)
                       {
                         //show validation message
-                        echo '<tr><td colspan="8" ><span class="message">' , $oItem->ValidationMessage  , '</span></td></tr>',
-                         '<tr class="orderiteminvalidrow" >';
+                        echo '<div class="resgridrow"><span class="message">' , $oItem->ValidationMessage  , '</span></div>',
+                         '<div class="resgridrow orderiteminvalidrow" >';
                       }
                       else if ($oItem->ChangedByCoordinator)
-                        echo '<tr class="changedrow" >';
+                        echo '<div class="resgridrow changedrow" >';
                       else
-                        echo "<tr>";
+                        echo '<div class="resgridrow">';
                       
                       $oProductPackage = new ProductPackage($oItem->ProductItems, $oItem->ProductItemQuantity, 
                                 $oItem->ItemUnitAbbrev, $oItem->UnitInterval, $oItem->UnitAbbrev, $oItem->PackageSize, 
@@ -281,7 +265,12 @@ function SetDirty()
                            'tooltiphelp', 'ProductPackage' . $oItem->ProductID);
                       
                       //1. ProductName + link to product screen + hidden order item id to identify existing records
-                      echo '<td class="columndatalong">';
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><!$FIELD_PRODUCT$!></div>';
+                      echo '<div class="resgriddatalong">';
                       
                       if ($oProductPackage->HasTooltip)
                       {
@@ -298,23 +287,39 @@ function SetDirty()
                       echo  '<input type="hidden" id="' , OrderItems::CTL_PREFIX_ID , $oItem->ProductID , '" name="' ,
                                 OrderItems::CTL_PREFIX_ID , $oItem->ProductID , '" value="' , $oItem->OrderItemID , '" />';
                       
-                      echo  '</td>';
+                      echo  '</div></div>';
                       
                       //2. Producer
                       $cellProducer = new HtmlGridCellText($oItem->ProducerName, HtmlGridCellText::CELL_TYPE_NORMAL);
-                      echo '<td class="columndata">';
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><!$FIELD_PRODUCER$!></div>';
+                      echo '<div class="resgriddatahlong">';
                       echo $cellProducer->EchoHtml();
-                      echo "</td>";
+                      echo "</div></div>";
                       unset($cellProducer);
                       
                       //3. Product Package
-                      echo '<td class="columndatatiny">'; 
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><!$FIELD_QUANTITY$!></div>';
+                      echo '<div class="resgriddatatiny">';
                       $oProductPackage->SuppressTooltip = TRUE;
                       $oProductPackage->EchoHtml();
-                      echo '</td>';
+                      echo '</div></div>';
                       
                       //4. Coop Price
-                      echo '<td class="columndatatiny">' , $oItem->ProductCoopPrice , '</td>';
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><!$ORDER_ITEMS_PRICE$!></div>';
+                      echo '<div class="resgriddatatiny">';
+                      echo $oItem->ProductCoopPrice , '</div></div>';
                       
                       //5. Member Order
                       $txtMemberOrder = new HtmlTextEditNumericRange(OrderItems::CTL_PREFIX_QUANTITY . $oItem->ProductID,
@@ -330,11 +335,17 @@ function SetDirty()
                       if ($oItem->ProductMaxUserOrder != NULL)
                         $txtMemberOrder->MaxValue = $oItem->ProductMaxUserOrder;
 
-                      echo '<td class="columndatatiny">';
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><!$FIELD_MEMBER_ORDER_ITEM_QUANTITY$!></div>';
+                      echo '<div class="resgriddatatiny">';
                       $txtMemberOrder->EchoHtml();
-                      echo '</td>';
+                      echo '</div></div>';
                       
                       //6. Max Fix Addition
+                      
                       if (  ($oItem->MemberMaxFixQuantityAddition != NULL && $oItem->MemberMaxFixQuantityAddition != 0)
                         || Product::AllowsPartialOrders($oItem->ProductUnitID, $oItem->ProductQuantity, $oItem->UnitInterval, $oItem->PackageSize))
                       {
@@ -348,15 +359,26 @@ function SetDirty()
                           $txtMemberMaxFixQuantityAddition->MaxValue = $oItem->ProductQuantity;
                         $txtMemberMaxFixQuantityAddition->CssClass = "orderitemqentry";
                         $txtMemberMaxFixQuantityAddition->OnChange = "JavaScript:SetDirty();";
-                        echo '<td class="columndatatiny">';
+
+                        echo '<div class="resgridcell">';
+                        echo '<div class="resgridtitle'; 
+                        if ($bPrintedHeaders)
+                          echo ' mobiledisplay';
+                        echo '"><a id="additionhlp_' . $oItem->ProductID .'" name="additionhlp_' . 
+                          $oItem->ProductID .'" class="tooltiphelp" href="#additionhlp_' . $oItem->ProductID .
+                          '" ><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!><span><!$TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></span></a></div>';
+                        echo '<div class="resgriddatatiny">';
                         $txtMemberMaxFixQuantityAddition->EchoHtml();
-                        echo '</td>';
+                        echo '</div></div>';
                       }
-                      else
-                        echo '<td class="columndatatiny"></td>';
                       
                       //7. Total Price
-                      echo '<td class="columndatatiny">';
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><!$FIELD_MEMBER_ORDER_ITEM_TOTAL$!></div>';
+                      echo '<div class="resgriddatatiny">';
                       if ($oItem->JoinedItems > 0)
                       {
                         $fOriginalAmount = ($oItem->Quantity/$oItem->ProductQuantity) * $oItem->ProductCoopPrice;
@@ -372,7 +394,7 @@ function SetDirty()
                       else
                         echo $oItem->CoopTotal;
                       
-                      echo '</td>';
+                      echo '</div></div>';
                       
                       //8. Member Comments
                       $txtOrderItemComments = new HtmlTextEdit(OrderItems::CTL_PREFIX_COMMENTS . $oItem->ProductID,
@@ -383,19 +405,22 @@ function SetDirty()
                       $txtOrderItemComments->Rows = 1;
                       $txtOrderItemComments->OnChange = "JavaScript:SetDirty();";
                       $txtOrderItemComments->EncloseInHtmlCell = FALSE;
-                      echo '<td>';
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><!$FIELD_MEMBER_ORDER_ITEM_COMMENTS$!></div>';
+                      echo '<div class="resgriddatalong">';
                       $txtOrderItemComments->EchoEditPartHtml();
-                      echo '</td>';
+                      echo '</div></div>';
                       
-                      echo '</tr>';
+                      echo '</div>';
+                      
+                      $bPrintedHeaders = true;
                   }
                 }
 
                 ?>
-                <tr><td colspan='8'>&nbsp;</td></tr>
-                <tr><td colspan='8'>&nbsp;</td></tr>
-                </tbody>
-                </table>
            </td>
     </tr>
     <tr>

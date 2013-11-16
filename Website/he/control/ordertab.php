@@ -34,8 +34,7 @@ function WriteOrderTabElement($sText, $sLink, $bIsOnPage)
   </td>
 </tr> 
 </table>
-<table cellpadding="0" cellspacing="0" border="0" width="100%">
-<tr><td width="100%" align="center"><?php
+<?php
 
 $nCoopTotal = $oOrderTabInfo->CoopTotal;
 $sOrderSumClass = '';
@@ -44,30 +43,29 @@ if ($oOrderTabInfo->StatusObj->Status == ActiveCoopOrderStatus::Open)
 else
   $sOrderSumClass = " closedsum";
 
-echo '<table cellpadding="5" cellspacing="0" class="ordersummary', $sOrderSumClass, '"><tr>';
+echo '<div class="ordersummary', $sOrderSumClass, '">';
 if ($oOrderTabInfo->OrderCoopFee != NULL && $oOrderTabInfo->OrderCoopFee != 0)
 {
   $nCoopTotal += $oOrderTabInfo->OrderCoopFee;
 
-  echo '<td class="headlabel" >סה&quot;כ מוצרים‏:‏‏&nbsp;',
-      $oOrderTabInfo->CoopTotal, '</td>',
-   '<td class="headlabel" >תוספת לקואופ‏:‏‏&nbsp;',
-      $oOrderTabInfo->OrderCoopFee, '</td>';
+  echo '<div class="headlabel" >סה&quot;כ מוצרים‏:‏‏&nbsp;',
+      $oOrderTabInfo->CoopTotal, '</div>',
+   '<div class="headlabel" >תוספת לקואופ‏:‏‏&nbsp;',
+      $oOrderTabInfo->OrderCoopFee, '</div>';
 }
   
-echo '<td class="headlabel" >סה&quot;כ ההזמנה‏:‏‏&nbsp;',
-    $nCoopTotal , '</td>';
+echo '<div class="headlabel" >סה&quot;כ ההזמנה‏:‏‏&nbsp;',
+    $nCoopTotal , '</div>';
 
 if ($oOrderTabInfo->StatusObj->StatusName != NULL)
 {
-  echo '<td nowrap class="headlabel">' ,  $oOrderTabInfo->StatusObj->StatusName , '</td>';
+  echo '<div class="headlabel">' ,  $oOrderTabInfo->StatusObj->StatusName , '</div>';
 }
 
 if ($oOrderTabInfo->Capacity != NULL)
- echo '<td class="headlabel">' , $oOrderTabInfo->Capacity , '&nbsp;תפוסה</td>';
+ echo '<div class="headlabel">' , $oOrderTabInfo->Capacity , '&nbsp;תפוסה</div>';
 
-echo '</tr></table>';
+echo '</div>';
 
-?></td></tr>
-</table>
+?>
 
