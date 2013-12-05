@@ -345,7 +345,15 @@ function SetDirty()
                       echo '</div></div>';
                       
                       //6. Max Fix Addition
-                      
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><a id="additionhlp_' . $oItem->ProductID .'" name="additionhlp_' . 
+                        $oItem->ProductID .'" class="tooltiphelp" href="#additionhlp_' . $oItem->ProductID .
+                        '" ><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!><span><!$TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></span></a></div>';
+                      echo '<div class="resgriddatatiny">';
+
                       if (  ($oItem->MemberMaxFixQuantityAddition != NULL && $oItem->MemberMaxFixQuantityAddition != 0)
                         || Product::AllowsPartialOrders($oItem->ProductUnitID, $oItem->ProductQuantity, $oItem->UnitInterval, $oItem->PackageSize))
                       {
@@ -360,17 +368,9 @@ function SetDirty()
                         $txtMemberMaxFixQuantityAddition->CssClass = "orderitemqentry";
                         $txtMemberMaxFixQuantityAddition->OnChange = "JavaScript:SetDirty();";
 
-                        echo '<div class="resgridcell">';
-                        echo '<div class="resgridtitle'; 
-                        if ($bPrintedHeaders)
-                          echo ' mobiledisplay';
-                        echo '"><a id="additionhlp_' . $oItem->ProductID .'" name="additionhlp_' . 
-                          $oItem->ProductID .'" class="tooltiphelp" href="#additionhlp_' . $oItem->ProductID .
-                          '" ><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!><span><!$TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></span></a></div>';
-                        echo '<div class="resgriddatatiny">';
                         $txtMemberMaxFixQuantityAddition->EchoHtml();
-                        echo '</div></div>';
                       }
+                      echo '</div></div>';
                       
                       //7. Total Price
                       echo '<div class="resgridcell">';

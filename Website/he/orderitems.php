@@ -345,7 +345,15 @@ function SetDirty()
                       echo '</div></div>';
                       
                       //6. Max Fix Addition
-                      
+                      echo '<div class="resgridcell">';
+                      echo '<div class="resgridtitle'; 
+                      if ($bPrintedHeaders)
+                        echo ' mobiledisplay';
+                      echo '"><a id="additionhlp_' . $oItem->ProductID .'" name="additionhlp_' . 
+                        $oItem->ProductID .'" class="tooltiphelp" href="#additionhlp_' . $oItem->ProductID .
+                        '" >הוספה<span>הכמות המקסימלית שמתאמי הזמנת הקואופרטיב יורשו *להוסיף* להזמנה שלך כדי להשלים הזמנות חלקיות לגודל החבילה. למשל, אם גודל החבילה הוא 2ק&quot;ג, והכמות שהזמנת היא 0.5ק&quot;ג, ע&quot;י השמת הערך 0.5ק&quot;ג בשדה זה, תוכל/י להגדיר שאפשר לעלות עד ל- 1ק&quot;ג כדי להשלים הזמנה חלקית</span></a></div>';
+                      echo '<div class="resgriddatatiny">';
+
                       if (  ($oItem->MemberMaxFixQuantityAddition != NULL && $oItem->MemberMaxFixQuantityAddition != 0)
                         || Product::AllowsPartialOrders($oItem->ProductUnitID, $oItem->ProductQuantity, $oItem->UnitInterval, $oItem->PackageSize))
                       {
@@ -360,17 +368,9 @@ function SetDirty()
                         $txtMemberMaxFixQuantityAddition->CssClass = "orderitemqentry";
                         $txtMemberMaxFixQuantityAddition->OnChange = "JavaScript:SetDirty();";
 
-                        echo '<div class="resgridcell">';
-                        echo '<div class="resgridtitle'; 
-                        if ($bPrintedHeaders)
-                          echo ' mobiledisplay';
-                        echo '"><a id="additionhlp_' . $oItem->ProductID .'" name="additionhlp_' . 
-                          $oItem->ProductID .'" class="tooltiphelp" href="#additionhlp_' . $oItem->ProductID .
-                          '" >הוספה<span>הכמות המקסימלית שמתאמי הזמנת הקואופרטיב יורשו *להוסיף* להזמנה שלך כדי להשלים הזמנות חלקיות לגודל החבילה. למשל, אם גודל החבילה הוא 2ק&quot;ג, והכמות שהזמנת היא 0.5ק&quot;ג, ע&quot;י השמת הערך 0.5ק&quot;ג בשדה זה, תוכל/י להגדיר שאפשר לעלות עד ל- 1ק&quot;ג כדי להשלים הזמנה חלקית</span></a></div>';
-                        echo '<div class="resgriddatatiny">';
                         $txtMemberMaxFixQuantityAddition->EchoHtml();
-                        echo '</div></div>';
                       }
+                      echo '</div></div>';
                       
                       //7. Total Price
                       echo '<div class="resgridcell">';
