@@ -836,6 +836,12 @@ class OrderItems extends SQLBase {
      $oOrderItem->InvalidEntry = TRUE;
      $oOrderItem->ValidationMessage .= sprintf('<!$ORDER_ITEM_VALIDATION_FOR_UNIT_INTERVAL$!><br/>', $fGap);
    }
+   elseif ($oOrderItem->MemberMaxFixQuantityAddition != NULL && fmod($oOrderItem->MemberMaxFixQuantityAddition,$fGap) != 0)
+   {
+     $oOrderItem->InvalidEntry = TRUE;
+     $oOrderItem->ValidationMessage .= sprintf('<!$ORDER_ITEM_VALIDATION_FOR_UNIT_INTERVAL$!><br/>', $fGap);
+   }
+   
    
    //validate joined product - cannot reduce quantity
    if ($oOrderItem->UnjoinedQuantity < 0)

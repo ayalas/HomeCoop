@@ -836,6 +836,12 @@ class OrderItems extends SQLBase {
      $oOrderItem->InvalidEntry = TRUE;
      $oOrderItem->ValidationMessage .= sprintf('לא ניתן להזמין את הכמות שהוזנה. יש להזין כמות בכפולות של  %s<br/>', $fGap);
    }
+   elseif ($oOrderItem->MemberMaxFixQuantityAddition != NULL && fmod($oOrderItem->MemberMaxFixQuantityAddition,$fGap) != 0)
+   {
+     $oOrderItem->InvalidEntry = TRUE;
+     $oOrderItem->ValidationMessage .= sprintf('לא ניתן להזמין את הכמות שהוזנה. יש להזין כמות בכפולות של  %s<br/>', $fGap);
+   }
+   
    
    //validate joined product - cannot reduce quantity
    if ($oOrderItem->UnjoinedQuantity < 0)

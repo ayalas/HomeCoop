@@ -836,6 +836,12 @@ class OrderItems extends SQLBase {
      $oOrderItem->InvalidEntry = TRUE;
      $oOrderItem->ValidationMessage .= sprintf('Quantity entered is not valid. Must enter values in multiples of %s<br/>', $fGap);
    }
+   elseif ($oOrderItem->MemberMaxFixQuantityAddition != NULL && fmod($oOrderItem->MemberMaxFixQuantityAddition,$fGap) != 0)
+   {
+     $oOrderItem->InvalidEntry = TRUE;
+     $oOrderItem->ValidationMessage .= sprintf('Quantity entered is not valid. Must enter values in multiples of %s<br/>', $fGap);
+   }
+   
    
    //validate joined product - cannot reduce quantity
    if ($oOrderItem->UnjoinedQuantity < 0)

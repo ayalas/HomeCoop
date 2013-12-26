@@ -227,7 +227,9 @@ define ('ROUND_SETTING_PRODUCT_PRODUCER_TOTAL', Rounding::ROUND_TYPE_ROUND_PRECI
 define ('ROUND_SETTING_PRODUCT_COOP_TOTAL', Rounding::ROUND_TYPE_ROUND_PRECISION_1);
 
 //copy order default date jump
-define ('COPY_ORDER_DEFAULT_DATE_JUMP', Consts::COPY_ORDER_JUMP_MONTH);
+define ('COPY_ORDER_DEFAULT_DATE_JUMP', Consts::COPY_ORDER_JUMP_WEEK);
+//jump x weeks/months
+define ('COPY_ORDER_JUMP', 5);
 
 //handles a persistant connection to the database
 $g_oDBAccess = new DBAccess;

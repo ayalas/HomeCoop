@@ -881,13 +881,13 @@ class CoopOrder extends SQLBase {
     switch(COPY_ORDER_DEFAULT_DATE_JUMP)
     {
       case Consts::COPY_ORDER_JUMP_WEEK:
-        $di = new DateInterval('P1W');
+        $di = new DateInterval('P' . (COPY_ORDER_JUMP +0) . 'W');
         $this->m_aData[self::PROPERTY_END]->add($di);
         $this->m_aData[self::PROPERTY_DELIVERY]->add($di);
         break;
         
       case Consts::COPY_ORDER_JUMP_MONTH:
-        $di = new DateInterval('P1M');
+        $di = new DateInterval('P' . (COPY_ORDER_JUMP +0) . 'M');
         $this->AddDatePreserveDW(self::PROPERTY_END, $di);
         $this->AddDatePreserveDW(self::PROPERTY_DELIVERY, $di);        
         break;
