@@ -317,21 +317,30 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
 
 <xsl:template match="sheet">
   <office:spreadsheet>
-   <table:table table:style-name="ta1" >
+   
+    <table:table table:style-name="ta1" >
     <xsl:attribute name="table:name"><xsl:value-of select="name" /></xsl:attribute>
-    
+
+    <xsl:apply-templates select="batch" />
+
+   <table:named-expressions/>
+   </table:table>
+  </office:spreadsheet>
+</xsl:template>
+
+<xsl:template match="batch">
+  
     <xsl:apply-templates select="colh" />
     
     <xsl:apply-templates select="row" />
     
     <xsl:apply-templates select="sum" />
-
-   </table:table>
-   <table:named-expressions/>
-  </office:spreadsheet>
+  
 </xsl:template>
+  
 
 <xsl:template match="colh">
+  <xsl:if test="../preceding-sibling::row = 0">
   <table:table-header-columns>
    <table:table-column table:style-name="prdcol" table:default-cell-style-name="celltitle"/>
    <table:table-column table:style-name="regcol" table:default-cell-style-name="celltitle"/>
@@ -344,6 +353,8 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
   </xsl:for-each> 
   
   <table:table-column table:style-name="dblcol" table:default-cell-style-name="Default"/>
+  
+  </xsl:if>
   <table:table-row table:style-name="ho1">
    <table:table-cell table:style-name="celltitle" office:value-type="string">
     <text:p><xsl:value-of select="prdh"/></text:p>
@@ -387,10 +398,21 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
    <table:table-cell table:style-name="prddata" office:value-type="string">
     <text:p><xsl:value-of select="prd"/></text:p>
    </table:table-cell>
-   <table:table-cell table:style-name="celldata" office:value-type="float" >
-    <xsl:attribute name="office:value"><xsl:value-of select="price"/></xsl:attribute>
-    <text:p><xsl:value-of select="price"/></text:p>
-   </table:table-cell>
+   
+   <xsl:choose>
+   <xsl:when test="price != ''" >
+    <table:table-cell table:style-name="celldata" office:value-type="float" >
+      <xsl:attribute name="office:value">
+        <xsl:value-of select="price"/>
+      </xsl:attribute>
+     <text:p><xsl:value-of select="price"/></text:p>
+    </table:table-cell>
+   </xsl:when>
+   <xsl:otherwise>
+     <table:table-cell table:style-name="celldata" />
+   </xsl:otherwise>
+   </xsl:choose>
+   
    <table:table-cell table:style-name="prddata" office:value-type="string">
     <text:p><xsl:value-of select="quantity"/></text:p>
    </table:table-cell>
@@ -435,10 +457,21 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
      <table:table-cell table:style-name="celltitle" office:value-type="string">
        <text:p><xsl:value-of select="sumlabel"/></text:p>
      </table:table-cell>
+     
+    <xsl:choose>
+    <xsl:when test="sumtotal != ''" >
      <table:table-cell table:style-name="celltitle" office:value-type="float" >
-      <xsl:attribute name="office:value"><xsl:value-of select="sumtotal"/></xsl:attribute>
+       <xsl:attribute name="office:value">
+         <xsl:value-of select="sumtotal"/>
+       </xsl:attribute>
       <text:p><xsl:value-of select="sumtotal"/></text:p>
      </table:table-cell>
+    </xsl:when>
+    <xsl:otherwise>
+      <table:table-cell table:style-name="celltitle" />
+    </xsl:otherwise>
+    </xsl:choose>
+     
     <table:table-cell table:number-columns-repeated="2"/>
     
      <xsl:for-each select="summem">

@@ -32,11 +32,11 @@ class CoopOrderExport extends CoopOrderSubBase {
   protected $m_nPickupLocationID = NULL;
   protected $m_sMailList = NULL;
   protected $m_aCurrentProduct = NULL;
-  protected $m_aCurrentItem = NULL;
   protected $m_aCurrentProducer = NULL;
   protected $m_aCurrentPickupLocation = NULL;
   protected $m_aProducts = NULL;
   protected $m_aOrders = NULL;
+  protected $m_aOrderItems = NULL;
   protected $m_oXmlDoc = NULL;
   
   protected $m_sDir = NULL;
@@ -353,7 +353,7 @@ class CoopOrderExport extends CoopOrderSubBase {
     else
       $sXslPath .= '.xsl';
     
-    //strip ID
+    //PRODUCER ONLY
     if ( ($this->m_aData[self::PROPERTY_ID] & CoopOrderExport::LIST_ITEM_PRODUCER) === CoopOrderExport::LIST_ITEM_PRODUCER )
     {
      $this->m_nProducerID = $this->m_aData[self::PROPERTY_ID] - CoopOrderExport::LIST_ITEM_TYPE_ORDER - CoopOrderExport::LIST_ITEM_PRODUCER;
@@ -365,6 +365,7 @@ class CoopOrderExport extends CoopOrderSubBase {
       $sFileName .= $this->m_aCurrentProducer[Producer::PROPERTY_EXPORT_FILE_NAME];
 
     }
+    //PICKUP LOCATION ONLY
     else if ( ($this->m_aData[self::PROPERTY_ID] & CoopOrderExport::LIST_ITEM_PICKUP_LOCATION) === CoopOrderExport::LIST_ITEM_PICKUP_LOCATION )
     {
      $this->m_nPickupLocationID = $this->m_aData[self::PROPERTY_ID] - CoopOrderExport::LIST_ITEM_TYPE_ORDER - CoopOrderExport::LIST_ITEM_PICKUP_LOCATION;
@@ -375,13 +376,15 @@ class CoopOrderExport extends CoopOrderSubBase {
      if ($this->m_aCurrentPickupLocation[PickupLocation::PROPERTY_EXPORT_FILE_NAME] != NULL)
       $sFileName .= $this->m_aCurrentPickupLocation[PickupLocation::PROPERTY_EXPORT_FILE_NAME];
     }
+    //SUMMARY ONLY
     else if ( ($this->m_aData[self::PROPERTY_ID] & CoopOrderExport::LIST_ITEM_TYPE_SUMMARY) === CoopOrderExport::LIST_ITEM_TYPE_SUMMARY )
     {     
      $this->CoopOrderSummaryQueryAndBuildXML();
      
      $sFileName .= '<!$ORDER_EXPORT_COOP_ORDER_SUMMARY_FILE_NAME_SUFFIX$!>';
     }
-    else if ($this->m_aData[self::PROPERTY_ID] == CoopOrderExport::LIST_ITEM_TYPE_ORDER) 
+    //ALL DATA
+    else if ($this->m_aData[self::PROPERTY_ID] == CoopOrderExport::LIST_ITEM_TYPE_ORDER)
     {
      $this->CoopOrderQueryAndBuildXML(); 
      
@@ -442,12 +445,14 @@ class CoopOrderExport extends CoopOrderSubBase {
     $this->BuildDocumentHeaderXML($document /*by ref*/);
     
     $ordsheet = NULL;
+    $detsheet = NULL;
     $this->QueryCoopOrderPickupLocationProducts();
-    $this->PickupLocationOrdersSheetXML($ordsheet /*by ref*/);
-    
-    $this->QueryCoopOrderPickupLocationProducers();
+    $this->PickupLocationOrdersSheetXML($ordsheet, $detsheet /*by ref*/);
     
     $document->appendChild($ordsheet);
+    $document->appendChild($detsheet);
+    
+    $this->QueryCoopOrderPickupLocationProducers();
     
     foreach($this->m_aData[self::PROPERTY_PRODUCERS] as $this->m_nProducerID => $this->m_aCurrentProducer)
     {
@@ -463,47 +468,58 @@ class CoopOrderExport extends CoopOrderSubBase {
     $this->m_oXmlDoc->appendChild($document);
   }
   
-  protected function PickupLocationOrdersSheetXML(&$sheet)
+  protected function PickupLocationOrdersSheetXML(&$sheet, &$detsheet)
   {    
     $this->QueryOrders();
     
-    $this->BuildNewSheetXML( $this->m_aCurrentPickupLocation[PickupLocation::PROPERTY_NAME], TRUE, $sheet /*by ref*/ );
+    $batch = NULL;
+    $this->BuildNewSheetXML( $this->m_aCurrentPickupLocation[PickupLocation::PROPERTY_NAME], TRUE, $sheet, $batch /*by ref*/ );
     
-    $this->QueryCoopOrderProductItems();
+    $this->QueryCoopOrderProductItems(FALSE);
 
-    $this->BuildSheetBodyXML( TRUE, FALSE, $sheet /*by ref*/);
+    $this->BuildSheetBodyXML( TRUE, FALSE, $batch /*by ref*/);
     
     $this->BuildSheetSummaryRowXML( TRUE,'<!$FIELD_ORDER_EXPORT_TOTAL_ROW_LABEL$!>',
-       NULL /* means calculate by orders totals*/, $sheet /*by ref*/);
+       NULL /* means calculate by orders totals*/, $batch /*by ref*/);
+    
+    $sheet->appendChild($batch);
+    
+    //Details Sheet
+    $this->QueryCoopOrderProductItems(TRUE);
+
+    $this->BuildPickupLocationDetailSheetXML( $detsheet /*by ref*/);   
 
   }
   
   protected function BuildProducerSheetXML(&$sheet)
   {
+    $batch = NULL;
     if ($this->m_nPickupLocationID > 0)
       $this->QueryCoopOrderPickupLocationProducts();
     else
       $this->QueryCoopOrderProducts();
     
-    $this->BuildNewSheetXML( $this->m_aCurrentProducer[Producer::PROPERTY_PRODUCER_NAME], FALSE, $sheet /*by ref*/ );
+    $this->BuildNewSheetXML( $this->m_aCurrentProducer[Producer::PROPERTY_PRODUCER_NAME], FALSE, $sheet, $batch /*by ref*/ );
     
-    $this->BuildSheetBodyXML( FALSE, TRUE, $sheet /*by ref*/);
+    $this->BuildSheetBodyXML( FALSE, TRUE, $batch /*by ref*/);
 
     if ($this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_TOTAL_DELIVERY] > 0) //if has delivery costs
     {
       $this->BuildSheetSummaryRowXML( FALSE,'<!$FIELD_ORDER_EXPORT_TOTAL_PRODUCTS_ROW_LABEL$!>',
-                $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_PRODUCER_TOTAL], $sheet /*by ref*/);
+                $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_PRODUCER_TOTAL], $batch /*by ref*/);
       
       $this->BuildSheetSummaryRowXML( FALSE,'<!$FIELD_ORDER_EXPORT_TOTAL_DELIVERY_ROW_LABEL$!>',
-         $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_TOTAL_DELIVERY], $sheet /*by ref*/);
+         $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_TOTAL_DELIVERY], $batch /*by ref*/);
 
       $this->BuildSheetSummaryRowXML( FALSE,'<!$FIELD_ORDER_EXPORT_TOTAL_ROW_LABEL$!>',
          $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_PRODUCER_TOTAL] +  
-              $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_TOTAL_DELIVERY], $sheet /*by ref*/);
+              $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_TOTAL_DELIVERY], $batch /*by ref*/);
     }
     else
       $this->BuildSheetSummaryRowXML( FALSE,'<!$FIELD_ORDER_EXPORT_TOTAL_ROW_LABEL$!>',
-                $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_PRODUCER_TOTAL], $sheet /*by ref*/);
+                $this->m_aCurrentProducer[CoopOrderProducer::PROPERTY_PRODUCER_TOTAL], $batch /*by ref*/);
+    
+    $sheet->appendChild($batch);
 
   }
   
@@ -532,10 +548,13 @@ class CoopOrderExport extends CoopOrderSubBase {
     foreach($this->m_aData[self::PROPERTY_PICKUP_LOCATIONS] as $this->m_nPickupLocationID => $this->m_aCurrentPickupLocation)
     {
       $plsheet = NULL;
+      $detsheet = NULL;
       $this->QueryCoopOrderPickupLocationProducts();
-      $this->PickupLocationOrdersSheetXML( $plsheet /*by ref*/);
+      $this->PickupLocationOrdersSheetXML( $plsheet , $detsheet /*by ref*/);
       $document->appendChild($plsheet);
+      $document->appendChild($detsheet);
       unset($plsheet);
+      unset($detsheet);
     }
     
     $this->m_oXmlDoc->appendChild($document);
@@ -556,18 +575,21 @@ class CoopOrderExport extends CoopOrderSubBase {
   
   protected function CoopOrderSummarySheetXML(&$sheet)
   {
+    $batch = NULL;
     $this->QueryOrders();
     
-    $this->BuildNewSheetXML($this->Name, TRUE, $sheet /*by ref*/);
+    $this->BuildNewSheetXML($this->Name, TRUE, $sheet, $batch /*by ref*/);
     
     $this->QueryCoopOrderProducts();
     
-    $this->QueryCoopOrderProductItems();
+    $this->QueryCoopOrderProductItems(FALSE);
 
-    $this->BuildSheetBodyXML( TRUE, FALSE, $sheet /*by ref*/);
+    $this->BuildSheetBodyXML( TRUE, FALSE, $batch /*by ref*/);
     
     $this->BuildSheetSummaryRowXML( TRUE,'<!$FIELD_ORDER_EXPORT_TOTAL_ROW_LABEL$!>',
-       $this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL], $sheet /*by ref*/);
+       $this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL], $batch /*by ref*/);
+    
+    $sheet->appendChild($batch);
   }
   
   protected function BuildDocumentHeaderXML(&$document)
@@ -589,14 +611,16 @@ class CoopOrderExport extends CoopOrderSubBase {
     $parent->appendChild($orientation);
   }
   
-  protected function BuildNewSheetXML($sSheetName, $bIncludeOrders, &$sheet)
+  protected function BuildNewSheetXML($sSheetName, $bIncludeOrders, &$sheet, &$batch)
   {
     $sheet = $this->m_oXmlDoc->createElement('sheet');
     
-    $sheetname = $this->m_oXmlDoc->createElement('name', $sSheetName);
+    $sheetname = $this->m_oXmlDoc->createElement('name', $this->remove_filename_special_char($sSheetName));
     $sheet->appendChild($sheetname);
     
     $this->AddOrientation($sheet);
+    
+    $batch = $this->m_oXmlDoc->createElement('batch');
     
     $colh = $this->m_oXmlDoc->createElement('colh');
     
@@ -630,12 +654,12 @@ class CoopOrderExport extends CoopOrderSubBase {
       $colh->appendChild($totalph);
     }
     
-    $sheet->appendChild($colh);
+    $batch->appendChild($colh);
   }
   
-  protected function BuildSheetBodyXML($bIncludeOrders,$bProducerPrice, &$sheet)
+  protected function BuildSheetBodyXML($bIncludeOrders,$bProducerPrice, &$batch)
   {
-   foreach($this->m_aProducts as $this->m_aCurrentProduct)
+   foreach($this->m_aProducts as $ProductID => $this->m_aCurrentProduct)
     {
       $row = $this->m_oXmlDoc->createElement('row');
       
@@ -665,18 +689,14 @@ class CoopOrderExport extends CoopOrderSubBase {
             
       if ($bIncludeOrders)
       {
-        while($this->m_aCurrentItem)
+        foreach($this->m_aOrderItems[$ProductID] as $OrderItem)
         {
-          if ($this->m_aCurrentItem["ProductKeyID"] != $this->m_aCurrentProduct["ProductKeyID"])
-            break; //moving to next product so exit loop for this one
           $mem = NULL;
-          if ($this->m_aCurrentItem["fQuantity"] != NULL)
-            $mem = $this->m_oXmlDoc->createElement('mem', $this->m_aCurrentItem["fQuantity"]);
+          if ($OrderItem["fQuantity"] != NULL)
+            $mem = $this->m_oXmlDoc->createElement('mem', $OrderItem["fQuantity"]);
           else
             $mem = $this->m_oXmlDoc->createElement('mem');
           $row->appendChild($mem);
-
-          $this->m_aCurrentItem = $this->fetch();
         }
       }
       
@@ -689,11 +709,11 @@ class CoopOrderExport extends CoopOrderSubBase {
         $row->appendChild($totalpr);
       }
       
-      $sheet->appendChild($row);
+      $batch->appendChild($row);
     } 
   }
   
-  protected function BuildSheetSummaryRowXML($bIncludeOrders, $sLabel, $mSummary, &$sheet)
+  protected function BuildSheetSummaryRowXML($bIncludeOrders, $sLabel, $mSummary, &$batch)
   {
     $mTotal = 0;
     $mTotalFee = 0;
@@ -743,16 +763,113 @@ class CoopOrderExport extends CoopOrderSubBase {
       //add fee row
       $feelabel = $this->m_oXmlDoc->createElement('sumlabel', '<!$FIELD_ORDER_COOP_FEE$!>');
       $fee->appendChild($feelabel);
-      $sheet->appendChild($fee);
+      $batch->appendChild($fee);
     }
     
-    $sheet->appendChild($sum);    
+    $batch->appendChild($sum);    
   }
   
+  protected function BuildPickupLocationDetailSheetXML(&$sheet)
+  {
+    $sheet = $this->m_oXmlDoc->createElement('sheet');
+    
+    $sheetname = $this->m_oXmlDoc->createElement('name', $this->remove_filename_special_char(sprintf('<!$EXPORT_PICKUP_LOCATION_DETAIL_SHEET_NAME_FORMAT$!>', 
+        $this->m_aCurrentPickupLocation[PickupLocation::PROPERTY_NAME])));
+    $sheet->appendChild($sheetname);
+    
+    $this->AddOrientation($sheet);
+
+    foreach($this->m_aOrderItems as $OrderID => $products)
+    {
+      $batch = $this->m_oXmlDoc->createElement('batch');
+      
+      $order = $this->m_aOrders[$OrderID];
+      
+      $colh = $this->m_oXmlDoc->createElement('colh');
+    
+      $prdh = $this->m_oXmlDoc->createElement('prdh', '<!$FIELD_PRODUCT$!>');
+      $colh->appendChild($prdh);
+
+      $quantityh = $this->m_oXmlDoc->createElement('quantityh', '<!$FIELD_EXPORT_QUANTITY$!>');
+      $colh->appendChild($quantityh);
+
+      $priceh = $this->m_oXmlDoc->createElement('priceh', '<!$ORDER_ITEMS_PRICE$!>');
+      $colh->appendChild($priceh);
+
+      $packageh = $this->m_oXmlDoc->createElement('packageh', '<!$FIELD_PACKAGE_SIZE$!>');
+      $colh->appendChild($packageh); 
+      
+      $memh = $this->m_oXmlDoc->createElement('memh', $order["sName"]);
+      $colh->appendChild($memh);
+      
+      $batch->appendChild($colh);
+      
+      foreach($products as $ProductID => $orderitem)
+      {
+        if ($orderitem["fQuantity"] == NULL)
+          continue;
+        
+        $row = $this->m_oXmlDoc->createElement('row');
+        $this->m_aCurrentProduct = $this->m_aProducts[$ProductID];
+        
+        $prd = $this->m_oXmlDoc->createElement('prd', $this->m_aCurrentProduct["sProduct"]);
+        $row->appendChild($prd);
+
+        $quantity = $this->m_oXmlDoc->createElement('quantity', $this->m_aCurrentProduct["fQuantity"] . ' ' . $this->m_aCurrentProduct["sUnitAbbrev"]);
+        $row->appendChild($quantity);
+
+        $price = $this->m_oXmlDoc->createElement('price', $this->m_aCurrentProduct["mCoopPrice"]);
+        $row->appendChild($price);
+
+        $sPackageSize = '';
+        if ($this->m_aCurrentProduct["fPackageSize"] != NULL && $this->m_aCurrentProduct["fPackageSize"] != $this->m_aCurrentProduct["fQuantity"])
+          $sPackageSize = $this->m_aCurrentProduct["fPackageSize"] . ' ' . $this->m_aCurrentProduct["sUnitAbbrev"];
+
+        $package = $this->m_oXmlDoc->createElement('package', $sPackageSize);
+        $row->appendChild($package);
+        
+        $mem = $this->m_oXmlDoc->createElement('mem', $orderitem["fQuantity"]);
+
+        $row->appendChild($mem);
+
+        $batch->appendChild($row);
+      }
+      
+      //summary row
+      $sum = $this->m_oXmlDoc->createElement('sum');
+      $sumlabel = $this->m_oXmlDoc->createElement('sumlabel', '<!$FIELD_ORDER_EXPORT_TOTAL_ROW_LABEL$!>');
+      $sum->appendChild($sumlabel);
+
+      //fee row
+      $fee = $this->m_oXmlDoc->createElement('sum');
+      if ($order["mCoopFee"] != NULL)
+      {
+        $feemem = $this->m_oXmlDoc->createElement('summem', $order["mCoopFee"]);
+        $fee->appendChild($feemem);
+      }
+      $summem = $this->m_oXmlDoc->createElement('summem', $order["OrderCoopTotal"]);
+      $sum->appendChild($summem);
+
+      if ($fee->hasChildNodes())
+      {
+        //add fee row
+        $feelabel = $this->m_oXmlDoc->createElement('sumlabel', '<!$FIELD_ORDER_COOP_FEE$!>');
+        $fee->appendChild($feelabel);
+        $batch->appendChild($fee);
+      }
+
+      $batch->appendChild($sum);
+
+      $sheet->appendChild($batch);
+      
+      $this->BuildBatchSeparator($sheet);
+    }
+}
   
   
   protected function QueryCoopOrderProducts()
-  {    
+  {   
+   $this->m_aProducts = array();
    $sSQL =   " SELECT COPRD.ProductKeyID, PRD.fQuantity, PRD.nItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
              " COPRD.fTotalCoopOrder, COPRD.mProducerPrice, COPRD.mCoopPrice, COPRD.mProducerTotal, " .
              $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
@@ -770,11 +887,26 @@ class CoopOrderExport extends CoopOrderSubBase {
     $sSQL .= " AND (COPRD.fTotalCoopOrder > 0 OR COPRD.nJoinedStatus > 0) " .
              " ORDER BY PRD.nSortOrder, COPRD.ProductKeyID; ";
     $this->RunSQL( $sSQL );
-    $this->m_aProducts = $this->fetchAll();
+    
+    while($curProduct = $this->fetch())
+    {
+      $this->m_aProducts[$curProduct['ProductKeyID']] = $curProduct;
+    }
+  }
+  
+  
+  protected function BuildBatchSeparator(&$sheet)
+  {
+    //$sheet->
+    $batch = $this->m_oXmlDoc->createElement('batch');
+    $row = $this->m_oXmlDoc->createElement('row');
+    $batch->appendChild($row);
+    $sheet->appendChild($batch);
   }
   
   protected function QueryCoopOrderPickupLocationProducts()
   {    
+   $this->m_aProducts = array();
    $sSQL =   " SELECT COPLPRD.ProductKeyID, PRD.fQuantity, PRD.nItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
              " COPLPRD.fTotalCoopOrder, COPRD.mProducerPrice, COPRD.mCoopPrice, COPLPRD.mProducerTotal, " .
              $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
@@ -796,7 +928,11 @@ class CoopOrderExport extends CoopOrderSubBase {
     $sSQL .= " AND (COPLPRD.fTotalCoopOrder > 0 OR COPRD.nJoinedStatus > 0) " .
              " ORDER BY PRD.nSortOrder, COPRD.ProductKeyID; ";
     $this->RunSQL( $sSQL );
-    $this->m_aProducts = $this->fetchAll();
+    
+    while($curProduct = $this->fetch())
+    {
+      $this->m_aProducts[$curProduct['ProductKeyID']] = $curProduct;
+    }
   }
   
   protected function QueryCoopOrderPickupLocationProducers()
@@ -808,22 +944,20 @@ class CoopOrderExport extends CoopOrderSubBase {
           " WHERE COP.CoopOrderKeyID = " . $this->m_aData[parent::PROPERTY_COOP_ORDER_ID] . ";";
 
     $this->RunSQL( $sSQL );
-    
-    $rec = $this->fetch();
-    
-    while ($rec)
+
+    while ($rec = $this->fetch())
     {
       $this->m_aData[self::PROPERTY_PRODUCERS][$rec["ProducerKeyID"]][CoopOrderProducer::PROPERTY_PRODUCER_TOTAL] = $rec["mProducerTotal"]; 
-      
-      $rec = $this->fetch();
     }
   }
   
-  protected function QueryCoopOrderProductItems()
+  protected function QueryCoopOrderProductItems($ByMember)
   {
-   $sSQL =   " SELECT COPRD.ProductKeyID, O.OrderID, OI.fQuantity "  .
+    $this->m_aOrderItems = array();
+    
+    $sSQL =   " SELECT COPRD.ProductKeyID, O.OrderID, OI.fQuantity "  .
              " FROM T_CoopOrderProduct COPRD INNER JOIN T_Product PRD ON PRD.ProductKeyID = COPRD.ProductKeyID " .
-             " INNER JOIN T_Order O ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID ";
+             " INNER JOIN T_Order O ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID INNER JOIN T_Member M ON M.MemberID = O.MemberID ";
     if ($this->m_nPickupLocationID > 0)      
     {
       $sSQL .=  " INNER JOIN T_CoopOrderPickupLocationProduct COPLPRD ON COPLPRD.CoopOrderKeyID = COPRD.CoopOrderKeyID " .
@@ -840,13 +974,24 @@ class CoopOrderExport extends CoopOrderSubBase {
       $sSQL .=  " COPLPRD.fTotalCoopOrder > 0 ) ";
    else
       $sSQL .=  " COPRD.fTotalCoopOrder > 0 ) ";
-    $sSQL .=  " ORDER BY PRD.nSortOrder, PRD.ProductKeyID, O.dCreated, O.OrderID; ";
+    if ($ByMember)
+      $sSQL .=  " ORDER BY M.sName, O.OrderID, PRD.nSortOrder, PRD.ProductKeyID; ";
+    else
+      $sSQL .=  " ORDER BY PRD.nSortOrder, PRD.ProductKeyID, M.sName, O.OrderID; ";
     $this->RunSQL( $sSQL );
-    $this->m_aCurrentItem = $this->fetch();
+    
+    while($curItem = $this->fetch())
+    {
+      if ($ByMember)
+        $this->m_aOrderItems[$curItem['OrderID']][$curItem['ProductKeyID']] = $curItem;
+      else
+        $this->m_aOrderItems[$curItem['ProductKeyID']][$curItem['OrderID']] = $curItem;
+    }
   }
   
   protected function QueryOrders()
   {
+    $this->m_aOrders = array();
     $sSQL =     " SELECT O.OrderID, O.MemberID, M.sName, O.PickupLocationKeyID, O.mCoopFee, " . 
                 " O.mCoopTotal, (IfNull(O.mCoopFee,0) + O.mCoopTotal) as OrderCoopTotal " .
                 " FROM T_Order O " .
@@ -855,9 +1000,13 @@ class CoopOrderExport extends CoopOrderSubBase {
                 " AND O.mCoopTotal > 0 ";
     if ($this->m_nPickupLocationID > 0)
       $sSQL .=  " AND O.PickupLocationKeyID = " . $this->m_nPickupLocationID;     
-    $sSQL .=    " ORDER BY O.dCreated, O.OrderID; "; //must have unequivocal order to match orders with items (hence the use of ids)
+    $sSQL .=    " ORDER BY M.sName, O.OrderID; "; //must have unequivocal order to match orders with items (hence the use of ids)
     $this->RunSQL( $sSQL );
-    $this->m_aOrders = $this->fetchAll();
+    
+    while($curOrder = $this->fetch()) 
+    {
+      $this->m_aOrders[$curOrder['OrderID']] = $curOrder;
+    }
   }
   
   //source: http://snipplr.com/view/52144/

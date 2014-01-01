@@ -97,16 +97,11 @@
    <xsl:if test="orientation = 'rtl' ">
      <xsl:attribute name="ss:RightToLeft">1</xsl:attribute>
    </xsl:if>
-   
-   <Table ss:StyleID="ta1">
-    
-    <xsl:apply-templates select="colh" />
-    
-    <xsl:apply-templates select="row" />
-    
-    <xsl:apply-templates select="sum" />
+       
+    <Table ss:StyleID="ta1">
+    <xsl:apply-templates select="batch" />
+    </Table>
 
-   </Table>
    <x:WorksheetOptions>
    <xsl:if test="orientation = 'rtl' ">
     <x:DisplayRightToLeft/>
@@ -117,17 +112,30 @@
   </ss:Worksheet>
 </xsl:template>
 
-<xsl:template match="colh"> 
-  <Column ss:Width="129.6" />
-  <Column ss:Width="43.2" />
-  <Column ss:Width="43.2" />
-  <Column ss:Width="72" />
-
-  <xsl:for-each select="memh">
-    <Column ss:Width="43.2" />
-  </xsl:for-each>
+<xsl:template match="batch">
   
-  <Column ss:Width="72" />
+    <xsl:apply-templates select="colh" />
+    
+    <xsl:apply-templates select="row" />
+    
+    <xsl:apply-templates select="sum" />
+  
+</xsl:template>
+
+<xsl:template match="colh"> 
+  
+  <xsl:if test="../preceding-sibling::row = 0">
+    <Column ss:Width="129.6" />
+    <Column ss:Width="43.2" />
+    <Column ss:Width="43.2" />
+    <Column ss:Width="72" />
+  
+    <xsl:for-each select="memh">
+      <Column ss:Width="43.2" />
+    </xsl:for-each>
+
+    <Column ss:Width="72" />
+  </xsl:if>
 
   <Row ss:Height="15.84">
     <Cell ss:StyleID="ce1">
@@ -171,17 +179,27 @@
    <Cell>
       <Data ss:Type="String"><xsl:value-of select="prd"/></Data>
    </Cell>
-   <Cell>
-      <xsl:choose> 
-      <xsl:when test="position() mod 2 = 0">
-         <xsl:attribute name="ss:StyleID">ce4</xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-         <xsl:attribute name="ss:StyleID">ce6</xsl:attribute>
-      </xsl:otherwise>
-      </xsl:choose>
-      <Data ss:Type="Number"><xsl:value-of select="price"/></Data>
-   </Cell>
+   
+   
+   <xsl:choose>
+   <xsl:when test="price != ''" >
+    <Cell>
+       <xsl:choose> 
+       <xsl:when test="position() mod 2 = 0">
+          <xsl:attribute name="ss:StyleID">ce4</xsl:attribute>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:attribute name="ss:StyleID">ce6</xsl:attribute>
+       </xsl:otherwise>
+       </xsl:choose>
+       <Data ss:Type="Number"><xsl:value-of select="price"/></Data>
+    </Cell>
+   </xsl:when>
+    <xsl:otherwise>
+      <Cell/>
+    </xsl:otherwise>
+   </xsl:choose>
+    
    <Cell>
       <Data ss:Type="String"><xsl:value-of select="quantity"/></Data>
    </Cell>
@@ -245,9 +263,18 @@
      <Cell ss:StyleID="ce1">
        <Data ss:Type="String"><xsl:value-of select="sumlabel"/></Data>
      </Cell>
-     <Cell ss:StyleID="ce1">
-      <Data ss:Type="Number"><xsl:value-of select="sumtotal"/></Data>
-     </Cell>
+     
+     <xsl:choose> 
+      <xsl:when test="sumtotal != ''">
+         <Cell ss:StyleID="ce1">
+          <Data ss:Type="Number"><xsl:value-of select="sumtotal"/></Data>
+         </Cell>
+      </xsl:when>
+      <xsl:otherwise>
+         <Cell/>
+      </xsl:otherwise>
+      </xsl:choose>
+     
      <Cell/>
      <Cell/>
     

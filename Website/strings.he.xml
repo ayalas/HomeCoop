@@ -2209,4 +2209,8 @@
     <key>BTN_FACET_APPLY_FILTER</key>
     <value>החלת סינון</value>
 </str>
+<str>
+    <key>EXPORT_PICKUP_LOCATION_DETAIL_SHEET_NAME_FORMAT</key>
+    <value>%s- פירוט</value>
+</str>
 </strings>

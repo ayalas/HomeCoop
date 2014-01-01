@@ -2305,4 +2305,8 @@
     <key>BTN_FACET_APPLY_FILTER</key>
     <value>Apply filter</value>
 </str>
+<str>
+    <key>EXPORT_PICKUP_LOCATION_DETAIL_SHEET_NAME_FORMAT</key>
+    <value>%s- Detail</value>
+</str>
 </strings>
