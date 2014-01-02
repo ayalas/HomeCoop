@@ -80,31 +80,38 @@ class CoopOrderProducers extends CoopOrderSubBase {
     return $this->fetchAllKeyPair();
  }
  
- //unlike equivalent pickup location function, this one is used only in the home page orders boxes
- //and that's why it's checking only for member "can order" permissions
- public function LoadList($CoopOrderID)
- {
-    $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
+ public function LoadFacet($nCoopOrderID, $MemberID)
+  {
+    global $g_oMemberSession, $g_aMemberProducerIDs;
    
-    if (!$this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
-         Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
+    $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
+       
+    if ($g_oMemberSession->MemberID == $MemberID)
     {
-      $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
-      return NULL;
+      if (!$this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
+           Consts::PERMISSION_SCOPE_BOTH, 0, TRUE))
+      {
+        $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NO_PERMISSION;
+        return NULL;
+      }
     }
     
-    $sSQL =   " SELECT COP.ProducerKeyID, COP.mTotalDelivery, COP.mMaxProducerOrder, IfNull(COP.mProducerTotal,0) mProducerTotal,  " .
+    if (count($g_aMemberProducerIDs) == 0)
+      return NULL;
+    
+        $sSQL =   " SELECT COP.ProducerKeyID, COP.mTotalDelivery, COP.mMaxProducerOrder, IfNull(COP.mProducerTotal,0) mProducerTotal,  " .
           " P.sExportFileName, IfNull(COP.fBurden,0) fBurden, COP.fMaxBurden, P.CoordinatingGroupID, " .
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
           " FROM T_CoopOrderProducer COP INNER JOIN T_Producer P ON COP.ProducerKeyID = P.ProducerKeyID " . 
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCERS) .
-          " WHERE COP.CoopOrderKeyID = " . $CoopOrderID;
-    $sSQL .= " ORDER BY P_S.sString; ";
+          " WHERE COP.CoopOrderKeyID = " . $nCoopOrderID .
+          " AND COP.ProducerKeyID IN (" . implode(",", $g_aMemberProducerIDs) . ") " .
+          " ORDER BY P_S.sString; ";
 
     $this->RunSQL( $sSQL );
 
     return $this->fetch();
- }
+  }
  
 }
 

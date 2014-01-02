@@ -3,7 +3,7 @@
 if(realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
    return;
 
-class MemberPickupLocations extends SQLBase {
+class MemberPickupLocations extends SQLBase implements IMemberFacet {
   const PROPERTY_MEMBER_NAME = "Name";
   const POST_ACTION_BLOCK = 10;
   const POST_ACTION_FILTER = 11;
@@ -96,7 +96,7 @@ class MemberPickupLocations extends SQLBase {
     return $this->fetch();
   }
   
-  public function BlockPickupLocation($PickupLocationID, $bBlock = 1, $bInsert = TRUE)
+  public function BlockFromFacet($PickupLocationID, $bBlock = 1, $bInsert = TRUE)
   {
     global $g_oMemberSession;
     
@@ -134,7 +134,7 @@ class MemberPickupLocations extends SQLBase {
     return TRUE;
   }
   
-  public function RemovePickupLocation($PickupLocationID, $bRemove = 1, $bInsert = TRUE)
+  public function RemoveFromFacet($PickupLocationID, $bRemove = 1, $bInsert = TRUE)
   {
     global $g_oMemberSession;
     
@@ -180,7 +180,7 @@ class MemberPickupLocations extends SQLBase {
       {
         if (isset($arrNewValues[$PLID])) //new is added
         {
-          $this->RemovePickupLocation($PLID, 0, ($PL['MPLID'] == NULL));
+          $this->RemoveFromFacet($PLID, 0, ($PL['MPLID'] == NULL));
           $bHasChanges = TRUE;
         }
       }
@@ -188,7 +188,7 @@ class MemberPickupLocations extends SQLBase {
       {
         if (!isset($arrNewValues[$PLID])) //new is removed
         {
-          $this->RemovePickupLocation($PLID, 1, ($PL['MPLID'] == NULL));
+          $this->RemoveFromFacet($PLID, 1, ($PL['MPLID'] == NULL));
           $bHasChanges = TRUE;
         }
       }

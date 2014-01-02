@@ -3,10 +3,10 @@
 include_once '../settings.php';
 include_once '../authenticate.php';
 
-$oTable = new MemberPickupLocations();
+$oTable = new MemberProducers();
 $oMemberTabInfo = NULL;
 $recTable = NULL;
-$nPickupLocationID = 0;
+$nProducerID = 0;
 $nExistingRec = 0;
 $nValue = 0;
 $sPageTitle = '';
@@ -26,8 +26,8 @@ try
        exit;
     }
 
-    if ( isset( $_POST['hidPickupLocation'] ) && !empty($_POST['hidPickupLocation']) )
-      $nPickupLocationID = intval($_POST['hidPickupLocation']);
+    if ( isset( $_POST['hidProducer'] ) && !empty($_POST['hidProducer']) )
+      $nProducerID = intval($_POST['hidProducer']);
     
     if ( isset( $_POST['hidValue'] ) && !empty($_POST['hidValue']) )
       $nValue = intval($_POST['hidValue']);
@@ -39,16 +39,16 @@ try
     {
       switch($_POST['hidPostAction'])
       {
-        case MemberPickupLocations::POST_ACTION_BLOCK:
-          $bSuccess = $oTable->BlockFromFacet($nPickupLocationID, $nValue, ($nExistingRec == 0));
+        case MemberProducers::POST_ACTION_BLOCK:
+          $bSuccess = $oTable->BlockFromFacet($nProducerID, $nValue, ($nExistingRec == 0));
           
           if ($bSuccess)
             $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');
           else if ($oTable->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
             $g_oError->AddError('הרשומה לא נשמרה. אין לך הרשאות מספיקות או שאירעה שגיאה.');
           break;
-        case MemberPickupLocations::POST_ACTION_FILTER:
-          $bSuccess = $oTable->RemoveFromFacet($nPickupLocationID, $nValue, ($nExistingRec == 0));
+        case MemberProducers::POST_ACTION_FILTER:
+          $bSuccess = $oTable->RemoveFromFacet($nProducerID, $nValue, ($nExistingRec == 0));
             
           if ($bSuccess)
             $g_oError->AddError('הרשומה נשמרה בהצלחה.', 'ok');
@@ -80,11 +80,11 @@ try
       exit;
   }
   
-  $bFullEdit = $oTable->HasPermission(MemberPickupLocations::PERMISSION_EDIT);
+  $bFullEdit = $oTable->HasPermission(MemberProducers::PERMISSION_EDIT);
   
-  $oMemberTabInfo = new MemberTabInfo($oTable->ID, MemberTabInfo::PAGE_PICKUP_LOCATIONS);
+  $oMemberTabInfo = new MemberTabInfo($oTable->ID, MemberTabInfo::PAGE_PRODUCERS);
 
-  $sPageTitle = sprintf('%s - מקומות איסוף', htmlspecialchars($oTable->Name));
+  $sPageTitle = sprintf('%s - יצרנים', htmlspecialchars($oTable->Name));
   
   $oMemberTabInfo->MainTabName = $oTable->Name;
 }
@@ -105,20 +105,20 @@ UserSessionBase::Close();
 <title>הזינו את שם הקואופרטיב שלכם: <?php echo $sPageTitle; ?></title>
 <script type="text/javascript" src="../script/authenticated.js" ></script>
 <script type="text/javascript" >
-function SetBlock(nPickupLocationID, nValue, nExistingRec)
+function SetBlock(nProducerID, nValue, nExistingRec)
 {
   PreventMultiplePostBack(); //so no multiple postbacks
-  document.getElementById("hidPostAction").value = <?php echo MemberPickupLocations::POST_ACTION_BLOCK; ?>;
-  document.getElementById("hidPickupLocation").value = nPickupLocationID;
+  document.getElementById("hidPostAction").value = <?php echo MemberProducers::POST_ACTION_BLOCK; ?>;
+  document.getElementById("hidProducer").value = nProducerID;
   document.getElementById("hidValue").value = nValue;
   document.getElementById("hidExistingRec").value = nExistingRec;
   document.frmMain.submit();
 }
-function SetFilter(nPickupLocationID, nValue, nExistingRec)
+function SetFilter(nProducerID, nValue, nExistingRec)
 {
   PreventMultiplePostBack(); //so no multiple postbacks
-  document.getElementById("hidPostAction").value = <?php echo MemberPickupLocations::POST_ACTION_FILTER; ?>;
-  document.getElementById("hidPickupLocation").value = nPickupLocationID;
+  document.getElementById("hidPostAction").value = <?php echo MemberProducers::POST_ACTION_FILTER; ?>;
+  document.getElementById("hidProducer").value = nProducerID;
   document.getElementById("hidValue").value = nValue;
   document.getElementById("hidExistingRec").value = nExistingRec;
   document.frmMain.submit();
@@ -139,7 +139,7 @@ function PreventMultiplePostBack()
 <form id="frmMain" name="frmMain" method="post">
 <input type="hidden" id="hidOriginalData" name="hidOriginalData" value="<?php echo $oTable->GetSerializedData(); ?>" />
 <input type="hidden" id="hidPostAction" name="hidPostAction" value="" />
-<input type="hidden" id="hidPickupLocation" name="hidPickupLocation" value="" />
+<input type="hidden" id="hidProducer" name="hidProducer" value="" />
 <input type="hidden" id="hidValue" name="hidValue" value="" />
 <input type="hidden" id="hidExistingRec" name="hidExistingRec" value="" />
 <?php include_once '../control/header.php'; ?>
@@ -158,7 +158,7 @@ function PreventMultiplePostBack()
                 ?></td>
                 </tr>
                 <tr>
-                  <td class="columntitlelong">מקום האיסוף</td>
+                  <td class="columntitlelong">שם יצרן</td>
                   <td class="columntitleshort">מבוטל</td>
                   <td class="columntitlenowidth">חסום</td>
                 </tr>
@@ -174,7 +174,7 @@ function PreventMultiplePostBack()
                       echo "<tr>";
                       
                       //name
-                      echo "<td>"  , htmlspecialchars($recTable["sPickupLocation"]) ,  "</td>";
+                      echo "<td>"  , htmlspecialchars($recTable["sProducer"]) ,  "</td>";
                       
                       //Remove Filter
                       echo '<td>';
@@ -190,9 +190,9 @@ function PreventMultiplePostBack()
                       
                       if ($bFullEdit)
                       {
-                        echo ' onchange="JavaScript:SetFilter(', $recTable['PickupLocationKeyID'], ',', $nValue, ',';
+                        echo ' onchange="JavaScript:SetFilter(', $recTable['ProducerKeyID'], ',', $nValue, ',';
                                             
-                        if ($recTable['MPLID'] != NULL)
+                        if ($recTable['MPRID'] != NULL)
                           echo '1';
                         else
                           echo '0';
@@ -217,8 +217,8 @@ function PreventMultiplePostBack()
                       else
                         $nValue = 1;
                       
-                      echo ' onchange="JavaScript:SetBlock(', $recTable['PickupLocationKeyID'], ',', $nValue, ',';                     
-                      if ($recTable['MPLID'] != NULL)
+                      echo ' onchange="JavaScript:SetBlock(', $recTable['ProducerKeyID'], ',', $nValue, ',';                     
+                      if ($recTable['MPRID'] != NULL)
                         echo '1';
                       else
                         echo '0';

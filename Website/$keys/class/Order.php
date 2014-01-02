@@ -701,7 +701,7 @@ class Order extends SQLBase {
       $this->RunSQL( $sSQL );
       while($rec = $this->fetch())
       {
-        if ($rec['fBurden'] + $rec['fItemsBurden'] > $rec['fMaxBurden'])
+        if ($rec['fMaxBurden'] > 0 && $rec['fBurden'] + $rec['fItemsBurden'] > $rec['fMaxBurden'])
         {
           $g_oError->AddError('<!$CANNOT_SWITCH_PICKUP_LOCATION_DUE_TO_STORAGE_RESTRICTIONS$!>');
           $bValid = FALSE;

@@ -48,13 +48,15 @@ try
   while ( $recTable )
   {
       $oPickUpLocs = new CoopOrderPickupLocations;
+      $oProducers = new CoopOrderProducers;
       $recPickupLoc = $oPickUpLocs->LoadFacet($recTable["CoopOrderKeyID"], $g_oMemberSession->MemberID);
-      if (!$recPickupLoc) //if this order is filtered out/pickup locations blocked
+      $recProducer = $oProducers->LoadFacet($recTable["CoopOrderKeyID"], $g_oMemberSession->MemberID);
+      if (!$recPickupLoc || !$recProducer) //if this order is filtered out/blocked
       {
         $recTable = $oTable->fetch();
         continue;
       }
-    
+
       if (!$g_oMemberSession->IsOnlyMember)
       {
         $oPermissions = $oTable->GetCoordPermissions($recTable["CoordinatingGroupID"]);
@@ -216,9 +218,6 @@ try
       
       //row: producers
       echo '<tr><td><span class="listareatitle">Producer:‎</span><span class="normalcolor" >';
-      
-      $oProducers = new CoopOrderProducers;
-      $recProducer = $oProducers->LoadList($recTable["CoopOrderKeyID"]);
 
       while ( $recProducer )
       {        

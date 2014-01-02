@@ -9,31 +9,45 @@ $g_aMemberPickupLocations = NULL;
 $g_aMemberPickupLocationIDs = NULL;
 $g_nMemberPickupLocationsRemoved = 0;
 
+$g_oMemberProducers = NULL;
+$g_aMemberProducers = NULL;
+$g_aMemberProducerIDs = NULL;
+$g_nMemberProducersRemoved = 0;
+
 function FacetLoad()
 {
   global $g_oMemberPickupLocations, $g_aMemberPickupLocations, $g_aMemberPickupLocationIDs, $g_nMemberPickupLocationsRemoved;
+  global $g_oMemberProducers, $g_aMemberProducers, $g_aMemberProducerIDs, $g_nMemberProducersRemoved;
   
   $g_oMemberPickupLocations = new MemberPickupLocations();
-  $g_aMemberPickupLocations = array();
-  $g_aMemberPickupLocationIDs = array();
-  $g_nMemberPickupLocationsRemoved = 0;
+  LoadSpecificFacet($g_oMemberPickupLocations, $g_aMemberPickupLocations, $g_aMemberPickupLocationIDs, $g_nMemberPickupLocationsRemoved,
+      'PickupLocationKeyID');
   
-  $arrTemp = $g_oMemberPickupLocations->GetTableForFacet();
+  $g_oMemberProducers = new MemberProducers();
+  LoadSpecificFacet($g_oMemberProducers, $g_aMemberProducers, $g_aMemberProducerIDs, $g_nMemberProducersRemoved,
+      'ProducerKeyID');  
+}
 
-
-  //add pickup location id as key
+function LoadSpecificFacet(&$oFacet, &$aFacet, &$aFacetIDs, &$nFacetRemoved, $sIDField)
+{
+  $aFacet = array();
+  $aFacetIDs = array();
+  $nFacetRemoved = 0;
+  
+  $arrTemp = $oFacet->GetTableForFacet();
+  
+  //add producer id as key
   foreach ($arrTemp as $oTemp)
   {
-    $g_aMemberPickupLocations[$oTemp['PickupLocationKeyID']] = $oTemp;
+    $aFacet[$oTemp[$sIDField]] = $oTemp;
     if (!$oTemp['bDisabled'] && !$oTemp['bBlocked'])
     {
       if ($oTemp['bRemoved'])
-        $g_nMemberPickupLocationsRemoved++;
+        $nFacetRemoved++;
       else
-        $g_aMemberPickupLocationIDs[$oTemp['PickupLocationKeyID']] = $oTemp['PickupLocationKeyID'];
+        $aFacetIDs[$oTemp[$sIDField]] = $oTemp[$sIDField];
     }
   }
-  
 }
 
 FacetLoad();

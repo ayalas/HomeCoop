@@ -2213,4 +2213,12 @@
     <key>EXPORT_PICKUP_LOCATION_DETAIL_SHEET_NAME_FORMAT</key>
     <value>%s- פירוט</value>
 </str>
+<str>
+    <key>TAB_PRODUCERS</key>
+    <value>יצרנים</value>
+</str>
+<str>
+    <key>PAGE_TITLE_MEMBER_PRODUCERS</key>
+    <value>%s - יצרנים</value>
+</str>
 </strings>

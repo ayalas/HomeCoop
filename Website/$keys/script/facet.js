@@ -1,24 +1,24 @@
-function TogglePLExpand()
+function ToggleFacetExpand(hidStateID, imgExpandID, ulID)
 {
  var sDisplay = '';
- var ctlExpandState = document.getElementById('hidplfacetgrpexpandstate');
+ var ctlExpandState = document.getElementById(hidStateID);
  var nExpandStatus = ctlExpandState.value;
  if (nExpandStatus == 0)
  {
  	sDisplay = 'block';
 	nExpandStatus = 1;
-        document.getElementById('imgFacetExpandArrow').src = 'img/arrow_up.gif';
+        document.getElementById(imgExpandID).src = 'img/arrow_up.gif';
  }
  else
  {
 	sDisplay = 'none';
 	nExpandStatus = 0;
-        document.getElementById('imgFacetExpandArrow').src = 'img/arrow_down.gif';
+        document.getElementById(imgExpandID).src = 'img/arrow_down.gif';
  }
 
  //get child nodes of plfacetgrp and toggle display of li elements with the class unselectedfacet
  
- var ctlULFacet = document.getElementById('plfacetgrp');
+ var ctlULFacet = document.getElementById(ulID);
  if (ctlULFacet != null && ctlULFacet.children != null && ctlULFacet.children.length > 0)
  {
    for(var i=0; i< ctlULFacet.children.length; i++)
@@ -29,6 +29,17 @@ function TogglePLExpand()
  }
 
   ctlExpandState.value = nExpandStatus;
+  
+}
+
+function TogglePRExpand()
+{
+  ToggleFacetExpand('hidprfacetgrpexpandstate', 'imgPRFacetExpandArrow', 'prfacetgrp'); 
+}
+
+function TogglePLExpand()
+{
+  ToggleFacetExpand('hidplfacetgrpexpandstate', 'imgPLFacetExpandArrow', 'plfacetgrp');
 }
 
 function ToggleMobileExpand()
@@ -55,9 +66,9 @@ function ToggleMobileExpand()
   ctlExpandState.value = nExpandStatus;
 }
 
-function ToggleItemSelect(sCtlID)
+function ToggleItemSelect(sCtlID, sStateID)
 {
-  var nExpandStatus = document.getElementById('hidplfacetgrpexpandstate').value;
+  var nExpandStatus = document.getElementById(sStateID).value;
 
   var ctlItem = document.getElementById(sCtlID);
 
@@ -83,10 +94,10 @@ function ToggleItemSelect(sCtlID)
   
 }
 
-function ApplyFacetFilter()
+function ApplySpecificFacetFilter(sGroupID, sHidSelectedIDs)
 {
- var sSelected = '';
- var ctlULFacet = document.getElementById('plfacetgrp');
+  var sSelected = '';
+ var ctlULFacet = document.getElementById(sGroupID);
  if (ctlULFacet != null && ctlULFacet.children != null && ctlULFacet.children.length > 0)
  {
    for(var i=0; i< ctlULFacet.children.length; i++)
@@ -96,6 +107,12 @@ function ApplyFacetFilter()
    }
  }
 
- document.getElementById('hidSelectedPLs').value = sSelected;
+ document.getElementById(sHidSelectedIDs).value = sSelected;
+}
+
+function ApplyFacetFilter()
+{
+ ApplySpecificFacetFilter('plfacetgrp', 'hidSelectedPLs');
+ ApplySpecificFacetFilter('prfacetgrp', 'hidSelectedPRs'); 
  document.frmHome.submit();
 }

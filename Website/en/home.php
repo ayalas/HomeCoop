@@ -31,7 +31,9 @@ include_once 'facet.php';
 <form id="frmHome" name="frmHome" method="post">
 <input type="hidden" id="hidfacetmblexpandstate" name="hidfacetmblexpandstate" value="0" />
 <input type="hidden" id="hidplfacetgrpexpandstate" name="hidplfacetgrpexpandstate" value="0" />
+<input type="hidden" id="hidprfacetgrpexpandstate" name="hidprfacetgrpexpandstate" value="0" />
 <input type="hidden" id="hidSelectedPLs" name="hidSelectedPLs" value="" />
+<input type="hidden" id="hidSelectedPRs" name="hidSelectedPRs" value="" />
 <?php 
   $sHeaderAdditionToLogo = '<a href="#" class="facetmobileexpander mobiledisplay" onclick="JavaScript:ToggleMobileExpand();">
     <img alt="Pickup Locations" id="imgFacetMobileExpandArrow" src="img/filter.png"/></a>';

@@ -137,4 +137,7 @@ li.facetitm:hover
  cursor: pointer;
 }
 
-
+.facetsep
+{
+  height: 8px;
+}

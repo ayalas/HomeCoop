@@ -40,7 +40,7 @@ try
       switch($_POST['hidPostAction'])
       {
         case MemberPickupLocations::POST_ACTION_BLOCK:
-          $bSuccess = $oTable->BlockPickupLocation($nPickupLocationID, $nValue, ($nExistingRec == 0));
+          $bSuccess = $oTable->BlockFromFacet($nPickupLocationID, $nValue, ($nExistingRec == 0));
           
           if ($bSuccess)
             $g_oError->AddError('Record saved successfully.', 'ok');
@@ -48,7 +48,7 @@ try
             $g_oError->AddError('Record was not saved. You may not have sufficent permissions or an error has occured.');
           break;
         case MemberPickupLocations::POST_ACTION_FILTER:
-          $bSuccess = $oTable->RemovePickupLocation($nPickupLocationID, $nValue, ($nExistingRec == 0));
+          $bSuccess = $oTable->RemoveFromFacet($nPickupLocationID, $nValue, ($nExistingRec == 0));
             
           if ($bSuccess)
             $g_oError->AddError('Record saved successfully.', 'ok');
