@@ -611,6 +611,14 @@ class CoopOrderExport extends CoopOrderSubBase {
     $parent->appendChild($orientation);
   }
   
+  //define landscape or portrait page format
+  //determines whether to use repeated columns as well
+  protected function AddPageFormat($parent, $format = 'landscape')
+  {
+    $orientation = $this->m_oXmlDoc->createElement('pageformat', $format);
+    $parent->appendChild($orientation);
+  }
+  
   protected function BuildNewSheetXML($sSheetName, $bIncludeOrders, &$sheet, &$batch)
   {
     $sheet = $this->m_oXmlDoc->createElement('sheet');
@@ -619,6 +627,7 @@ class CoopOrderExport extends CoopOrderSubBase {
     $sheet->appendChild($sheetname);
     
     $this->AddOrientation($sheet);
+    $this->AddPageFormat($sheet);
     
     $batch = $this->m_oXmlDoc->createElement('batch');
     
@@ -778,6 +787,8 @@ class CoopOrderExport extends CoopOrderSubBase {
     $sheet->appendChild($sheetname);
     
     $this->AddOrientation($sheet);
+    
+    $this->AddPageFormat($sheet, 'portrait');
 
     foreach($this->m_aOrderItems as $OrderID => $products)
     {

@@ -217,6 +217,13 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
    </xsl:if>
    </style:table-properties>
   </style:style>
+  <style:style style:name="ta2" style:family="table" style:master-page-name="Portrait">
+   <style:table-properties table:display="true" >
+   <xsl:if test="orientation = 'rtl' ">
+    <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
+   </xsl:if>
+   </style:table-properties>
+  </style:style>
   <style:style style:name="celltitle" style:family="table-cell" style:parent-style-name="Default">
 <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" />
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0in" >
@@ -282,6 +289,7 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
  </office:automatic-styles>
  <office:master-styles>
   <style:master-page style:name="Default" style:page-layout-name="pm1">
+   <style:page-layout-properties style:print-orientation="landscape" />
    <style:header>
     <text:p><text:sheet-name>???</text:sheet-name></text:p>
    </style:header>
@@ -306,6 +314,17 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
+  <style:master-page style:name="Portrait" style:page-layout-name="pm3">
+   <style:page-layout-properties style:print-orientation="portrait" />
+   <style:header>
+    <text:p><text:sheet-name>???</text:sheet-name></text:p>
+   </style:header>
+   <style:header-left style:display="false"/>
+   <style:footer>
+    <text:p>Page <text:page-number>1</text:page-number></text:p>
+   </style:footer>
+   <style:footer-left style:display="false"/>
+  </style:master-page>
  </office:master-styles>
  <office:body>
    
@@ -318,8 +337,22 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
 <xsl:template match="sheet">
   <office:spreadsheet>
    
-    <table:table table:style-name="ta1" >
-    <xsl:attribute name="table:name"><xsl:value-of select="name" /></xsl:attribute>
+    <table:table>
+      <xsl:attribute name="table:name"><xsl:value-of select="name" /></xsl:attribute>
+      <xsl:choose> 
+      <xsl:when test="pageformat = 'landscape' ">
+         <xsl:attribute name="table:style-name">ta1</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+         <xsl:attribute name="table:style-name">ta2</xsl:attribute>
+      </xsl:otherwise>
+      </xsl:choose> 
+    
+    <xsl:if test="pageformat = 'landscape' ">
+      <table:table-header-columns>
+       <table:table-column table:style-name="co1" table:number-columns-repeated="4" table:default-cell-style-name="Default"/>
+      </table:table-header-columns>
+    </xsl:if>
 
     <xsl:apply-templates select="batch" />
 

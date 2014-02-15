@@ -97,18 +97,43 @@
    <xsl:if test="orientation = 'rtl' ">
      <xsl:attribute name="ss:RightToLeft">1</xsl:attribute>
    </xsl:if>
-       
+    
+    <xsl:if test="pageformat = 'landscape' ">
+    <Names>
+      <NamedRange ss:Name="Print_Titles">
+        <xsl:attribute name="ss:RefersTo">='<xsl:value-of select="name" />'!C1:C4</xsl:attribute>
+      </NamedRange>
+    </Names>
+    </xsl:if>
+      
     <Table ss:StyleID="ta1">
     <xsl:apply-templates select="batch" />
     </Table>
 
-   <x:WorksheetOptions>
-   <xsl:if test="orientation = 'rtl' ">
-    <x:DisplayRightToLeft/>
+   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+      <xsl:choose> 
+      <xsl:when test="pageformat = 'landscape' ">
+         <Layout x:Orientation="Landscape"/>
+      </xsl:when>
+      <xsl:otherwise>
+         <Layout x:Orientation="Portrait"/>
+      </xsl:otherwise>
+      </xsl:choose>
+   </PageSetup>
+   <Unsynced/>
+   <xsl:if test="pageformat = 'landscape' ">
+    <Print>
+     <LeftToRight/>
+    </Print>
    </xsl:if>
-   <x:ProtectObjects>False</x:ProtectObjects>
-   <x:ProtectScenarios>False</x:ProtectScenarios>
-  </x:WorksheetOptions>
+   
+   <xsl:if test="orientation = 'rtl' ">
+    <DisplayRightToLeft/>
+   </xsl:if>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
   </ss:Worksheet>
 </xsl:template>
 
@@ -140,15 +165,27 @@
   <Row ss:Height="15.84">
     <Cell ss:StyleID="ce1">
       <Data ss:Type="String"><xsl:value-of select="prdh"/></Data>
+      <xsl:if test="../../pageformat = 'landscape' ">
+        <NamedCell ss:Name="Print_Titles"/>
+      </xsl:if>
     </Cell>
     <Cell ss:StyleID="ce1">
       <Data ss:Type="String"><xsl:value-of select="priceh"/></Data>
+      <xsl:if test="../../pageformat = 'landscape' ">
+        <NamedCell ss:Name="Print_Titles"/>
+      </xsl:if>
     </Cell>
     <Cell ss:StyleID="ce1">
       <Data ss:Type="String"><xsl:value-of select="quantityh"/></Data>
+      <xsl:if test="../../pageformat = 'landscape' ">
+        <NamedCell ss:Name="Print_Titles"/>
+      </xsl:if>
     </Cell>
     <Cell ss:StyleID="ce1">
       <Data ss:Type="String"><xsl:value-of select="packageh"/></Data>
+      <xsl:if test="../../pageformat = 'landscape' ">
+        <NamedCell ss:Name="Print_Titles"/>
+      </xsl:if>
     </Cell>
     
     <xsl:for-each select="memh">
@@ -178,33 +215,40 @@
     </xsl:choose>
    <Cell>
       <Data ss:Type="String"><xsl:value-of select="prd"/></Data>
+      <xsl:if test="../../pageformat = 'landscape' ">
+        <NamedCell ss:Name="Print_Titles"/>
+      </xsl:if>
    </Cell>
    
+   <Cell>
+    <xsl:if test="price != ''" >
+          <xsl:choose> 
+          <xsl:when test="position() mod 2 = 0">
+             <xsl:attribute name="ss:StyleID">ce4</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+             <xsl:attribute name="ss:StyleID">ce6</xsl:attribute>
+          </xsl:otherwise>
+          </xsl:choose>
+          <Data ss:Type="Number"><xsl:value-of select="price"/></Data>
+    </xsl:if>
+
+    <xsl:if test="../../pageformat = 'landscape' ">
+      <NamedCell ss:Name="Print_Titles"/>
+    </xsl:if>
+   </Cell>
    
-   <xsl:choose>
-   <xsl:when test="price != ''" >
-    <Cell>
-       <xsl:choose> 
-       <xsl:when test="position() mod 2 = 0">
-          <xsl:attribute name="ss:StyleID">ce4</xsl:attribute>
-       </xsl:when>
-       <xsl:otherwise>
-          <xsl:attribute name="ss:StyleID">ce6</xsl:attribute>
-       </xsl:otherwise>
-       </xsl:choose>
-       <Data ss:Type="Number"><xsl:value-of select="price"/></Data>
-    </Cell>
-   </xsl:when>
-    <xsl:otherwise>
-      <Cell/>
-    </xsl:otherwise>
-   </xsl:choose>
-    
    <Cell>
       <Data ss:Type="String"><xsl:value-of select="quantity"/></Data>
+      <xsl:if test="../../pageformat = 'landscape' ">
+        <NamedCell ss:Name="Print_Titles"/>
+      </xsl:if>
    </Cell>
    <Cell>
       <Data ss:Type="String"><xsl:value-of select="package"/></Data>
+       <xsl:if test="../../pageformat = 'landscape' ">
+        <NamedCell ss:Name="Print_Titles"/>
+       </xsl:if>
    </Cell>
     
    <xsl:for-each select="mem">
