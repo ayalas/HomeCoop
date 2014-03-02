@@ -93,6 +93,9 @@ define ('PRODUCT_IMAGE_HEIGHT_SMALL', 200);
 //Any datetime format supported by the database
 define('DATABASE_DATE_FORMAT','Y-m-d G:i:s');
 
+//save users password unencrtypted in a separate sPasswordForMigration field
+define ('MIGRATION_MODE', FALSE);
+
 //---------------------- language switcher
 //language switcher consts
 define("LANGUAGE_SWITCHER_VALUE_LINKS", 0); //all languages will be displayed as side-by-side links

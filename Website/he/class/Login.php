@@ -55,8 +55,13 @@ class Login extends SQLBase
         try
         {
           $sSQL = "SELECT M.sName, M.MemberID, M.PaymentMethodKeyID, M.bDisabled, M.fPercentOverBalance, " . 
-                  " M.dJoined, M.mBalance, M.mBalanceHeld, CG.CoordinatingGroupID, M.nExportFormat " . 
-                  " FROM T_Member M INNER JOIN T_CoordinatingGroupMember CGM ON CGM.MemberID = M.MemberID " . 
+                  " M.dJoined, M.mBalance, M.mBalanceHeld, CG.CoordinatingGroupID, M.nExportFormat ";
+          
+          if (MIGRATION_MODE) {
+            $sSQL .= ", CASE WHEN M.sPasswordForMigration = :pwd THEN 0 ELSE 1 END bMigrationUpdate";
+          }
+          
+          $sSQL .= " FROM T_Member M INNER JOIN T_CoordinatingGroupMember CGM ON CGM.MemberID = M.MemberID " . 
                   " INNER JOIN T_CoordinatingGroup CG ON CG.CoordinatingGroupID = CGM.CoordinatingGroupID AND CG.sCoordinatingGroup IS NULL " .
                   " WHERE M.sLoginName = :lname and M.sPassword = md5( :pwd ) ;";
 
@@ -76,9 +81,29 @@ class Login extends SQLBase
         else if ($result["bDisabled"])
             return self::ERR_MEMBER_DISABLED;
 
+        //LOGIN OK
         $m_oSessionManager= new SessionManager;
-    
+        
         $m_oSessionManager->MemberID= $result['MemberID'];
+
+        if (MIGRATION_MODE && $result["bMigrationUpdate"]) {
+          //save unencrypted users passwords for migration
+          try
+          {
+            $sSQL = "UPDATE T_Member SET sPasswordForMigration = :pwd WHERE MemberID = :mid;";
+            $this->RunSQLWithParams($sSQL, 
+                array(
+                  "pwd" => $this->m_aData[self::PROPERTY_PASSWORD],
+                  'mid' => $m_oSessionManager->MemberID
+                )
+            );
+          }
+          catch(Exception $e)
+          {
+            //do not throw original exception here, so user name and password won't be sent back to screen
+            throw new Exception('אירעה שגיאה באימות פרטי הכניסה מול בסיס הנתונים, כנראה בשל עומס יתר');
+          }
+        }
 
         $m_oSessionManager->LoadPermissions();
 

@@ -611,6 +611,7 @@ CREATE TABLE `T_Member` (
   `sEMail4` varchar(100) DEFAULT NULL,
   `bDisabled` tinyint(1) NOT NULL DEFAULT 0,
   `sComments` VARCHAR(300) NULL,
+  `sPasswordForMigration` VARCHAR(50) NULL,
   PRIMARY KEY (`MemberID`),
   UNIQUE KEY `ind_sLoginName` (`sLoginName`),
   UNIQUE KEY `indName` (`sName`),
