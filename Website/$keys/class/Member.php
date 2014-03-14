@@ -239,13 +239,25 @@ class Member extends SQLBase  {
       $this->BeginTransaction();
       
       //insert the record
-      $sSQL =  " INSERT INTO T_Member( sName, sLoginName, sPassword, PaymentMethodKeyID, dJoined, sEMail, sEMail2, sEMail3, sEMail4, sComments " .
-              $this->ConcatColIfNotNull(self::PROPERTY_BALANCE, "mBalance") .
+      $sSQL =  " INSERT INTO T_Member( sName, sLoginName, sPassword, PaymentMethodKeyID, dJoined, sEMail, sEMail2, sEMail3, sEMail4, sComments ";
+      
+      if (MIGRATION_MODE)
+      {
+        $sSQL .=  ', sPasswordForMigration ';
+      }
+      $sSQL .=  $this->ConcatColIfNotNull(self::PROPERTY_BALANCE, "mBalance") .
               $this->ConcatColIfNotNull(self::PROPERTY_BALANCE_HELD, "mBalanceHeld") .
               $this->ConcatColIfNotNull(self::PROPERTY_BALANCE_INVESTED, "mBalanceInvested") .
-              $this->ConcatColIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE, "fPercentOverBalance").  " ) VALUES( :mname, :lname , md5(:pwd) ," .
-          $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . ", :joined, :email1, :email2, :email3, :email4, :comments " .
-             $this->ConcatValIfNotNull(self::PROPERTY_BALANCE) .
+              $this->ConcatColIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE, "fPercentOverBalance") .  
+          " ) VALUES( :mname, :lname , md5(:pwd) ," .
+          $this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] . ", :joined, :email1, :email2, :email3, :email4, :comments ";
+      
+      if (MIGRATION_MODE)
+      {
+        $sSQL .=  ', :pwd ';
+      }
+      
+      $sSQL .=  $this->ConcatValIfNotNull(self::PROPERTY_BALANCE) .
              $this->ConcatValIfNotNull(self::PROPERTY_BALANCE_HELD) .
              $this->ConcatValIfNotNull(self::PROPERTY_BALANCE_INVESTED) .
              $this->ConcatValIfNotNull(self::PROPERTY_PERCENT_OVER_BALANCE) . " ); " ;
@@ -396,6 +408,11 @@ class Member extends SQLBase  {
       if ($this->m_aData[self::PROPERTY_NEW_PASSWORD] != NULL)
       {
         $sSQL .= ", sPassword = md5(:Password) ";
+        if (MIGRATION_MODE)
+        {
+          $sSQL .= ", sPasswordForMigration = :Password ";
+        }
+        
         $arrParams["Password"] = $this->m_aData[self::PROPERTY_NEW_PASSWORD];
       }
       

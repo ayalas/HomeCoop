@@ -94,7 +94,7 @@ define ('PRODUCT_IMAGE_HEIGHT_SMALL', 200);
 define('DATABASE_DATE_FORMAT','Y-m-d G:i:s');
 
 //save users password unencrtypted in a separate sPasswordForMigration field
-define ('MIGRATION_MODE', FALSE);
+define ('MIGRATION_MODE', TRUE);
 
 //---------------------- language switcher
 //language switcher consts
