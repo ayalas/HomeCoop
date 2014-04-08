@@ -38,6 +38,7 @@ class OrderItem extends SQLBase {
   const PROPERTY_STORAGE_AREA_ID = "StorageAreaID";
   const PROPERTY_STORAGE_AREA_BURDEN = "StorageAreaBurden";
   const PROPERTY_STORAGE_AREA_MAX_BURDEN = "StorageAreaMaxBurden";
+  const PROPERTY_STORAGE_AREA_NAME = "StorageAreaName";
  
   const PROPERTY_PRODUCT_PACKAGE_SIZE = "PackageSize";
   const PROPERTY_UNIT_INTERVAL = "UnitInterval";
@@ -97,6 +98,7 @@ class OrderItem extends SQLBase {
         self::PROPERTY_STORAGE_AREA_ID => NULL,
         self::PROPERTY_STORAGE_AREA_BURDEN => NULL,
         self::PROPERTY_STORAGE_AREA_MAX_BURDEN => NULL,
+        self::PROPERTY_STORAGE_AREA_NAME => NULL,
        );
   }
   

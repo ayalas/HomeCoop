@@ -62,6 +62,7 @@ $recMembers = NULL;
 $recNonMembers = NULL;
 $bExtendedGroupPermissions = FALSE;
 $sPageName = '';
+$oPickupLocationTabInfo = NULL;
 
 try
 {
@@ -275,7 +276,17 @@ try
       $oCoordinate->ResetGroupName( $sName );
   }
   
-  $sPageName = sprintf('Coordinators of %s', $oCoordinate->RecordName);
+  $sPageName = htmlspecialchars(sprintf('Coordinators of %s', $oCoordinate->RecordName));
+  
+  switch($oCoordinate->PermissionArea)
+  {
+    case Consts::PERMISSION_AREA_PICKUP_LOCATIONS:
+      $oPickupLocationTabInfo = new PickupLocationTabInfo($oCoordinate->RecordID, $oCoordinate->GroupID, 
+      PickupLocationTabInfo::PAGE_COORD);
+      
+      $oPickupLocationTabInfo->MainTabName = $oCoordinate->RecordName;
+    break;
+  }
 }
 catch(Exception $e)
 {
@@ -368,10 +379,22 @@ function SetMemberAsCoordinator(nMemberID)
 <input type="hidden" id="hidPostAction" name="hidPostAction" value="" />
 <input type="hidden" id="hidPostValue" name="hidPostValue" value="" />
 <?php include_once '../control/header.php'; ?>
-<table cellspacing="0" cellpadding="0" >
+<table cellspacing="0" cellpadding="0" >   
     <tr>
-        <td class="fullwidth"><span class="pagename">
-          <?php echo $sPageName; ?></span></td>
+    <?php
+        switch($oCoordinate->PermissionArea)
+        {
+        case Consts::PERMISSION_AREA_PICKUP_LOCATIONS:
+          echo '<td>';
+          include_once '../control/pickuploctab.php';
+          echo '</td>';
+          break;
+        default:
+          echo '<td class="fullwidth"><span class="pagename">',
+              $sPageName, '</span></td>';
+          break;
+        }
+      ?>
     </tr>
     <tr>
         <td>

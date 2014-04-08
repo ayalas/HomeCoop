@@ -12,6 +12,8 @@ class Consts
     const URL_ACCESS_DENIED = 'AccessDenied.php';
     const URL_HOME = 'home.php';
     const URL_CACHE_DIR = 'cache';
+    
+    
        
     //indexes of the languages array, $g_aSupportedLanguages, defined in settings.php
     const IND_LANGUAGE_NAME = 0;
@@ -63,6 +65,8 @@ class Consts
     4) @ denotes the email 'at' charcter and right after it are the allowed first character(s) ([a-zA-Z0-9_-]) and their subsequent ones 
     */
     const ACCEPTED_EMAIL_REGULAR_EXPRESSION = '/^([a-zA-Z0-9])*([a-zA-Z0-9\._-])*([a-zA-Z0-9])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/' ;
+    
+    const PAID_BY_REDUCTION_SIGN = '*';
 
     //DATABASE-MATCHING CONSTANTS, produced by the following script:
         /*
@@ -78,6 +82,7 @@ class Consts
     const PAYMENT_METHOD_AT_PICKUP = 6;
     const PAYMENT_METHOD_PLUS_EXTRA = 5;
     const PAYMENT_METHOD_UP_TO_BALANCE = 4;
+    const PAYMENT_METHOD_REDUCT_FROM_BALANCE = 269;
     const PERMISSION_AREA_CACHIER_TOTALS = 36;
     const PERMISSION_AREA_COOP_ORDERS = 16;
     const PERMISSION_AREA_COOP_ORDER_ORDERS = 27;
@@ -112,6 +117,7 @@ class Consts
     const PERMISSION_AREA_UNITS = 11;
     const PERMISSION_AREA_UNIT_ABBREVIATION = 18;
     const PERMISSION_AREA_STORAGE_AREAS = 105;
+    const PERMISSION_AREA_TRANSACTIONS = 268;
     const PERMISSION_SCOPE_COOP = 38;
     const PERMISSION_SCOPE_GROUP = 39;
     const PERMISSION_TYPE_ADD = 47;

@@ -38,6 +38,7 @@ class CoopOrderExport extends CoopOrderSubBase {
   protected $m_aOrders = NULL;
   protected $m_aOrderItems = NULL;
   protected $m_oXmlDoc = NULL;
+  protected $m_bHasPaidByReductionMembers = FALSE;
   
   protected $m_sDir = NULL;
   
@@ -484,6 +485,10 @@ class CoopOrderExport extends CoopOrderSubBase {
     
     $sheet->appendChild($batch);
     
+    $this->BuildBatchSeparator($sheet);
+    
+    $this->BuildFooter($sheet);
+    
     //Details Sheet
     $this->QueryCoopOrderProductItems(TRUE);
 
@@ -590,6 +595,10 @@ class CoopOrderExport extends CoopOrderSubBase {
        $this->m_aData[self::PROPERTY_COOP_ORDER_COOP_TOTAL], $batch /*by ref*/);
     
     $sheet->appendChild($batch);
+    
+    $this->BuildBatchSeparator($sheet);
+    
+    $this->BuildFooter($sheet);
   }
   
   protected function BuildDocumentHeaderXML(&$document)
@@ -621,6 +630,8 @@ class CoopOrderExport extends CoopOrderSubBase {
   
   protected function BuildNewSheetXML($sSheetName, $bIncludeOrders, &$sheet, &$batch)
   {
+    $this->m_bHasPaidByReductionMembers = FALSE; //init for each sheet
+    
     $sheet = $this->m_oXmlDoc->createElement('sheet');
     
     $sheetname = $this->m_oXmlDoc->createElement('name', $this->remove_filename_special_char($sSheetName));
@@ -649,7 +660,7 @@ class CoopOrderExport extends CoopOrderSubBase {
     {
       foreach($this->m_aOrders as $order)
       {
-        $memh = $this->m_oXmlDoc->createElement('memh', $order["sName"]);
+        $memh = $this->CreateMemberNameElement($order);
         $colh->appendChild($memh);
       }
     }
@@ -780,6 +791,7 @@ class CoopOrderExport extends CoopOrderSubBase {
   
   protected function BuildPickupLocationDetailSheetXML(&$sheet)
   {
+    $this->m_bHasPaidByReductionMembers = FALSE; //init for each sheet
     $sheet = $this->m_oXmlDoc->createElement('sheet');
     
     $sheetname = $this->m_oXmlDoc->createElement('name', $this->remove_filename_special_char(sprintf('<!$EXPORT_PICKUP_LOCATION_DETAIL_SHEET_NAME_FORMAT$!>', 
@@ -810,7 +822,7 @@ class CoopOrderExport extends CoopOrderSubBase {
       $packageh = $this->m_oXmlDoc->createElement('packageh', '<!$FIELD_PACKAGE_SIZE$!>');
       $colh->appendChild($packageh); 
       
-      $memh = $this->m_oXmlDoc->createElement('memh', $order["sName"]);
+      $memh = $this->CreateMemberNameElement($order);
       $colh->appendChild($memh);
       
       $batch->appendChild($colh);
@@ -875,7 +887,22 @@ class CoopOrderExport extends CoopOrderSubBase {
       
       $this->BuildBatchSeparator($sheet);
     }
+    
+    $this->BuildFooter($sheet);
 }
+
+  protected function CreateMemberNameElement(&$order)
+  {
+    $sMemberName = $order["sName"];
+    
+    if ($order['PaymentMethodKeyID'] == Consts::PAYMENT_METHOD_REDUCT_FROM_BALANCE)
+    {
+      $sMemberName .= ' ' . Consts::PAID_BY_REDUCTION_SIGN;
+      $this->m_bHasPaidByReductionMembers = TRUE;
+    }
+      
+    return $this->m_oXmlDoc->createElement('memh', $sMemberName);
+  }
   
   
   protected function QueryCoopOrderProducts()
@@ -913,6 +940,18 @@ class CoopOrderExport extends CoopOrderSubBase {
     $row = $this->m_oXmlDoc->createElement('row');
     $batch->appendChild($row);
     $sheet->appendChild($batch);
+  }
+  
+  protected function BuildFooter(&$sheet)
+  {
+    if (!$this->m_bHasPaidByReductionMembers)
+      return;
+    
+    $footer = $this->m_oXmlDoc->createElement('footer');
+    $legend = $this->m_oXmlDoc->createElement('legend', '<!$LEGEND_PAID_BY_REDUCTION$!>');
+    
+    $footer->appendChild($legend);
+    $sheet->appendChild($footer);
   }
   
   protected function QueryCoopOrderPickupLocationProducts()
@@ -1004,7 +1043,7 @@ class CoopOrderExport extends CoopOrderSubBase {
   {
     $this->m_aOrders = array();
     $sSQL =     " SELECT O.OrderID, O.MemberID, M.sName, O.PickupLocationKeyID, O.mCoopFee, " . 
-                " O.mCoopTotal, (IfNull(O.mCoopFee,0) + O.mCoopTotal) as OrderCoopTotal " .
+                " O.mCoopTotal, (IfNull(O.mCoopFee,0) + O.mCoopTotal) as OrderCoopTotal, IfNull(O.PaymentMethodKeyID, M.PaymentMethodKeyID) as PaymentMethodKeyID " .
                 " FROM T_Order O " .
                 " INNER JOIN T_Member M ON O.MemberID = M.MemberID " .
                 " WHERE O.CoopOrderKeyID = " . $this->m_aData[parent::PROPERTY_COOP_ORDER_ID] . 

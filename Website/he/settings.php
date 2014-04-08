@@ -94,7 +94,7 @@ define ('PRODUCT_IMAGE_HEIGHT_SMALL', 200);
 define('DATABASE_DATE_FORMAT','Y-m-d G:i:s');
 
 //save users password unencrtypted in a separate sPasswordForMigration field
-define ('MIGRATION_MODE', TRUE);
+define ('MIGRATION_MODE', FALSE);
 
 //---------------------- language switcher
 //language switcher consts
@@ -200,10 +200,7 @@ if ($g_sLangDir != '')
 
 
 //default payment method in the new member screen
-//possible values:
-// PAYMENT_METHOD_AT_PICKUP - member can order without balance limits
-// PAYMENT_METHOD_UP_TO_BALANCE - member can order up to hir balance only
-// PAYMENT_METHOD_PLUS_EXTRA- member can order up to hir balance + a specified percentage above that balance
+//possible values: "PAYMENT_METHOD" constants from Consts class
 define ('DEFAULT_PAYMENT_METHOD_FOR_NEW_MEMBERS', Consts::PAYMENT_METHOD_PLUS_EXTRA);
 
 //default file format for exported data (members, cooperative order data)

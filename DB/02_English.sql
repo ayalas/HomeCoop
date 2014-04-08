@@ -41,6 +41,11 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PAYMENT_METHOD_AT_PIC
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'At Pickup' );
 
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PAYMENT_METHOD_REDUCT_FROM_BALANCE');
+
+INSERT INTO Tlng_String (KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'Reduct from Balance' );
+
 /* Permission Areas - strings NOT IN USE (no translation required) */
 SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_PRODUCERS');
 
@@ -201,6 +206,11 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_STORA
 
 INSERT INTO Tlng_String ( KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'Storage Areas' );
+
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_TRANSACTIONS');
+
+INSERT INTO Tlng_String ( KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'Transactions' );
 
 /* Permission Scopes - strings NOT IN USE (no translation required) */
 SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_SCOPE_COOP');

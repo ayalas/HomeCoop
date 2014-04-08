@@ -21,13 +21,13 @@ if ( isset($g_oMemberSession) ) //not set on public pages, such as catalog.php
 
     $mMaxOrder = $g_oMemberSession->GetMaxOrder();
     if ($mMaxOrder != NULL && $mMaxOrder != $g_oMemberSession->Balance) //if not payment at pickup
-      $HelloMessage .= '<br/>' . 'Max. Order: ' . $mMaxOrder;
+      $HelloMessage .= ' ' . 'Max. Order: ' . $mMaxOrder;
       
   }
   
     if ($sBalance != '')
     {
-        $sBalanceLink = '<a class="tooltiphelp mobilemenu" href="#"><img border="0" src="' . $g_sRootRelativePath .
+        $sBalanceLink = '<a class="tooltiphelp mobilemenu balancelink" href="#"><img border="0" src="' . $g_sRootRelativePath .
         'img/emblem-money.png" />‎' . $sBalance;
     }
 

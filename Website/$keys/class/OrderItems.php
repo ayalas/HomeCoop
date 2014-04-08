@@ -102,6 +102,7 @@ class OrderItems extends SQLBase {
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_JOINED_PRODUCTS, 'sJoinedProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
+          "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'StorageAreaName') .
           "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, 'sUnitAbbrev') .
           "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, 'sItemUnitAbbrev') .
           " FROM T_Order O INNER JOIN T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID " . 
@@ -110,6 +111,7 @@ class OrderItems extends SQLBase {
           " AND COPS.PickupLocationKeyID = O.PickupLocationKeyID " .
           " INNER JOIN T_CoopOrderStorageArea COSA ON COSA.CoopOrderKeyID =  COPS.CoopOrderKeyID " .
           " AND COSA.StorageAreaKeyID = COPS.StorageAreaKeyID " .
+          " INNER JOIN T_PickupLocationStorageArea PLSA ON PLSA.StorageAreaKeyID = COSA.StorageAreaKeyID " .
           " INNER JOIN T_Product PRD ON PRD.ProductKeyID = COPRD.ProductKeyID " .
           " INNER JOIN T_Producer P ON P.ProducerKeyID = PRD.ProducerKeyID " .
           " INNER JOIN T_Unit UT ON UT.UnitKeyID = PRD.UnitKeyID " .
@@ -125,6 +127,7 @@ class OrderItems extends SQLBase {
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCTS) .
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_JOINED_PRODUCTS) .
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCERS) .
+          $this->ConcatStringsJoin(Consts::PERMISSION_AREA_STORAGE_AREAS) .
           $this->ConcatForeignStringsJoin(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, Consts::PERMISSION_AREA_UNITS) .
           $this->ConcatForeignStringsJoin(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, Consts::PERMISSION_AREA_ITEM_UNITS) .
           " WHERE O.OrderID = " . $this->m_aData[Order::PROPERTY_ID] . 
@@ -180,6 +183,7 @@ class OrderItems extends SQLBase {
       $oItem->StorageAreaID  = $recItem["StorageAreaKeyID"];
       $oItem->StorageAreaBurden  = $recItem["StorageAreaBurden"];
       $oItem->StorageAreaMaxBurden = $recItem["StorageAreaMaxBurden"];
+      $oItem->StorageAreaName = $recItem["StorageAreaName"];
       
       $oItem->CalculateBurden();
       
@@ -417,6 +421,9 @@ class OrderItems extends SQLBase {
    
    //rounding collected data
    $this->m_oOrder->CoopTotal = Rounding::Round( $this->m_oOrder->CoopTotal, ROUND_SETTING_ORDER_COOP_TOTAL );
+   
+   //calculate fee
+   $this->m_oOrder->CalculateCoopFee();
  }
  
  //validate collected data against products, producers, coop order, pickup location, member balance, etc.
@@ -506,13 +513,25 @@ class OrderItems extends SQLBase {
    }
    
    //validate storage areas (must be after products data have been collected)
-   foreach($this->m_aStorageAreasBurden as $aStorage)
+   foreach($this->m_aStorageAreasBurden as $StorageID => $aStorage)
    {
-     if ($aStorage['StorageAreaBurden'] > $aStorage['StorageAreaMaxBurden'])
-     {
-       $bValid = FALSE;
-       $g_oError->AddError('<!$ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN$!>');
-       break;
+    if ($aStorage['StorageAreaBurden'] > $aStorage['StorageAreaMaxBurden'])
+    {
+      $bValid = FALSE;
+      $g_oError->AddError(sprintf('<!$ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN$!>', $aStorage['StorageAreaName']));
+      //mark problematic items (has increased and in this storage area)
+      foreach($this->m_aData[self::PROPERTY_ORDER_ITEMS] as $nProductID => $oOrderItem)
+      {
+        $oOriginalItem = $this->m_aOriginalData[self::PROPERTY_ORDER_ITEMS][$nProductID];
+
+        //skip hidden, already problematic items, or not of this storage area
+        if (!$oOriginalItem->Visible || $oOrderItem->InvalidEntry || $StorageID != $oOrderItem->StorageAreaID)
+          continue;
+        
+        if ($oOrderItem->Quantity > $oOriginalItem->Quantity)
+          $this->m_aData[self::PROPERTY_ORDER_ITEMS][$nProductID]->InvalidEntry = TRUE;
+      }
+      break;
      }
    }
    
@@ -568,7 +587,13 @@ class OrderItems extends SQLBase {
 
     $oCalc->Run();
     
+    $bReinitSession = $this->m_oOrder->ReductFromBalance();
+    
     $this->CommitTransaction();
+    
+    if ($bReinitSession)
+      $g_oMemberSession->Authenticate();
+    
   }
   catch(Exception $e)
   {
@@ -701,6 +726,7 @@ class OrderItems extends SQLBase {
     $oItem->StorageAreaID  = $oOriginalItem->StorageAreaID;
     $oItem->StorageAreaBurden  = $oOriginalItem->StorageAreaBurden;
     $oItem->StorageAreaMaxBurden = $oOriginalItem->StorageAreaMaxBurden;
+    $oItem->StorageAreaName = $oOriginalItem->StorageAreaName;
         
     $this->m_aData[self::PROPERTY_ORDER_ITEMS][$nProductID] = $oItem;
    }
@@ -895,6 +921,7 @@ class OrderItems extends SQLBase {
      $this->m_aStorageAreasBurden[$oOrderItem->StorageAreaID] = array(
        'StorageAreaBurden' => $oOrderItem->StorageAreaBurden + $fAddedBurden,
        'StorageAreaMaxBurden' => $oOrderItem->StorageAreaMaxBurden,
+       'StorageAreaName' => $oOrderItem->StorageAreaName,
       );
    }
    else

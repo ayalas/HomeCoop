@@ -56,6 +56,8 @@ class Order extends SQLBase {
   const PROPERTY_MAX_ORDER = "MaxOrder";
   
   const PROPERTY_COOP_ORDER_STATUS_OBJECT = "StatusObj";
+  
+  const PROPERTY_TOTAL_COOP_DELTA = "TotalCoopDelta";
 
   protected $m_bCanModify = FALSE;
     
@@ -74,6 +76,7 @@ class Order extends SQLBase {
                             self::PROPERTY_PICKUP_LOCATION_GROUP_ID => 0,
                             PickupLocation::PROPERTY_PUBLISHED_STRINGS => NULL,
                             self::PROPERTY_COOP_TOTAL => 0,
+                            self::PROPERTY_COOP_TOTAL_INC_FEE => 0,
                             self::PROPERTY_TOTAL_BURDEN => 0,
                             self::PROPERTY_PRODUCER_TOTAL => 0,
                             self::PROPERTY_COOP_FEE => 0,
@@ -136,6 +139,10 @@ class Order extends SQLBase {
         if ($this->m_aData[$name] == NULL)
           return 0;
         return $this->m_aData[$name];
+      case self::PROPERTY_TOTAL_COOP_DELTA:
+        if ($this->m_aOriginalData[self::PROPERTY_ID] > 0) //if has original data
+          return ($this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE] - $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL_INC_FEE]);
+        return 0;
       default:
         return parent::__get($name);
     }
@@ -213,10 +220,10 @@ class Order extends SQLBase {
     
     $bMyOrderEdit = FALSE;
     
-    $bCoord = $this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_COOP_ORDER_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
+    $bCoord = $this->HasPermission(self::PERMISSION_COORD) || $this->AddPermissionBridge(self::PERMISSION_COORD, Consts::PERMISSION_AREA_COOP_ORDER_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
          Consts::PERMISSION_SCOPE_BOTH, 0, TRUE);
     
-    $bView = $this->AddPermissionBridge(self::PERMISSION_VIEW, Consts::PERMISSION_AREA_COOP_ORDER_PICKUP_LOCATION_ORDERS, 
+    $bView = $this->HasPermission(self::PERMISSION_VIEW) || $this->AddPermissionBridge(self::PERMISSION_VIEW, Consts::PERMISSION_AREA_COOP_ORDER_PICKUP_LOCATION_ORDERS, 
             Consts::PERMISSION_TYPE_VIEW, Consts::PERMISSION_SCOPE_BOTH, 0, TRUE);
     
     if ( $this->m_aData[self::PROPERTY_MEMBER_ID] == 0)
@@ -224,15 +231,25 @@ class Order extends SQLBase {
     
     if ($this->m_aData[self::PROPERTY_MEMBER_ID] == 0 || $this->m_aData[self::PROPERTY_MEMBER_ID] == $g_oMemberSession->MemberID)
     {
-      $bMyOrderEdit = $this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
+      $bMyOrderEdit = $this->HasPermission(self::PERMISSION_PAGE_ACCESS) || $this->AddPermissionBridge(self::PERMISSION_PAGE_ACCESS, Consts::PERMISSION_AREA_ORDERS, Consts::PERMISSION_TYPE_MODIFY, 
          Consts::PERMISSION_SCOPE_BOTH, 0, TRUE);
     }
     
     //add check for setting max order
-    $this->AddPermissionBridge(self::PERMISSION_SET_MAX_ORDER, Consts::PERMISSION_AREA_ORDER_SET_MAX, 
+    if (!$this->HasPermission(self::PERMISSION_SET_MAX_ORDER)) {
+      $this->AddPermissionBridge(self::PERMISSION_SET_MAX_ORDER, Consts::PERMISSION_AREA_ORDER_SET_MAX, 
             Consts::PERMISSION_TYPE_MODIFY, Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
+    }
     
     return ($bCoord || $bView || $bMyOrderEdit);
+  }
+  
+  protected function CheckEditPermission()
+  {
+    if (!$this->CheckAccess())
+      return FALSE;
+    
+    return ($this->HasPermission(self::PERMISSION_PAGE_ACCESS) || $this->HasPermission(self::PERMISSION_COORD));
   }
   
   protected function CheckCoordinator()
@@ -340,7 +357,7 @@ class Order extends SQLBase {
     $this->CanModify();
     if ($this->m_nLastOperationStatus != parent::OPERATION_STATUS_NONE)
       return FALSE;
-
+    
     $this->m_aOriginalData = $this->m_aData;
 
     return TRUE;
@@ -503,6 +520,9 @@ class Order extends SQLBase {
         unset($oCalc);
       }
       
+      //pickup location change has effect on payments by reduction
+      $this->ReductFromBalanceOnPLChange();
+      
       $this->CommitTransaction();
     }
     catch(Exception $e)
@@ -560,7 +580,14 @@ class Order extends SQLBase {
       $oCalc->Run();
       unset($oCalc);
       
+      //reduct from balance the entire order
+      $this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE] = 0;
+      $bReinitSession = $this->ReductFromBalance();
+      
       $this->CommitTransaction();
+      
+      if ($bReinitSession)
+        $g_oMemberSession->Authenticate();
     }
     catch(Exception $e)
     {
@@ -578,6 +605,129 @@ class Order extends SQLBase {
     return $bSuccess;
   }
   
+  //reduct delta from balance, cachier, write transaction TotalCoopDelta
+ public function ReductFromBalance()
+ {
+  global $g_oMemberSession;
+  global $g_dNow;
+  
+  if ($this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] != Consts::PAYMENT_METHOD_REDUCT_FROM_BALANCE)
+    return FALSE;
+  
+  if ($this->TotalCoopDelta == 0) //no real change
+    return FALSE;
+  
+  if (!$this->CheckEditPermission()) //since it is a public method
+    return FALSE;
+  
+  $dNow = $g_dNow;
+  $sNow = $dNow->format(DATABASE_DATE_FORMAT);
+  
+  $bSessionWrite = FALSE;
+  
+  //balance
+  $sSQL =   " UPDATE T_Member SET mBalance = mBalance - :delta, mBalanceHeld = mBalanceHeld - :delta " . 
+        " WHERE MemberID = " . $this->m_aData[self::PROPERTY_MEMBER_ID] . ';';
+
+  $this->RunSQLWithParams( $sSQL, array(
+          "delta" =>  $this->TotalCoopDelta));
+  
+  //session write
+  if ($g_oMemberSession->MemberID == $this->m_aData[self::PROPERTY_MEMBER_ID])
+  {
+    $_SESSION[UserSessionBase::KEY_BALANCE] = $_SESSION[UserSessionBase::KEY_BALANCE] - $this->TotalCoopDelta;
+    $_SESSION[UserSessionBase::KEY_BALANCE_HELD] = $_SESSION[UserSessionBase::KEY_BALANCE_HELD] - $this->TotalCoopDelta;
+    $bSessionWrite = TRUE;
+  }
+
+  //cachier
+  $sSQL =   " UPDATE T_PickupLocation " .
+          " SET mPrevCachier = mCachier, mCachier = mCachier - :delta, dCachierUpdate = :CachierUpdate " .
+          " WHERE PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] . ';';
+
+  $this->RunSQLWithParams( $sSQL, array(
+          "delta" =>  $this->TotalCoopDelta,
+          "CachierUpdate" => $sNow,));
+
+  //transaction
+  $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, MemberID, ModifiedByMemberID, mAmount, dDate, sTransaction) " .
+             " VALUES(:pickuplocid, :memberid, :modifier, :amount, :date, :desc);";
+
+  $this->RunSQLWithParams($sSQL, array(
+            'pickuplocid' => $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID],
+            'memberid' => $this->m_aData[self::PROPERTY_MEMBER_ID],
+            'modifier' => $g_oMemberSession->MemberID,
+            'amount' => (-$this->TotalCoopDelta),
+            'date' => $sNow,
+            'desc' => '<!$TRANSACTION_TYPE_REDUCT_FROM_BALANCE$!>',
+          ));
+  
+  return $bSessionWrite;
+  
+ }
+ 
+ //pickup location change has effect on payments by reduction - need to record money transfer from one pickup location to another
+ protected function ReductFromBalanceOnPLChange()
+ {
+  global $g_oMemberSession;
+  global $g_dNow;
+  
+  if ($this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID] != Consts::PAYMENT_METHOD_REDUCT_FROM_BALANCE)
+    return FALSE;
+  
+  if ($this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] == $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_ID])
+    return FALSE;
+  
+  $dNow = $g_dNow;
+  $sNow = $dNow->format(DATABASE_DATE_FORMAT);
+  
+  //source cachier
+  $sSQL =   " UPDATE T_PickupLocation " .
+          " SET mPrevCachier = mCachier, mCachier = mCachier + :delta, dCachierUpdate = :CachierUpdate " .
+          " WHERE PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] . ';';
+
+  $this->RunSQLWithParams( $sSQL, array(
+          "delta" =>  $this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE],
+          "CachierUpdate" => $sNow,));
+
+  //transaction from source pickup location (to member)
+  $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, MemberID, ModifiedByMemberID, mAmount, dDate, sTransaction) " .
+             " VALUES(:pickuplocid, :memberid, :modifier, :amount, :date, :desc);";
+
+  $this->RunSQLWithParams($sSQL, array(
+            'pickuplocid' => $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_ID],
+            'memberid' => $this->m_aData[self::PROPERTY_MEMBER_ID],
+            'modifier' => $g_oMemberSession->MemberID,
+            'amount' => $this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE],
+            'date' => $sNow,
+            'desc' => '<!$TRANSACTION_TYPE_REDUCT_PICKUP_LOCATION_WITHDRAWAL$!>',
+          ));
+  
+  //target cachier
+  $sSQL =   " UPDATE T_PickupLocation " .
+          " SET mPrevCachier = mCachier, mCachier = mCachier - :delta, dCachierUpdate = :CachierUpdate " .
+          " WHERE PickupLocationKeyID = " . $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID] . ';';
+
+  $this->RunSQLWithParams( $sSQL, array(
+          "delta" =>  $this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE],
+          "CachierUpdate" => $sNow,));
+
+  //transaction (from member) to target pickup location
+  $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, MemberID, ModifiedByMemberID, mAmount, dDate, sTransaction) " .
+             " VALUES(:pickuplocid, :memberid, :modifier, :amount, :date, :desc);";
+
+  $this->RunSQLWithParams($sSQL, array(
+            'pickuplocid' => $this->m_aData[self::PROPERTY_PICKUP_LOCATION_ID],
+            'memberid' => $this->m_aData[self::PROPERTY_MEMBER_ID],
+            'modifier' => $g_oMemberSession->MemberID,
+            'amount' => (-$this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE]),
+            'date' => $sNow,
+            'desc' => '<!$TRANSACTION_TYPE_REDUCT_PICKUP_LOCATION_DEPOSIT$!>',
+          ));
+  
+  return TRUE;
+ }
+
   //load data and validation for the coop order
   //called when loading a new order record form
   public function LoadCoopOrder($nCoopOrderID, $MemberID)
@@ -764,6 +914,8 @@ class Order extends SQLBase {
     $this->m_aData[self::PROPERTY_PICKUP_LOCATION_NAME] = $this->m_aOriginalData[self::PROPERTY_PICKUP_LOCATION_NAME];
     $this->m_aData[self::PROPERTY_MEMBER_NAME] = $this->m_aOriginalData[self::PROPERTY_MEMBER_NAME];
     $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $this->m_aOriginalData[self::PROPERTY_PRODUCER_TOTAL];
+    $this->m_aData[self::PROPERTY_COOP_TOTAL] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL];
+    $this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE] = $this->m_aOriginalData[self::PROPERTY_COOP_TOTAL_INC_FEE];
     $this->m_aData[self::PROPERTY_COOP_FEE] = $this->m_aOriginalData[self::PROPERTY_COOP_FEE];
     $this->m_aData[self::PROPERTY_CREATE_DATE] =  $this->m_aOriginalData[self::PROPERTY_CREATE_DATE];
     $this->m_aData[self::PROPERTY_CREATE_MEMBER_ID] = $this->m_aOriginalData[self::PROPERTY_CREATE_MEMBER_ID];
@@ -1024,10 +1176,22 @@ class Order extends SQLBase {
 
     if ($this->m_aData[self::PROPERTY_MAX_ORDER] != NULL) //if not payment at pickup
     {
-      if ($this->m_aData[self::PROPERTY_MAX_ORDER] < $this->m_aData[self::PROPERTY_COOP_TOTAL])
+      $mSumForValidation = 0;
+      $bAllowSkip = FALSE;
+      switch($this->m_aData[self::PROPERTY_PAYMENT_METHOD_ID]) {
+        case Consts::PAYMENT_METHOD_REDUCT_FROM_BALANCE:
+          $mSumForValidation = $this->m_aData[self::PROPERTY_MAX_ORDER] - $this->TotalCoopDelta;
+          break;
+        default:
+          $mSumForValidation = $this->m_aData[self::PROPERTY_MAX_ORDER] - $this->m_aData[self::PROPERTY_COOP_TOTAL_INC_FEE];
+          $bAllowSkip = TRUE;
+          break;
+      }
+      
+      if ($mSumForValidation < 0)
       {
         $this->m_bCanModify = TRUE;
-        if (!$bHasCoordPermission)
+        if (!$bHasCoordPermission || !$bAllowSkip)
         {
           $this->AddError(sprintf('<!$ORDER_CANNOT_BE_ENLARGED_BEYOND_BALANCE$!>',$this->m_aData[self::PROPERTY_MAX_ORDER]));
           return TRUE; //CanEnlarge remains FALSE

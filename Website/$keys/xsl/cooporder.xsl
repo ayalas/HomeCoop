@@ -233,6 +233,15 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
   </style:paragraph-properties>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
+<style:style style:name="cellegend" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" style:vertical-align="top"/>
+   <style:paragraph-properties fo:margin-left="0cm" >
+     <xsl:if test="orientation = 'rtl' ">
+      <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
+     </xsl:if>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
 <style:style style:name="memtitle" style:family="table-cell" style:parent-style-name="Default">
     <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" />
    <style:paragraph-properties fo:margin-left="0in" >
@@ -355,6 +364,8 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
     </xsl:if>
 
     <xsl:apply-templates select="batch" />
+    
+    <xsl:apply-templates select="footer" />
 
    <table:named-expressions/>
    </table:table>
@@ -514,5 +525,22 @@ office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
      </table:table-cell>
      </xsl:for-each>
     </table:table-row>
+</xsl:template>
+
+<xsl:template match="footer">
+    
+  <xsl:apply-templates select="legend" />
+  
+</xsl:template>
+
+<xsl:template match="legend">
+  
+  <table:table-row table:style-name="ho1">
+    <table:table-cell table:style-name="cellegend" office:value-type="string">
+    <text:p><xsl:value-of select="."/></text:p>
+   </table:table-cell>
+   <table:table-cell table:number-columns-repeated="4"/>
+  </table:table-row>
+    
 </xsl:template>
 </xsl:stylesheet>

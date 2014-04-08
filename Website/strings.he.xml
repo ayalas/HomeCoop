@@ -2122,7 +2122,7 @@
 </str>
 <str>
     <key>ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
-    <value>לא ניתן לשמור את ההזמנה המבוקשת כי אין מספיק מקום אחסון פנוי</value>
+    <value>לא ניתן לשמור את ההזמנה המבוקשת כי אין מספיק מקום אחסון פנוי ב%s</value>
 </str>
 <str>
     <key>PRODUCT_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
@@ -2220,5 +2220,49 @@
 <str>
     <key>PAGE_TITLE_MEMBER_PRODUCERS</key>
     <value>%s - יצרנים</value>
+</str>
+<str>
+    <key>FIELD_TRANSACTION</key>
+    <value>תיאור תנועה כספית</value>
+</str>
+<str>
+    <key>FIELD_AMOUNT</key>
+    <value>סכום</value>
+</str>
+<str>
+    <key>FIELD_COORDINATOR</key>
+    <value>מתאמ/ת</value>
+</str>
+<str>
+    <key>FIELD_TIME</key>
+    <value>תאריך ושעה</value>
+</str>
+<str>
+    <key>PAGE_TITLE_TRANSACTIONS</key>
+    <value>תנועות כספיות של %s</value>
+</str>
+<str>
+    <key>TAB_TRANSACTIONS</key>
+    <value>תנועות כספיות</value>
+</str>
+<str>
+    <key>TRANSACTION_TYPE_REDUCT_FROM_BALANCE</key>
+    <value>תשלום בקיזוז אוטומטי מפקדון</value>
+</str>
+<str>
+    <key>TRANSACTION_TYPE_REDUCT_PICKUP_LOCATION_WITHDRAWAL</key>
+    <value>מקור שינוי מקום איסוף</value>
+</str>
+<str>
+     <key>TRANSACTION_TYPE_REDUCT_PICKUP_LOCATION_DEPOSIT</key>
+    <value>יעד שינוי מקום איסוף</value>
+</str>
+<str>
+     <key>INVALID_CHARACTER_IN_FIELD</key>
+    <value>תו לא חוקי %s בשדה %s</value>
+</str>
+<str>
+     <key>LEGEND_PAID_BY_REDUCTION</key>
+    <value>* - שולם ע"י קיזוז מהפקדון</value>
 </str>
 </strings>

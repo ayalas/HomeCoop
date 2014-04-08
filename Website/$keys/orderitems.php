@@ -266,10 +266,7 @@ function SetDirty()
                       
                       //1. ProductName + link to product screen + hidden order item id to identify existing records
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '"><!$FIELD_PRODUCT$!></div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, '<!$FIELD_PRODUCT$!>');
                       echo '<div class="resgriddatalong">';
                       
                       if ($oProductPackage->HasTooltip)
@@ -292,10 +289,7 @@ function SetDirty()
                       //2. Producer
                       $cellProducer = new HtmlGridCellText($oItem->ProducerName, HtmlGridCellText::CELL_TYPE_NORMAL);
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '"><!$FIELD_PRODUCER$!></div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, '<!$FIELD_PRODUCER$!>');
                       echo '<div class="resgriddatahlong">';
                       echo $cellProducer->EchoHtml();
                       echo "</div></div>";
@@ -303,21 +297,15 @@ function SetDirty()
                       
                       //3. Product Package
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '"><!$FIELD_QUANTITY$!></div>';
-                      echo '<div class="resgriddatatiny">';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, '<!$FIELD_QUANTITY$!>');
+                      echo '<div class="resgriddatashort">';
                       $oProductPackage->SuppressTooltip = TRUE;
                       $oProductPackage->EchoHtml();
                       echo '</div></div>';
                       
                       //4. Coop Price
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '"><!$ORDER_ITEMS_PRICE$!></div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, '<!$ORDER_ITEMS_PRICE$!>');
                       echo '<div class="resgriddatatiny">';
                       echo $oItem->ProductCoopPrice , '</div></div>';
                       
@@ -336,10 +324,7 @@ function SetDirty()
                         $txtMemberOrder->MaxValue = $oItem->ProductMaxUserOrder;
 
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '"><!$FIELD_MEMBER_ORDER_ITEM_QUANTITY$!></div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, '<!$FIELD_MEMBER_ORDER_ITEM_QUANTITY$!>');
                       echo '<div class="resgriddatatiny">';
                       $txtMemberOrder->EchoHtml();
                       echo '</div></div>';
@@ -349,8 +334,8 @@ function SetDirty()
                       echo '<div class="resgridtitle'; 
                       if ($bPrintedHeaders)
                         echo ' mobiledisplay';
-                      echo '"><a id="additionhlp_' . $oItem->ProductID .'" name="additionhlp_' . 
-                        $oItem->ProductID .'" class="tooltiphelp" href="#additionhlp_' . $oItem->ProductID .
+                      echo '"><a id="additionhlp_' , $oItem->ProductID ,'" name="additionhlp_' , 
+                        $oItem->ProductID ,'" class="tooltiphelp" href="#additionhlp_' , $oItem->ProductID ,
                         '" ><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!><span><!$TOOLTIP_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></span></a></div>';
                       echo '<div class="resgriddatatiny">';
 
@@ -374,10 +359,7 @@ function SetDirty()
                       
                       //7. Total Price
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '"><!$FIELD_MEMBER_ORDER_ITEM_TOTAL$!></div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, '<!$FIELD_MEMBER_ORDER_ITEM_TOTAL$!>');
                       echo '<div class="resgriddatatiny">';
                       if ($oItem->JoinedItems > 0)
                       {
@@ -406,10 +388,7 @@ function SetDirty()
                       $txtOrderItemComments->OnChange = "JavaScript:SetDirty();";
                       $txtOrderItemComments->EncloseInHtmlCell = FALSE;
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '"><!$FIELD_MEMBER_ORDER_ITEM_COMMENTS$!></div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, '<!$FIELD_MEMBER_ORDER_ITEM_COMMENTS$!>');
                       echo '<div class="resgriddatalong">';
                       $txtOrderItemComments->EchoEditPartHtml();
                       echo '</div></div>';

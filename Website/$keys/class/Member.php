@@ -713,10 +713,19 @@ class Member extends SQLBase  {
       $g_oError->AddError(sprintf('<!$FIELD_REQUIRED$!>', '<!$FIELD_MEMBER_NAME$!>'));
       $bValid = FALSE;
     }
-    else if (!$this->IsUniqueName())
+    else
     {
-      $g_oError->AddError('<!$MEMBER_NAME_IS_NOT_UNIQUE$!>');
-      $bValid = FALSE;
+      if (stripos($this->m_aData[self::PROPERTY_MEMBER_NAME], Consts::PAID_BY_REDUCTION_SIGN) !== FALSE)
+      {
+        $g_oError->AddError(sprintf('<!$INVALID_CHARACTER_IN_FIELD$!>', Consts::PAID_BY_REDUCTION_SIGN, 
+            '<!$FIELD_MEMBER_NAME$!>'));
+        $bValid = FALSE;
+      }
+      elseif ($bValid && !$this->IsUniqueName()) //check uniqueness only if otherwise valid
+      {
+        $g_oError->AddError('<!$MEMBER_NAME_IS_NOT_UNIQUE$!>');
+        $bValid = FALSE;
+      }
     }
     
     //must insert a unique login name
@@ -727,13 +736,10 @@ class Member extends SQLBase  {
         $g_oError->AddError(sprintf('<!$FIELD_REQUIRED$!>', '<!$FIELD_LOGIN_NAME$!>'));
         $bValid = FALSE;
       }
-      else //check uniquness
+      elseif ($bValid && !$this->IsUniqueLoginName()) //check uniqueness only if otherwise valid
       {
-        if (!$this->IsUniqueLoginName())
-        {
-          $g_oError->AddError('<!$LOGIN_NAME_ADDED_IS_NOT_UNIQUE$!>');
-          $bValid = FALSE;
-        }
+        $g_oError->AddError('<!$LOGIN_NAME_ADDED_IS_NOT_UNIQUE$!>');
+        $bValid = FALSE;
       }
     }
     
@@ -744,7 +750,7 @@ class Member extends SQLBase  {
       $g_oError->AddError(sprintf('<!$FIELD_REQUIRED$!>', '<!$FIELD_NEW_PASSWORD$!>'));
       $bValid = FALSE;
     }
-    else if ($this->m_aData[self::PROPERTY_NEW_PASSWORD] != NULL) 
+    elseif ($this->m_aData[self::PROPERTY_NEW_PASSWORD] != NULL) 
     {
       if (strlen($this->m_aData[self::PROPERTY_NEW_PASSWORD]) < PASSWORD_MIN_LENGTH )
       {
@@ -770,12 +776,12 @@ class Member extends SQLBase  {
       $g_oError->AddError(sprintf('<!$FIELD_REQUIRED$!>', '<!$FIELD_EMAIL$!>'));
       $bValid = FALSE;
     }
-    else if (!preg_match(Consts::ACCEPTED_EMAIL_REGULAR_EXPRESSION, $this->m_aData[self::PROPERTY_EMAIL]))
+    elseif (!preg_match(Consts::ACCEPTED_EMAIL_REGULAR_EXPRESSION, $this->m_aData[self::PROPERTY_EMAIL]))
     {
       $g_oError->AddError(sprintf('<!$FIELD_INVALID$!>', '<!$FIELD_EMAIL$!>'));
       $bValid = FALSE;
     }
-    else if (ENFORCE_UNIQUE_MAIN_EMAIL && !$this->IsUniqueEMail())
+    elseif (ENFORCE_UNIQUE_MAIN_EMAIL && !$this->IsUniqueEMail())
     {
       $g_oError->AddError('<!$MEMBER_MAIN_EMAIL_IS_NOT_UNIQUE$!>');
       $bValid = FALSE;

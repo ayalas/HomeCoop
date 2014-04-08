@@ -141,6 +141,7 @@ function Sort(nField)
                 else
                 {
                   $sMaxOrderTooltipID = '';
+                  $sThisYear = HtmlDateString::GetThisYear();
                   while ( $recTable )
                   {
                       echo "<tr>";
@@ -188,7 +189,7 @@ function Sort(nField)
                       
                       $dDate = new DateTime($recTable["dCreated"], $g_oTimeZone);
                       //if current year, take current year format
-                      if (($dDate->format('Y')+0) == HtmlDateString::GetThisYear())
+                      if (($dDate->format('Y')+0) == $sThisYear)
                         echo $dDate->format('n.j g:i A');
                       else
                         echo $dDate->format('n.j.Y g:i A');

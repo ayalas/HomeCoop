@@ -266,10 +266,7 @@ function SetDirty()
                       
                       //1. ProductName + link to product screen + hidden order item id to identify existing records
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '">מוצר</div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, 'מוצר');
                       echo '<div class="resgriddatalong">';
                       
                       if ($oProductPackage->HasTooltip)
@@ -292,10 +289,7 @@ function SetDirty()
                       //2. Producer
                       $cellProducer = new HtmlGridCellText($oItem->ProducerName, HtmlGridCellText::CELL_TYPE_NORMAL);
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '">יצרן</div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, 'יצרן');
                       echo '<div class="resgriddatahlong">';
                       echo $cellProducer->EchoHtml();
                       echo "</div></div>";
@@ -303,21 +297,15 @@ function SetDirty()
                       
                       //3. Product Package
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '">כמות</div>';
-                      echo '<div class="resgriddatatiny">';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, 'כמות');
+                      echo '<div class="resgriddatashort">';
                       $oProductPackage->SuppressTooltip = TRUE;
                       $oProductPackage->EchoHtml();
                       echo '</div></div>';
                       
                       //4. Coop Price
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '">מחיר</div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, 'מחיר');
                       echo '<div class="resgriddatatiny">';
                       echo $oItem->ProductCoopPrice , '</div></div>';
                       
@@ -336,10 +324,7 @@ function SetDirty()
                         $txtMemberOrder->MaxValue = $oItem->ProductMaxUserOrder;
 
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '">הזמנה</div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, 'הזמנה');
                       echo '<div class="resgriddatatiny">';
                       $txtMemberOrder->EchoHtml();
                       echo '</div></div>';
@@ -349,8 +334,8 @@ function SetDirty()
                       echo '<div class="resgridtitle'; 
                       if ($bPrintedHeaders)
                         echo ' mobiledisplay';
-                      echo '"><a id="additionhlp_' . $oItem->ProductID .'" name="additionhlp_' . 
-                        $oItem->ProductID .'" class="tooltiphelp" href="#additionhlp_' . $oItem->ProductID .
+                      echo '"><a id="additionhlp_' , $oItem->ProductID ,'" name="additionhlp_' , 
+                        $oItem->ProductID ,'" class="tooltiphelp" href="#additionhlp_' , $oItem->ProductID ,
                         '" >הוספה<span>הכמות המקסימלית שמתאמי הזמנת הקואופרטיב יורשו *להוסיף* להזמנה שלך כדי להשלים הזמנות חלקיות לגודל החבילה. למשל, אם גודל החבילה הוא 2ק&quot;ג, והכמות שהזמנת היא 0.5ק&quot;ג, ע&quot;י השמת הערך 0.5ק&quot;ג בשדה זה, תוכל/י להגדיר שאפשר לעלות עד ל- 1ק&quot;ג כדי להשלים הזמנה חלקית</span></a></div>';
                       echo '<div class="resgriddatatiny">';
 
@@ -374,10 +359,7 @@ function SetDirty()
                       
                       //7. Total Price
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '">סה&quot;כ</div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, 'סה&quot;כ');
                       echo '<div class="resgriddatatiny">';
                       if ($oItem->JoinedItems > 0)
                       {
@@ -406,10 +388,7 @@ function SetDirty()
                       $txtOrderItemComments->OnChange = "JavaScript:SetDirty();";
                       $txtOrderItemComments->EncloseInHtmlCell = FALSE;
                       echo '<div class="resgridcell">';
-                      echo '<div class="resgridtitle'; 
-                      if ($bPrintedHeaders)
-                        echo ' mobiledisplay';
-                      echo '">הערות</div>';
+                      HtmlDivTable::EchoTitle($bPrintedHeaders, 'הערות');
                       echo '<div class="resgriddatalong">';
                       $txtOrderItemComments->EchoEditPartHtml();
                       echo '</div></div>';

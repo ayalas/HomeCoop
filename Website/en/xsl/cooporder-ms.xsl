@@ -108,6 +108,7 @@
       
     <Table ss:StyleID="ta1">
     <xsl:apply-templates select="batch" />
+    <xsl:apply-templates select="footer" />
     </Table>
 
    <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
@@ -330,5 +331,26 @@
      
      <Cell/>
   </Row>
+</xsl:template>
+
+<xsl:template match="footer">
+    
+  <xsl:apply-templates select="legend" />
+  
+</xsl:template>
+
+<xsl:template match="legend">
+  
+  <Row ss:Height="15.84">
+    <Cell ss:StyleID="ce2">
+      <Data ss:Type="String"><xsl:value-of select="."/></Data>
+    </Cell>
+    <Cell/>
+    <Cell/>
+    <Cell/>
+    <Cell/>
+    <Cell/>
+  </Row>
+    
 </xsl:template>
 </xsl:stylesheet>

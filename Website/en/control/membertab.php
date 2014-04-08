@@ -23,24 +23,31 @@ function WriteMemberTabElement($sText, $sLink, $bIsOnPage)
       WriteMemberTabElement($oMemberTabInfo->MainTabName, $g_sRootRelativePath . 'coord/member.php?id=' . $oMemberTabInfo->MemberID , 
         $oMemberTabInfo->Page == MemberTabInfo::PAGE_ENTRY );
 
-      if ($oMemberTabInfo->HasPermissions(array(MemberTabInfo::PROPERTY_PERMISSION_MEMBER_ROLES_COORD, 
-               MemberTabInfo::PROPERTY_PERMISSION_MEMBER_ROLES_VIEW)))
+      if ($oMemberTabInfo->HasPermissions(array(MemberTabInfo::PERMISSION_MEMBER_ROLES_COORD, 
+               MemberTabInfo::PERMISSION_MEMBER_ROLES_VIEW)))
       {
         WriteMemberTabElement('Roles',
           $g_sRootRelativePath . 'coord/memberroles.php?id=' . $oMemberTabInfo->MemberID , 
           $oMemberTabInfo->Page == MemberTabInfo::PAGE_ROLES);
       }
       
-      if ($oMemberTabInfo->HasPermissions(array(MemberTabInfo::PROPERTY_PERMISSION_MEMBER_PICKUP_LOCATIONS_MODIFY, 
-               MemberTabInfo::PROPERTY_PERMISSION_MEMBER_PICKUP_LOCATIONS_COORD)))
+      if ($oMemberTabInfo->HasPermissions(array(MemberTabInfo::PERMISSION_MEMBER_TRANSACTIONS_VIEW)))
+      {
+        WriteMemberTabElement('Transactions',
+          $g_sRootRelativePath . 'coord/membertransactions.php?id=' . $oMemberTabInfo->MemberID , 
+          $oMemberTabInfo->Page == MemberTabInfo::PAGE_TRANSACTIONS);
+      }
+      
+      if ($oMemberTabInfo->HasPermissions(array(MemberTabInfo::PERMISSION_MEMBER_PICKUP_LOCATIONS_MODIFY, 
+               MemberTabInfo::PERMISSION_MEMBER_PICKUP_LOCATIONS_COORD)))
       {
         WriteMemberTabElement('Pickup Locations',
           $g_sRootRelativePath . 'coord/memberpickuplocs.php?id=' . $oMemberTabInfo->MemberID , 
           $oMemberTabInfo->Page == MemberTabInfo::PAGE_PICKUP_LOCATIONS);
       }
       
-      if ($oMemberTabInfo->HasPermissions(array(MemberTabInfo::PROPERTY_PERMISSION_MEMBER_PRODUCERS_MODIFY, 
-               MemberTabInfo::PROPERTY_PERMISSION_MEMBER_PRODUCERS_COORD)))
+      if ($oMemberTabInfo->HasPermissions(array(MemberTabInfo::PERMISSION_MEMBER_PRODUCERS_MODIFY, 
+               MemberTabInfo::PERMISSION_MEMBER_PRODUCERS_COORD)))
       {
         WriteMemberTabElement('Producers',
           $g_sRootRelativePath . 'coord/memberproducers.php?id=' . $oMemberTabInfo->MemberID , 

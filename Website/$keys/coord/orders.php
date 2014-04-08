@@ -203,6 +203,7 @@ function Sort(nField)
                 else
                 {
                   $sTooltipBalanceID = '';
+                  $sThisYear = HtmlDateString::GetThisYear();
                   while ( $recTable )
                   {
                     if ($bOrdersChanged && array_key_exists($recTable["OrderID"], $arrOrdersUpdated))
@@ -259,7 +260,7 @@ function Sort(nField)
                       
                       $dDate = new DateTime($recTable["dCreated"], $g_oTimeZone);
                       //if current year, take current year format
-                      if (($dDate->format('Y')+0) == HtmlDateString::GetThisYear())
+                      if (($dDate->format('Y')+0) == $sThisYear)
                         echo $dDate->format('<!$FULL_DATE_FORMAT_CURRENT_YEAR$!>');
                       else
                         echo $dDate->format('<!$FULL_DATE_FORMAT_ANY_YEAR$!>');

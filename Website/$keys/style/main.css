@@ -780,6 +780,10 @@ th
 {
   white-space: nowrap;
 }
+.numericcolumn
+{
+  text-align: right;
+}
 .openorder
 {
    color: #336633;
@@ -1155,7 +1159,7 @@ td a.LinkButton {
 }
 .resgriddatahlong
 {
-  width: 110px;
+  width: 120px;
   white-space: normal;
 }
 .resgriddatalong

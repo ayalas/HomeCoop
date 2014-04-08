@@ -7,6 +7,7 @@ $sPageTitle = '<!$NEW_PICKUP_LOCATION$!>';
 
 $oRecord = new PickupLocation;
 $nStorageCount = 0;
+$oPickupLocationTabInfo = NULL;
 
 try
 {
@@ -42,6 +43,9 @@ try
           if ( isset( $_POST['txtMaxBurden'] ) && !empty($_POST['txtMaxBurden']))
             $oRecord->MaxBurden = 0 + $_POST['txtMaxBurden'];
           
+          if (isset( $_POST['txtTransaction']) && !empty($_POST['txtTransaction']))
+            $oRecord->Transaction = $_POST['txtTransaction'];
+          
           $oRecord->RotationOrder = NULL;
           if ( isset( $_POST['txtRotationOrder'] ) && !empty($_POST['txtRotationOrder']))
             $oRecord->RotationOrder = 0 + $_POST['txtRotationOrder'];
@@ -67,7 +71,7 @@ try
           if ( $bSuccess )
           {
               $g_oError->AddError('<!$RECORD_SAVED$!>', 'ok');
-              $sPageTitle = $oRecord->Name;
+              $sPageTitle = htmlspecialchars($oRecord->Name);
           }
           else if ($oRecord->LastOperationStatus != SQLBase::OPERATION_STATUS_VALIDATION_FAILED)
               $g_oError->AddError('<!$RECORD_NOT_SAVED$!>');
@@ -95,7 +99,7 @@ try
         exit;
     }
 
-    $sPageTitle = $oRecord->Name;
+    $sPageTitle = htmlspecialchars($oRecord->Name);
   }
   
   switch($oRecord->LastOperationStatus)
@@ -107,6 +111,11 @@ try
       RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
       exit;
   }
+  
+  $oPickupLocationTabInfo = new PickupLocationTabInfo($oRecord->ID, $oRecord->CoordinatingGroupID, 
+      PickupLocationTabInfo::PAGE_ENTRY);
+  
+  $oPickupLocationTabInfo->MainTabName = $sPageTitle;
 }
 catch(Exception $e)
 {
@@ -232,11 +241,13 @@ function AddStorageArea()
 <?php include_once '../control/header.php'; ?>
 <table cellspacing="0" cellpadding="0">
     <tr>
-        <td class="fullwidth"><span class="pagename"><?php echo $sPageTitle;  ?></span></td>
-    </tr>
-    <tr>
         <td >
                 <table cellspacing="0" cellpadding="0" width="100%">
+                <tr>
+                <td><?php 
+                  include_once '../control/pickuploctab.php';
+                ?></td>
+                </tr>
                 <tr>
                 <td><?php 
                   include_once '../control/error/ctlError.php';
@@ -353,6 +364,16 @@ function AddStorageArea()
                     HtmlTextEditMultiLang::OtherLangsEmptyCells();
                   ?>
                  <td></td>
+                </tr>
+                
+                <tr>
+                  <?php                     
+                    $txtTransaction = new HtmlTextEditOneLang('<!$FIELD_TRANSACTION$!>', 'txtTransaction', htmlspecialchars($oRecord->Transaction));
+                    $txtTransaction->EchoHtml();
+                    unset($txtTransaction);
+                    
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells();
+                  ?>
                 </tr>
                 
                 <tr>

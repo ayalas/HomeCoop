@@ -22,6 +22,7 @@ class PickupLocation extends SQLBase {
   const PROPERTY_CACHIER_DATE = "CachierDate";
   const PROPERTY_STORAGE_AREAS = "StorageAreas";
   const PROPERTY_NEW_STORAGE_AREAS = "NewStorageAreas";
+  const PROPERTY_TRANSACTION = "Transaction";
   
   const MAX_LENGTH_EXPORT_FILE_NAME = 40;
   
@@ -46,6 +47,7 @@ class PickupLocation extends SQLBase {
                             self::PROPERTY_CACHIER_DATE => NULL,
                             self::PROPERTY_STORAGE_AREAS => array(),
                             self::PROPERTY_NEW_STORAGE_AREAS => array(),
+                            self::PROPERTY_TRANSACTION => NULL,
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData; 
@@ -99,7 +101,6 @@ class PickupLocation extends SQLBase {
   
   public function LoadRecord($nID)
   {
-    global $g_oMemberSession;
     global $g_oTimeZone;
     
     $this->m_nLastOperationStatus = parent::OPERATION_STATUS_NONE;
@@ -283,18 +284,12 @@ class PickupLocation extends SQLBase {
           
           if ( $this->m_aData[self::PROPERTY_CACHIER] != NULL)
           {
-            $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, ModifiedByMemberID, mAmount, dDate) " .
-                  " VALUES(:pickuplocid, :modifier, :amount, :date);";
-
-            $this->RunSQLWithParams($sSQL, array(
-                      'pickuplocid' => $this->m_aData[self::PROPERTY_ID],
-                      'modifier' => $g_oMemberSession->MemberID,
-                    'amount' => $this->m_aData[self::PROPERTY_CACHIER],
-                    'date' => $g_dNow->format(DATABASE_DATE_FORMAT),
-                  ));
+            $this->InsertTransaction($this->m_aData[self::PROPERTY_CACHIER]);
           }
           
           $this->CommitTransaction();
+          
+          $this->m_aData[self::PROPERTY_TRANSACTION] = NULL;
           
           $this->ApplySaveStorageAreas();
         }
@@ -320,7 +315,6 @@ class PickupLocation extends SQLBase {
   
   public function Edit()
   {
-    global $g_oMemberSession;
     global $g_sLangDir;
     global $g_dNow;
 
@@ -389,19 +383,12 @@ class PickupLocation extends SQLBase {
       
       if ($this->m_aData[self::PROPERTY_CACHIER] != $this->m_aOriginalData[self::PROPERTY_CACHIER])
       {
-        $mAmount = $this->m_aData[self::PROPERTY_CACHIER] - $this->m_aOriginalData[self::PROPERTY_CACHIER];
-        $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, ModifiedByMemberID, mAmount, dDate) " .
-              " VALUES(:pickuplocid, :modifier, :amount, :date);";
-
-        $this->RunSQLWithParams($sSQL, array(
-                  'pickuplocid' => $this->m_aData[self::PROPERTY_ID],
-                  'modifier' => $g_oMemberSession->MemberID,
-                'amount' => $mAmount,
-                'date' => $g_dNow->format(DATABASE_DATE_FORMAT),
-              ));
+        $this->InsertTransaction($this->m_aData[self::PROPERTY_CACHIER] - $this->m_aOriginalData[self::PROPERTY_CACHIER]);
       }
       
       $this->CommitTransaction();
+      
+      $this->m_aData[self::PROPERTY_TRANSACTION] = NULL;
       
       $this->ApplySaveStorageAreas();
     }
@@ -942,6 +929,33 @@ class PickupLocation extends SQLBase {
     $this->RunSQL( $sSQLQuery );
     $res = $this->fetch();
     return (!isset($res) || $res["nCount"] == 0);
+  }
+  
+  protected function InsertTransaction($mAmount)
+  {
+    global $g_oMemberSession;
+    global $g_dNow;
+    $sSQL = " INSERT INTO T_Transaction (PickupLocationKeyID, ModifiedByMemberID, mAmount, dDate, sTransaction) " .
+          " VALUES(:pickuplocid, :modifier, :amount, :date, " ; 
+    $arrParams = array(
+              'pickuplocid' => $this->m_aData[self::PROPERTY_ID],
+              'modifier' => $g_oMemberSession->MemberID,
+            'amount' => $mAmount,
+            'date' => $g_dNow->format(DATABASE_DATE_FORMAT),
+          );
+    
+    if ($this->m_aData[self::PROPERTY_TRANSACTION] != NULL)
+    {
+      $sSQL .= ' :desc';
+      $arrParams['desc'] = $this->m_aData[self::PROPERTY_TRANSACTION];
+    }
+    else
+      $sSQL .= ' NULL';
+    
+    $sSQL .= ");";
+
+    $this->RunSQLWithParams($sSQL, $arrParams);    
+    
   }
   
 }

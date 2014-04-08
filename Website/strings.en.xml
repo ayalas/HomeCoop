@@ -2222,7 +2222,7 @@
 </str>
 <str>
     <key>ORDER_ITEM_VALIDATION_BURDEN_EXCEEDS_STORAGE_BURDEN</key>
-    <value>Cannot save the requested order since there is not enough free storage area.</value>
+    <value>Cannot save the requested order since %s has not enough free storage area.</value>
 </str>
 
 <str>
@@ -2316,5 +2316,49 @@
 <str>
     <key>PAGE_TITLE_MEMBER_PRODUCERS</key>
     <value>%s - Producers</value>
+</str>
+<str>
+    <key>FIELD_TRANSACTION</key>
+    <value>Transaction Desc.</value>
+</str>
+<str>
+    <key>FIELD_AMOUNT</key>
+    <value>Amount</value>
+</str>
+<str>
+    <key>FIELD_COORDINATOR</key>
+    <value>Coordinator</value>
+</str>
+<str>
+    <key>FIELD_TIME</key>
+    <value>Time</value>
+</str>
+<str>
+    <key>PAGE_TITLE_TRANSACTIONS</key>
+    <value>%s - Transactions</value>
+</str>
+<str>
+    <key>TAB_TRANSACTIONS</key>
+    <value>Transactions</value>
+</str>
+<str>
+    <key>TRANSACTION_TYPE_REDUCT_FROM_BALANCE</key>
+    <value>auto-payment from balance</value>
+</str>
+<str>
+    <key>TRANSACTION_TYPE_REDUCT_PICKUP_LOCATION_WITHDRAWAL</key>
+    <value>Pickup Location Change Source</value>
+</str>
+<str>
+     <key>TRANSACTION_TYPE_REDUCT_PICKUP_LOCATION_DEPOSIT</key>
+    <value>Pickup Location Change Target</value>
+</str>
+<str>
+     <key>INVALID_CHARACTER_IN_FIELD</key>
+    <value>Invalid character %s in %s</value>
+</str>
+<str>
+     <key>LEGEND_PAID_BY_REDUCTION</key>
+    <value>* - paid by reduction from balance</value>
 </str>
 </strings>
