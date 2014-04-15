@@ -126,18 +126,6 @@ try
     
   if ( $oRecord->CanModify )
   {
-    $oPickupLocs = new CoopOrderPickupLocations;
-    if ($bHasCoordPermission)
-      $recPickupLocs = $oPickupLocs->LoadList($oRecord->CoopOrderID, $oRecord->MemberID);
-    else
-    {
-      //fix facet to include current pickup location
-      if ($oRecord->ID > 0 && $oRecord->PickupLocationID > 0 && !isset($g_aMemberPickupLocationIDs[$oRecord->PickupLocationID]))
-        $g_aMemberPickupLocationIDs[$oRecord->PickupLocationID] = $oRecord->PickupLocationID;
-      
-      $recPickupLocs = $oPickupLocs->LoadFacet($oRecord->CoopOrderID, $g_oMemberSession->MemberID);
-    }
-    
     if ( $bHasCoordPermission )
     {
       $arrPaymentMethods = $oRecord->GetPaymentMethods();
@@ -149,6 +137,23 @@ try
         $oRecord->CanModify = FALSE;
         $g_oError->AddError('There are no members left to add to this cooperative order. All members are already ordering.');
       }
+      //if the required member is not in the list - set member to first one
+      elseif (!isset($arrMembers[$oRecord->MemberID]))
+      {
+        $oRecord->LoadCoopOrder($oRecord->CoopOrderID, key($arrMembers));
+      }
+    }
+    
+    $oPickupLocs = new CoopOrderPickupLocations;
+    if ($bHasCoordPermission)
+      $recPickupLocs = $oPickupLocs->LoadList($oRecord->CoopOrderID, $oRecord->MemberID);
+    else
+    {
+      //fix facet to include current pickup location
+      if ($oRecord->ID > 0 && $oRecord->PickupLocationID > 0 && !isset($g_aMemberPickupLocationIDs[$oRecord->PickupLocationID]))
+        $g_aMemberPickupLocationIDs[$oRecord->PickupLocationID] = $oRecord->PickupLocationID;
+      
+      $recPickupLocs = $oPickupLocs->LoadFacet($oRecord->CoopOrderID, $g_oMemberSession->MemberID);
     }
   }
 

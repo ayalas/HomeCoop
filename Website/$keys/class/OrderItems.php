@@ -92,19 +92,22 @@ class OrderItems extends SQLBase {
     //clear the items array before load
     $this->m_aData[self::PROPERTY_ORDER_ITEMS] = array();
 
-    $sSQL =   " SELECT OI.OrderItemID, PRD.ProductKeyID, P.ProducerKeyID, PRD.UnitKeyID, OI.fQuantity, OI.mCoopPrice ,  OI.mProducerPrice, " .
-            " OI.fOriginalQuantity, OI.fMaxFixQuantityAddition, OI.sMemberComments, OI.fUnjoinedQuantity, COPRD.mProducerPrice ProductProducerPrice, "  .
-            " COPRD.fBurden, COPRD.fMaxCoopOrder, IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder, COPRD.mCoopPrice ProductCoopPrice, " .
-            " COPRD.fMaxUserOrder, PRD.JoinToProductKeyID, NullIf(JPRD.nItems,0) JoinedProductItems, P.CoordinatingGroupID,  " .
-            " IfNull(JCOPRD.mCoopPrice,0) JoinedCoopPrice,  IfNUll(JCOPRD.mProducerPrice,0) JoinedProducerPrice, OI.nJoinedItems, " .
-            " NUllIf(PRD.fQuantity,0) ProductQuantity, PRD.nItems ProductItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
-            " COSA.fBurden StorageAreaBurden, COSA.fMaxBurden StorageAreaMaxBurden, COSA.StorageAreaKeyID, " .
+    $sSQL = " SELECT OI.OrderItemID, PRD.ProductKeyID, P.ProducerKeyID, PRD.UnitKeyID, " . 
+          " OI.fQuantity, OI.mCoopPrice,  OI.mProducerPrice, OI.fOriginalQuantity, OI.fMaxFixQuantityAddition, OI.sMemberComments, " . 
+          " OI.fUnjoinedQuantity, COPRD.mProducerPrice ProductProducerPrice, "  .
+          " COPRD.fBurden, COPRD.fMaxCoopOrder, IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder, COPRD.mCoopPrice ProductCoopPrice, " .
+          " COPRD.fMaxUserOrder, PRD.JoinToProductKeyID, NullIf(JPRD.nItems,0) JoinedProductItems, P.CoordinatingGroupID,  " .
+          " IfNull(JCOPRD.mCoopPrice,0) JoinedCoopPrice,  IfNUll(JCOPRD.mProducerPrice,0) JoinedProducerPrice, OI.nJoinedItems, " .
+          " NUllIf(PRD.fQuantity,0) ProductQuantity, PRD.nItems ProductItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
+          " COSA.fBurden StorageAreaBurden, COSA.fMaxBurden StorageAreaMaxBurden, COSA.StorageAreaKeyID, " .
+          " OID.OrderItemID DeletedItemID , OID.fMaxFixQuantityAddition DeletedQuantityAddition, OID.sMemberComments DeletedComments, " . 
+          " OID.mCoopPrice DeletedCoopTotal, OID.fQuantity DeletedQuantity, OID.DeletedBy, " .
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_JOINED_PRODUCTS, 'sJoinedProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
-          "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'StorageAreaName') .
-          "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, 'sUnitAbbrev') .
-          "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, 'sItemUnitAbbrev') .
+          ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_STORAGE_AREAS, 'StorageAreaName') .
+          ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, 'sUnitAbbrev') .
+          ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, 'sItemUnitAbbrev') .
           " FROM T_Order O INNER JOIN T_CoopOrderProduct COPRD ON O.CoopOrderKeyID = COPRD.CoopOrderKeyID " . 
           " INNER JOIN T_CoopOrderProductStorage COPS ON COPS.CoopOrderKeyID = O.CoopOrderKeyID " .
           " AND COPS.ProductKeyID = COPRD.ProductKeyID " .
@@ -117,21 +120,20 @@ class OrderItems extends SQLBase {
           " INNER JOIN T_Unit UT ON UT.UnitKeyID = PRD.UnitKeyID " .
           " LEFT JOIN T_Product JPRD ON JPRD.ProductKeyID = PRD.JoinToProductKeyID " .
           " LEFT JOIN T_CoopOrderProduct JCOPRD ON O.CoopOrderKeyID = JCOPRD.CoopOrderKeyID AND JCOPRD.ProductKeyID = JPRD.ProductKeyID " .
-          " LEFT JOIN T_Unit IUT ON IUT.UnitKeyID = PRD.ItemUnitKeyID ";
-    if ($this->m_aData[self::PROPERTY_PRODUCTS_VIEW_MODE] == self::PRODUCTS_VIEW_MODE_SHOW_ALL)
-      $sSQL .= " LEFT JOIN ";
-    else
-      $sSQL .= " INNER JOIN ";
-    
-    $sSQL .= " T_OrderItem OI ON OI.OrderID = O.OrderID AND OI.ProductKeyID = COPRD.ProductKeyID " .
+          " LEFT JOIN T_Unit IUT ON IUT.UnitKeyID = PRD.ItemUnitKeyID " .
+          " LEFT JOIN T_OrderItem OI ON OI.OrderID = O.OrderID AND OI.ProductKeyID = COPRD.ProductKeyID " .
+          " LEFT JOIN T_OrderItem_Deleted OID ON OID.OrderID = O.OrderID AND OID.ProductKeyID = COPRD.ProductKeyID AND OI.OrderItemID IS NULL " .
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCTS) .
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_JOINED_PRODUCTS) .
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_PRODUCERS) .
           $this->ConcatStringsJoin(Consts::PERMISSION_AREA_STORAGE_AREAS) .
           $this->ConcatForeignStringsJoin(Consts::PERMISSION_AREA_UNIT_ABBREVIATION, Consts::PERMISSION_AREA_UNITS) .
           $this->ConcatForeignStringsJoin(Consts::PERMISSION_AREA_ITEM_UNIT_ABBREVIATION, Consts::PERMISSION_AREA_ITEM_UNITS) .
-          " WHERE O.OrderID = " . $this->m_aData[Order::PROPERTY_ID] . 
-          " ORDER BY PRD.nSortOrder ,PRD_S.sString; ";
+          " WHERE O.OrderID = " . $this->m_aData[Order::PROPERTY_ID];
+    if ($this->m_aData[self::PROPERTY_PRODUCTS_VIEW_MODE] == self::PRODUCTS_VIEW_MODE_ITEMS_ONLY)
+      $sSQL .= " AND (OI.OrderItemID IS NOT NULL OR OID.OrderItemID IS NOT NULL) ";
+
+    $sSQL .= " ORDER BY PRD.nSortOrder ,PRD_S.sString; ";
 
     $this->RunSQL( $sSQL );
 
@@ -184,9 +186,19 @@ class OrderItems extends SQLBase {
       $oItem->StorageAreaBurden  = $recItem["StorageAreaBurden"];
       $oItem->StorageAreaMaxBurden = $recItem["StorageAreaMaxBurden"];
       $oItem->StorageAreaName = $recItem["StorageAreaName"];
+      $oItem->DeletedItemID = $recItem["DeletedItemID"];
       
-      $oItem->CalculateBurden();
-      
+      if ($oItem->DeletedItemID != NULL && $this->m_oOrder->MemberID != $recItem["DeletedBy"])
+      {
+        $oItem->DeletedQuantityAddition = $recItem["DeletedQuantityAddition"];
+        $oItem->DeletedComments = $recItem["DeletedComments"];
+        $oItem->DeletedCoopTotal = $recItem["DeletedCoopTotal"];
+        $oItem->DeletedBy = $recItem["DeletedBy"];
+        $oItem->MemberLastQuantity = $recItem["DeletedQuantity"];
+      }
+
+      $oItem->CalculateBurden();      
+            
       $this->SetItemChangedByCoordinator($oItem);
       
       $this->m_aData[self::PROPERTY_ORDER_ITEMS][$recItem["ProductKeyID"]] = $oItem;
@@ -638,6 +650,18 @@ class OrderItems extends SQLBase {
    
    $oOrderItem->OrderItemID = $this->GetLastInsertedID();
    
+   //delete deleted item if existed
+   if ($oOrderItem->DeletedItemID > 0)
+   {
+     $sSQL = " DELETE FROM T_OrderItem_Deleted WHERE OrderItemID = " . $oOrderItem->DeletedItemID;
+     $this->RunSQL($sSQL);
+     $oOrderItem->DeletedItemID = 0;
+     $oOrderItem->DeletedQuantityAddition = NULL;
+     $oOrderItem->DeletedComments = NULL;
+     $oOrderItem->DeletedCoopTotal = 0;
+     $oOrderItem->DeletedBy = 0;  
+   }
+   
    $this->m_aProductsChanged[] = $oOrderItem->ProductID;
  }
  
@@ -671,6 +695,27 @@ class OrderItems extends SQLBase {
  //called in SaveData, when quantity was set to 0/null
  protected function DeleteItem(&$oOrderItem)
  {
+   global $g_oMemberSession;
+   
+   //backup deleted item if not done by order member
+   if ($this->m_oOrder->MemberID != $g_oMemberSession->MemberID)
+   {
+    $sSQL = "INSERT INTO T_OrderItem_Deleted (OrderItemID, OrderID, ProductKeyID, fQuantity, mCoopPrice, mProducerPrice, fOriginalQuantity, ". 
+            " fMaxFixQuantityAddition, sMemberComments, fUnjoinedQuantity, nJoinedItems, DeletedBy) " .
+            " SELECT  OI.OrderItemID, OI.OrderID, OI.ProductKeyID, OI.fQuantity, OI.mCoopPrice, OI.mProducerPrice, OI.fOriginalQuantity, ". 
+            " OI.fMaxFixQuantityAddition, OI.sMemberComments, OI.fUnjoinedQuantity, OI.nJoinedItems, " . $g_oMemberSession->MemberID .
+            " FROM T_OrderItem OI " .
+            " WHERE OI.OrderItemID = " . $oOrderItem->OrderItemID .
+            " ON DUPLICATE KEY UPDATE OrderID = " . $this->m_oOrder->ID . ", ProductKeyID = " . $oOrderItem->ProductID . ";";
+    $this->RunSQL($sSQL);
+    
+     $oOrderItem->DeletedItemID = $this->GetLastInsertedID();
+     $oOrderItem->DeletedQuantityAddition = $oOrderItem->MemberMaxFixQuantityAddition;
+     $oOrderItem->DeletedComments = $oOrderItem->MemberComments;
+     $oOrderItem->DeletedCoopTotal = $oOrderItem->CoopTotal;
+     $oOrderItem->DeletedBy = $g_oMemberSession->MemberID;  
+   }
+   
    $sSQL = " DELETE FROM T_OrderItem WHERE OrderItemID = " . $oOrderItem->OrderItemID  . ';';
    
    $this->RunSQL($sSQL);
@@ -727,7 +772,12 @@ class OrderItems extends SQLBase {
     $oItem->StorageAreaBurden  = $oOriginalItem->StorageAreaBurden;
     $oItem->StorageAreaMaxBurden = $oOriginalItem->StorageAreaMaxBurden;
     $oItem->StorageAreaName = $oOriginalItem->StorageAreaName;
-        
+    
+    $oItem->DeletedItemID = $oOriginalItem->DeletedItemID;
+    $oItem->DeletedBy = $oOriginalItem->DeletedBy;
+    $oItem->DeletedQuantityAddition = $oOriginalItem->DeletedQuantityAddition;
+    $oItem->DeletedCoopTotal = $oOriginalItem->DeletedCoopTotal;
+            
     $this->m_aData[self::PROPERTY_ORDER_ITEMS][$nProductID] = $oItem;
    }
    
