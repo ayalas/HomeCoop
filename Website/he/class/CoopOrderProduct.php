@@ -75,6 +75,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
                             CoopOrder::PROPERTY_SMALL_ORDER_COOP_FEE => 0,
                             CoopOrder::PROPERTY_COOP_FEE_PERCENT => 0,
                             self::PROPERTY_PICKUP_LOCATIONS_STORAGE => array(),
+                            Product::PROPERTY_IS_DISABLED => FALSE,
                             );
     $this->m_aData = $this->m_aDefaultData;
     $this->m_aOriginalData = $this->m_aDefaultData;
@@ -121,7 +122,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
     
     $sSQL =   " SELECT COPRD.ProductKeyID, PRD.fQuantity, PRD.nItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, P.ProducerKeyID , " . 
               " PRD.sImage1FileName, PRD.sImage2FileName,PRD.UnitKeyID, " . 
-              " COPRD.mProducerPrice, COPRD.mCoopPrice, " . 
+              " COPRD.mProducerPrice, COPRD.mCoopPrice, COPRD.bDisabled, " . 
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
             "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
             "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_SPECIFICATION, 'sSpec') .
@@ -169,7 +170,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
     {
       $sSQL =   " SELECT COPRD.ProductKeyID, PRD.fQuantity, PRD.nItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, P.ProducerKeyID , " . 
               " COPRD.fMaxCoopOrder, IfNull(COPRD.fBurden,0) fBurden, COPRD.nJoinedStatus, IfNUll(COPRD.mProducerTotal,0) mProducerTotal, " . 
-              " IfNUll(COPRD.mCoopTotal,0) mCoopTotal, P.CoordinatingGroupID, " . 
+              " IfNUll(COPRD.mCoopTotal,0) mCoopTotal, P.CoordinatingGroupID, COPRD.bDisabled, " . 
               " IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder, COPRD.mProducerPrice, COPRD.mCoopPrice, COPRD.fMaxUserOrder,  " . 
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCERS, 'sProducer') .
             "," . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
@@ -232,6 +233,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = $rec["mProducerTotal"];
       $this->m_aData[self::PROPERTY_COOP_TOTAL] = $rec["mCoopTotal"];
       $this->m_aData[self::PROPERTY_JOINED_STATUS] = $rec["nJoinedStatus"];
+      $this->m_aData[Product::PROPERTY_IS_DISABLED] = $rec["bDisabled"];
       
       $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = TRUE;
       
@@ -322,13 +324,14 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       $this->BeginTransaction();
       
       //insert the record
-      $sSQL =  " INSERT INTO T_CoopOrderProduct( CoopOrderKeyID, ProductKeyID, mProducerPrice, mCoopPrice " . 
+      $sSQL =  " INSERT INTO T_CoopOrderProduct( CoopOrderKeyID, ProductKeyID, bDisabled, mProducerPrice, mCoopPrice " . 
               $this->ConcatColIfNotNull(self::PROPERTY_MAX_USER_ORDER, "fMaxUserOrder") . 
               $this->ConcatColIfNotNull(self::PROPERTY_MAX_COOP_ORDER, "fMaxCoopOrder") . 
               $this->ConcatColIfNotNull(self::PROPERTY_BURDEN, "fBurden");
 
       $sSQL .= ") VALUES ( " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .   ", "  . 
               $this->m_aData[self::PROPERTY_PRODUCT_ID] .   ", "  . 
+              intval($this->m_aData[Product::PROPERTY_IS_DISABLED]) .   ", "  . 
               $this->m_aData[self::PROPERTY_PRODUCER_PRICE]  .   ", "  . 
               $this->m_aData[self::PROPERTY_COOP_PRICE]  .
               $this->ConcatValIfNotNull(self::PROPERTY_MAX_USER_ORDER) .
@@ -356,6 +359,8 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
   
   public function Edit()
   {
+    global $g_oMemberSession;
+    
     //general permission check
     if ( !$this->VerifyAction())
       return FALSE;
@@ -382,24 +387,66 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
+    $sQuantityLine = '';
+    $arrOrders = NULL;
+    
     try
     {
       $this->BeginTransaction();
+      
+      //if turned into disabled product
+      if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0 && $this->m_aData[Product::PROPERTY_IS_DISABLED])
+      {
+        //get order list
+        $sSQL =   " SELECT DISTINCT O.OrderID " .
+                  " FROM T_Order O INNER JOIN T_OrderItem OI ON O.OrderID = OI.OrderID " .
+                  " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+                  " AND OI.ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] . ";";
+
+        $this->RunSQL($sSQL);
+
+        $arrOrders = $this->fetchAllOneColumn();
+        
+        //backup the order items of this product
+        $sSQL = "INSERT INTO T_OrderItem_Deleted (OrderItemID, OrderID, ProductKeyID, fQuantity, mCoopPrice, mProducerPrice, fOriginalQuantity, ". 
+              " fMaxFixQuantityAddition, sMemberComments, fUnjoinedQuantity, nJoinedItems, DeletedBy) " .
+              " SELECT  OI.OrderItemID, OI.OrderID, OI.ProductKeyID, OI.fQuantity, OI.mCoopPrice, OI.mProducerPrice, OI.fOriginalQuantity, ". 
+              " OI.fMaxFixQuantityAddition, OI.sMemberComments, OI.fUnjoinedQuantity, OI.nJoinedItems, " . $g_oMemberSession->MemberID .
+              " FROM T_Order O INNER JOIN T_OrderItem OI ON O.OrderID = OI.OrderID " .
+              " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+              " AND OI.ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] .
+              " ON DUPLICATE KEY UPDATE OrderID = O.OrderID, ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] . ";";
+        $this->RunSQL($sSQL);
+
+        //delete the order items of this product
+        $sSQL =   " DELETE OI " .
+                  " FROM T_Order O INNER JOIN T_OrderItem OI ON O.OrderID = OI.OrderID " .
+                  " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+                  " AND OI.ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] . ";";
+
+        $this->RunSQL($sSQL);
+        
+        $this->m_aData[self::PROPERTY_TOTAL_COOP_ORDER] = 0;
+        $this->m_aData[self::PROPERTY_PRODUCER_TOTAL] = 0;
+        $this->m_aData[self::PROPERTY_COOP_TOTAL] = 0;
+      }
 
       $sSQL =   " UPDATE T_CoopOrderProduct " .
-                " SET mProducerPrice =  ?, " . 
-                " mCoopPrice = ? ," .
-                " fMaxUserOrder = ? ," .
-                " fMaxCoopOrder = ? ," .
-                " fBurden = ? " .
+                " SET mProducerPrice =  :producerprice, " . 
+                " mCoopPrice = :coopprice ," .
+                " fMaxUserOrder = :maxuser ," .
+                " fMaxCoopOrder = :maxcoop ," .
+                " fBurden = :burden, " .
+                " bDisabled = :disabled " .
                 " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
                 " AND ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] . ";";
 
-      $this->RunSQLWithParams( $sSQL, array(  $this->m_aData[self::PROPERTY_PRODUCER_PRICE],
-                                              $this->m_aData[self::PROPERTY_COOP_PRICE],
-                                              $this->m_aData[self::PROPERTY_MAX_USER_ORDER],
-                                              $this->m_aData[self::PROPERTY_MAX_COOP_ORDER],
-                                              $this->m_aData[self::PROPERTY_BURDEN],
+      $this->RunSQLWithParams( $sSQL, array(  "producerprice" => $this->m_aData[self::PROPERTY_PRODUCER_PRICE],
+                                              "coopprice" => $this->m_aData[self::PROPERTY_COOP_PRICE],
+                                              "maxuser" => $this->m_aData[self::PROPERTY_MAX_USER_ORDER],
+                                              "maxcoop" => $this->m_aData[self::PROPERTY_MAX_COOP_ORDER],
+                                              "burden" => $this->m_aData[self::PROPERTY_BURDEN],
+                                              "disabled" => intval($this->m_aData[Product::PROPERTY_IS_DISABLED]),
                                         )
       );
       
@@ -409,6 +456,8 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0)
       {
         $oCalculate = new CoopOrderCalculate( $this->m_aData[self::PROPERTY_COOP_ORDER_ID] );
+        if ($arrOrders != NULL)
+          $oCalculate->OrdersListToCalculate = $arrOrders;
         $oCalculate->Run();
       }
       
@@ -448,6 +497,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
     $this->m_aData[self::PROPERTY_MAX_COOP_ORDER] = $this->m_aOriginalData[self::PROPERTY_MAX_COOP_ORDER];
     $this->m_aData[self::PROPERTY_TOTAL_COOP_ORDER] = $this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER];
     $this->m_aData[self::PROPERTY_JOINED_STATUS] = $this->m_aOriginalData[self::PROPERTY_JOINED_STATUS];
+    $this->m_aData[Product::PROPERTY_IS_DISABLED] = $this->m_aOriginalData[Product::PROPERTY_IS_DISABLED];
  
     $this->m_aData[self::PROPERTY_IS_EXISTING_RECORD] = $this->m_aOriginalData[self::PROPERTY_IS_EXISTING_RECORD];   
     
@@ -464,7 +514,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
   
   public function Delete()
   {
-    global $g_oError;
+    global $g_oError, $g_oMemberSession;
 
     //general permission check
     if ( !$this->VerifyAction())
@@ -484,48 +534,23 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       return FALSE;
     }
     
+    if ($this->m_aOriginalData[self::PROPERTY_TOTAL_COOP_ORDER] > 0)
+    {
+      $this->m_nLastOperationStatus = self::OPERATION_STATUS_NO_PERMISSION;
+      return FALSE;     
+    }
+    
     try
     {
       $this->BeginTransaction();
       
-      $oCalc = new CoopOrderCalculate($this->m_aData[self::PROPERTY_COOP_ORDER_ID]);
-      
-      //get order list
-      $sSQL =   " SELECT DISTINCT O.OrderID " .
-                " FROM T_Order O INNER JOIN T_OrderItem OI ON O.OrderID = OI.OrderID " .
-                " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
-                " AND OI.ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] . ";";
-      
-      $this->RunSQL($sSQL);
-      
-      $arrOrders = $this->fetchAllOneColumn();
-      
-      $oCalc->OrdersListToCalculate = $arrOrders;
-      
-      
-      //delete the order items of this product
-      $sSQL =   " DELETE OI " .
-                " FROM T_Order O INNER JOIN T_OrderItem OI ON O.OrderID = OI.OrderID " .
-                " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
-                " AND OI.ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] . ";";
-
-      $this->RunSQL($sSQL);
-
       $sSQL =   " DELETE FROM T_CoopOrderProduct " .
                 " WHERE CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
                 " AND ProductKeyID = " . $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID] . ";";
 
       $this->RunSQL($sSQL);
             
-      //this line just makes the products calculation skipped - adding a filter that returns no result (because the product was already deleted)
-      $oCalc->ProductsListToCalculate = $this->m_aOriginalData[self::PROPERTY_PRODUCT_ID]; 
       
-      $oCalc->CoopFee = $this->CoopFee;
-      $oCalc->SmallOrder = $this->SmallOrder;
-      $oCalc->SmallOrderCoopFee = $this->SmallOrderCoopFee;
-      $oCalc->CoopFeePercent = $this->CoopFeePercent; 
-    
-      $oCalc->Run(); //recalculate coop order and orders data
 
       $this->CommitTransaction();
     }

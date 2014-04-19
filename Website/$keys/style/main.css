@@ -810,6 +810,10 @@ th
 {
   background-color:#FF6666;
 }
+.orderitemcancelledrow
+{
+  background-color:#999999;
+}
 .orderitemqentry
 {
   font-size: 12px;

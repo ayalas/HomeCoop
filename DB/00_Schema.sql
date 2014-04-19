@@ -83,6 +83,7 @@ CREATE TABLE `T_CoopOrderProduct` (
   `nJoinedStatus` tinyint(1) NOT NULL,
   `mProducerTotal` decimal(10,2) unsigned DEFAULT NULL,
   `mCoopTotal` decimal(10,2) unsigned DEFAULT NULL,
+  `bDisabled` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`CoopOrderKeyID`,`ProductKeyID`),
   KEY `indCOPProductKeyID` (`ProductKeyID`) USING BTREE,
   CONSTRAINT `fkCOPCoopOrderKeyID` FOREIGN KEY (`CoopOrderKeyID`) REFERENCES `T_CoopOrder` (`CoopOrderKeyID`) ON DELETE CASCADE,
@@ -690,7 +691,7 @@ CREATE  TABLE `T_CoopOrderProductStorage` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE  TABLE `HomeCoop`.`T_MemberPickupLocation` (
+CREATE  TABLE `T_MemberPickupLocation` (
   `MemberID` BIGINT UNSIGNED NOT NULL ,
   `PickupLocationKeyID` BIGINT UNSIGNED NOT NULL ,
   `bBlocked` TINYINT(1) NULL DEFAULT 0 ,
@@ -699,18 +700,18 @@ CREATE  TABLE `HomeCoop`.`T_MemberPickupLocation` (
   INDEX `fkMPL_PLID` (`PickupLocationKeyID` ASC) ,
   CONSTRAINT `fkMPL_MemberID`
     FOREIGN KEY (`MemberID` )
-    REFERENCES `HomeCoop`.`T_Member` (`MemberID` )
+    REFERENCES `T_Member` (`MemberID` )
     ON DELETE CASCADE
     ON UPDATE RESTRICT,
   CONSTRAINT `fkMPL_PLID`
     FOREIGN KEY (`PickupLocationKeyID` )
-    REFERENCES `HomeCoop`.`T_PickupLocation` (`PickupLocationKeyID` )
+    REFERENCES `T_PickupLocation` (`PickupLocationKeyID` )
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
 DEFAULT CHARACTER SET = utf8;
 
 
-CREATE  TABLE `HomeCoop`.`T_Transaction` (
+CREATE  TABLE `T_Transaction` (
   `TransactionID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ,
   `PickupLocationKeyID` BIGINT UNSIGNED NULL ,
   `MemberID` BIGINT UNSIGNED NULL ,
@@ -723,19 +724,39 @@ CREATE  TABLE `HomeCoop`.`T_Transaction` (
   INDEX `trsPickupLocationID` (`PickupLocationKeyID` ASC) ,
   CONSTRAINT `trsMemberID`
     FOREIGN KEY (`MemberID` )
-    REFERENCES `HomeCoop`.`T_Member` (`MemberID` )
+    REFERENCES `T_Member` (`MemberID` )
     ON DELETE CASCADE
     ON UPDATE RESTRICT,
   CONSTRAINT `trsModifiedBy`
     FOREIGN KEY (`ModifiedByMemberID` )
-    REFERENCES `HomeCoop`.`T_Member` (`MemberID` )
+    REFERENCES `T_Member` (`MemberID` )
     ON DELETE SET NULL
     ON UPDATE RESTRICT,
   CONSTRAINT `trsPickupLocationID`
     FOREIGN KEY (`PickupLocationKeyID` )
-    REFERENCES `HomeCoop`.`T_PickupLocation` (`PickupLocationKeyID` )
+    REFERENCES `T_PickupLocation` (`PickupLocationKeyID` )
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+CREATE TABLE `T_OrderItem_Deleted` (
+  `OrderItemID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `OrderID` bigint(20) unsigned NOT NULL,
+  `ProductKeyID` bigint(20) unsigned NOT NULL,
+  `fQuantity` float NOT NULL,
+  `mCoopPrice` decimal(10,2) unsigned NOT NULL,
+  `mProducerPrice` decimal(10,2) unsigned NOT NULL,
+  `fOriginalQuantity` float unsigned DEFAULT NULL,
+  `fMaxFixQuantityAddition` float unsigned DEFAULT NULL,
+  `sMemberComments` varchar(100) DEFAULT NULL,
+  `fUnjoinedQuantity` float DEFAULT NULL,
+  `nJoinedItems` int(11) unsigned DEFAULT NULL,
+  `DeletedBy` bigint(20) unsigned NULL,
+  PRIMARY KEY (`OrderItemID`),
+  UNIQUE KEY `indOrderID` (`OrderID`,`ProductKeyID`),
+  KEY `indProductKeyID` (`ProductKeyID`),
+  CONSTRAINT `fkOrderOrderItemDeleted` FOREIGN KEY (`OrderID`) REFERENCES `T_Order` (`OrderID`) ON DELETE CASCADE,
+  CONSTRAINT `fkProductOrderItemDeleted` FOREIGN KEY (`ProductKeyID`) REFERENCES `T_Product` (`ProductKeyID`),
+  CONSTRAINT `fkOrderItemDeletedMember` FOREIGN KEY (`DeletedBy`) REFERENCES `T_Member` (`MemberID`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;

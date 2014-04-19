@@ -49,6 +49,9 @@ try
     if ( isset($_POST['txtBurden']) && !empty($_POST['txtBurden']))
        $oRecord->Burden = 0 + trim($_POST['txtBurden']);
     
+    if ( isset( $_POST['ctlIsDisabled'] ))
+       $oRecord->IsDisabled = (intval($_POST['ctlIsDisabled']) == 1);
+    
     if (!$oRecord->IsExistingRecord) //get producer only on new record. It cannot be changed
     {
       $sCtl = HtmlSelectArray::PREFIX . 'ProducerKeyID';
@@ -239,17 +242,6 @@ function Delete()
 {
   var sMessage = 'נא אשר/י או בטל/י את פעולת המחיקה';
   
-  <?php
-    if ($oRecord->IsExistingRecord && $oRecord->ProductCoopTotal > 0)
-    {
-      
-    ?>
-    sMessage = "<?php echo sprintf('פעולה זו תמחק גם את כל ההזמנות על סך %s שנעשו עבור מוצר זה. נא אשר/י', $oRecord->ProductCoopTotal); ?>";
-    <?php
-    
-    }
-    ?>
-  
   if (confirm(decodeXml(sMessage)))
   {
     document.getElementById("hidPostAction").value = <?php echo SQLBase::POST_ACTION_DELETE; ?>;
@@ -270,7 +262,19 @@ function SelectProduct()
 }
 function Save()
 {
-  document.getElementById("hidPostAction").value = <?php echo SQLBase::POST_ACTION_SAVE; ?>;
+  <?php
+    if ($oRecord->IsExistingRecord && $oRecord->TotalCoopOrder > 0) 
+    { ?> 
+      var ctlDisabled = document.getElementById("ctlIsDisabled");
+      if (ctlDisabled.options[ctlDisabled.selectedIndex].value == 1) {
+        sMessage = "<?php echo sprintf('פעולה זו תמחק גם את כל ההזמנות על סך %s שנעשו עבור מוצר זה. נא אשר/י', $oRecord->TotalCoopOrder); ?>";
+        if (!confirm(decodeXml(sMessage)))
+          return;
+      }
+    <?php } ?>
+    
+    document.getElementById("hidPostAction").value = <?php echo SQLBase::POST_ACTION_SAVE; ?>;
+    document.frmMain.submit();
 }
 </script>
 </head>
@@ -297,9 +301,9 @@ function Save()
                     <?php if ($oRecord->IsExistingRecord && !$bReadOnly)
                       echo '<a href="coproduct.php?coid=' , $oRecord->CoopOrderID , '" ><img border="0" title="הוספה" src="../img/edit-add-2.png" /></a>&nbsp;';
                     ?>
-                    <button type="submit" onclick="JavaScript:Save();" id="btn_save" name="btn_save" 
+                    <button type="button" onclick="JavaScript:Save();" id="btn_save" name="btn_save" 
                   <?php if ($g_oError->HadError || $bReadOnly ) echo ' disabled="disabled" '; ?>>שמירה</button>&nbsp;<button type="button" onclick="JavaScript:Delete();" id="btnDelete" name="btnDelete" <?php 
-                      if ($g_oError->HadError || !$oRecord->IsExistingRecord || $bReadOnly ) 
+                      if ($g_oError->HadError || !$oRecord->IsExistingRecord || $bReadOnly || $oRecord->TotalCoopOrder > 0 ) 
                         echo ' disabled="disabled" '; 
                       ?> >מחיקה</button>
                   </td>
@@ -465,7 +469,18 @@ function Save()
                   ?>
                   <td></td>
                 </tr>
-                
+                <tr>
+                  <?php                    
+                    $oIsDisabled = new HtmlSelectBoolean('ctlIsDisabled', 'מצב', $oRecord->IsDisabled, 'לא פעיל', 
+                            'פעיל');
+                    $oIsDisabled->ReadOnly =  $bReadOnly;
+                    $oIsDisabled->EchoHtml();
+                    unset($oIsDisabled);
+                    
+                    HtmlTextEditMultiLang::OtherLangsEmptyCells(); 
+                  ?>
+                  <td></td>
+                </tr>
                 <?php
                   if ( $oRecord->JoinedStatus != CoopOrderProduct::JOIN_STATUS_NONE )
                   {

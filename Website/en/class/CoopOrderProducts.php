@@ -26,7 +26,7 @@ class CoopOrderProducts  extends CoopOrderSubBase {
       return NULL;
     }
     
-    $sSQL =   " SELECT COPRD.ProductKeyID, P.ProducerKeyID, COPRD.nJoinedStatus, COPRD.mProducerPrice, COPRD.mCoopPrice, ". 
+    $sSQL =   " SELECT COPRD.ProductKeyID, COPRD.bDisabled DisabledProduct, P.ProducerKeyID, COPRD.nJoinedStatus, COPRD.mProducerPrice, COPRD.mCoopPrice, ". 
             " IfNUll(COPRD.mProducerTotal,0) mProducerTotal, PRD.UnitKeyID," . 
             " NUllIf(PRD.fQuantity,0) ProductQuantity, PRD.nItems ProductItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
             " IfNull(COPRD.fTotalCoopOrder,0) fTotalCoopOrder, COPRD.fMaxUserOrder, COPRD.fMaxCoopOrder, IfNull(COPRD.fBurden,0) fBurden, " . 
@@ -46,7 +46,7 @@ class CoopOrderProducts  extends CoopOrderSubBase {
     if ($this->GetPermissionScope(self::PERMISSION_COOP_ORDER_PRODUCT_EDIT) != Consts::PERMISSION_SCOPE_COOP_CODE &&
         $this->GetPermissionScope(self::PERMISSION_COOP_ORDER_PRODUCT_VIEW) != Consts::PERMISSION_SCOPE_COOP_CODE)
             $sSQL .=  " AND P.CoordinatingGroupID IN ( " . implode(",", $g_oMemberSession->Groups) . ") ";
-    $sSQL .= " ORDER BY PRD.nSortOrder; ";
+    $sSQL .= " ORDER BY COPRD.bDisabled, PRD.nSortOrder; ";
 
     $this->RunSQL( $sSQL );
 

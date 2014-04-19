@@ -112,6 +112,7 @@ function OpenPartialOrders(nProductID)
               <td class="columntitlelong">מוצר</td>
               <td class="columntitlelong">יצרן</td>
               <td class="columntitletiny">סה&quot;כ</td>
+              <td class="columntitleshort">מצב</td>
               <td class="columntitleshort">סה&quot;כ ליצרן</td>
               <td class="columntitleshort">מ. יצרן</td>
               <td class="columntitleshort">מ. קואופ</td>
@@ -188,6 +189,16 @@ function OpenPartialOrders(nProductID)
                               ');" >' , $recTable["fTotalCoopOrder"] , '</span>';
                       
                       echo '</td>';
+                      
+                      //status
+                      echo "<td>";
+                      
+                      if ($recTable["DisabledProduct"])
+                          echo 'לא פעיל';
+                      else
+                          echo 'פעיל';
+
+                      echo  "</td>";
 
                       //sum
                       echo '<td>';

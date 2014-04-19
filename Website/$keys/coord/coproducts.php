@@ -112,6 +112,7 @@ function OpenPartialOrders(nProductID)
               <td class="columntitlelong"><!$FIELD_PRODUCT$!></td>
               <td class="columntitlelong"><!$FIELD_PRODUCER$!></td>
               <td class="columntitletiny"><!$FIELD_COOP_ORDER_PRODUCT_TOTAL_QUANTITY$!></td>
+              <td class="columntitleshort"><!$FIELD_IS_DISABLED$!></td>
               <td class="columntitleshort"><!$FIELD_COOP_ORDER_PRODUCT_PRODUCER_TOTAL$!></td>
               <td class="columntitleshort"><!$FIELD_PRODUCER_PRICE_SHORT$!></td>
               <td class="columntitleshort"><!$FIELD_COOP_PRICE_SHORT$!></td>
@@ -188,6 +189,16 @@ function OpenPartialOrders(nProductID)
                               ');" >' , $recTable["fTotalCoopOrder"] , '</span>';
                       
                       echo '</td>';
+                      
+                      //status
+                      echo "<td>";
+                      
+                      if ($recTable["DisabledProduct"])
+                          echo '<!$FIELD_VALUE_DISABLED$!>';
+                      else
+                          echo '<!$FIELD_VALUE_ENABLED$!>';
+
+                      echo  "</td>";
 
                       //sum
                       echo '<td>';

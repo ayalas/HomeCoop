@@ -243,19 +243,31 @@ function SetDirty()
                 {
                   $bPrintedHeaders = false;
                   $sJoinedItemsTooltipID = '';
+                  $bItemReadOnly = FALSE;
                   foreach($arrItems as $oItem)
                   {
                       if (!$oItem->Visible)
                         continue;
-                                            
+                      
+                      $bItemReadOnly = $oItem->DisabledProduct || !$oRecord->CanModify;
+
                       if ($oItem->InvalidEntry)
                       {
                         //show validation message
                         echo '<div class="resgridrow"><span class="message">' , $oItem->ValidationMessage  , '</span></div>',
-                         '<div class="resgridrow orderiteminvalidrow" >';
+                         '<div class="resgridrow orderiteminvalidrow">';
                       }
                       else if ($oItem->ChangedByCoordinator)
-                        echo '<div class="resgridrow changedrow" >';
+                      {
+                        echo '<div class="resgridrow ';
+                        if ($oItem->DisabledProduct)
+                          echo 'orderitemcancelledrow" ';
+                        else
+                          echo 'changedrow" ';
+                        echo '>';
+                      }
+                      else if ($oItem->DisabledProduct)
+                        continue;
                       else
                         echo '<div class="resgridrow">';
                       
@@ -307,12 +319,13 @@ function SetDirty()
                       echo '<div class="resgridcell">';
                       HtmlDivTable::EchoTitle($bPrintedHeaders, 'מחיר');
                       echo '<div class="resgriddatatiny">';
-                      echo $oItem->ProductCoopPrice , '</div></div>';
+                      echo $oItem->ProductCoopPrice , '</div>';
+                      echo '</div>';
                       
                       //5. Member Order
                       $txtMemberOrder = new HtmlTextEditNumericRange(OrderItems::CTL_PREFIX_QUANTITY . $oItem->ProductID,
                           'ltr', HtmlTextEdit::TEXTBOX, $oItem->Quantity, $oItem->GetAllowedInterval() );
-                      $txtMemberOrder->ReadOnly = !$oRecord->CanModify;
+                      $txtMemberOrder->ReadOnly = $bItemReadOnly;
                       $txtMemberOrder->MaxLength = HtmlTextEditNumeric::NUMBER_DEFAULT_MAX_LENGTH;
                       $txtMemberOrder->CssClass = "orderitemqentry";
                       $txtMemberOrder->OnChange = "JavaScript:SetDirty();";
@@ -337,6 +350,8 @@ function SetDirty()
                       echo '"><a id="additionhlp_' , $oItem->ProductID ,'" name="additionhlp_' , 
                         $oItem->ProductID ,'" class="tooltiphelp" href="#additionhlp_' , $oItem->ProductID ,
                         '" >הוספה<span>הכמות המקסימלית שמתאמי הזמנת הקואופרטיב יורשו *להוסיף* להזמנה שלך כדי להשלים הזמנות חלקיות לגודל החבילה. למשל, אם גודל החבילה הוא 2ק&quot;ג, והכמות שהזמנת היא 0.5ק&quot;ג, ע&quot;י השמת הערך 0.5ק&quot;ג בשדה זה, תוכל/י להגדיר שאפשר לעלות עד ל- 1ק&quot;ג כדי להשלים הזמנה חלקית</span></a></div>';
+                      
+                      
                       echo '<div class="resgriddatatiny">';
 
                       if (  ($oItem->MemberMaxFixQuantityAddition != NULL && $oItem->MemberMaxFixQuantityAddition != 0)
@@ -344,7 +359,7 @@ function SetDirty()
                       {
                         $txtMemberMaxFixQuantityAddition = new HtmlTextEditNumericRange(OrderItems::CTL_PREFIX_MAX_FIX_QUANTITY_ADDITION . $oItem->ProductID,
                             'ltr', HtmlTextEdit::TEXTBOX, $oItem->MemberMaxFixQuantityAddition, $oItem->GetAllowedInterval() );
-                        $txtMemberMaxFixQuantityAddition->ReadOnly = !$oRecord->CanModify;
+                        $txtMemberMaxFixQuantityAddition->ReadOnly = $bItemReadOnly;
                         $txtMemberMaxFixQuantityAddition->MaxLength = HtmlTextEditNumeric::NUMBER_DEFAULT_MAX_LENGTH;
                         if ($oItem->PackageSize != NULL)
                           $txtMemberMaxFixQuantityAddition->MaxValue = $oItem->PackageSize;
@@ -379,19 +394,28 @@ function SetDirty()
                       echo '</div></div>';
                       
                       //8. Member Comments
-                      $txtOrderItemComments = new HtmlTextEdit(OrderItems::CTL_PREFIX_COMMENTS . $oItem->ProductID,
-                          NULL, HtmlTextEdit::TEXTAREA, $oItem->MemberComments);
-                      $txtOrderItemComments->ReadOnly = !$oRecord->CanModify;
-                      $txtOrderItemComments->MaxLength = OrderItems::MAX_LENGTH_MEMBER_COMMENTS;
-                      $txtOrderItemComments->CssClass = "orderitemcentry";
-                      $txtOrderItemComments->Rows = 1;
-                      $txtOrderItemComments->OnChange = "JavaScript:SetDirty();";
-                      $txtOrderItemComments->EncloseInHtmlCell = FALSE;
+                      
                       echo '<div class="resgridcell">';
                       HtmlDivTable::EchoTitle($bPrintedHeaders, 'הערות');
-                      echo '<div class="resgriddatalong">';
-                      $txtOrderItemComments->EchoEditPartHtml();
-                      echo '</div></div>';
+                      if ($oItem->DisabledProduct)
+                      {
+                        echo '<div class="resgriddatalong">המוצר בוטל</div>';
+                      }
+                      else
+                      {
+                        echo '<div class="resgriddatalong">';
+                        $txtOrderItemComments = new HtmlTextEdit(OrderItems::CTL_PREFIX_COMMENTS . $oItem->ProductID,
+                          NULL, HtmlTextEdit::TEXTAREA, $oItem->MemberComments);
+                        $txtOrderItemComments->ReadOnly = $bItemReadOnly;
+                        $txtOrderItemComments->MaxLength = OrderItems::MAX_LENGTH_MEMBER_COMMENTS;
+                        $txtOrderItemComments->CssClass = "orderitemcentry";
+                        $txtOrderItemComments->Rows = 1;
+                        $txtOrderItemComments->OnChange = "JavaScript:SetDirty();";
+                        $txtOrderItemComments->EncloseInHtmlCell = FALSE;
+                        $txtOrderItemComments->EchoEditPartHtml();
+                        echo '</div>';
+                      }
+                      echo '</div>';
                       
                       echo '</div>';
                       

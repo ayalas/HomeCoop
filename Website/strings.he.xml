@@ -2265,4 +2265,8 @@
      <key>LEGEND_PAID_BY_REDUCTION</key>
     <value>* - שולם ע"י קיזוז מהפקדון</value>
 </str>
+<str>
+     <key>CANCELLED_PRODUCT</key>
+     <value>המוצר בוטל</value>
+</str>
 </strings>

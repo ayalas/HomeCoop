@@ -2361,4 +2361,8 @@
      <key>LEGEND_PAID_BY_REDUCTION</key>
     <value>* - paid by reduction from balance</value>
 </str>
+<str>
+     <key>CANCELLED_PRODUCT</key>
+     <value>This product is cancelled</value>
+</str>
 </strings>

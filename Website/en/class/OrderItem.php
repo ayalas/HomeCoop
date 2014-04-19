@@ -55,10 +55,11 @@ class OrderItem extends SQLBase {
   const PROPERTY_VISIBLE = "Visible";
   
   const PROPERTY_DELETED_ITEM_ID = "DeletedItemID"; 
-  const PROPERTY_DELETED_QUANTITY_ADDITION = "DeletedQuantityAddition"; 
-  const PROPERTY_DELETED_COMMENTS = "DeletedComments"; 
-  const PROPERTY_DELETED_COOP_TOTAL = "DeletedCoopTotal"; 
-  const PROPERTY_DELETED_BY = "DeletedBy"; 
+  //const PROPERTY_DELETED_QUANTITY_ADDITION = "DeletedQuantityAddition"; 
+  //const PROPERTY_DELETED_COMMENTS = "DeletedComments"; 
+  //const PROPERTY_DELETED_COOP_TOTAL = "DeletedCoopTotal"; 
+  const PROPERTY_DELETED_BY = "DeletedBy";
+  const PROPERTY_DISABLED_PRODUCT = "DisabledProduct";
     
   public function __construct()
   {
@@ -106,10 +107,11 @@ class OrderItem extends SQLBase {
         self::PROPERTY_STORAGE_AREA_MAX_BURDEN => NULL,
         self::PROPERTY_STORAGE_AREA_NAME => NULL,
         self::PROPERTY_DELETED_ITEM_ID => 0,
-        self::PROPERTY_DELETED_QUANTITY_ADDITION => NULL,
-        self::PROPERTY_DELETED_COMMENTS => NULL,
-        self::PROPERTY_DELETED_COOP_TOTAL => 0,
+        //self::PROPERTY_DELETED_QUANTITY_ADDITION => NULL,
+        //self::PROPERTY_DELETED_COMMENTS => NULL,
+        //self::PROPERTY_DELETED_COOP_TOTAL => 0,
         self::PROPERTY_DELETED_BY => 0,
+        self::PROPERTY_DISABLED_PRODUCT => FALSE,
        );
   }
   
