@@ -2269,4 +2269,8 @@
      <key>CANCELLED_PRODUCT</key>
      <value>המוצר בוטל</value>
 </str>
+<str>
+     <key>LABEL_EXPORT_TOTAL_MEMBER</key>
+     <value>סה"כ %s</value>
+</str>
 </strings>

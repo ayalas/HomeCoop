@@ -860,7 +860,7 @@ class CoopOrderExport extends CoopOrderSubBase {
       
       //summary row
       $sum = $this->m_oXmlDoc->createElement('sum');
-      $sumlabel = $this->m_oXmlDoc->createElement('sumlabel', '<!$FIELD_ORDER_EXPORT_TOTAL_ROW_LABEL$!>');
+      $sumlabel = $this->m_oXmlDoc->createElement('sumlabel', sprintf('<!$LABEL_EXPORT_TOTAL_MEMBER$!>', $order["sName"]));
       $sum->appendChild($sumlabel);
 
       //fee row

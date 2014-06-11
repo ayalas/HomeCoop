@@ -100,7 +100,7 @@ class OrderItems extends SQLBase {
           " IfNull(JCOPRD.mCoopPrice,0) JoinedCoopPrice,  IfNUll(JCOPRD.mProducerPrice,0) JoinedProducerPrice, OI.nJoinedItems, " .
           " NUllIf(PRD.fQuantity,0) ProductQuantity, PRD.nItems ProductItems, PRD.fItemQuantity, PRD.fPackageSize, PRD.fUnitInterval, " .
           " COSA.fBurden StorageAreaBurden, COSA.fMaxBurden StorageAreaMaxBurden, COSA.StorageAreaKeyID, " .
-          " OID.OrderItemID DeletedItemID , OID.fQuantity DeletedQuantity, OID.DeletedBy, " . 
+          " OID.OrderItemID DeletedItemID , IfNull(OID.fOriginalQuantity, OID.fQuantity) DeletedQuantity, OID.DeletedBy, " . 
         /*OID.mCoopPrice DeletedCoopTotal, OID.fMaxFixQuantityAddition DeletedQuantityAddition, OID.sMemberComments DeletedComments, " . */
                  $this->ConcatStringsSelect(Consts::PERMISSION_AREA_PRODUCTS, 'sProduct') .
           ", " . $this->ConcatStringsSelect(Consts::PERMISSION_AREA_JOINED_PRODUCTS, 'sJoinedProduct') .

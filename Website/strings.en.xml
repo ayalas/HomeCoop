@@ -2365,4 +2365,8 @@
      <key>CANCELLED_PRODUCT</key>
      <value>This product is cancelled</value>
 </str>
+<str>
+     <key>LABEL_EXPORT_TOTAL_MEMBER</key>
+     <value>Total %s</value>
+</str>
 </strings>

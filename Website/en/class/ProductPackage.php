@@ -88,20 +88,19 @@ class ProductPackage {
 
       if ($this->m_nMode != self::MODE_PACKAGE_SIZE)
         $this->m_nMode = self::MODE_QUANTITY;
-      
-      
-      switch($this->m_nMode)
-      {
-        case self::MODE_QUANTITY:
-          $this->m_sResult = $this->m_aData[self::PROPERTY_QUANTITY];
-          break;
-        case self::MODE_ITEMS_QUANTITY:
-          $this->m_sResult = $this->m_aData[self::PROPERTY_PACKAGE_SIZE];
-          break;
-        case self::MODE_PACKAGE_SIZE:
-          $this->m_sResult = $this->m_aData[self::PROPERTY_QUANTITY];
-          break;
-      }
+    }
+    
+    switch($this->m_nMode)
+    {
+      case self::MODE_QUANTITY:
+        $this->m_sResult = $this->m_aData[self::PROPERTY_QUANTITY];
+        break;
+      case self::MODE_ITEMS_QUANTITY:
+        $this->m_sResult = $this->m_aData[self::PROPERTY_PACKAGE_SIZE];
+        break;
+      case self::MODE_PACKAGE_SIZE:
+        $this->m_sResult = $this->m_aData[self::PROPERTY_QUANTITY];
+        break;
     }
   }
   
