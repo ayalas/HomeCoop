@@ -613,6 +613,7 @@ CREATE TABLE `T_Member` (
   `bDisabled` tinyint(1) NOT NULL DEFAULT 0,
   `sComments` VARCHAR(300) NULL,
   `sPasswordForMigration` VARCHAR(50) NULL,
+  `DrupalUID` INT UNSIGNED NULL,
   PRIMARY KEY (`MemberID`),
   UNIQUE KEY `ind_sLoginName` (`sLoginName`),
   UNIQUE KEY `indName` (`sName`),
