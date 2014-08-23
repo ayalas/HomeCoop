@@ -9,13 +9,13 @@ define("SESSION_LANG_ID", "LangID");
 //DEFAULT LANGUAGE
 $sLangDir = 'he';
 
-if (isset($_GET[LANG_PARAM]))
+if (isset($_GET[LANG_PARAM]) && !empty($_GET[LANG_PARAM]))
 {    
     //don't allow setting the language to an incorrect value by manually changing the query string param
     $sLangDir = $_GET[LANG_PARAM];
     setcookie(LANG_PARAM, $sLangDir);
 }
-else if (isset($_COOKIE[LANG_PARAM])) //read cookie value
+else if (isset($_COOKIE[LANG_PARAM]) && !empty($_COOKIE[LANG_PARAM])) //read cookie value
     $sLangDir = $_COOKIE[LANG_PARAM];
 
 //reset langid
