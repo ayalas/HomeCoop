@@ -1,6 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `HomeCoop` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `HomeCoop`;
-
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (i686)
 --
 -- Host: localhost    Database: HomeCoop
@@ -719,6 +716,7 @@ CREATE  TABLE `T_Transaction` (
   `ModifiedByMemberID` BIGINT UNSIGNED NULL ,
   `mAmount` DECIMAL(10,2) NULL ,
   `dDate` DATETIME NOT NULL ,
+  `sTransaction` NVARCHAR(100) NULL,
   PRIMARY KEY (`TransactionID`) ,
   INDEX `trsMemberID` (`MemberID` ASC) ,
   INDEX `trsModifiedBy` (`ModifiedByMemberID` ASC) ,
@@ -761,3 +759,14 @@ CREATE TABLE `T_OrderItem_Deleted` (
   CONSTRAINT `fkProductOrderItemDeleted` FOREIGN KEY (`ProductKeyID`) REFERENCES `T_Product` (`ProductKeyID`),
   CONSTRAINT `fkOrderItemDeletedMember` FOREIGN KEY (`DeletedBy`) REFERENCES `T_Member` (`MemberID`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `T_MemberProducer` (
+  `MemberID` bigint(20) unsigned NOT NULL,
+  `ProducerKeyID` bigint(20) unsigned NOT NULL,
+  `bBlocked` tinyint(1) DEFAULT '0',
+  `bRemoved` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`MemberID`,`ProducerKeyID`),
+  KEY `fkMemPR_PID` (`ProducerKeyID`),
+  CONSTRAINT `fkMemPR_MemberID` FOREIGN KEY (`MemberID`) REFERENCES `T_Member` (`MemberID`) ON DELETE CASCADE,
+  CONSTRAINT `fkMemPR_PID` FOREIGN KEY (`ProducerKeyID`) REFERENCES `T_Producer` (`ProducerKeyID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
