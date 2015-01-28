@@ -2273,4 +2273,8 @@
      <key>LABEL_EXPORT_TOTAL_MEMBER</key>
      <value>סה"כ %s</value>
 </str>
+<str>
+    <key>DELETED_ITEMS_TITLE</key>
+    <value>הזמנות שנמחקו</value>
+</str>
 </strings>

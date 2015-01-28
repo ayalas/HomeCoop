@@ -18,6 +18,7 @@ class PartialOrders extends SQLBase {
   const PROPERTY_PACKAGE_SIZE = "PackageSize";
   const PROPERTY_QUANTITY = "Quantity";
   const PROPERTY_IS_PARTIAL = "IsPartial";
+  const PROPERTY_DELETED_ITEMS = "DeletedItems";
   
   public function __construct()
   {
@@ -29,6 +30,7 @@ class PartialOrders extends SQLBase {
         self::PROPERTY_PACKAGE_SIZE => NULL,
         self::PROPERTY_QUANTITY => 0,
         self::PROPERTY_IS_PARTIAL => FALSE,
+        self::PROPERTY_DELETED_ITEMS => NULL,
        );
   }
   
@@ -54,6 +56,8 @@ class PartialOrders extends SQLBase {
     
     if (!$this->LoadProductData())
       return NULL;
+    
+    $this->LoadDeletedData();
     
     $sSQL = " SELECT O.OrderID, M.sName MemberName, OI.fOriginalQuantity, OI.fMaxFixQuantityAddition, OI.fQuantity, O.dCreated " . 
             " FROM T_Order O INNER JOIN T_Member M ON M.MemberID = O.MemberID " .
@@ -103,6 +107,19 @@ class PartialOrders extends SQLBase {
     $this->m_aData[self::PROPERTY_QUANTITY] = $recProduct["fQuantity"];
     
     return TRUE;
+  }
+  
+  protected function LoadDeletedData()
+  {
+    $sSQL = " SELECT O.OrderID, M.sName MemberName, OI.fOriginalQuantity, OI.fMaxFixQuantityAddition, OI.fQuantity, O.dCreated " . 
+            " FROM T_Order O INNER JOIN T_Member M ON M.MemberID = O.MemberID " .
+            " INNER JOIN T_OrderItem_Deleted OI ON OI.OrderID = O.OrderID " .
+            " WHERE O.CoopOrderKeyID = " . $this->m_aData[self::PROPERTY_COOP_ORDER_ID] .
+            " AND OI.ProductKeyID = " . $this->m_aData[self::PROPERTY_PRODUCT_ID] .
+            " ORDER BY O.dCreated desc, O.dModified desc; ";
+    
+    $this->RunSQL($sSQL);
+    $this->m_aData[self::PROPERTY_DELETED_ITEMS] = $this->fetchAll();
   }
   
 }

@@ -2369,4 +2369,8 @@
      <key>LABEL_EXPORT_TOTAL_MEMBER</key>
      <value>Total %s</value>
 </str>
+<str>
+    <key>DELETED_ITEMS_TITLE</key>
+    <value>Deletd Orders</value>
+</str>
 </strings>

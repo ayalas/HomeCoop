@@ -160,6 +160,44 @@ UserSessionBase::Close();
                 }
     ?>
             </table>
+          <?php
+          if ($oData->DeletedItems != NULL && count($oData->DeletedItems) > 0) {
+            
+            ?>
+          <div class="headmainlabel">הזמנות שנמחקו</div>
+          <table cellspacing="0" cellpadding="2" width="100%">
+            <tr>
+              <td colspan="6"><?php include_once '../control/error/ctlError.php'; ?></td>
+            </tr>
+            <tr>
+              <td class="columntitle">חבר/ה</td>
+              <td class="columntitletiny">כמות מקורית</td>
+              <td class="columntitletiny">כמות</td>
+              <td class="columntitletiny">הוספה</td>
+              <td class="columntitlenowidth">ת. הזמנה</td>
+            </tr>
+            <?php
+            foreach($oData->DeletedItems as $Item) {
+              echo '<tr>';
+              
+              echo '<td><span class="link" onclick="JavaScript:OpenOrder(' , $Item["OrderID"] , ');" >' ,  
+                              htmlspecialchars( $Item["MemberName"] ) ,  '</span></td>',
+              
+                 "<td>" , $Item["fOriginalQuantity"] , "</td>",
+                      
+                       "<td>" , $Item["fQuantity"] , "</td>",
+                      
+                       "<td>" , $Item["fMaxFixQuantityAddition"] , "</td>";
+              
+              $dDate = new DateTime($Item["dCreated"], $g_oTimeZone);
+              echo "<td>" , $dDate->format('j.n.Y') , "</td>";
+              
+              echo '</tr>';
+              
+            }
+            ?>
+          </table>
+          <?php } ?>
         </td>
     </tr>
     <tr>

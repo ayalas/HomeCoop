@@ -160,6 +160,44 @@ UserSessionBase::Close();
                 }
     ?>
             </table>
+          <?php
+          if ($oData->DeletedItems != NULL && count($oData->DeletedItems) > 0) {
+            
+            ?>
+          <div class="headmainlabel">Deletd Orders</div>
+          <table cellspacing="0" cellpadding="2" width="100%">
+            <tr>
+              <td colspan="6"><?php include_once '../control/error/ctlError.php'; ?></td>
+            </tr>
+            <tr>
+              <td class="columntitle">Member</td>
+              <td class="columntitletiny">Original Quantity</td>
+              <td class="columntitletiny">Quantity</td>
+              <td class="columntitletiny">Add</td>
+              <td class="columntitlenowidth">Order Date</td>
+            </tr>
+            <?php
+            foreach($oData->DeletedItems as $Item) {
+              echo '<tr>';
+              
+              echo '<td><span class="link" onclick="JavaScript:OpenOrder(' , $Item["OrderID"] , ');" >' ,  
+                              htmlspecialchars( $Item["MemberName"] ) ,  '</span></td>',
+              
+                 "<td>" , $Item["fOriginalQuantity"] , "</td>",
+                      
+                       "<td>" , $Item["fQuantity"] , "</td>",
+                      
+                       "<td>" , $Item["fMaxFixQuantityAddition"] , "</td>";
+              
+              $dDate = new DateTime($Item["dCreated"], $g_oTimeZone);
+              echo "<td>" , $dDate->format('n.j.Y') , "</td>";
+              
+              echo '</tr>';
+              
+            }
+            ?>
+          </table>
+          <?php } ?>
         </td>
     </tr>
     <tr>

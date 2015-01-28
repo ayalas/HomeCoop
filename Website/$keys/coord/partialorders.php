@@ -160,6 +160,44 @@ UserSessionBase::Close();
                 }
     ?>
             </table>
+          <?php
+          if ($oData->DeletedItems != NULL && count($oData->DeletedItems) > 0) {
+            
+            ?>
+          <div class="headmainlabel"><!$DELETED_ITEMS_TITLE$!></div>
+          <table cellspacing="0" cellpadding="2" width="100%">
+            <tr>
+              <td colspan="6"><?php include_once '../control/error/ctlError.php'; ?></td>
+            </tr>
+            <tr>
+              <td class="columntitle"><!$FIELD_MEMBER$!></td>
+              <td class="columntitletiny"><!$FIELD_ORIGINAL_QUANTITY$!></td>
+              <td class="columntitletiny"><!$FIELD_QUANTITY$!></td>
+              <td class="columntitletiny"><!$FIELD_MEMBER_ORDER_ITEM_MAX_FIX_ADDITION$!></td>
+              <td class="columntitlenowidth"><!$FIELD_ORDER_CREATED$!></td>
+            </tr>
+            <?php
+            foreach($oData->DeletedItems as $Item) {
+              echo '<tr>';
+              
+              echo '<td><span class="link" onclick="JavaScript:OpenOrder(' , $Item["OrderID"] , ');" >' ,  
+                              htmlspecialchars( $Item["MemberName"] ) ,  '</span></td>',
+              
+                 "<td>" , $Item["fOriginalQuantity"] , "</td>",
+                      
+                       "<td>" , $Item["fQuantity"] , "</td>",
+                      
+                       "<td>" , $Item["fMaxFixQuantityAddition"] , "</td>";
+              
+              $dDate = new DateTime($Item["dCreated"], $g_oTimeZone);
+              echo "<td>" , $dDate->format('<!$DATE_PICKER_DATE_FORMAT$!>') , "</td>";
+              
+              echo '</tr>';
+              
+            }
+            ?>
+          </table>
+          <?php } ?>
         </td>
     </tr>
     <tr>
