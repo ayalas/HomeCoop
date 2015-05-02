@@ -70,13 +70,14 @@ UserSessionBase::Close();
                 {
                   while ( $recProducers )
                   {
-                      //PAGING START
-                      $g_nCountRecords++;
-                      if ($g_nCountRecords > HOMECOOP_RECORDS_PER_PAGE) {
-                        //do not display the row over the page reocrds - it's for checking if there is a next page
+                      $retIterate = HomeCoopPager::IterateRecordForPaging();
+                      if ($retIterate == HomeCoopPager::PAGING_SKIP_RECORD) {
+                        $recProducers = $oProducers->fetch();
+                        continue;
+                      }
+                      else if ($retIterate == HomeCoopPager::PAGING_BREAK_LOOP) {
                         break;
                       }
-                      //PAGING END
                       
                       echo "<tr><td><a href='producer.php?id=" ,  $recProducers["ProducerKeyID"] , "' >" ,  
                               htmlspecialchars($recProducers["sProducer"]) , "</a></td><td>";

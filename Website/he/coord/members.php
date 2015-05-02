@@ -10,6 +10,7 @@ $bShowMails = FALSE;
 $sMailList = NULL;
 $arrList = $oTable->GetExportList();
 $bFirstRequest = false;
+$PostAction = Members::POST_ACTION_SEARCH;
 
 try
 {
@@ -18,37 +19,37 @@ try
     if ( isset( $_POST['hidOriginalData'] ) )
       $oTable->SetSerializedData( $_POST["hidOriginalData"] );
     
-    if (!empty( $_POST['hidPostAction'] ))
+    if (isset($_POST['hidPostAction']) && !empty( $_POST['hidPostAction'] )) {
+      $PostAction = intval($_POST['hidPostAction']);
+    }
+    switch($PostAction)
     {
-      switch($_POST['hidPostAction'])
-      {
-        case Members::POST_ACTION_SEARCH:
-            $oTable->SearchPhrase = NULL;
-            if ( isset( $_POST['txtSearch'] ) && !empty($_POST['txtSearch']) )
-              $oTable->SearchPhrase = $_POST['txtSearch'];    
-          break;
-        case Members::POST_ACTION_LIST_SELECT:
+      case Members::POST_ACTION_SEARCH:
+          $oTable->SearchPhrase = NULL;
+          if ( isset( $_POST['txtSearch'] ) && !empty($_POST['txtSearch']) )
+            $oTable->SearchPhrase = $_POST['txtSearch'];    
+        break;
+      case Members::POST_ACTION_LIST_SELECT:
 
-           $sCtl = HtmlSelectArray::PREFIX . 'DataSet';
-           if ( isset( $_POST[$sCtl] ))
-           {
-              $nAction = intval($_POST[$sCtl]);
-              if ($nAction == MEMBERS::EXPORT_LIST_ITEM_SELECTED_MEMBERS_EMAILS)
+         $sCtl = HtmlSelectArray::PREFIX . 'DataSet';
+         if ( isset( $_POST[$sCtl] ))
+         {
+            $nAction = intval($_POST[$sCtl]);
+            if ($nAction == MEMBERS::EXPORT_LIST_ITEM_SELECTED_MEMBERS_EMAILS)
+            {
+              if (isset($_POST["chkMember"]))
               {
-                if (isset($_POST["chkMember"]))
-                {
-                  $oTable->MemberIDs = implode(",", $_POST["chkMember"]);
-                  $sMailList = $oTable->GetMailingList();
-                }
-                else
-                  $g_oError->AddError('לא נבחרו חברות/ים.');
+                $oTable->MemberIDs = implode(",", $_POST["chkMember"]);
+                $sMailList = $oTable->GetMailingList();
               }
-          }
-          break;
-      }
-    }    
+              else
+                $g_oError->AddError('לא נבחרו חברות/ים.');
+            }
+        }
+        break;
+    } 
     
-    $recTable = $oTable->GetTable();
+  $recTable = $oTable->GetTable();
 
     if ($oTable->LastOperationStatus == SQLBase::OPERATION_STATUS_NO_PERMISSION)
     {
@@ -98,7 +99,7 @@ function ListSelect()
 }
 function Search()
 {
-  document.getElementById("hidPostAction").value = <?php echo MEMBERS::POST_ACTION_SEARCH; ?>;
+  //default post action
   document.frmMain.submit();
 }
 function SelectAll(bCheck)

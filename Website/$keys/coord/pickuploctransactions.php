@@ -8,6 +8,7 @@ $recTransaction = NULL;
 $oRecord = new PickupLocation;
 $sPageTitle = '';
 $oPickupLocationTabInfo = NULL;
+$g_nCountRecords = 0; //PAGING
 
 try
 {
@@ -106,6 +107,9 @@ UserSessionBase::Close();
     <tr>
       <td>
         <?php 
+          //PAGING
+          $g_BasePageUrl = 'pickuploctransactions.php?id=' . $oRecord->ID;
+          include_once '../control/paging.php';
         include_once '../control/footer.php';
         ?>
       </td>

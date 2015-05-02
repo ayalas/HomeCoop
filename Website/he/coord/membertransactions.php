@@ -7,6 +7,7 @@ $oTable = new TransactionTable();
 $recTransaction = NULL;
 $oMember = new Member();
 $sPageTitle = '';
+$g_nCountRecords = 0; //PAGING
 
 try
 {
@@ -98,6 +99,12 @@ UserSessionBase::Close();
                 </td>
               </tr>
               </table>
+          <?php
+          //PAGING
+          $g_BasePageUrl = 'membertransactions.php?id=' . $oTable->MemberID;
+
+          include_once '../control/paging.php';
+          ?>
         </td>
     </tr>
     <tr>

@@ -87,13 +87,14 @@ UserSessionBase::Close();
                 {
                   while ( $recProducts )
                   {
-                      //PAGING START
-                      $g_nCountRecords++;
-                      if ($g_nCountRecords > HOMECOOP_RECORDS_PER_PAGE) {
-                        //do not display the row over the page reocrds - it's for checking if there is a next page
+                      $retIterate = HomeCoopPager::IterateRecordForPaging();
+                      if ($retIterate == HomeCoopPager::PAGING_SKIP_RECORD) {
+                        $recProducts = $oProducts->fetch();
+                        continue;
+                      }
+                      else if ($retIterate == HomeCoopPager::PAGING_BREAK_LOOP) {
                         break;
                       }
-                      //PAGING END
                       //
                       //sort
                       echo "<tr><td>" , $recProducts["nSortOrder"] , "</td>";

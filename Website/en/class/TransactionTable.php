@@ -72,9 +72,7 @@ class TransactionTable extends SQLBase {
     if (!empty($sWhere))
       $sSQL .= ' WHERE ' . $sWhere;
     
-    $sSQL .= ' ORDER BY T.TransactionID DESC;';
-    
-    $this->RunSQL($sSQL);
+    $this->RunSQL(HomeCoopPager::Process($sSQL, " ORDER BY TransactionID DESC "));
     
     return $this->fetch();
   }

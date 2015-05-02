@@ -15,7 +15,7 @@ class TransactionTableHtml extends SQLBase {
   
   public function EchoHtml($oRec)
   {
-    global $g_oTimeZone;
+    global $g_oTimeZone, $g_nCountRecords;
     
     if (!$oRec)
     {
@@ -30,6 +30,15 @@ class TransactionTableHtml extends SQLBase {
     
     while($oRec)
     {
+      $retIterate = HomeCoopPager::IterateRecordForPaging();
+      if ($retIterate == HomeCoopPager::PAGING_SKIP_RECORD) {
+        $oRec = $this->m_aData[self::PROPERTY_TABLE]->fetch();
+        continue;
+      }
+      else if ($retIterate == HomeCoopPager::PAGING_BREAK_LOOP) {
+        break;
+      }
+
       echo '<div class="resgridrow">';
       
       echo '<div class="resgridcell">';
