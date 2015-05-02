@@ -6,30 +6,25 @@ include_once 'authenticate.php';
 $oData = new MemberOrders;
 $recTable = NULL;
 $sPageTitle = 'My Orders';
+$g_nCountRecords = 0; //PAGING
 
 try
 {
   
   if ( $_SERVER[ 'REQUEST_METHOD'] == 'GET' )
   {
-    $oData->MemberID = $g_oMemberSession->MemberID;
-  }
-  else if ( $_SERVER[ 'REQUEST_METHOD'] == 'POST' )
-  {
-    if (!empty( $_POST['hidPostAction'] ))
-    {
-      switch($_POST['hidPostAction'])
-      {
-        case MemberOrders::POST_ACTION_SWITCH_MEMBER:
-          $sCtl = HtmlSelectArray::PREFIX . 'Member';
-          if ( isset( $_POST[$sCtl] ))
-            $oData->MemberID = intval($_POST[$sCtl]);
-          if ( isset( $_POST['hidPostValue'] ) && !empty($_POST['hidPostValue']) )
-            $oData->MemberName = $_POST['hidPostValue'];
-         break;
+    if (isset($_GET['id'])) {
+      $oData->MemberID = intval($_GET['id']);
+      
+      if (isset($_GET['name'])) {
+        $oData->MemberName = $_GET['name'];
       }
     }
+    else {
+      $oData->MemberID = $g_oMemberSession->MemberID;
+    }
   }
+  
   $recTable = $oData->LoadDataByMember();
   
   switch($oData->LastOperationStatus)
@@ -65,9 +60,9 @@ UserSessionBase::Close();
 function SwitchMember()
 {
   var ctl = document.getElementById("<?php echo HtmlSelectArray::PREFIX , 'Member';?>");
-  document.getElementById("hidPostValue").value = ctl.options[ctl.selectedIndex].text;
-  document.getElementById("hidPostAction").value = <?php echo MemberOrders::POST_ACTION_SWITCH_MEMBER; ?>;
-  document.frmMain.submit();
+
+  document.location.href = 'orders.php?id=' + ctl.options[ctl.selectedIndex].value + '&name=' +
+          encodeURIComponent(ctl.options[ctl.selectedIndex].text) + '&pg=1';
 }
 </script>
 </head>
@@ -122,6 +117,14 @@ function SwitchMember()
                 {
                   while ( $recTable )
                   {
+                      //PAGING START
+                      $g_nCountRecords++;
+                      if ($g_nCountRecords > HOMECOOP_RECORDS_PER_PAGE) {
+                        //do not display the row over the page reocrds - it's for checking if there is a next page
+                        break;
+                      }
+                      //PAGING END
+                      
                       echo "<tr>";
                       
                       echo "<td><a href='orderitems.php?id=" , $recTable["OrderID"] , "' >" ,  
@@ -158,6 +161,12 @@ function SwitchMember()
                 }
     ?>
             </table>
+           <?php
+          //PAGING
+          $g_BasePageUrl = 'orders.php?id=' . $oData->MemberID . '&name=' . urlencode($oData->MemberName);
+
+          include_once 'control/paging.php';
+          ?>
         </td>
     </tr>
     <tr>

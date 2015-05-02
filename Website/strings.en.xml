@@ -2373,4 +2373,20 @@
     <key>DELETED_ITEMS_TITLE</key>
     <value>Deletd Orders</value>
 </str>
+<str>
+    <key>PAGING_NEXT_PAGE</key>
+    <value>Next page</value>
+</str>
+<str>
+    <key>PAGING_PREV_PAGE</key>
+    <value>Previous page</value>
+</str>
+<str>
+    <key>PAGING_LAST_PAGE</key>
+    <value>Last page</value>
+</str>
+<str>
+    <key>PAGING_FIRST_PAGE</key>
+    <value>First page</value>
+</str>
 </strings>

@@ -2277,4 +2277,20 @@
     <key>DELETED_ITEMS_TITLE</key>
     <value>הזמנות שנמחקו</value>
 </str>
+<str>
+    <key>PAGING_NEXT_PAGE</key>
+    <value>העמוד הבא</value>
+</str>
+<str>
+    <key>PAGING_PREV_PAGE</key>
+    <value>העמוד הקודם</value>
+</str>
+<str>
+    <key>PAGING_LAST_PAGE</key>
+    <value>העמוד האחרון</value>
+</str>
+<str>
+    <key>PAGING_FIRST_PAGE</key>
+    <value>העמוד הראשון</value>
+</str>
 </strings>

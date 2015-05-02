@@ -295,6 +295,15 @@ INSERT INTO T_PermissionArea( PermissionAreaKeyID)
 VALUES( @prmAreaMemberPickupLocations );
 
 INSERT INTO T_Key( sStringKey )
+VALUES( 'PERMISSION_AREA_MEMBER_PRODUCERS' );
+
+SET @prmAreaMemberProducers = LAST_INSERT_ID();
+
+INSERT INTO T_PermissionArea( PermissionAreaKeyID)
+VALUES( @prmAreaMemberProducers );
+
+
+INSERT INTO T_Key( sStringKey )
 VALUES( 'PERMISSION_AREA_ROLES' );
 
 SET @LastID = LAST_INSERT_ID();
@@ -652,6 +661,12 @@ VALUES( @prmAreaMemberPickupLocations, @prmTypeModify, 1);
 INSERT INTO T_Permission( PermissionAreaKeyID,  PermissionTypeKeyID, nAllowedScopeCodes)
 VALUES( @prmAreaMemberPickupLocations, @prmTypeCoord, 3);
 
+INSERT INTO T_Permission( PermissionAreaKeyID,  PermissionTypeKeyID, nAllowedScopeCodes)
+VALUES( @prmAreaMemberProducers, @prmTypeModify, 1);
+
+INSERT INTO T_Permission( PermissionAreaKeyID,  PermissionTypeKeyID, nAllowedScopeCodes)
+VALUES( @prmAreaMemberProducers, @prmTypeCoord, 3);
+
 INSERT INTO T_Permission( PermissionAreaKeyID, PermissionTypeKeyID, nAllowedScopeCodes)
 VALUES( @prmTransactions, @prmTypeView, 1);
 
@@ -897,6 +912,12 @@ INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID
 VALUES(@roleSystemAdmin, @prmAreaMemberPickupLocations, @prmTypeModify, @prmdepCoop);
 
 INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
+VALUES(@roleSystemAdmin, @prmAreaMemberProducers, @prmTypeCoord, @prmdepCoop);
+
+INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
+VALUES(@roleSystemAdmin, @prmAreaMemberProducers, @prmTypeModify, @prmdepCoop);
+
+INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
 VALUES(@roleSystemAdmin, @prmTransactions, @prmTypeView, @prmdepCoop);
 
 /*CHIEF_COORDINATOR - role permissions */
@@ -1048,6 +1069,12 @@ INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID
 VALUES(@roleCoopChiefCoord, @prmAreaMemberPickupLocations, @prmTypeModify, @prmdepCoop);
 
 INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
+VALUES(@roleCoopChiefCoord, @prmAreaMemberProducers, @prmTypeCoord, @prmdepCoop);
+
+INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
+VALUES(@roleCoopChiefCoord, @prmAreaMemberProducers, @prmTypeModify, @prmdepCoop);
+
+INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
 VALUES(@roleCoopChiefCoord, @prmTransactions, @prmTypeView, @prmdepCoop);
 
 /* MEMBERSHIP COORDINATOR - role permissions */
@@ -1183,6 +1210,10 @@ VALUES( @roleProducerCoord, @prmAreaCoopOrderPLSums, @prmTypeView, @prmdepCoop);
 
 INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
 VALUES( @roleProducerCoord, @prmAreaCachierTotals, @prmTypeView, @prmdepCoop);
+
+INSERT INTO T_RolePermission(RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID)
+VALUES(@roleProducerCoord, @prmAreaMemberProducers, @prmTypeCoord, @prmdepGroup);
+
 
 /*ORDER_COORDINATOR - role permissions */
 INSERT INTO T_RolePermission( RoleKeyID, PermissionAreaKeyID, PermissionTypeKeyID, PermissionScopeKeyID )

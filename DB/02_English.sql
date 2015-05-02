@@ -385,3 +385,8 @@ SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_MEMBE
 
 INSERT INTO Tlng_String (KeyID, LangID, sString )
 VALUES( @LastID, @LangID, 'Member Pickup Locations' );
+
+SET @LastID = (SELECT KeyID FROM T_Key WHERE sStringKey = 'PERMISSION_AREA_MEMBER_PRODUCERS');
+
+INSERT INTO Tlng_String (KeyID, LangID, sString )
+VALUES( @LastID, @LangID, 'Member Producers' );

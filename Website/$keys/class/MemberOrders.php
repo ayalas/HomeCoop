@@ -57,9 +57,7 @@ class MemberOrders extends SQLBase{
     if ($this->GetPermissionScope(self::PERMISSION_COORD) == Consts::PERMISSION_SCOPE_GROUP_CODE)        
       $sSQL .=     " AND CO.CoordinatingGroupID IN ( 0, " . implode(",", $g_oMemberSession->Groups) . ") ";
     
-     $sSQL .= " ORDER BY O.dCreated desc;";
-
-    $this->RunSQL( $sSQL );
+    $this->RunSQL( HomeCoopPager::Process($sSQL, " ORDER BY dCreated DESC ") );
 
     return $this->fetch();
  }

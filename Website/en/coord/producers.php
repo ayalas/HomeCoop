@@ -6,6 +6,7 @@ include_once '../authenticate.php';
 $oProducers = new Producers;
 $recProducers = NULL;
 $bCanSetCoord = FALSE;
+$g_nCountRecords = 0; //PAGING
 
 try
 {
@@ -69,6 +70,14 @@ UserSessionBase::Close();
                 {
                   while ( $recProducers )
                   {
+                      //PAGING START
+                      $g_nCountRecords++;
+                      if ($g_nCountRecords > HOMECOOP_RECORDS_PER_PAGE) {
+                        //do not display the row over the page reocrds - it's for checking if there is a next page
+                        break;
+                      }
+                      //PAGING END
+                      
                       echo "<tr><td><a href='producer.php?id=" ,  $recProducers["ProducerKeyID"] , "' >" ,  
                               htmlspecialchars($recProducers["sProducer"]) , "</a></td><td>";
                       if ($recProducers["bDisabled"])
@@ -94,6 +103,12 @@ UserSessionBase::Close();
                 }
 ?>
                 </table>
+  <?php
+          //PAGING
+          $g_BasePageUrl = 'producers.php';
+
+          include_once '../control/paging.php';
+          ?>
                 </td>
     </tr>
     <tr>

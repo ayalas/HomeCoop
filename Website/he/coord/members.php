@@ -9,6 +9,7 @@ $sSearch = NULL;
 $bShowMails = FALSE;
 $sMailList = NULL;
 $arrList = $oTable->GetExportList();
+$bFirstRequest = false;
 
 try
 {
@@ -46,15 +47,20 @@ try
           break;
       }
     }    
+    
+    $recTable = $oTable->GetTable();
+
+    if ($oTable->LastOperationStatus == SQLBase::OPERATION_STATUS_NO_PERMISSION)
+    {
+        RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
+        exit;
+    }
+  }
+  else {
+    $bFirstRequest = true;
   }
   
-  $recTable = $oTable->GetTable();
-
-  if ($oTable->LastOperationStatus == SQLBase::OPERATION_STATUS_NO_PERMISSION)
-  {
-      RedirectPage::To( $g_sRootRelativePath . Consts::URL_ACCESS_DENIED );
-      exit;
-  }
+  
 }
 catch(Exception $e)
 {
@@ -154,6 +160,10 @@ function SelectAll(bCheck)
                       <span class="link" onclick="JavaScript:SelectAll(false);">הסרת בחירה</span>
                     </td>
                   </tr>
+                  <?php
+                  if (!$bFirstRequest) {
+                    
+                  ?>
                 <tr>
                   <td class="columntitletiny"></td>
                   <td class="columntitlelong">שם</td>
@@ -253,6 +263,7 @@ function SelectAll(bCheck)
                       $recTable = $oTable->fetch();
                   }
                 }
+              }
 ?>
                 </table>
                 </td>

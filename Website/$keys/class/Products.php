@@ -55,9 +55,7 @@ class Products extends SQLBase {
            ($this->GetPermissionScope(self::PERMISSION_VIEW) != Consts::PERMISSION_SCOPE_COOP_CODE) )
           $sSQL .=  " WHERE P.CoordinatingGroupID IN ( 0, " . implode(",", $g_oMemberSession->Groups) . ") ";
 
-      $sSQL .= " ORDER BY PRD.bDisabled, PRD.nSortOrder ,PRD_S.sString; ";
-
-      $this->RunSQL( $sSQL );
+      $this->RunSQL( HomeCoopPager::Process($sSQL, " ORDER BY bDisabled ASC, nSortOrder ASC,sProduct ASC ") );
 
       return $this->fetch();
   }

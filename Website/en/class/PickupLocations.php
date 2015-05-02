@@ -38,9 +38,7 @@ class PickupLocations extends SQLBase {
       if ( $this->GetPermissionScope(self::PERMISSION_COORD) == Consts::PERMISSION_SCOPE_GROUP_CODE ) 
           $sSQL .=  " WHERE PL.CoordinatingGroupID IN (" . implode(",", $g_oMemberSession->Groups) . ") ";
 
-      $sSQL .= " ORDER BY PL.bDisabled, PL.nRotationOrder, PL_S.sString; ";
-
-      $this->RunSQL( $sSQL );
+      $this->RunSQL( HomeCoopPager::Process($sSQL, " ORDER BY bDisabled ASC, nRotationOrder ASC, sPickupLocation ASC ") );
 
       return $this->fetch();
   }

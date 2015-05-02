@@ -7,6 +7,8 @@ $oTable = new CoopOrders;
 $recTable = NULL;
 $dDate = NULL;
 $oCoopOrderCapacity = NULL;
+$g_nCountRecords = 0; //PAGING
+
 try
 {
   $recTable = $oTable->GetTable();
@@ -101,6 +103,14 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
                 {
                   while ( $recTable )
                   {
+                      //PAGING START
+                      $g_nCountRecords++;
+                      if ($g_nCountRecords > HOMECOOP_RECORDS_PER_PAGE) {
+                        //do not display the row over the page reocrds - it's for checking if there is a next page
+                        break;
+                      }
+                      //PAGING END
+                      
                       //name                          
                       echo "<tr><td><a class='tooltiplink' href='cooporder.php?id=" ,  $recTable["CoopOrderKeyID"] , "' >" , 
                         htmlspecialchars($recTable["sCoopOrder"]),
@@ -183,6 +193,12 @@ $bCanSetCoord = $oTable->HasPermission(SQLBase::PERMISSION_COORD_SET);
                 }
 ?>
                 </table>
+          <?php
+          //PAGING
+          $g_BasePageUrl = 'cooporders.php';
+
+          include_once '../control/paging.php';
+          ?>
         </td>
     </tr>
     <tr>

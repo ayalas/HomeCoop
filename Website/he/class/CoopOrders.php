@@ -40,6 +40,8 @@ class CoopOrders extends SQLBase {
       $this->CanViewSums();
       $this->AddPermissionBridge(self::PERMISSION_COORD_SET, Consts::PERMISSION_AREA_COOP_ORDERS, Consts::PERMISSION_TYPE_COORD_SET, 
          Consts::PERMISSION_SCOPE_COOP_CODE, 0, TRUE);
+      
+      
 
       $sSQL =   " SELECT CO.CoopOrderKeyID, CO.dStart, CO.dEnd, CO.dDelivery, CO.ModifiedByMemberID, M.sName as ModifierName, CO.nStatus, CO.CoordinatingGroupID," .
                 " CO.mMaxCoopTotal, CO.fMaxBurden, CO.mCoopTotal, CO.mProducerTotal, IfNull(CO.fBurden,2) fBurden, CO.mTotalDelivery, " .
@@ -52,9 +54,7 @@ class CoopOrders extends SQLBase {
            && $this->GetPermissionScope(self::PERMISSION_COORD) != Consts::PERMISSION_SCOPE_COOP_CODE )
           $sSQL .=  " WHERE CO.CoordinatingGroupID IN ( 0, " . implode(",", $g_oMemberSession->Groups) . ") ";
 
-      $sSQL .= " ORDER BY CO.dDelivery desc; ";
-
-      $this->RunSQL( $sSQL );
+      $this->RunSQL( HomeCoopPager::Process($sSQL, " ORDER BY dDelivery DESC ") );
 
       return $this->fetch();
   }

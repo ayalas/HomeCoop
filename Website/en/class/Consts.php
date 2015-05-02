@@ -12,8 +12,7 @@ class Consts
     const URL_ACCESS_DENIED = 'AccessDenied.php';
     const URL_HOME = 'home.php';
     const URL_CACHE_DIR = 'cache';
-    
-    
+    const URLARG_PAGING = 'pg';
        
     //indexes of the languages array, $g_aSupportedLanguages, defined in settings.php
     const IND_LANGUAGE_NAME = 0;

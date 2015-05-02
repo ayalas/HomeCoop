@@ -39,10 +39,8 @@ class Producers extends SQLBase
         if ( ($this->GetPermissionScope(self::PERMISSION_COORD) != Consts::PERMISSION_SCOPE_COOP_CODE) &&
              ($this->GetPermissionScope(self::PERMISSION_VIEW) != Consts::PERMISSION_SCOPE_COOP_CODE) )
            $sSQL .=     " WHERE P.CoordinatingGroupID IN (" . implode(",", $g_oMemberSession->Groups) . ") ";
-
-        $sSQL .=         " ORDER BY P.bDisabled, P_S.sString; ";
         
-        $this->RunSQL( $sSQL );
+        $this->RunSQL( HomeCoopPager::Process($sSQL, " ORDER BY bDisabled ASC, sProducer ASC ") );
 
         return $this->fetch();
     }

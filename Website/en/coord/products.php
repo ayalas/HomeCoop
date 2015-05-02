@@ -10,6 +10,7 @@ $sToolTipQuantityIntervalLine = NULL;
 $sToolTipPackageSizeLine = NULL;
 $bQuantityTooltip = FALSE;
 $bReadOnly = TRUE;
+$g_nCountRecords = 0; //PAGING
 try
 {
   $recProducts = $oProducts->GetTable();
@@ -86,6 +87,14 @@ UserSessionBase::Close();
                 {
                   while ( $recProducts )
                   {
+                      //PAGING START
+                      $g_nCountRecords++;
+                      if ($g_nCountRecords > HOMECOOP_RECORDS_PER_PAGE) {
+                        //do not display the row over the page reocrds - it's for checking if there is a next page
+                        break;
+                      }
+                      //PAGING END
+                      //
                       //sort
                       echo "<tr><td>" , $recProducts["nSortOrder"] , "</td>";
                       //product name
@@ -141,6 +150,12 @@ UserSessionBase::Close();
                 }
 ?>
                 </table>
+           <?php
+          //PAGING
+          $g_BasePageUrl = 'products.php';
+
+          include_once '../control/paging.php';
+          ?>
                 </td>
     </tr>
     <tr>

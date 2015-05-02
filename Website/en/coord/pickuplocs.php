@@ -6,6 +6,7 @@ include_once '../authenticate.php';
 $oTable = new PickupLocations;
 $recTable = NULL;
 $bCanSetCoord = FALSE;
+$g_nCountRecords = 0; //PAGING
 
 try
 {
@@ -80,6 +81,14 @@ UserSessionBase::Close();
                 {
                   while ( $recTable )
                   {
+                      //PAGING START
+                      $g_nCountRecords++;
+                      if ($g_nCountRecords > HOMECOOP_RECORDS_PER_PAGE) {
+                        //do not display the row over the page reocrds - it's for checking if there is a next page
+                        break;
+                      }
+                      //PAGING END
+                      
                       //name
                       echo "<tr><td><a href='pickuploc.php?id=" ,  $recTable["PickupLocationKeyID"] , "' >" ,
                               htmlspecialchars( $recTable["sPickupLocation"]) ,  "</a></td>";
@@ -135,6 +144,12 @@ UserSessionBase::Close();
                 }
 ?>
                 </table>
+          <?php
+          //PAGING
+          $g_BasePageUrl = 'pickuplocs.php';
+
+          include_once '../control/paging.php';
+          ?>
                 </td>
     </tr>
     <tr>
