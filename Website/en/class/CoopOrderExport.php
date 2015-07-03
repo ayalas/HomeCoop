@@ -1059,6 +1059,29 @@ class CoopOrderExport extends CoopOrderSubBase {
     }
   }
   
+  protected function ReplaceSpecialXML($source) {
+    if (empty($source)) {
+      return $source;
+    }
+    
+    $len = strlen($source);
+    
+    $arr = array();
+    
+    for($i=0; $i<$len; $i++) {
+      switch($source{$i}) {
+       case '"':
+         $arr[$i] = '&amp;quot;';
+         break;
+       default:
+         $arr[$i] = $source{$i};
+         break;
+      }
+    }
+    
+    return implode($arr);
+  }
+  
   //source: http://snipplr.com/view/52144/
   public static function remove_filename_special_char($string) {
     $ts = array("/\~/", "/\`/", "/\@/", "/\#/", "/\\$/", "/\%/", "/\^/", "/\&/", "/\*/", "/\(/", "/\)/", "/\:/", "/\:/", "/\;/", "/\</", "/\>/", "/\?/", "/\//", "/\,/", "/\{/", "/\}/", "/\[/", "/\]/", "/\|/", "/\+/", "/\=/", "/\!/", "/\'/" );

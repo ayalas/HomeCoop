@@ -665,12 +665,12 @@ class CoopOrderExport extends CoopOrderSubBase {
       }
     }
     
-    $totalh = $this->m_oXmlDoc->createElement('totalh', 'סה”כ כמות');
+    $totalh = $this->m_oXmlDoc->createElement('totalh', 'סה&quot;כ כמות');
     $colh->appendChild($totalh);
     
     if ($this->m_nProducerID > 0)
     {
-      $totalph = $this->m_oXmlDoc->createElement('totalh', 'סה”כ מחיר');
+      $totalph = $this->m_oXmlDoc->createElement('totalh', 'סה&quot;כ מחיר');
       $colh->appendChild($totalph);
     }
     
@@ -1057,6 +1057,29 @@ class CoopOrderExport extends CoopOrderSubBase {
     {
       $this->m_aOrders[$curOrder['OrderID']] = $curOrder;
     }
+  }
+  
+  protected function ReplaceSpecialXML($source) {
+    if (empty($source)) {
+      return $source;
+    }
+    
+    $len = strlen($source);
+    
+    $arr = array();
+    
+    for($i=0; $i<$len; $i++) {
+      switch($source{$i}) {
+       case '"':
+         $arr[$i] = '&amp;quot;';
+         break;
+       default:
+         $arr[$i] = $source{$i};
+         break;
+      }
+    }
+    
+    return implode($arr);
   }
   
   //source: http://snipplr.com/view/52144/

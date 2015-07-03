@@ -1484,12 +1484,12 @@
 </str>
 <str>
     <key>FIELD_ORDER_EXPORT_TOTAL_PRODUCT_QUANTITY</key>
-    <value>סה”כ כמות</value>
+    <value>סה&quot;כ כמות</value>
     <pages>coord/cooporderexport</pages>
 </str>
 <str>
     <key>FIELD_ORDER_EXPORT_TOTAL_PRODUCT_PRODUCER_SUM</key>
-    <value>סה”כ מחיר</value>
+    <value>סה&quot;כ מחיר</value>
     <pages>coord/cooporderexport</pages>
 </str>
 <str>
@@ -2271,7 +2271,7 @@
 </str>
 <str>
      <key>LABEL_EXPORT_TOTAL_MEMBER</key>
-     <value>סה"כ %s</value>
+     <value>סה&quot;כ %s</value>
 </str>
 <str>
     <key>DELETED_ITEMS_TITLE</key>
