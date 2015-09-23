@@ -814,15 +814,15 @@ class PickupLocation extends SQLBase {
   protected function InitStorageMultiLangPostElement($key, $nPrefixLen, &$sBaseCtlName, $sStorageArrKey)
   {
     global $g_nCountLanguages;
-    $sIDPlusLang = substr($key, $nPrefixLen );
+    $sIDPlusLang = mb_substr($key, $nPrefixLen );
 
     if ($g_nCountLanguages > 0)
     {
       $nPos = strpos($sIDPlusLang, HtmlTextEditMultiLang::ID_LINK);
       if ($nPos > 0)
       {
-        $nStorageAreaKeyID = 0 + substr($sIDPlusLang, 0, $nPos );
-        $sBaseCtlName = substr($key, 0, $nPrefixLen + $nPos );
+        $nStorageAreaKeyID = 0 + mb_substr($sIDPlusLang, 0, $nPos );
+        $sBaseCtlName = mb_substr($key, 0, $nPrefixLen + $nPos );
       }
     }
     else
@@ -836,7 +836,7 @@ class PickupLocation extends SQLBase {
 
   protected function InitStoragePostElement($key, $nPrefixLen, $sStorageArrKey)
   {
-    $nStorageAreaKeyID = 0 + substr($key, $nPrefixLen );;
+    $nStorageAreaKeyID = 0 + mb_substr($key, $nPrefixLen );;
 
     return $this->InitStoragePostElementFromId($key, $nStorageAreaKeyID, $sStorageArrKey);
   }

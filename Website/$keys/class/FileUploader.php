@@ -123,7 +123,7 @@ class FileUploader {
       $sFileExtension = '';
       $nExtensionPos = strrpos( $this->m_sOriginalFileName, '.' );
       if ( $nExtensionPos > 0 )
-          $sFileExtension = substr($this->m_sOriginalFileName, $nExtensionPos);
+          $sFileExtension = mb_substr($this->m_sOriginalFileName, $nExtensionPos);
       
       if ($this->m_aData[self::PROPERTY_RESULT_FILE_NAME] == NULL)
         $this->m_aData[self::PROPERTY_RESULT_FILE_NAME] = $this->m_aData[self::PROPERTY_UNIQUE_FILE_NAME] . $sFileExtension;
@@ -151,7 +151,7 @@ class FileUploader {
         return '';
       
       //+1: to include_once the '/'
-      $sResult = substr($_SERVER['SCRIPT_FILENAME'], 0, $nPos + 1) . $g_sRootRelativePath . URL_UPLOAD_DIR;
+      $sResult = mb_substr($_SERVER['SCRIPT_FILENAME'], 0, $nPos + 1) . $g_sRootRelativePath . URL_UPLOAD_DIR;
       
       return realpath($sResult) . '/';
     }

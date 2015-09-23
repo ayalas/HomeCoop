@@ -171,7 +171,7 @@ class DateTimeValidate {
     
     do
     {
-      $aNewPart = $this->GetStringPart(substr($sDate, $nProcessed), $nLen  - $nProcessed);
+      $aNewPart = $this->GetStringPart(mb_substr($sDate, $nProcessed), $nLen  - $nProcessed);
       
       $nProcessed += $aNewPart[self::IND_STR_LEN];
       
@@ -189,7 +189,7 @@ class DateTimeValidate {
     $sReturn = '';
     $sChar = '';
     for ($index = 0; $index < $nLen; $index++) {
-      $sChar = substr($sDate, $index, 1);
+      $sChar = mb_substr($sDate, $index, 1);
       $bCharIsNumeric = (1 === preg_match("/^([0-9])$/", $sChar));
       if ($index == 0)
       {

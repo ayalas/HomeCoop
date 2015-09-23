@@ -832,7 +832,7 @@ class CoopOrderProduct extends CoopOrderSubRecordBase {
       //if found in position 0
       if (strpos($key, $sPrefix) === 0)
       {
-        $nPickupLocationKeyID = 0 + substr($key, $nPrefixLen );
+        $nPickupLocationKeyID = 0 + mb_substr($key, $nPrefixLen );
         
         $this->m_aData[self::PROPERTY_PICKUP_LOCATIONS_STORAGE][$nPickupLocationKeyID]['Data']['StorageAreaKeyID'] = $value;
       }

@@ -138,7 +138,7 @@ while ($nPos === FALSE)
 {
   $nNext = stripos( $sNeedle, '/', $nNext );
   if ($nNext !== FALSE)
-    $sNeedle = substr( $sNeedle, $nNext );
+    $sNeedle = mb_substr( $sNeedle, $nNext );
   else
     break;
   $nNext++;
@@ -146,9 +146,9 @@ while ($nPos === FALSE)
   $nPos = strpos($_SERVER["SCRIPT_FILENAME"], $sNeedle);
 }
 
-define('SITE_ROOT', substr($_SERVER["SCRIPT_FILENAME"], 0, $nPos) );
+define('SITE_ROOT', mb_substr($_SERVER["SCRIPT_FILENAME"], 0, $nPos) );
 
-$g_sFilePathFromRoot = substr( $_SERVER["SCRIPT_FILENAME"], $nPos+1 );
+$g_sFilePathFromRoot = mb_substr( $_SERVER["SCRIPT_FILENAME"], $nPos+1 );
 
 $nRootPos = 0;
 $nPos = 0;
@@ -157,8 +157,8 @@ $endLang = stripos( $g_sFilePathFromRoot, '/'); //go to next '/' (possibly after
 
 if ($g_aSupportedLanguages !== NULL)
 {
-  $g_sLangDir = substr ($g_sFilePathFromRoot, 0, $endLang); //extract language folder
-  $g_sFilePathFromRoot = substr ($g_sFilePathFromRoot, $endLang + 1); //extract path after language folder
+  $g_sLangDir = mb_substr ($g_sFilePathFromRoot, 0, $endLang); //extract language folder
+  $g_sFilePathFromRoot = mb_substr ($g_sFilePathFromRoot, $endLang + 1); //extract path after language folder
 
 }
 

@@ -89,7 +89,7 @@ class HtmlGridCellText {
     if ($nLen > $nSpaceInLetters)
     {
       echo '<abbr title="' , htmlspecialchars( $this->m_aData[self::PROPERTY_TEXT] ) , '" >' , 
-            htmlspecialchars(trim(substr( $this->m_aData[self::PROPERTY_TEXT], 0, $nSpaceInLetters ) ) ), '</abbr>';
+            htmlspecialchars(trim(mb_substr( $this->m_aData[self::PROPERTY_TEXT], 0, $nSpaceInLetters ))) , '</abbr>';
     }
     else
       echo htmlspecialchars($this->m_aData[self::PROPERTY_TEXT]); //width is long enough

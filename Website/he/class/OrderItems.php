@@ -728,7 +728,7 @@ class OrderItems extends SQLBase {
  //used for collecting postback data and rebuilding the item instance
  protected function InitItemFromPostKey($key, $nPrefixLen)
  {
-   $nProductID = 0 + substr($key, $nPrefixLen );
+   $nProductID = 0 + mb_substr($key, $nPrefixLen );
    if ($nProductID == 0)
      throw new Exception('Error in OrderItems.CollectData: ProductID 0 for post key ' . $key);
    

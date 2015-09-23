@@ -535,7 +535,7 @@ class CoopOrderPickupLocation extends CoopOrderSubRecordBase {
   
   protected function InitStoragePostElement($key, $nPrefixLen)
   {
-    $nStorageAreaKeyID = 0 + substr($key, $nPrefixLen );
+    $nStorageAreaKeyID = 0 + mb_substr($key, $nPrefixLen );
 
     return $this->InitStoragePostElementFromId($key, $nStorageAreaKeyID);
   }

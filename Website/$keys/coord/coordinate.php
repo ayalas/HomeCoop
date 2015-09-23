@@ -157,19 +157,19 @@ try
           foreach($_POST as $PostKey => $PostValue)
           {
             //if key begins with chkMember_ - take memberid if true
-            if (substr($PostKey, 0, $nKeyLen) == "chkMember_")
+            if (mb_substr($PostKey, 0, $nKeyLen) == "chkMember_")
             {
               if ($PostValue)
-                $aMembersByIDs[substr($PostKey, $nKeyLen)] = FALSE;
+                $aMembersByIDs[mb_substr($PostKey, $nKeyLen)] = FALSE;
             }
           }
 
           //IsContactPerson
           foreach($_POST as $PostKey => $PostValue)
           {
-            if (substr($PostKey, 0, $nContactLen) == "chkMemberIsContact")
+            if (mb_substr($PostKey, 0, $nContactLen) == "chkMemberIsContact")
             {
-              $sArrayKey = substr($PostKey, $nContactLen);
+              $sArrayKey = mb_substr($PostKey, $nContactLen);
               if (array_key_exists($sArrayKey, $aMembersByIDs))
                 $aMembersByIDs[$sArrayKey] = $PostValue;
             }
